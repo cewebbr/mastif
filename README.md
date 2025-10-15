@@ -1,7 +1,11 @@
 # Agentic Stack Testing Framework
 
+![Class Diagram](class_diagram.png)
+
 ## Overview
 This framework now supports evaluation on the Mind2Web benchmark, which tests web agent capabilities on real-world website tasks.
+
+
 
 ## Installation
 
