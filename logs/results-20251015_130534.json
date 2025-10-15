@@ -1,0 +1,1842 @@
+{
+  "test_run_timestamp": "2025-10-15T13:05:34.065628",
+  "total_tests": 40,
+  "results": [
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "model_context_protocol",
+      "framework": "direct",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc646-40ac1c845c03cfe66b24dfa4;d6b70b6b-e09d-40ee-b5e2-b658fca55e1c)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with model_context_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "model_context_protocol",
+          "observation": null,
+          "timestamp": 1760544325.457943
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with model_context_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Plan a multi-step research project on renewable energy\",\n  \"context\": {\n    \"conversation_id\": \"test-001\",\n    \"turn\": 1,\n    \"environment\": {},\n    \"tools_ava",
+          "observation": null,
+          "timestamp": 1760544325.457969
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: model_context_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Plan a multi-step research project on renewable energy\",\n  \"context\": {\n    \"conversation_id\": \"test-001\",",
+          "observation": null,
+          "timestamp": 1760544325.457979
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 335 characters",
+          "timestamp": 1760544326.647572
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 1.19s",
+          "timestamp": 1760544326.64758
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 1.1896319389343262,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "model_context_protocol",
+      "framework": "direct",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc647-29d8e1714d5cd581084528a9;f659557c-b195-400b-81b2-9d172d3a9c8b)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with model_context_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "model_context_protocol",
+          "observation": null,
+          "timestamp": 1760544326.647647
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with model_context_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Research and synthesize information about quantum computing applications\",\n  \"context\": {\n    \"conversation_id\": \"test-001\",\n    \"turn\": 1,\n    \"environment\": ",
+          "observation": null,
+          "timestamp": 1760544326.647695
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: model_context_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Research and synthesize information about quantum computing applications\",\n  \"context\": {\n    \"conversatio",
+          "observation": null,
+          "timestamp": 1760544326.647715
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 335 characters",
+          "timestamp": 1760544326.785142
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1760544326.7851489
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.13750028610229492,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "model_context_protocol",
+      "framework": "direct",
+      "task": "Create a policy on how to make the web more accessible for people with disabilities",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc647-672facfc402cf0342350d991;2c973935-a938-4f07-95f6-a3368b3d7f16)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with model_context_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "model_context_protocol",
+          "observation": null,
+          "timestamp": 1760544326.785205
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with model_context_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Create a policy on how to make the web more accessible for people with disabilities\",\n  \"context\": {\n    \"conversation_id\": \"test-001\",\n    \"turn\": 1,\n    \"env",
+          "observation": null,
+          "timestamp": 1760544326.7852569
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: model_context_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Create a policy on how to make the web more accessible for people with disabilities\",\n  \"context\": {\n    \"",
+          "observation": null,
+          "timestamp": 1760544326.785283
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 335 characters",
+          "timestamp": 1760544326.941483
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.16s",
+          "timestamp": 1760544326.941491
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.15628314018249512,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "model_context_protocol",
+      "framework": "direct",
+      "task": "What is the common error on how people structure html documents",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc647-7f1d98447afd8cfd127140c9;d4ed0558-a55f-4afa-afaa-a1e19cbd7876)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with model_context_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "model_context_protocol",
+          "observation": null,
+          "timestamp": 1760544326.9415832
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with model_context_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"What is the common error on how people structure html documents\",\n  \"context\": {\n    \"conversation_id\": \"test-001\",\n    \"turn\": 1,\n    \"environment\": {},\n    \"",
+          "observation": null,
+          "timestamp": 1760544326.942046
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: model_context_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"What is the common error on how people structure html documents\",\n  \"context\": {\n    \"conversation_id\": \"t",
+          "observation": null,
+          "timestamp": 1760544326.942092
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 335 characters",
+          "timestamp": 1760544327.6231291
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.68s",
+          "timestamp": 1760544327.623136
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.681549072265625,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "agent_to_agent",
+      "framework": "direct",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc648-7748dd3b5aa7611a57d8f724;c78d9c2c-ac9c-460f-a43f-430bf8333e42)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_to_agent protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_to_agent",
+          "observation": null,
+          "timestamp": 1760544327.623235
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_to_agent",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Plan a multi-step research project on renewable ener",
+          "observation": null,
+          "timestamp": 1760544327.6232882
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_to_agent\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Plan a ",
+          "observation": null,
+          "timestamp": 1760544327.623307
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1760544327.7628071
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1760544327.762816
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.13957715034484863,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "agent_to_agent",
+      "framework": "direct",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc648-4cbe80e20db66f9910fcd187;c39856cd-28c7-49cd-98c2-7a1ce6dc3791)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_to_agent protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_to_agent",
+          "observation": null,
+          "timestamp": 1760544327.762914
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_to_agent",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Research and synthesize information about quantum co",
+          "observation": null,
+          "timestamp": 1760544327.762995
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_to_agent\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Researc",
+          "observation": null,
+          "timestamp": 1760544327.7630332
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1760544327.8965418
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.13s",
+          "timestamp": 1760544327.8965461
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.13363313674926758,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "agent_to_agent",
+      "framework": "direct",
+      "task": "Create a policy on how to make the web more accessible for people with disabilities",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc648-126289a74213b95608c68cd5;54a9dcd7-c2da-485b-86b1-ab8c276b3345)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_to_agent protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_to_agent",
+          "observation": null,
+          "timestamp": 1760544327.8965812
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_to_agent",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Create a policy on how to make the web more accessib",
+          "observation": null,
+          "timestamp": 1760544327.896615
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_to_agent\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Create ",
+          "observation": null,
+          "timestamp": 1760544327.896663
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1760544328.031955
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1760544328.0319622
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.1353769302368164,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "agent_to_agent",
+      "framework": "direct",
+      "task": "What is the common error on how people structure html documents",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc648-0be5a2b54a5b48495c6eafa1;affa6878-2ec3-40a9-acff-7aaf79bd7450)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_to_agent protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_to_agent",
+          "observation": null,
+          "timestamp": 1760544328.032042
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_to_agent",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"What is the common error on how people structure htm",
+          "observation": null,
+          "timestamp": 1760544328.0321019
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_to_agent\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"What is",
+          "observation": null,
+          "timestamp": 1760544328.0321229
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1760544328.1835258
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.15s",
+          "timestamp": 1760544328.183536
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.1514880657196045,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "agent_communication_protocol",
+      "framework": "direct",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc648-12e749af0778fe0e5a6c50be;74a2119f-a266-42f2-b665-6b902248ec92)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_communication_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_communication_protocol",
+          "observation": null,
+          "timestamp": 1760544328.1837
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_communication_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Plan a multi-step research project on renewable energy\",\n    \"intent\": \"information_seeking\"",
+          "observation": null,
+          "timestamp": 1760544328.183809
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_communication_protocol\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Plan a multi-step research projec",
+          "observation": null,
+          "timestamp": 1760544328.184437
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1760544328.3224509
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1760544328.32246
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.13875699043273926,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "agent_communication_protocol",
+      "framework": "direct",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc648-507dd13d133492f832e85725;59c9be3e-b934-4985-b45a-fd69fdeda81f)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_communication_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_communication_protocol",
+          "observation": null,
+          "timestamp": 1760544328.3225658
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_communication_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Research and synthesize information about quantum computing applications\",\n    \"intent\": \"in",
+          "observation": null,
+          "timestamp": 1760544328.322665
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_communication_protocol\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Research and synthesize informati",
+          "observation": null,
+          "timestamp": 1760544328.322711
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1760544328.4614751
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1760544328.461484
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.1389150619506836,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "agent_communication_protocol",
+      "framework": "direct",
+      "task": "Create a policy on how to make the web more accessible for people with disabilities",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc648-7762db0c7135f52478d61c69;73164aa1-b071-4e99-ae9c-447ec97e323a)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_communication_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_communication_protocol",
+          "observation": null,
+          "timestamp": 1760544328.461579
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_communication_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Create a policy on how to make the web more accessible for people with disabilities\",\n    \"i",
+          "observation": null,
+          "timestamp": 1760544328.46165
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_communication_protocol\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Create a policy on how to make th",
+          "observation": null,
+          "timestamp": 1760544328.461677
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1760544328.62237
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.16s",
+          "timestamp": 1760544328.622381
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.1607973575592041,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "agent_communication_protocol",
+      "framework": "direct",
+      "task": "What is the common error on how people structure html documents",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc649-282d39f238c130ef39be454a;e5cc7d55-180c-4455-8518-b2ef247e65b4)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_communication_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_communication_protocol",
+          "observation": null,
+          "timestamp": 1760544328.62248
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_communication_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"What is the common error on how people structure html documents\",\n    \"intent\": \"information",
+          "observation": null,
+          "timestamp": 1760544328.622582
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_communication_protocol\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"What is the common error on how p",
+          "observation": null,
+          "timestamp": 1760544328.6226392
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1760544328.757951
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1760544328.757962
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.13547706604003906,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc649-1f19ae0b700a1b5972b8cb3e;ebeab51d-b978-4b00-959e-7b7a4b7391e1)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1760544328.758114
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Plan a multi-step research project on renewable energy",
+          "observation": null,
+          "timestamp": 1760544328.758118
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.16s",
+          "timestamp": 1760544328.922636
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.16451406478881836,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc649-159766dc25a3d0fd458d3b98;3e0f17a8-a960-446b-a907-bb179f20c023)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1760544328.922718
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Research and synthesize information about quantum computing applications",
+          "observation": null,
+          "timestamp": 1760544328.922721
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1760544329.0672472
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.1445169448852539,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Create a policy on how to make the web more accessible for people with disabilities",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc649-507dd52c323ba8e22516c72a;574fcdb2-fad2-4cb1-8c8b-90b85b143602)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1760544329.067352
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Create a policy on how to make the web more accessible for people with disabilities",
+          "observation": null,
+          "timestamp": 1760544329.067355
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.15s",
+          "timestamp": 1760544329.217817
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.15046072006225586,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "What is the common error on how people structure html documents",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc649-788f23fc164e30b163f44f01;9f9946f8-0156-4c20-af2a-b12f5d5570d4)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1760544329.2178931
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "What is the common error on how people structure html documents",
+          "observation": null,
+          "timestamp": 1760544329.217896
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1760544329.353929
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.13602495193481445,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc649-521454e54aea027b02244605;423cd386-8500-4e63-9448-625ed4f7bfd3)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Research Analyst, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760544329.354134
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Plan a multi-step research project on renewable energy",
+          "observation": null,
+          "timestamp": 1760544329.354176
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 335 characters",
+          "timestamp": 1760544329.507933
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.15382075309753418,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Research Analyst"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc649-560cf7567cfa210442c61e60;7ae0fd59-9c8d-48e1-8c6c-062a2faa4c46)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Research Analyst, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760544329.5080378
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Research and synthesize information about quantum computing applications",
+          "observation": null,
+          "timestamp": 1760544329.508079
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 335 characters",
+          "timestamp": 1760544329.6485188
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.14049410820007324,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Research Analyst"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Create a policy on how to make the web more accessible for people with disabilities",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64a-6659f4f226d8208b63e57b1a;8535a9d5-88d6-40d4-b574-f7e3fe5fa863)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Research Analyst, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760544329.6486049
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Create a policy on how to make the web more accessible for people with disabilities",
+          "observation": null,
+          "timestamp": 1760544329.6486368
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 335 characters",
+          "timestamp": 1760544329.788943
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.14034581184387207,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Research Analyst"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "What is the common error on how people structure html documents",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64a-32ef3c3d45815e0b0d9d1262;a856836e-067a-469d-ae2b-eeea2c144a89)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Research Analyst, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760544329.789042
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "What is the common error on how people structure html documents",
+          "observation": null,
+          "timestamp": 1760544329.7890859
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 335 characters",
+          "timestamp": 1760544329.926563
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.13753128051757812,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Research Analyst"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64a-629504fd70eb9b8421411ead;91eb6c61-df50-4ffe-9dc8-e89bc72ee868)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 13 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760544329.926782
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Plan a multi-step research project on renewable energy",
+          "observation": null,
+          "timestamp": 1760544329.9267972
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Plan a multi-step research project on renewable energy",
+          "observation": null,
+          "timestamp": 1760544329.926801
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1760544330.0692859
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 0.14255213737487793,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64a-520539b61e65483c7d7b6cae;b30425db-aca5-41fa-8101-7309d9ff7295)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 13 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760544330.069371
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Research and synthesize information about quantum computing applications",
+          "observation": null,
+          "timestamp": 1760544330.0693812
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Research and synthesize information about quantum computing applications",
+          "observation": null,
+          "timestamp": 1760544330.069382
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1760544330.207947
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 0.13859796524047852,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Create a policy on how to make the web more accessible for people with disabilities",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64a-40ba129711a8d60d3b1c931a;363f9832-405c-4e08-a8b7-e3cbd88ec213)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 13 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760544330.207992
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Create a policy on how to make the web more accessible for people with disabilities",
+          "observation": null,
+          "timestamp": 1760544330.2079968
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Create a policy on how to make the web more accessible for people with disabilities",
+          "observation": null,
+          "timestamp": 1760544330.207999
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1760544330.34817
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 0.14019107818603516,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "What is the common error on how people structure html documents",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64a-7d6fe0b252152d7457641032;26461ab0-adb0-41dd-b1e7-38bf3b24e74e)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 13 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760544330.348274
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "What is the common error on how people structure html documents",
+          "observation": null,
+          "timestamp": 1760544330.348284
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "What is the common error on how people structure html documents",
+          "observation": null,
+          "timestamp": 1760544330.348288
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1760544330.499604
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 0.15135407447814941,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "LangChain execution error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64b-46b7789873822cbf4ee413f1;3b9aae4a-2b6a-454d-be75-313e272991a1)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 13 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze', 'wikipedia', 'web_browser', 'code_interpreter', 'click_element', 'type_text', 'navigate', 'extract_table', 'summarize', 'translate', 'calendar']",
+          "timestamp": 1760544330.648336
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Plan a multi-step research project on renewable energy",
+          "observation": null,
+          "timestamp": 1760544330.650578
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64b-46b7789873822cbf4ee413f1;3b9aae4a-2b6a-454d-be75-313e272991a1)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+          "timestamp": 1760544330.797745
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.29801106452941895,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "LangChain execution error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64b-3ff58cf3003c34023a6a5d21;1177062f-18de-41e6-bf07-ac4f06447026)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 13 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze', 'wikipedia', 'web_browser', 'code_interpreter', 'click_element', 'type_text', 'navigate', 'extract_table', 'summarize', 'translate', 'calendar']",
+          "timestamp": 1760544330.956733
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Research and synthesize information about quantum computing applications",
+          "observation": null,
+          "timestamp": 1760544330.957379
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64b-3ff58cf3003c34023a6a5d21;1177062f-18de-41e6-bf07-ac4f06447026)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+          "timestamp": 1760544331.1326249
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.3348050117492676,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Create a policy on how to make the web more accessible for people with disabilities",
+      "response": "LangChain execution error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64b-27d212170f91448f6c8a8aab;6790d149-cf96-44db-8687-e79e7a063e01)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 13 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze', 'wikipedia', 'web_browser', 'code_interpreter', 'click_element', 'type_text', 'navigate', 'extract_table', 'summarize', 'translate', 'calendar']",
+          "timestamp": 1760544331.2772741
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Create a policy on how to make the web more accessible for people with disabilities",
+          "observation": null,
+          "timestamp": 1760544331.277979
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64b-27d212170f91448f6c8a8aab;6790d149-cf96-44db-8687-e79e7a063e01)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+          "timestamp": 1760544331.423313
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.2906181812286377,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "What is the common error on how people structure html documents",
+      "response": "LangChain execution error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64c-30e0119e740fe49b67a12e14;e7059e11-817f-4e69-9093-9b05bfb7ff54)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 13 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze', 'wikipedia', 'web_browser', 'code_interpreter', 'click_element', 'type_text', 'navigate', 'extract_table', 'summarize', 'translate', 'calendar']",
+          "timestamp": 1760544331.573003
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "What is the common error on how people structure html documents",
+          "observation": null,
+          "timestamp": 1760544331.5737011
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64c-30e0119e740fe49b67a12e14;e7059e11-817f-4e69-9093-9b05bfb7ff54)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+          "timestamp": 1760544331.7167602
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.2933778762817383,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64c-66fe89cf4bde65ab6e84b4b1;d642d817-f009-4181-bf35-15564b05787b)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1760544331.724488
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Plan a multi-step research project on renewable energy",
+          "observation": null,
+          "timestamp": 1760544331.725898
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 335 characters",
+          "timestamp": 1760544331.874877
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1760544331.877341
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1760544332.027255
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1760544332.027669
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1760544332.0284538
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1760544332.168575
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1760544332.168879
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1760544332.1694489
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 335 characters",
+          "timestamp": 1760544332.312163
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.5958762168884277,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64d-5457b61a30a995dd25cd70e6;953327af-dc5f-48b9-96d4-1162a12ad9ea)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1760544332.319644
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Research and synthesize information about quantum computing applications",
+          "observation": null,
+          "timestamp": 1760544332.32062
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 335 characters",
+          "timestamp": 1760544332.459123
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1760544332.45998
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1760544332.596426
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1760544332.5967848
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1760544332.5975628
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1760544332.7376719
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1760544332.738036
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1760544332.738796
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 335 characters",
+          "timestamp": 1760544332.878657
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.566361665725708,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Create a policy on how to make the web more accessible for people with disabilities",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64d-417b80ff421541dd420c199e;0ebe3e37-c417-40d1-aa28-854a84503e72)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1760544332.884462
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Create a policy on how to make the web more accessible for people with disabilities",
+          "observation": null,
+          "timestamp": 1760544332.885458
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 335 characters",
+          "timestamp": 1760544333.022186
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1760544333.0231402
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1760544333.175701
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1760544333.1760828
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1760544333.176845
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1760544333.3199239
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1760544333.320299
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1760544333.321173
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 335 characters",
+          "timestamp": 1760544333.4625978
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.5838761329650879,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "What is the common error on how people structure html documents",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-68efc64e-6233d6ff241052ac1988ac66;a8aca7e3-68a4-49bf-aa5a-09631ca939c6)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1760544333.468406
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "What is the common error on how people structure html documents",
+          "observation": null,
+          "timestamp": 1760544333.469387
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 335 characters",
+          "timestamp": 1760544333.60885
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1760544333.609822
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1760544333.752131
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1760544333.7524962
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1760544333.753233
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1760544333.8986812
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1760544333.899029
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1760544333.89979
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 335 characters",
+          "timestamp": 1760544334.0517812
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.5890097618103027,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.0033032894134521484,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.0025479793548583984,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Create a policy on how to make the web more accessible for people with disabilities",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.0017359256744384766,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "What is the common error on how people structure html documents",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.0019500255584716797,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 7.605552673339844e-05,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 1.3113021850585938e-05,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Create a policy on how to make the web more accessible for people with disabilities",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 8.821487426757812e-06,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "What is the common error on how people structure html documents",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 8.821487426757812e-06,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    }
+  ]
+}

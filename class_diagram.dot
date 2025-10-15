@@ -1,0 +1,32 @@
+digraph UML {
+  rankdir=TB;
+  node [shape=record, fontname="Helvetica", fontsize=10];
+
+  "ProtocolType" [label="{ProtocolType||}"];
+  "ReasoningStep" [label="{ReasoningStep|step_number\lthought\laction\laction_input\lobservation\ltimestamp\l|}"];
+  "TestResult" [label="{TestResult|model_name\lprotocol\lframework\ltask\lresponse\lreasoning_steps\llatency\lsuccess\lerror\lmetadata\l|}"];
+  "BaseProtocol" [label="{BaseProtocol\n«abstract»||send_message\lreceive_message\l}"];
+  "MCPProtocol" [label="{MCPProtocol||send_message\lreceive_message\l}"];
+  "A2AProtocol" [label="{A2AProtocol||send_message\lreceive_message\l}"];
+  "ACPProtocol" [label="{ACPProtocol||send_message\lreceive_message\l}"];
+  "HuggingFaceAdapter" [label="{HuggingFaceAdapter||__init__\lgenerate\lget_langchain_llm\lget_llamaindex_llm\l}"];
+  "CrewAIAgent" [label="{CrewAIAgent||__init__\lexecute_task\l}"];
+  "SmolAgentWrapper" [label="{SmolAgentWrapper||__init__\ladd_tool\lrun\l}"];
+  "LangChainAgent" [label="{LangChainAgent||__init__\ladd_tool\lrun\l}"];
+  "LangGraphAgent" [label="{LangGraphAgent||__init__\lbuild_research_workflow\lrun\l}"];
+  "LlamaIndexAgent" [label="{LlamaIndexAgent||__init__\ladd_tool\lrun\l}"];
+  "SemanticKernelAgent" [label="{SemanticKernelAgent||__init__\ladd_semantic_function\lrun\l}"];
+  "AgenticStackTester" [label="{AgenticStackTester||__init__\ltest_with_protocol\ltest_with_crewai\ltest_with_smolagents\ltest_with_langchain\ltest_with_langgraph\ltest_with_llamaindex\ltest_with_semantic_kernel\lrun_comprehensive_test\lexport_results\lprint_summary\l}"];
+  "HuggingFaceLLM" [label="{HuggingFaceLLM|model_name\ladapter\l|__init__\lmetadata\lcomplete\lstream_complete\l}"];
+  "AgentState" [label="{AgentState|task\lplan\lresearch_results\lfinal_report\lstep\l|}"];
+  "ProtocolType" -> "Enum" [arrowhead=empty, fontsize=9];
+  "BaseProtocol" -> "ABC" [arrowhead=empty, fontsize=9];
+  "MCPProtocol" -> "BaseProtocol" [arrowhead=empty, fontsize=9];
+  "A2AProtocol" -> "BaseProtocol" [arrowhead=empty, fontsize=9];
+  "ACPProtocol" -> "BaseProtocol" [arrowhead=empty, fontsize=9];
+  "HuggingFaceLLM" -> "CustomLLM" [arrowhead=empty, fontsize=9];
+  "AgentState" -> "TypedDict" [arrowhead=empty, fontsize=9];
+  "TestResult" -> "ProtocolType" [arrowhead=open, taillabel="protocol", headlabel="1", fontsize=9];
+  "TestResult" -> "ReasoningStep" [arrowhead=none, arrowtail=odiamond, dir=back, taillabel="reasoning_steps", headlabel="0..*", fontsize=9];
+  "HuggingFaceLLM" -> "HuggingFaceAdapter" [arrowhead=open, taillabel="adapter", headlabel="1", fontsize=9];
+}

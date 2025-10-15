@@ -1,0 +1,1208 @@
+{
+  "benchmark": "Mind2Web",
+  "timestamp": "2025-10-15T11:18:53.316128",
+  "aggregate_metrics": {
+    "total_tasks_evaluated": 60,
+    "avg_action_coverage": 0.016666666666666666,
+    "avg_action_order_score": 0.016666666666666666,
+    "avg_task_understanding": 0.013492063492063493,
+    "avg_reasoning_steps": 3.5,
+    "domain_metrics": {
+      "Entertainment": {
+        "count": 18,
+        "total_coverage": 0.0,
+        "total_understanding": 0.06666666666666667,
+        "avg_coverage": 0.0,
+        "avg_understanding": 0.003703703703703704
+      },
+      "Shopping": {
+        "count": 12,
+        "total_coverage": 0.0,
+        "total_understanding": 0.0,
+        "avg_coverage": 0.0,
+        "avg_understanding": 0.0
+      },
+      "Travel": {
+        "count": 30,
+        "total_coverage": 1.0,
+        "total_understanding": 0.7428571428571428,
+        "avg_coverage": 0.03333333333333333,
+        "avg_understanding": 0.02476190476190476
+      }
+    }
+  },
+  "task_results": [
+    {
+      "task_id": "39fd14c2-3bdd-4ca6-8a3a-1a6e7374c8e6",
+      "website": "last.fm",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  Merchandise -> CLICK",
+        "[span]  Women's Last.fm Spiral Hex Tee -> CLICK",
+        "[select]  S -> SELECT: XL",
+        "[svg]   -> CLICK",
+        "[button]  ADD TO CART -> CLICK",
+        "[path]   -> CLICK",
+        "[button]  Check Out -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.06666666666666667,
+      "reasoning_steps_count": 3,
+      "response_length": 162
+    },
+    {
+      "task_id": "f296f6a6-dbb7-47dd-bd6f-4ac2336a7d28",
+      "website": "bookdepository",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  Bestsellers -> CLICK",
+        "[select]  All -> SELECT: US$20 to US$40",
+        "[select]  All -> SELECT: In stock (53476)",
+        "[select]  All -> SELECT: Digital",
+        "[select]  All -> SELECT: French (299)",
+        "[button]  Refine results -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 0
+    },
+    {
+      "task_id": "21e5c264-df85-4055-a566-ecb65cdd8c63",
+      "website": "us.megabus",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[textbox]  From (type text or use the arrow keys) -> TYPE: New York",
+        "[span]  New York, NY -> CLICK",
+        "[textbox]  To (type text or use the arrow keys) -> TYPE: Alfred",
+        "[span]  Alfred, NY -> CLICK",
+        "[textbox]  Pick a date -> CLICK",
+        "[gridcell]  March 31, 2023 -> CLICK",
+        "[span]   -> CLICK",
+        "[span]   -> CLICK",
+        "[button]  Find tickets -> CLICK",
+        "[button]  Add to basket -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.2,
+      "reasoning_steps_count": 3,
+      "response_length": 369
+    },
+    {
+      "task_id": "40fbda9d-22c5-4aab-9798-3db50d981c5c",
+      "website": "yellowpages",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[link]  QUESTIONS & ANSWERS -> CLICK",
+        "[link]  Home Improvement Remodeling -> CLICK"
+      ],
+      "extracted_actions": [
+        "click",
+        "type",
+        "select",
+        "navigate",
+        "submit",
+        "enter",
+        "input"
+      ],
+      "action_coverage": 1.0,
+      "action_order_score": 1.0,
+      "task_understanding_score": 0.14285714285714285,
+      "reasoning_steps_count": 3,
+      "response_length": 2010
+    },
+    {
+      "task_id": "126b4604-8b04-4eb1-9027-266631c96f01",
+      "website": "resy",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Los Angeles -> CLICK",
+        "[link]  La Cha Cha Cha -> CLICK",
+        "[div]  Today -> CLICK",
+        "[button]  April 7, 2023. -> CLICK",
+        "[combobox]  Guests -> SELECT: 3 Guests",
+        "[button]  5:00 PM Outdoor Table -> CLICK",
+        "[button]  Reserve Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 335
+    },
+    {
+      "task_id": "66625c9d-5bf3-42d1-b463-ab2767307201",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> CLICK",
+        "[link]  Partner Deals -> CLICK",
+        "[button]  Learn More -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.1,
+      "reasoning_steps_count": 3,
+      "response_length": 335
+    },
+    {
+      "task_id": "f45b0783-4325-4b3e-959d-c181971d72f6",
+      "website": "sports.yahoo",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  NBA . -> CLICK",
+        "[link]  Teams -> CLICK",
+        "[link]  Los Angeles Lakers -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 335
+    },
+    {
+      "task_id": "b5d47068-b773-4061-b7ba-17bd25e88e06",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> HOVER",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 335
+    },
+    {
+      "task_id": "42657330-bfc5-425d-ae21-396a9ba1fb12",
+      "website": "uniqlo",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  WOMEN -> CLICK",
+        "[RootWebArea]  Women's, Men's & Kids' Clothing & Accessories | UN... -> CLICK",
+        "[searchbox]  Search by keyword -> TYPE: women t-shirts",
+        "[div]  WOMEN / Tops -> CLICK",
+        "[gridcell]  Size -> CLICK",
+        "[label]  S -> CLICK",
+        "[gridcell]  Color -> CLICK",
+        "[label]  YELLOW -> CLICK",
+        "[gridcell]  Price -> CLICK",
+        "[label]  $10-$20 -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 335
+    },
+    {
+      "task_id": "29f47ddb-3d25-4cfb-b1d6-d3987e998a13",
+      "website": "amctheatres",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[select]  AMC Grove City 14 -> SELECT: AMC Grove City 14",
+        "[select]  All Movies -> SELECT: 65",
+        "[select]  Sun, Mar 26 -> SELECT: Tue, Mar 28",
+        "[link]  7:30pm -> CLICK",
+        "[text]  J10 -> CLICK",
+        "[text]  J9 -> CLICK",
+        "[text]  J8 -> CLICK",
+        "[text]  J7 -> CLICK",
+        "[svg]   -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 335
+    },
+    {
+      "task_id": "39fd14c2-3bdd-4ca6-8a3a-1a6e7374c8e6",
+      "website": "last.fm",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  Merchandise -> CLICK",
+        "[span]  Women's Last.fm Spiral Hex Tee -> CLICK",
+        "[select]  S -> SELECT: XL",
+        "[svg]   -> CLICK",
+        "[button]  ADD TO CART -> CLICK",
+        "[path]   -> CLICK",
+        "[button]  Check Out -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 4,
+      "response_length": 335
+    },
+    {
+      "task_id": "f296f6a6-dbb7-47dd-bd6f-4ac2336a7d28",
+      "website": "bookdepository",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  Bestsellers -> CLICK",
+        "[select]  All -> SELECT: US$20 to US$40",
+        "[select]  All -> SELECT: In stock (53476)",
+        "[select]  All -> SELECT: Digital",
+        "[select]  All -> SELECT: French (299)",
+        "[button]  Refine results -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 4,
+      "response_length": 335
+    },
+    {
+      "task_id": "21e5c264-df85-4055-a566-ecb65cdd8c63",
+      "website": "us.megabus",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[textbox]  From (type text or use the arrow keys) -> TYPE: New York",
+        "[span]  New York, NY -> CLICK",
+        "[textbox]  To (type text or use the arrow keys) -> TYPE: Alfred",
+        "[span]  Alfred, NY -> CLICK",
+        "[textbox]  Pick a date -> CLICK",
+        "[gridcell]  March 31, 2023 -> CLICK",
+        "[span]   -> CLICK",
+        "[span]   -> CLICK",
+        "[button]  Find tickets -> CLICK",
+        "[button]  Add to basket -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 4,
+      "response_length": 335
+    },
+    {
+      "task_id": "40fbda9d-22c5-4aab-9798-3db50d981c5c",
+      "website": "yellowpages",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[link]  QUESTIONS & ANSWERS -> CLICK",
+        "[link]  Home Improvement Remodeling -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 4,
+      "response_length": 335
+    },
+    {
+      "task_id": "126b4604-8b04-4eb1-9027-266631c96f01",
+      "website": "resy",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Los Angeles -> CLICK",
+        "[link]  La Cha Cha Cha -> CLICK",
+        "[div]  Today -> CLICK",
+        "[button]  April 7, 2023. -> CLICK",
+        "[combobox]  Guests -> SELECT: 3 Guests",
+        "[button]  5:00 PM Outdoor Table -> CLICK",
+        "[button]  Reserve Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 4,
+      "response_length": 335
+    },
+    {
+      "task_id": "66625c9d-5bf3-42d1-b463-ab2767307201",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> CLICK",
+        "[link]  Partner Deals -> CLICK",
+        "[button]  Learn More -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.1,
+      "reasoning_steps_count": 4,
+      "response_length": 335
+    },
+    {
+      "task_id": "f45b0783-4325-4b3e-959d-c181971d72f6",
+      "website": "sports.yahoo",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  NBA . -> CLICK",
+        "[link]  Teams -> CLICK",
+        "[link]  Los Angeles Lakers -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 4,
+      "response_length": 335
+    },
+    {
+      "task_id": "b5d47068-b773-4061-b7ba-17bd25e88e06",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> HOVER",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 4,
+      "response_length": 335
+    },
+    {
+      "task_id": "42657330-bfc5-425d-ae21-396a9ba1fb12",
+      "website": "uniqlo",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  WOMEN -> CLICK",
+        "[RootWebArea]  Women's, Men's & Kids' Clothing & Accessories | UN... -> CLICK",
+        "[searchbox]  Search by keyword -> TYPE: women t-shirts",
+        "[div]  WOMEN / Tops -> CLICK",
+        "[gridcell]  Size -> CLICK",
+        "[label]  S -> CLICK",
+        "[gridcell]  Color -> CLICK",
+        "[label]  YELLOW -> CLICK",
+        "[gridcell]  Price -> CLICK",
+        "[label]  $10-$20 -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 4,
+      "response_length": 335
+    },
+    {
+      "task_id": "29f47ddb-3d25-4cfb-b1d6-d3987e998a13",
+      "website": "amctheatres",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[select]  AMC Grove City 14 -> SELECT: AMC Grove City 14",
+        "[select]  All Movies -> SELECT: 65",
+        "[select]  Sun, Mar 26 -> SELECT: Tue, Mar 28",
+        "[link]  7:30pm -> CLICK",
+        "[text]  J10 -> CLICK",
+        "[text]  J9 -> CLICK",
+        "[text]  J8 -> CLICK",
+        "[text]  J7 -> CLICK",
+        "[svg]   -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 4,
+      "response_length": 335
+    },
+    {
+      "task_id": "39fd14c2-3bdd-4ca6-8a3a-1a6e7374c8e6",
+      "website": "last.fm",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  Merchandise -> CLICK",
+        "[span]  Women's Last.fm Spiral Hex Tee -> CLICK",
+        "[select]  S -> SELECT: XL",
+        "[svg]   -> CLICK",
+        "[button]  ADD TO CART -> CLICK",
+        "[path]   -> CLICK",
+        "[button]  Check Out -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 355
+    },
+    {
+      "task_id": "f296f6a6-dbb7-47dd-bd6f-4ac2336a7d28",
+      "website": "bookdepository",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  Bestsellers -> CLICK",
+        "[select]  All -> SELECT: US$20 to US$40",
+        "[select]  All -> SELECT: In stock (53476)",
+        "[select]  All -> SELECT: Digital",
+        "[select]  All -> SELECT: French (299)",
+        "[button]  Refine results -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 355
+    },
+    {
+      "task_id": "21e5c264-df85-4055-a566-ecb65cdd8c63",
+      "website": "us.megabus",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[textbox]  From (type text or use the arrow keys) -> TYPE: New York",
+        "[span]  New York, NY -> CLICK",
+        "[textbox]  To (type text or use the arrow keys) -> TYPE: Alfred",
+        "[span]  Alfred, NY -> CLICK",
+        "[textbox]  Pick a date -> CLICK",
+        "[gridcell]  March 31, 2023 -> CLICK",
+        "[span]   -> CLICK",
+        "[span]   -> CLICK",
+        "[button]  Find tickets -> CLICK",
+        "[button]  Add to basket -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 355
+    },
+    {
+      "task_id": "40fbda9d-22c5-4aab-9798-3db50d981c5c",
+      "website": "yellowpages",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[link]  QUESTIONS & ANSWERS -> CLICK",
+        "[link]  Home Improvement Remodeling -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 355
+    },
+    {
+      "task_id": "126b4604-8b04-4eb1-9027-266631c96f01",
+      "website": "resy",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Los Angeles -> CLICK",
+        "[link]  La Cha Cha Cha -> CLICK",
+        "[div]  Today -> CLICK",
+        "[button]  April 7, 2023. -> CLICK",
+        "[combobox]  Guests -> SELECT: 3 Guests",
+        "[button]  5:00 PM Outdoor Table -> CLICK",
+        "[button]  Reserve Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 355
+    },
+    {
+      "task_id": "66625c9d-5bf3-42d1-b463-ab2767307201",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> CLICK",
+        "[link]  Partner Deals -> CLICK",
+        "[button]  Learn More -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.1,
+      "reasoning_steps_count": 3,
+      "response_length": 355
+    },
+    {
+      "task_id": "f45b0783-4325-4b3e-959d-c181971d72f6",
+      "website": "sports.yahoo",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  NBA . -> CLICK",
+        "[link]  Teams -> CLICK",
+        "[link]  Los Angeles Lakers -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 355
+    },
+    {
+      "task_id": "b5d47068-b773-4061-b7ba-17bd25e88e06",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> HOVER",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 355
+    },
+    {
+      "task_id": "42657330-bfc5-425d-ae21-396a9ba1fb12",
+      "website": "uniqlo",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  WOMEN -> CLICK",
+        "[RootWebArea]  Women's, Men's & Kids' Clothing & Accessories | UN... -> CLICK",
+        "[searchbox]  Search by keyword -> TYPE: women t-shirts",
+        "[div]  WOMEN / Tops -> CLICK",
+        "[gridcell]  Size -> CLICK",
+        "[label]  S -> CLICK",
+        "[gridcell]  Color -> CLICK",
+        "[label]  YELLOW -> CLICK",
+        "[gridcell]  Price -> CLICK",
+        "[label]  $10-$20 -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 355
+    },
+    {
+      "task_id": "29f47ddb-3d25-4cfb-b1d6-d3987e998a13",
+      "website": "amctheatres",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[select]  AMC Grove City 14 -> SELECT: AMC Grove City 14",
+        "[select]  All Movies -> SELECT: 65",
+        "[select]  Sun, Mar 26 -> SELECT: Tue, Mar 28",
+        "[link]  7:30pm -> CLICK",
+        "[text]  J10 -> CLICK",
+        "[text]  J9 -> CLICK",
+        "[text]  J8 -> CLICK",
+        "[text]  J7 -> CLICK",
+        "[svg]   -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 3,
+      "response_length": 355
+    },
+    {
+      "task_id": "39fd14c2-3bdd-4ca6-8a3a-1a6e7374c8e6",
+      "website": "last.fm",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  Merchandise -> CLICK",
+        "[span]  Women's Last.fm Spiral Hex Tee -> CLICK",
+        "[select]  S -> SELECT: XL",
+        "[svg]   -> CLICK",
+        "[button]  ADD TO CART -> CLICK",
+        "[path]   -> CLICK",
+        "[button]  Check Out -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 11,
+      "response_length": 335
+    },
+    {
+      "task_id": "f296f6a6-dbb7-47dd-bd6f-4ac2336a7d28",
+      "website": "bookdepository",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  Bestsellers -> CLICK",
+        "[select]  All -> SELECT: US$20 to US$40",
+        "[select]  All -> SELECT: In stock (53476)",
+        "[select]  All -> SELECT: Digital",
+        "[select]  All -> SELECT: French (299)",
+        "[button]  Refine results -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 11,
+      "response_length": 335
+    },
+    {
+      "task_id": "21e5c264-df85-4055-a566-ecb65cdd8c63",
+      "website": "us.megabus",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[textbox]  From (type text or use the arrow keys) -> TYPE: New York",
+        "[span]  New York, NY -> CLICK",
+        "[textbox]  To (type text or use the arrow keys) -> TYPE: Alfred",
+        "[span]  Alfred, NY -> CLICK",
+        "[textbox]  Pick a date -> CLICK",
+        "[gridcell]  March 31, 2023 -> CLICK",
+        "[span]   -> CLICK",
+        "[span]   -> CLICK",
+        "[button]  Find tickets -> CLICK",
+        "[button]  Add to basket -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 11,
+      "response_length": 335
+    },
+    {
+      "task_id": "40fbda9d-22c5-4aab-9798-3db50d981c5c",
+      "website": "yellowpages",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[link]  QUESTIONS & ANSWERS -> CLICK",
+        "[link]  Home Improvement Remodeling -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 11,
+      "response_length": 335
+    },
+    {
+      "task_id": "126b4604-8b04-4eb1-9027-266631c96f01",
+      "website": "resy",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Los Angeles -> CLICK",
+        "[link]  La Cha Cha Cha -> CLICK",
+        "[div]  Today -> CLICK",
+        "[button]  April 7, 2023. -> CLICK",
+        "[combobox]  Guests -> SELECT: 3 Guests",
+        "[button]  5:00 PM Outdoor Table -> CLICK",
+        "[button]  Reserve Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 11,
+      "response_length": 335
+    },
+    {
+      "task_id": "66625c9d-5bf3-42d1-b463-ab2767307201",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> CLICK",
+        "[link]  Partner Deals -> CLICK",
+        "[button]  Learn More -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.1,
+      "reasoning_steps_count": 11,
+      "response_length": 335
+    },
+    {
+      "task_id": "f45b0783-4325-4b3e-959d-c181971d72f6",
+      "website": "sports.yahoo",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  NBA . -> CLICK",
+        "[link]  Teams -> CLICK",
+        "[link]  Los Angeles Lakers -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 11,
+      "response_length": 335
+    },
+    {
+      "task_id": "b5d47068-b773-4061-b7ba-17bd25e88e06",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> HOVER",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 11,
+      "response_length": 335
+    },
+    {
+      "task_id": "42657330-bfc5-425d-ae21-396a9ba1fb12",
+      "website": "uniqlo",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  WOMEN -> CLICK",
+        "[RootWebArea]  Women's, Men's & Kids' Clothing & Accessories | UN... -> CLICK",
+        "[searchbox]  Search by keyword -> TYPE: women t-shirts",
+        "[div]  WOMEN / Tops -> CLICK",
+        "[gridcell]  Size -> CLICK",
+        "[label]  S -> CLICK",
+        "[gridcell]  Color -> CLICK",
+        "[label]  YELLOW -> CLICK",
+        "[gridcell]  Price -> CLICK",
+        "[label]  $10-$20 -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 11,
+      "response_length": 335
+    },
+    {
+      "task_id": "29f47ddb-3d25-4cfb-b1d6-d3987e998a13",
+      "website": "amctheatres",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[select]  AMC Grove City 14 -> SELECT: AMC Grove City 14",
+        "[select]  All Movies -> SELECT: 65",
+        "[select]  Sun, Mar 26 -> SELECT: Tue, Mar 28",
+        "[link]  7:30pm -> CLICK",
+        "[text]  J10 -> CLICK",
+        "[text]  J9 -> CLICK",
+        "[text]  J8 -> CLICK",
+        "[text]  J7 -> CLICK",
+        "[svg]   -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 11,
+      "response_length": 335
+    },
+    {
+      "task_id": "39fd14c2-3bdd-4ca6-8a3a-1a6e7374c8e6",
+      "website": "last.fm",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  Merchandise -> CLICK",
+        "[span]  Women's Last.fm Spiral Hex Tee -> CLICK",
+        "[select]  S -> SELECT: XL",
+        "[svg]   -> CLICK",
+        "[button]  ADD TO CART -> CLICK",
+        "[path]   -> CLICK",
+        "[button]  Check Out -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "f296f6a6-dbb7-47dd-bd6f-4ac2336a7d28",
+      "website": "bookdepository",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  Bestsellers -> CLICK",
+        "[select]  All -> SELECT: US$20 to US$40",
+        "[select]  All -> SELECT: In stock (53476)",
+        "[select]  All -> SELECT: Digital",
+        "[select]  All -> SELECT: French (299)",
+        "[button]  Refine results -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "21e5c264-df85-4055-a566-ecb65cdd8c63",
+      "website": "us.megabus",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[textbox]  From (type text or use the arrow keys) -> TYPE: New York",
+        "[span]  New York, NY -> CLICK",
+        "[textbox]  To (type text or use the arrow keys) -> TYPE: Alfred",
+        "[span]  Alfred, NY -> CLICK",
+        "[textbox]  Pick a date -> CLICK",
+        "[gridcell]  March 31, 2023 -> CLICK",
+        "[span]   -> CLICK",
+        "[span]   -> CLICK",
+        "[button]  Find tickets -> CLICK",
+        "[button]  Add to basket -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "40fbda9d-22c5-4aab-9798-3db50d981c5c",
+      "website": "yellowpages",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[link]  QUESTIONS & ANSWERS -> CLICK",
+        "[link]  Home Improvement Remodeling -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "126b4604-8b04-4eb1-9027-266631c96f01",
+      "website": "resy",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Los Angeles -> CLICK",
+        "[link]  La Cha Cha Cha -> CLICK",
+        "[div]  Today -> CLICK",
+        "[button]  April 7, 2023. -> CLICK",
+        "[combobox]  Guests -> SELECT: 3 Guests",
+        "[button]  5:00 PM Outdoor Table -> CLICK",
+        "[button]  Reserve Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "66625c9d-5bf3-42d1-b463-ab2767307201",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> CLICK",
+        "[link]  Partner Deals -> CLICK",
+        "[button]  Learn More -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "f45b0783-4325-4b3e-959d-c181971d72f6",
+      "website": "sports.yahoo",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  NBA . -> CLICK",
+        "[link]  Teams -> CLICK",
+        "[link]  Los Angeles Lakers -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "b5d47068-b773-4061-b7ba-17bd25e88e06",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> HOVER",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "42657330-bfc5-425d-ae21-396a9ba1fb12",
+      "website": "uniqlo",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  WOMEN -> CLICK",
+        "[RootWebArea]  Women's, Men's & Kids' Clothing & Accessories | UN... -> CLICK",
+        "[searchbox]  Search by keyword -> TYPE: women t-shirts",
+        "[div]  WOMEN / Tops -> CLICK",
+        "[gridcell]  Size -> CLICK",
+        "[label]  S -> CLICK",
+        "[gridcell]  Color -> CLICK",
+        "[label]  YELLOW -> CLICK",
+        "[gridcell]  Price -> CLICK",
+        "[label]  $10-$20 -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "29f47ddb-3d25-4cfb-b1d6-d3987e998a13",
+      "website": "amctheatres",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[select]  AMC Grove City 14 -> SELECT: AMC Grove City 14",
+        "[select]  All Movies -> SELECT: 65",
+        "[select]  Sun, Mar 26 -> SELECT: Tue, Mar 28",
+        "[link]  7:30pm -> CLICK",
+        "[text]  J10 -> CLICK",
+        "[text]  J9 -> CLICK",
+        "[text]  J8 -> CLICK",
+        "[text]  J7 -> CLICK",
+        "[svg]   -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "39fd14c2-3bdd-4ca6-8a3a-1a6e7374c8e6",
+      "website": "last.fm",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  Merchandise -> CLICK",
+        "[span]  Women's Last.fm Spiral Hex Tee -> CLICK",
+        "[select]  S -> SELECT: XL",
+        "[svg]   -> CLICK",
+        "[button]  ADD TO CART -> CLICK",
+        "[path]   -> CLICK",
+        "[button]  Check Out -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "f296f6a6-dbb7-47dd-bd6f-4ac2336a7d28",
+      "website": "bookdepository",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  Bestsellers -> CLICK",
+        "[select]  All -> SELECT: US$20 to US$40",
+        "[select]  All -> SELECT: In stock (53476)",
+        "[select]  All -> SELECT: Digital",
+        "[select]  All -> SELECT: French (299)",
+        "[button]  Refine results -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "21e5c264-df85-4055-a566-ecb65cdd8c63",
+      "website": "us.megabus",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[textbox]  From (type text or use the arrow keys) -> TYPE: New York",
+        "[span]  New York, NY -> CLICK",
+        "[textbox]  To (type text or use the arrow keys) -> TYPE: Alfred",
+        "[span]  Alfred, NY -> CLICK",
+        "[textbox]  Pick a date -> CLICK",
+        "[gridcell]  March 31, 2023 -> CLICK",
+        "[span]   -> CLICK",
+        "[span]   -> CLICK",
+        "[button]  Find tickets -> CLICK",
+        "[button]  Add to basket -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "40fbda9d-22c5-4aab-9798-3db50d981c5c",
+      "website": "yellowpages",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[link]  QUESTIONS & ANSWERS -> CLICK",
+        "[link]  Home Improvement Remodeling -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "126b4604-8b04-4eb1-9027-266631c96f01",
+      "website": "resy",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Los Angeles -> CLICK",
+        "[link]  La Cha Cha Cha -> CLICK",
+        "[div]  Today -> CLICK",
+        "[button]  April 7, 2023. -> CLICK",
+        "[combobox]  Guests -> SELECT: 3 Guests",
+        "[button]  5:00 PM Outdoor Table -> CLICK",
+        "[button]  Reserve Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "66625c9d-5bf3-42d1-b463-ab2767307201",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> CLICK",
+        "[link]  Partner Deals -> CLICK",
+        "[button]  Learn More -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "f45b0783-4325-4b3e-959d-c181971d72f6",
+      "website": "sports.yahoo",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[link]  NBA . -> CLICK",
+        "[link]  Teams -> CLICK",
+        "[link]  Los Angeles Lakers -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "b5d47068-b773-4061-b7ba-17bd25e88e06",
+      "website": "budget",
+      "domain": "Travel",
+      "ground_truth_actions": [
+        "[button]  Deals -> HOVER",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK",
+        "[button]  Deals -> CLICK",
+        "[link]  US Deals -> CLICK",
+        "[button]  Save Now -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "42657330-bfc5-425d-ae21-396a9ba1fb12",
+      "website": "uniqlo",
+      "domain": "Shopping",
+      "ground_truth_actions": [
+        "[link]  WOMEN -> CLICK",
+        "[RootWebArea]  Women's, Men's & Kids' Clothing & Accessories | UN... -> CLICK",
+        "[searchbox]  Search by keyword -> TYPE: women t-shirts",
+        "[div]  WOMEN / Tops -> CLICK",
+        "[gridcell]  Size -> CLICK",
+        "[label]  S -> CLICK",
+        "[gridcell]  Color -> CLICK",
+        "[label]  YELLOW -> CLICK",
+        "[gridcell]  Price -> CLICK",
+        "[label]  $10-$20 -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    },
+    {
+      "task_id": "29f47ddb-3d25-4cfb-b1d6-d3987e998a13",
+      "website": "amctheatres",
+      "domain": "Entertainment",
+      "ground_truth_actions": [
+        "[select]  AMC Grove City 14 -> SELECT: AMC Grove City 14",
+        "[select]  All Movies -> SELECT: 65",
+        "[select]  Sun, Mar 26 -> SELECT: Tue, Mar 28",
+        "[link]  7:30pm -> CLICK",
+        "[text]  J10 -> CLICK",
+        "[text]  J9 -> CLICK",
+        "[text]  J8 -> CLICK",
+        "[text]  J7 -> CLICK",
+        "[svg]   -> CLICK"
+      ],
+      "extracted_actions": [],
+      "action_coverage": 0.0,
+      "action_order_score": 0.0,
+      "task_understanding_score": 0.0,
+      "reasoning_steps_count": 0,
+      "response_length": 0
+    }
+  ]
+}

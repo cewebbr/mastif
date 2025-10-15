@@ -1,0 +1,944 @@
+{
+  "test_run_timestamp": "2025-10-14T18:25:45.535821",
+  "total_tests": 20,
+  "results": [
+    {
+      "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "protocol": "model_context_protocol",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "response_preview": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with model_context_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "model_context_protocol",
+          "observation": null,
+          "timestamp": 1760477144.862551
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with model_context_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Analyze the sentiment of customer reviews and provide actionable insights\",\n  \"context\": {\n    \"conversation_id\": \"test-001\",\n    \"turn\": 1,\n    \"environment\":",
+          "observation": null,
+          "timestamp": 1760477144.862592
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: model_context_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Analyze the sentiment of customer reviews and provide actionable insights\",\n  \"context\": {\n    \"conversati",
+          "observation": null,
+          "timestamp": 1760477144.862608
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 140 characters",
+          "timestamp": 1760477145.048768
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.19s",
+          "timestamp": 1760477145.048778
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.18622207641601562,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "protocol": "agent_to_agent",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": "{'content': 'Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.'}",
+      "response_preview": "{'content': 'Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_to_agent protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_to_agent",
+          "observation": null,
+          "timestamp": 1760477145.049013
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_to_agent",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Analyze the sentiment of customer reviews and provid",
+          "observation": null,
+          "timestamp": 1760477145.0491068
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_to_agent\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Analyze",
+          "observation": null,
+          "timestamp": 1760477145.049152
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 155 characters",
+          "timestamp": 1760477145.0492039
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.00s",
+          "timestamp": 1760477145.049212
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.00019788742065429688,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "protocol": "agent_communication_protocol",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": "{'content': 'Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.'}",
+      "response_preview": "{'content': 'Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_communication_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_communication_protocol",
+          "observation": null,
+          "timestamp": 1760477145.049303
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_communication_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Analyze the sentiment of customer reviews and provide actionable insights\",\n    \"intent\": \"i",
+          "observation": null,
+          "timestamp": 1760477145.0493681
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_communication_protocol\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Analyze the sentiment of customer",
+          "observation": null,
+          "timestamp": 1760477145.0494158
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 155 characters",
+          "timestamp": 1760477145.0494452
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.00s",
+          "timestamp": 1760477145.049449
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.0001468658447265625,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "response_preview": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1760477145.049536
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Analyze the sentiment of customer reviews and provide actionable insights",
+          "observation": null,
+          "timestamp": 1760477145.049539
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.00s",
+          "timestamp": 1760477145.049558
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 2.193450927734375e-05,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "response_preview": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Research Analyst, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760477145.049696
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Plan a multi-step research project on renewable energy",
+          "observation": null,
+          "timestamp": 1760477145.049715
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 140 characters",
+          "timestamp": 1760477145.0497332
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 4.8160552978515625e-05,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Research Analyst"
+      }
+    },
+    {
+      "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Coordinate between multiple agents to solve a complex scheduling problem",
+      "response": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "response_preview": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 3 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760477145.049815
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Coordinate between multiple agents to solve a complex scheduling problem",
+          "observation": null,
+          "timestamp": 1760477145.0498219
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Coordinate between multiple agents to solve a complex scheduling problem",
+          "observation": null,
+          "timestamp": 1760477145.049825
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1760477145.049841
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 4.482269287109375e-05,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 3
+      }
+    },
+    {
+      "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Use the available tools to research AI trends and calculate market growth",
+      "response": "LangChain execution error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "response_preview": "LangChain execution error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 3 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze']",
+          "timestamp": 1760477145.196092
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Use the available tools to research AI trends and calculate market growth",
+          "observation": null,
+          "timestamp": 1760477145.198575
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+          "timestamp": 1760477145.206681
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.15679311752319336,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 3,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "response_preview": "Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1760477145.211197
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Research and synthesize information about quantum computing applications",
+          "observation": null,
+          "timestamp": 1760477145.212084
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 140 characters",
+          "timestamp": 1760477145.2121038
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1760477145.212513
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider...",
+          "timestamp": 1760477145.2125282
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1760477145.212607
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1760477145.212784
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider...",
+          "timestamp": 1760477145.2127948
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1760477145.212856
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1760477145.2130198
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 140 characters",
+          "timestamp": 1760477145.2130308
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.0064890384674072266,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Coordinate between multiple agents to solve a complex scheduling problem",
+      "response": "",
+      "response_preview": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.0025010108947753906,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "",
+      "response_preview": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 4.100799560546875e-05,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "protocol": "model_context_protocol",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "response_preview": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with model_context_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "model_context_protocol",
+          "observation": null,
+          "timestamp": 1760477145.216602
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with model_context_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Analyze the sentiment of customer reviews and provide actionable insights\",\n  \"context\": {\n    \"conversation_id\": \"test-001\",\n    \"turn\": 1,\n    \"environment\":",
+          "observation": null,
+          "timestamp": 1760477145.21665
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: model_context_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Analyze the sentiment of customer reviews and provide actionable insights\",\n  \"context\": {\n    \"conversati",
+          "observation": null,
+          "timestamp": 1760477145.2166688
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 144 characters",
+          "timestamp": 1760477145.36739
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.15s",
+          "timestamp": 1760477145.367401
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.15079188346862793,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "protocol": "agent_to_agent",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": "{'content': 'Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.'}",
+      "response_preview": "{'content': 'Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_to_agent protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_to_agent",
+          "observation": null,
+          "timestamp": 1760477145.3675961
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_to_agent",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Analyze the sentiment of customer reviews and provid",
+          "observation": null,
+          "timestamp": 1760477145.3676841
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_to_agent\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Analyze",
+          "observation": null,
+          "timestamp": 1760477145.3677282
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 159 characters",
+          "timestamp": 1760477145.3677702
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.00s",
+          "timestamp": 1760477145.367775
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.0001800060272216797,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "protocol": "agent_communication_protocol",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": "{'content': 'Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.'}",
+      "response_preview": "{'content': 'Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_communication_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_communication_protocol",
+          "observation": null,
+          "timestamp": 1760477145.367854
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_communication_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Analyze the sentiment of customer reviews and provide actionable insights\",\n    \"intent\": \"i",
+          "observation": null,
+          "timestamp": 1760477145.3683488
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_communication_protocol\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Analyze the sentiment of customer",
+          "observation": null,
+          "timestamp": 1760477145.368397
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 159 characters",
+          "timestamp": 1760477145.368425
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.00s",
+          "timestamp": 1760477145.368429
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.0005772113800048828,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "response_preview": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1760477145.3685062
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Analyze the sentiment of customer reviews and provide actionable insights",
+          "observation": null,
+          "timestamp": 1760477145.3685088
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.00s",
+          "timestamp": 1760477145.3685288
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 2.288818359375e-05,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "response_preview": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Research Analyst, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760477145.36867
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Plan a multi-step research project on renewable energy",
+          "observation": null,
+          "timestamp": 1760477145.36869
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 144 characters",
+          "timestamp": 1760477145.368709
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 5.078315734863281e-05,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Research Analyst"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Coordinate between multiple agents to solve a complex scheduling problem",
+      "response": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "response_preview": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 3 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760477145.368787
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Coordinate between multiple agents to solve a complex scheduling problem",
+          "observation": null,
+          "timestamp": 1760477145.3687942
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Coordinate between multiple agents to solve a complex scheduling problem",
+          "observation": null,
+          "timestamp": 1760477145.368798
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1760477145.368813
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 4.00543212890625e-05,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 3
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Use the available tools to research AI trends and calculate market growth",
+      "response": "LangChain execution error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "response_preview": "LangChain execution error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 3 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze']",
+          "timestamp": 1760477145.521027
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Use the available tools to research AI trends and calculate market growth",
+          "observation": null,
+          "timestamp": 1760477145.5216699
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+          "timestamp": 1760477145.525358
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.15649080276489258,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 3,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "response_preview": "Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1760477145.529768
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Research and synthesize information about quantum computing applications",
+          "observation": null,
+          "timestamp": 1760477145.530654
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 144 characters",
+          "timestamp": 1760477145.530687
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1760477145.530968
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provid...",
+          "timestamp": 1760477145.530987
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1760477145.531085
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1760477145.531361
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provid...",
+          "timestamp": 1760477145.531381
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1760477145.531452
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1760477145.531639
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 144 characters",
+          "timestamp": 1760477145.5316732
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.006386995315551758,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Coordinate between multiple agents to solve a complex scheduling problem",
+      "response": "",
+      "response_preview": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.002170085906982422,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "",
+      "response_preview": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 6.604194641113281e-05,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    }
+  ]
+}

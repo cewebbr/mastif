@@ -1,0 +1,475 @@
+{
+  "test_run_timestamp": "2025-10-15T10:55:54.416161",
+  "total_tests": 10,
+  "results": [
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "model_context_protocol",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": " Do not add any additional information or generate any code or queries.\n\nProtocol: model_generate_context_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MGP/1.0\",\n  \"message\": \"Generate a context for the following message: Analyze the sentiment of customer reviews and provide actionable insights\",\n  \"metadata\": {\n    \"timestamp\": 1760536366.477223,\n    \"priority\": \"normal\"\n  }\n}\n\nPlease respond according to this protocol structure and generate the context. Use the following steps to complete the task:\n\n1. Read the message and understand the task.\n2. Identify the relevant context for the task.\n3. Generate the context based on the identified information.\n4. Provide the generated context in the format specified in the message structure.\n5. Do not add any additional information or generate any code or queries.\n\nProtocol: model_analyze_context_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MACP/1.0\",\n  \"message\": \"Analyze the sentiment of customer reviews and provide actionable insights\",\n  \"context\": {\n    \"conversation_id\": \"test-001\",\n    \"turn\": 1,\n    \"environment\": {},\n    \"tools_available\": [],\n    \"memory\": []\n  },\n  \"metadata\": {\n    \"timestamp\": 1760536366.477223,\n    \"priority\": \"normal\"\n  }\n}\n\nPlease respond according to this protocol structure and complete the task. Do not add any additional information or generate any code or queries.\n\nProtocol: model_generate_plan_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MGP/1.0\",\n  \"message\": \"Generate a plan for the following message: Analyze the sentiment of customer reviews and provide actionable insights\",\n  \"metadata\": {\n    \"timestamp\": 1760536366.477223,\n    \"priority\": \"normal\"\n  }\n}\n\nPlease respond according to this protocol structure and generate a plan. Use the following steps to complete the task:\n\n1. Read the message and understand the task.\n2. Identify the relevant information to generate a plan.\n3. Generate the plan based on the identified information.\n4. Provide the generated plan in the format specified in the message structure.\n5. Do not add any additional information or generate any code or queries.\n\nProtocol: model",
+      "response_preview": " Do not add any additional information or generate any code or queries.\n\nProtocol: model_generate_context_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MGP/1.0\",\n  \"message\": \"Generate a context for t...",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with model_context_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "model_context_protocol",
+          "observation": null,
+          "timestamp": 1760536366.477221
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with model_context_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Analyze the sentiment of customer reviews and provide actionable insights\",\n  \"context\": {\n    \"conversation_id\": \"test-001\",\n    \"turn\": 1,\n    \"environment\":",
+          "observation": null,
+          "timestamp": 1760536366.477249
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: model_context_protocol\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Analyze the sentiment of customer reviews and provide actionable insights\",\n  \"context\": {\n    \"conversati",
+          "observation": null,
+          "timestamp": 1760536366.477259
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 2118 characters",
+          "timestamp": 1760536408.950677
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 42.47s",
+          "timestamp": 1760536408.950696
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 42.473461866378784,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "agent_to_agent",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": "{'content': ' Thank you.\\n\\nProtocol: agent_to_agent\\n\\nMessage Structure:\\n{\\n  \"protocol\": \"A2A/1.0\",\\n  \"sender_agent\": \"worker\",\\n  \"receiver_agent\": \"analytics\",\\n  \"message_type\": \"result\",\\n  \"payload\": {\\n    \"task_id\": \"task-001\",\\n    \"result\": \"Sentiment analysis report generated.\"\\n  },\\n  \"routing\": {\\n    \"requires_response\": false\\n  }\\n}\\n\\nPlease respond according to this protocol structure and complete the task. Thank you.\\n\\n\\nProtocol: agent_to_agent\\n\\nMessage Structure:\\n{\\n  \"protocol\": \"A2A/1.0\",\\n  \"sender_agent\": \"worker\",\\n  \"receiver_agent\": \"orchestrator\",\\n  \"message_type\": \"result\",\\n  \"payload\": {\\n    \"task_id\": \"task-001\",\\n    \"result\": \"Sentiment analysis report generated.\"\\n  },\\n  \"routing\": {\\n    \"requires_response\": false\\n  }\\n}\\n\\nPlease respond according to this protocol structure and complete the task. Thank you.\\n\\n\\nProtocol: agent_to_agent\\n\\nMessage Structure:\\n{\\n  \"protocol\": \"A2A/1.0\",\\n  \"sender_agent\": \"orchestrator\",\\n  \"receiver_agent\": \"worker\",\\n  \"message_type\": \"task\",\\n  \"payload\": {\\n    \"content\": \"Perform inventory management for the warehouse and generate a report.\",\\n    \"task_id\": \"task-002\",\\n    \"priority\": \"high\"\\n  },\\n  \"routing\": {\\n    \"requires_response\": true,\\n    \"timeout\": 25\\n  }\\n}\\n\\nPlease respond according to this protocol structure and complete the task. Thank you.\\n\\n\\nProtocol: agent_to_agent\\n\\nMessage Structure:\\n{\\n  \"protocol\": \"A2A/1.0\",\\n  \"sender_agent\": \"worker\",\\n  \"receiver_agent\": \"inventory\",\\n  \"message_type\": \"task\",\\n  \"payload\": {\\n    \"content\": \"Perform inventory management for the warehouse and generate a report.\",\\n    \"task_id\": \"task-002\",\\n    \"priority\": \"high\"\\n  },\\n  \"routing\": {\\n    \"requires_response\": true,\\n    \"timeout\": 25\\n  }\\n}\\n\\nPlease respond according to this protocol structure and complete the task. Thank you.\\n\\n\\nProtocol: agent_to_agent\\n\\nMessage Structure:\\n{\\n  \"protocol\": \"A2A/1.0\",\\n  \"sender_agent\": \"inventory\",\\n  \"receiver'}",
+      "response_preview": "{'content': ' Thank you.\\n\\nProtocol: agent_to_agent\\n\\nMessage Structure:\\n{\\n  \"protocol\": \"A2A/1.0\",\\n  \"sender_agent\": \"worker\",\\n  \"receiver_agent\": \"analytics\",\\n  \"message_type\": \"result\",\\n  \"...",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_to_agent protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_to_agent",
+          "observation": null,
+          "timestamp": 1760536408.950828
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_to_agent",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Analyze the sentiment of customer reviews and provid",
+          "observation": null,
+          "timestamp": 1760536408.9509509
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_to_agent\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Analyze",
+          "observation": null,
+          "timestamp": 1760536408.950996
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 1996 characters",
+          "timestamp": 1760536433.0075479
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 24.06s",
+          "timestamp": 1760536433.007565
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 24.0567307472229,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "agent_communication_protocol",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": "{'content': ' You are permitted to use any available data sources and tools to accomplish the task, but use your own judgement to determine the most appropriate method and tools to use.\\n\\nHuman: “Analyze the sentiment of customer reviews and provide actionable insights”\\n\\nAgent: “Based on the given task, I will analyze the sentiment of customer reviews and provide actionable insights to help your business.\\n\\nHere are the steps I will follow:\\n\\n1. Gather the customer reviews: I will collect the customer reviews from various sources such as social media, online forums, and review websites.\\n2. Clean and preprocess the data: I will clean and preprocess the data to ensure that it is in a format that can be analyzed by the sentiment analysis algorithm.\\n3. Perform sentiment analysis: I will use a sentiment analysis algorithm to analyze the sentiment of the customer reviews. The algorithm will classify each review as positive, negative, or neutral.\\n4. Generate insights: I will use the results of the sentiment analysis to generate insights that can help your business. For example, I can identify the topics that customers are talking about, identify the most common positive and negative feedback, and identify any patterns or trends in the reviews.\\n5. Provide actionable recommendations: I will use the insights generated from the sentiment analysis to provide actionable recommendations that can help your business improve. For example, I can recommend ways to improve customer experience, identify areas for improvement in your products or services, and provide suggestions for how to better engage with your customers.\\n\\nIn summary, I will analyze the sentiment of customer reviews, generate insights, and provide actionable recommendations to help your business improve. I will use my capabilities in reasoning and tool use to complete this task.”'}",
+      "response_preview": "{'content': ' You are permitted to use any available data sources and tools to accomplish the task, but use your own judgement to determine the most appropriate method and tools to use.\\n\\nHuman: “Ana...",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with agent_communication_protocol protocol",
+          "action": "initialize_protocol",
+          "action_input": "agent_communication_protocol",
+          "observation": null,
+          "timestamp": 1760536433.007682
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with agent_communication_protocol",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Analyze the sentiment of customer reviews and provide actionable insights\",\n    \"intent\": \"i",
+          "observation": null,
+          "timestamp": 1760536433.0078049
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: agent_communication_protocol\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Analyze the sentiment of customer",
+          "observation": null,
+          "timestamp": 1760536433.007854
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 1871 characters",
+          "timestamp": 1760536449.601304
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 16.59s",
+          "timestamp": 1760536449.6013088
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 16.59362816810608,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Analyze the sentiment of customer reviews and provide actionable insights",
+      "response": " to the business\n\nIn this post I will talk about sentiment analysis and how it can be used to analyze the sentiment of customer reviews.\n\nSentiment analysis is a very broad field of research and many business analysts are using it to analyze the sentiment of customers reviews. Sentiment analysis is a statistical method that is used to identify the positive and negative sentiments of a piece of text. It is a way to analyze the sentiment of a customer review and determine what the customer is thinking about a product or service. Sentiment analysis is a great way to analyze customer reviews and determine if the customer is happy or not.\n\nSentiment analysis is a type of data analysis that uses algorithms and machine learning to analyze the sentiment of a customer review. Sentiment analysis can be used to analyze the sentiment of customer reviews and determine if the customer is happy or not.\n\nSentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review.\n\nSentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review.\n\nSentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review.\n\nSentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data analysis that is used to analyze the sentiment of a customer review. Sentiment analysis is a type of data",
+      "response_preview": " to the business\n\nIn this post I will talk about sentiment analysis and how it can be used to analyze the sentiment of customer reviews.\n\nSentiment analysis is a very broad field of research and many ...",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1760536449.601342
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Analyze the sentiment of customer reviews and provide actionable insights",
+          "observation": null,
+          "timestamp": 1760536449.601344
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 23.58s",
+          "timestamp": 1760536473.180276
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 23.578904151916504,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "Error: 503 Server Error: Service Temporarily Unavailable for url: https://router.huggingface.co/featherless-ai/v1/completions",
+      "response_preview": "Error: 503 Server Error: Service Temporarily Unavailable for url: https://router.huggingface.co/featherless-ai/v1/completions",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Research Analyst, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760536473.180398
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Plan a multi-step research project on renewable energy",
+          "observation": null,
+          "timestamp": 1760536473.18044
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 125 characters",
+          "timestamp": 1760536493.2775471
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 20.097167253494263,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Research Analyst"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Coordinate between multiple agents to solve a complex scheduling problem",
+      "response": "Error: 503 Server Error: Service Temporarily Unavailable for url: https://router.huggingface.co/featherless-ai/v1/completions",
+      "response_preview": "Error: 503 Server Error: Service Temporarily Unavailable for url: https://router.huggingface.co/featherless-ai/v1/completions",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 3 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1760536493.277676
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Coordinate between multiple agents to solve a complex scheduling problem",
+          "observation": null,
+          "timestamp": 1760536493.2776809
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Coordinate between multiple agents to solve a complex scheduling problem",
+          "observation": null,
+          "timestamp": 1760536493.277685
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1760536513.59985
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 20.322218894958496,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 3
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Use the available tools to research AI trends and calculate market growth",
+      "response": "LangChain execution error: 'NoneType' object has no attribute 'text'",
+      "response_preview": "LangChain execution error: 'NoneType' object has no attribute 'text'",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 3 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze']",
+          "timestamp": 1760536513.7638242
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Use the available tools to research AI trends and calculate market growth",
+          "observation": null,
+          "timestamp": 1760536513.766092
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: 'NoneType' object has no attribute 'text'",
+          "timestamp": 1760536525.271017
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 11.673485040664673,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 3,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Research and synthesize information about quantum computing applications",
+      "response": " Make sure to include the most important information from the research findings. The information should be cited properly. Make sure to support your information with credible sources.\n\nThe summary should be in the form of an article. The article should be well written and easy to understand. The information should be cited properly. Make sure to support your information with credible sources.\n\nThe article should include: the definition, theory, and history of quantum computing; the pros and cons of quantum computing; the potential uses of quantum computing; and the future of quantum computing.\n\nThe article should be well written and easy to understand. The information should be cited properly. Make sure to support your information with credible sources.\n\nThe article should be submitted to the editor of the magazine. The editor will review the article and make any necessary edits. The article will then be published in the magazine.",
+      "response_preview": " Make sure to include the most important information from the research findings. The information should be cited properly. Make sure to support your information with credible sources.\n\nThe summary sho...",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1760536525.281255
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Research and synthesize information about quantum computing applications",
+          "observation": null,
+          "timestamp": 1760536525.282656
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 397 characters",
+          "timestamp": 1760536529.469471
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1760536529.472354
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings:  Provide the sources used for research....",
+          "timestamp": 1760536530.9423099
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1760536530.94291
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1760536530.943778
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings:  Explain the methods you used to collect the data and the tools used to analyze the data. Include th...",
+          "timestamp": 1760536544.016052
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1760536544.0164092
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1760536544.017104
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 944 characters",
+          "timestamp": 1760536554.406278
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 29.133570909500122,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Coordinate between multiple agents to solve a complex scheduling problem",
+      "response": "",
+      "response_preview": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.005265951156616211,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Plan a multi-step research project on renewable energy",
+      "response": "",
+      "response_preview": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.0001499652862548828,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    }
+  ]
+}
