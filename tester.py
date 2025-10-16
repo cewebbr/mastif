@@ -46,7 +46,24 @@ class AgenticStackTester:
             ProtocolType.A2A: A2AProtocol(),
             ProtocolType.ACP: ACPProtocol()
         }
-    
+        self.standard_tools = [
+            {"name": "search", "description": "Search for information on the web"},
+            {"name": "calculate", "description": "Perform mathematical calculations"},
+            {"name": "analyze", "description": "Analyze data and generate insights"},
+            {"name": "wikipedia", "description": "Retrieve information from Wikipedia"},
+            {"name": "web_browser", "description": "Browse web pages and extract content"},
+            {"name": "code_interpreter", "description": "Interpret and execute code snippets"},
+            {"name": "click_element", "description": "Click on a web element"},
+            {"name": "type_text", "description": "Type text into a field"},
+            {"name": "navigate", "description": "Navigate to a URL"},
+            {"name": "extract_table", "description": "Extract tables from web pages"},
+            {"name": "summarize", "description": "Summarize text or web content"},
+            {"name": "translate", "description": "Translate text between languages"},
+            {"name": "calendar", "description": "Manage calendar events"}
+            # {"name": "file_upload", "description": "Upload a file to a website"}, # Not now
+            # {"name": "download", "description": "Download files from the web"} # Not now
+        ]
+
     def test_with_protocol(
         self,
         adapter: HuggingFaceAdapter,
@@ -430,25 +447,6 @@ Please respond according to this protocol structure and complete the task."""
             "What is the common error on how people structure html documents"
         ]
         
-        # Define common tools for tool-based frameworks
-        standard_tools = [
-            {"name": "search", "description": "Search for information on the web"},
-            {"name": "calculate", "description": "Perform mathematical calculations"},
-            {"name": "analyze", "description": "Analyze data and generate insights"},
-            {"name": "wikipedia", "description": "Retrieve information from Wikipedia"},
-            {"name": "web_browser", "description": "Browse web pages and extract content"},
-            {"name": "code_interpreter", "description": "Interpret and execute code snippets"},
-            {"name": "click_element", "description": "Click on a web element"},
-            {"name": "type_text", "description": "Type text into a field"},
-            {"name": "navigate", "description": "Navigate to a URL"},
-            {"name": "extract_table", "description": "Extract tables from web pages"},
-            {"name": "summarize", "description": "Summarize text or web content"},
-            {"name": "translate", "description": "Translate text between languages"},
-            {"name": "calendar", "description": "Manage calendar events"}
-            # {"name": "file_upload", "description": "Upload a file to a website"}, # Not now
-            # {"name": "download", "description": "Download files from the web"} # Not now
-        ]
-        
         for model_name in models:
             print(f"\n{'='*70}")
             print(f"Testing Model: {model_name}")
@@ -491,10 +489,10 @@ Please respond according to this protocol structure and complete the task."""
 
             frameworks = [
                 ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}), # TODO: Research about additional roles for CrewAI
-                ("Smolagents", self.test_with_smolagents, {"tools": standard_tools}),
-                ("LangChain", self.test_with_langchain, {"tools": standard_tools}),
+                ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
+                ("LangChain", self.test_with_langchain, {"tools": self.standard_tools}),
                 ("LangGraph", self.test_with_langgraph, {}),
-                ("LlamaIndex", self.test_with_llamaindex, {"tools": standard_tools}),
+                ("LlamaIndex", self.test_with_llamaindex, {"tools": self.standard_tools}),
                 ("SemanticKernel", self.test_with_semantic_kernel, {})
             ]
 
@@ -723,28 +721,9 @@ Please respond according to this protocol structure and complete the task."""
         # Initialize evaluator
         evaluator = Mind2WebEvaluator()
         
-        # Define standard tools for all frameworks
-        standard_tools = [
-            {"name": "search", "description": "Search for information on the web"},
-            {"name": "calculate", "description": "Perform mathematical calculations"},
-            {"name": "analyze", "description": "Analyze data and generate insights"},
-            {"name": "wikipedia", "description": "Retrieve information from Wikipedia"},
-            {"name": "web_browser", "description": "Browse web pages and extract content"},
-            {"name": "code_interpreter", "description": "Interpret and execute code snippets"},
-            {"name": "click_element", "description": "Click on a web element"},
-            {"name": "type_text", "description": "Type text into a field"},
-            {"name": "navigate", "description": "Navigate to a URL"},
-            {"name": "extract_table", "description": "Extract tables from web pages"},
-            {"name": "summarize", "description": "Summarize text or web content"},
-            {"name": "translate", "description": "Translate text between languages"},
-            {"name": "calendar", "description": "Manage calendar events"}
-            # {"name": "file_upload", "description": "Upload a file to a website"}, # Not now
-            # {"name": "download", "description": "Download files from the web"} # Not now
-        ]
-
         # Default to testing all frameworks if not specified
         frameworks = ["CrewAI", "Smolagents", "LangChain", "LangGraph", "LlamaIndex", "SemanticKernel"]
-        
+
         # Run tests for each model
         for model_name in models:
             print(f"\n{'='*70}")
@@ -756,10 +735,10 @@ Please respond according to this protocol structure and complete the task."""
             # Test each framework on Mind2Web tasks
             framework_configs = [
                 ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}),
-                ("Smolagents", self.test_with_smolagents, {"tools": standard_tools}),
-                ("LangChain", self.test_with_langchain, {"tools": standard_tools}),
+                ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
+                ("LangChain", self.test_with_langchain, {"tools": self.standard_tools}),
                 ("LangGraph", self.test_with_langgraph, {}),
-                ("LlamaIndex", self.test_with_llamaindex, {"tools": standard_tools}),
+                ("LlamaIndex", self.test_with_llamaindex, {"tools": self.standard_tools}),
                 ("SemanticKernel", self.test_with_semantic_kernel, {})
             ]
             # If frameworks is None, use all names from framework_configs
