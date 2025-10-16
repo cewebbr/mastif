@@ -1,12 +1,12 @@
 digraph UML {
-  graph [splines=ortho, nodesep=0.75]
+  graph [splines=ortho, nodesep=0.5]
   rankdir=TB;
   node [shape=record, fontname="Helvetica", fontsize=10];
   edge [concentrate=true]
 
   // Ascending/base components at the top
   {
-    // rank=min;
+    rank=min;
     Enum;
     ABC;
     TypedDict;
@@ -38,6 +38,7 @@ digraph UML {
       observation: Optional[str]\l
       timestamp: float\l
     }"];
+
     TestResult [label="{
       TestResult|
       model_name: str\l
@@ -52,8 +53,10 @@ digraph UML {
       metadata: Dict[str, Any]\l
     }"];
   }
-  TestResult -> ProtocolType [arrowhead=open, taillabel="protocol", headlabel="1", fontsize=9];
-  TestResult -> ReasoningStep [arrowhead=none, arrowtail=diamond, dir=back, taillabel="reasoning_steps", headlabel="0..*", fontsize=9];
+
+  TestResult -> ProtocolType [arrowhead=open, fontsize=9];
+
+  TestResult -> ReasoningStep [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9];
 
   // BaseProtocol and its implementations
   subgraph cluster_protocols {
@@ -82,12 +85,16 @@ digraph UML {
     get_langchain_llm(): HuggingFaceEndpoint\l
     get_llamaindex_llm(): HuggingFaceLLM\l
   }"];
+
   HuggingFaceLLM [label="{HuggingFaceLLM|model_name\ladapter\l|__init__\lmetadata\lcomplete\lstream_complete\l}"];
+  
   HuggingFaceLLM -> CustomLLM [arrowhead=empty, fontsize=9];
-  HuggingFaceAdapter -> HuggingFaceLLM [arrowhead=open, taillabel="uses", headlabel="1", fontsize=9];
+  
+  HuggingFaceAdapter -> HuggingFaceLLM [arrowhead=open, fontsize=9];
 
   // AgentState
   AgentState [label="{AgentState|task\lplan\lresearch_results\lfinal_report\lstep\l|}"];
+  
   AgentState -> TypedDict [arrowhead=empty, fontsize=9];
 
   // Frameworks cluster
@@ -95,12 +102,70 @@ digraph UML {
     label="frameworks";
     style=dashed;
     color=black;
-    CrewAIAgent [label="{CrewAIAgent||__init__\lexecute_task\l}"];
-    SmolAgentWrapper [label="{SmolAgentWrapper||__init__\ladd_tool\lrun\l}"];
-    LangChainAgent [label="{LangChainAgent||__init__\ladd_tool\lrun\l}"];
-    LangGraphAgent [label="{LangGraphAgent||__init__\lbuild_research_workflow\lrun\l}"];
-    LlamaIndexAgent [label="{LlamaIndexAgent||__init__\ladd_tool\lrun\l}"];
-    SemanticKernelAgent [label="{SemanticKernelAgent||__init__\ladd_semantic_function\lrun\l}"];
+
+    CrewAIAgent [label="{CrewAIAgent|
+      adapter\l
+      role: str\l
+      reasoning_steps: List[ReasoningStep]\l
+      |
+      __init__(adapter, role: str)\l
+      execute_task(task: str, context: Dict = None): str\l
+    }"];
+    
+    SmolAgentWrapper [label="{SmolAgentWrapper|
+      adapter\l
+      llm\l
+      tools: List[FunctionTool]\l
+      agent\l
+      reasoning_steps: List[ReasoningStep]\l
+      |
+      __init__(adapter)\l
+      add_tool(name: str, description: str, func=None)\l
+      run(task: str): str\l
+    }"];
+    
+    LangChainAgent [label="{LangChainAgent|
+      adapter\l
+      tools: List[Tool]\l
+      llm\l
+      reasoning_steps: List[ReasoningStep]\l
+      |
+      __init__(adapter)\l
+      add_tool(name: str, description: str, func=None)\l
+      run(task: str): str\l
+    }"];
+
+    LangGraphAgent [label="{LangGraphAgent|
+      adapter\l
+      graph\l
+      reasoning_steps: List[ReasoningStep]\l
+      |
+      __init__(adapter)\l
+      build_research_workflow()\l
+      run(task: str): str\l
+    }"];
+
+    LlamaIndexAgent [label="{LlamaIndexAgent|
+      adapter\l
+      llm\l
+      tools: List[FunctionTool]\l
+      agent\l
+      reasoning_steps: List[ReasoningStep]\l
+      |
+      __init__(adapter)\l
+      add_tool(name: str, description: str, func=None)\l
+      run(task: str): str\l
+    }"];
+
+    SemanticKernelAgent [label="{SemanticKernelAgent|
+      adapter\l
+      kernel\l
+      reasoning_steps: List[ReasoningStep]\l
+      |
+      __init__(adapter)\l
+      add_semantic_function(name: str, prompt_template: str, description: str)\l
+      run(task: str): str\l
+    }"];
   }
 
   // Benchmark
@@ -138,26 +203,28 @@ digraph UML {
   }"];
 
   // Relationships for AgenticStackTester
-  AgenticStackTester -> TestResult [arrowhead=open, label="results: List", fontsize=9];
-  AgenticStackTester -> ProtocolType [arrowhead=open, label="protocols", fontsize=9];
-  AgenticStackTester -> MCPProtocol [arrowhead=open, label="uses", fontsize=9];
-  AgenticStackTester -> A2AProtocol [arrowhead=open, label="uses", fontsize=9];
-  AgenticStackTester -> ACPProtocol [arrowhead=open, label="uses", fontsize=9];
-  AgenticStackTester -> HuggingFaceAdapter [arrowhead=open, label="uses", fontsize=9];
+  AgenticStackTester -> TestResult [arrowhead=open, fontsize=9];
+  AgenticStackTester -> ProtocolType [arrowhead=open, fontsize=9];
+  AgenticStackTester -> MCPProtocol [arrowhead=open, fontsize=9];
+  AgenticStackTester -> A2AProtocol [arrowhead=open, fontsize=9];
+  AgenticStackTester -> ACPProtocol [arrowhead=open, fontsize=9];
+  AgenticStackTester -> HuggingFaceAdapter [arrowhead=open, fontsize=9];
+
   // Frameworks are used via HuggingFaceAdapter, not directly:
-  HuggingFaceAdapter -> CrewAIAgent [arrowhead=open, label="uses", fontsize=9];
-  HuggingFaceAdapter -> SmolAgentWrapper [arrowhead=open, label="uses", fontsize=9];
-  HuggingFaceAdapter -> LangChainAgent [arrowhead=open, label="uses", fontsize=9];
-  HuggingFaceAdapter -> LangGraphAgent [arrowhead=open, label="uses", fontsize=9];
-  HuggingFaceAdapter -> LlamaIndexAgent [arrowhead=open, label="uses", fontsize=9];
-  HuggingFaceAdapter -> SemanticKernelAgent [arrowhead=open, label="uses", fontsize=9];
+  HuggingFaceAdapter -> CrewAIAgent [arrowhead=odiamond, fontsize=9];
+  HuggingFaceAdapter -> SmolAgentWrapper [arrowhead=odiamond, fontsize=9];
+  HuggingFaceAdapter -> LangChainAgent [arrowhead=odiamond, fontsize=9];
+  HuggingFaceAdapter -> LangGraphAgent [arrowhead=odiamond, fontsize=9];
+  HuggingFaceAdapter -> LlamaIndexAgent [arrowhead=odiamond, fontsize=9];
+  HuggingFaceAdapter -> SemanticKernelAgent [arrowhead=odiamond, fontsize=9];
+  
   // Mind2Web
-  AgenticStackTester -> Mind2WebLoader [arrowhead=open, label="uses", fontsize=9];
-  AgenticStackTester -> Mind2WebEvaluator [arrowhead=open, label="uses", fontsize=9];
+  AgenticStackTester -> Mind2WebLoader [arrowhead=open, fontsize=9];
+  AgenticStackTester -> Mind2WebEvaluator [arrowhead=open, fontsize=9];
 
   // Composition: LangGraphAgent contains AgentState
-  LangGraphAgent -> AgentState [arrowhead=none, arrowtail=diamond, dir=back, label="agent_state", fontsize=9, minlen=1] ; 
+  LangGraphAgent -> AgentState [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9, minlen=1] ; 
 
   // Composition: LlamaIndexAgent contains HuggingFaceLLM
-  LlamaIndexAgent -> HuggingFaceLLM [arrowhead=none, arrowtail=diamond, dir=back, label="llm", fontsize=9, minlen=1] ;
+  LlamaIndexAgent -> HuggingFaceLLM [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9, minlen=1] ;
 }

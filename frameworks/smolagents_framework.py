@@ -31,15 +31,15 @@ class SmolAgentWrapper:
         self.tools: List[Dict[str, str]] = []
         self.reasoning_steps: List[ReasoningStep] = []
     
-    def add_tool(self, tool_name: str, tool_description: str):
+    def add_tool(self, name: str, description: str):
         """
         Add a tool to the agent's toolkit
         
         Args:
-            tool_name: Name of the tool
-            tool_description: Description of tool's functionality
+            name: Name of the tool
+            description: Description of tool's functionality
         """
-        self.tools.append({"name": tool_name, "description": tool_description})
+        self.tools.append({"name": name, "description": description})
     
     def run(self, task: str) -> str:
         """
