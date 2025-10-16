@@ -158,7 +158,7 @@ class Mind2WebEvaluator:
         return 0.0
     
     # TODO: Change to LLM-as-a-judge for better evaluation instead of keyword matching
-    # TODO: Model to be use should be configurable
+    # TODO: Model to be used as judge should be configurable
     # TODO: Model for the judge should be different from the one being evaluated
     # TODO: Model for the judge should be SOTA (e.g., meta-llama/Llama-3.1-70B-Instruct) and available at huggingface to use the same key and adapters
     # TODO: Metrics should be only task understanding, task deviation (reasoning steps), task completion
