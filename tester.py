@@ -13,7 +13,7 @@ from typing import List, Dict, Optional
 
 from models import TestResult, ProtocolType, ReasoningStep
 from adapters import HuggingFaceAdapter
-from context_protocols import MCPProtocol, A2AProtocol, ACPProtocol
+from agent_protocols import MCPProtocol, A2AProtocol, ACPProtocol
 from frameworks import (
     CrewAIAgent,
     SmolAgentWrapper,

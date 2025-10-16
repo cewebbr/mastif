@@ -63,13 +63,27 @@ digraph UML {
     label="protocols";
     style=dashed;
     color=black;
-    BaseProtocol [label="{BaseProtocol\n«abstract»||send_message\lreceive_message\l}"];
+
+    BaseProtocol [label="{
+      BaseProtocol\n
+      «abstract»|
+      |
+      send_message(message: str, context: Dict = None): Dict\l
+      receive_message(response: Dict): str\l
+    }"];
+    
     BaseProtocol -> ABC [arrowhead=empty, fontsize=9];
-    MCPProtocol [label="{MCPProtocol||send_message\lreceive_message\l}"];
-    A2AProtocol [label="{A2AProtocol||send_message\lreceive_message\l}"];
-    ACPProtocol [label="{ACPProtocol||send_message\lreceive_message\l}"];
+    
+    MCPProtocol [label="{MCPProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
+    
+    A2AProtocol [label="{A2AProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
+    
+    ACPProtocol [label="{ACPProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
+    
     MCPProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
+    
     A2AProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
+    
     ACPProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
   }
 
@@ -86,14 +100,23 @@ digraph UML {
     get_llamaindex_llm(): HuggingFaceLLM\l
   }"];
 
-  HuggingFaceLLM [label="{HuggingFaceLLM|model_name\ladapter\l|__init__\lmetadata\lcomplete\lstream_complete\l}"];
+  HuggingFaceLLM [label="{
+    HuggingFaceLLM|
+    model_name: str\l
+    adapter: HuggingFaceAdapter\l
+    |
+    __init__(adapter: HuggingFaceAdapter)\l
+    metadata: LLMMetadata\l
+    complete(prompt: str, **kwargs): CompletionResponse\l
+    stream_complete(prompt: str, **kwargs): str\l
+  }"];
   
   HuggingFaceLLM -> CustomLLM [arrowhead=empty, fontsize=9];
   
   HuggingFaceAdapter -> HuggingFaceLLM [arrowhead=open, fontsize=9];
 
   // AgentState
-  AgentState [label="{AgentState|task\lplan\lresearch_results\lfinal_report\lstep\l|}"];
+  AgentState [label="{AgentState|task: str\lplan: str\lresearch_results: Annotated[list, operator.add]\lfinal_report: str\lstep: int\l|}"];
   
   AgentState -> TypedDict [arrowhead=empty, fontsize=9];
 
@@ -173,8 +196,33 @@ digraph UML {
     label="benchmark";
     style=dashed;
     color=black;
-    Mind2WebLoader [label="{Mind2WebLoader||get_task_sample\lget_task_statistics\l}"];
-    Mind2WebEvaluator [label="{Mind2WebEvaluator||evaluate_task\lget_aggregate_metrics\l}"];
+
+    Mind2WebLoader [label="{
+      Mind2WebLoader|
+      split: str = 'test'\l
+      hf_token: str = None\l
+      |
+      __init__(split: str = 'test', hf_token: str = None)\l
+      load_dataset()\l
+       _load_sample_data()\l
+      get_task_sample(num_tasks: Optional[int] = None, seed: int = 42): List[Dict]
+      get_task_by_domain(domain: str): List[Dict]\l
+      get_available_domains(): List[str]\l
+      get_task_statistics(): Dict\l
+    }"];
+    
+    Mind2WebEvaluator [label="{
+      Mind2WebEvaluator|
+      __init__()\l
+
+      |
+      evaluate_task(task: Dict, agent_response: str, reasoning_steps: List): Dict\l
+      _extract_actions_from_response(response: str): List[str]\l
+      _calculate_action_coverage(extracted: List[str], ground_truth: List[str]): float\l
+      _calculate_action_order_score(extracted: List[str], ground_truth: List[str]): float\l
+      _evaluate_task_understanding(response: str, task_description: str): float\l
+      get_aggregate_metrics(): Dict\l
+    }"];
   }
 
   // Tester
@@ -224,7 +272,4 @@ digraph UML {
 
   // Composition: LangGraphAgent contains AgentState
   LangGraphAgent -> AgentState [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9, minlen=1] ; 
-
-  // Composition: LlamaIndexAgent contains HuggingFaceLLM
-  LlamaIndexAgent -> HuggingFaceLLM [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9, minlen=1] ;
 }
