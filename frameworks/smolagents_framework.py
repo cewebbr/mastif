@@ -8,7 +8,7 @@ and efficiency with minimal overhead.
 from typing import Dict, List
 import sys
 sys.path.append('..')
-from models import ReasoningStep
+from domain_model import ReasoningStep
 
 
 class SmolAgentWrapper:

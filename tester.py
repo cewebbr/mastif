@@ -11,9 +11,9 @@ import datetime
 from pathlib import Path
 from typing import List, Dict, Optional
 
-from models import TestResult, ProtocolType, ReasoningStep
+from domain_model import TestResult, ProtocolType, ReasoningStep
 from adapters import HuggingFaceAdapter
-from agent_protocols import MCPProtocol, A2AProtocol, ACPProtocol
+from protocols import MCPProtocol, A2AProtocol, ACPProtocol
 from frameworks import (
     CrewAIAgent,
     SmolAgentWrapper,
@@ -441,6 +441,7 @@ Please respond according to this protocol structure and complete the task."""
         
         # Define test tasks for different scenarios
         test_tasks = [
+            # TODO: Add more tasks related to Ceweb projects, e.g., cordata and web accessibility
             "Plan a multi-step research project on renewable energy",
             "Research and synthesize information about quantum computing applications",
             "Create a policy on how to make the web more accessible for people with disabilities",

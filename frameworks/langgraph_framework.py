@@ -9,7 +9,7 @@ import operator
 from langgraph.graph import StateGraph, END
 import sys
 sys.path.append('..')
-from models import ReasoningStep
+from domain_model import ReasoningStep
 
 
 class LangGraphAgent:

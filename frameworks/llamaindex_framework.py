@@ -11,7 +11,7 @@ from llama_index.core.agent import ReActAgent
 from llama_index.core.tools import FunctionTool
 import sys
 sys.path.append('..')
-from models import ReasoningStep
+from domain_model import ReasoningStep
 
 
 class LlamaIndexAgent:

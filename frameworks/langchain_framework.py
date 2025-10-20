@@ -10,7 +10,7 @@ from langchain.tools import Tool
 from langchain.prompts import PromptTemplate
 import sys
 sys.path.append('..')
-from models import ReasoningStep
+from domain_model import ReasoningStep
 
 
 class LangChainAgent:

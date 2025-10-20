@@ -9,7 +9,7 @@ import json
 from typing import Dict, List, Optional
 import sys
 sys.path.append('..')
-from models import ReasoningStep
+from domain_model import ReasoningStep
 
 
 class CrewAIAgent:

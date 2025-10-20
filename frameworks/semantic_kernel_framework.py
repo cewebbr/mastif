@@ -9,7 +9,7 @@ import semantic_kernel as sk
 from semantic_kernel.connectors.ai.hugging_face import HuggingFaceTextCompletion
 import sys
 sys.path.append('..')
-from models import ReasoningStep
+from domain_model import ReasoningStep
 
 
 class SemanticKernelAgent:

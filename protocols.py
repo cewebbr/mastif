@@ -1,5 +1,5 @@
 """
-Context protocol implementations (MCP, A2A, ACP)
+Protocol implementations
 """
 
 from abc import ABC, abstractmethod
