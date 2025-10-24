@@ -441,11 +441,10 @@ Please respond according to this protocol structure and complete the task."""
         
         # Define test tasks for different scenarios
         test_tasks = [
-            # TODO: Add more tasks related to Ceweb projects, e.g., cordata and web accessibility
-            "Plan a multi-step research project on renewable energy",
-            "Research and synthesize information about quantum computing applications",
-            "Create a policy on how to make the web more accessible for people with disabilities",
-            "What is the common error on how people structure html documents"
+            # TODO: Add more Ceweb.br relevant tasks
+            "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results." # CORDATA
+            "Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws", # Acessibilidade
+            "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws" # CETIC.br
         ]
         
         for model_name in models:
