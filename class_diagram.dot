@@ -1,7 +1,7 @@
 digraph UML {
-graph [splines=ortho, nodesep=0.5]
+graph [splines=ortho, nodesep=0.5];
 rankdir=TB;
-node [shape=record, fontname="Helvetica", fontsize=10];
+node [shape=record, fontname="Helvetica", fontsize=10, style="filled", fillcolor=lightyellow];
 edge [concentrate=true]
 
 // Ascending/base components at the top
@@ -19,6 +19,7 @@ AgentState;
 // ProtocolType is an Enum
 subgraph cluster_dataclasses {
 label="dataclasses";
+bgcolor="#9ad4daff"
 style=dashed;
 color=black;
 ProtocolType [label="{ProtocolType|
@@ -61,6 +62,7 @@ TestResult -> ReasoningStep [arrowhead=none, arrowtail=diamond, dir=back, fontsi
 // BaseProtocol and its implementations
 subgraph cluster_protocols {
 label="protocols";
+bgcolor="#9ab4daff"
 style=dashed;
 color=black;
 
@@ -123,6 +125,7 @@ AgentState -> TypedDict [arrowhead=empty, fontsize=9];
 // Frameworks cluster
 subgraph cluster_frameworks {
 label="frameworks";
+bgcolor="#da9ad2ff"
 style=dashed;
 color=black;
 
@@ -194,6 +197,7 @@ run(task: str): str\l
 // Benchmark
 subgraph cluster_benchmark {
 label="benchmark";
+bgcolor="#dad49aff"
 style=dashed;
 color=black;
 
