@@ -1,275 +1,275 @@
 digraph UML {
-  graph [splines=ortho, nodesep=0.5]
-  rankdir=TB;
-  node [shape=record, fontname="Helvetica", fontsize=10];
-  edge [concentrate=true]
+graph [splines=ortho, nodesep=0.5]
+rankdir=TB;
+node [shape=record, fontname="Helvetica", fontsize=10];
+edge [concentrate=true]
 
-  // Ascending/base components at the top
-  {
-    rank=min;
-    Enum;
-    ABC;
-    TypedDict;
-    CustomLLM;
-    BaseProtocol;
-    HuggingFaceLLM;
-    AgentState;
-  }
+// Ascending/base components at the top
+{
+rank=min;
+Enum;
+ABC;
+TypedDict;
+CustomLLM;
+BaseProtocol;
+HuggingFaceLLM;
+AgentState;
+}
 
-  // ProtocolType is an Enum
-  subgraph cluster_dataclasses {
-    label="dataclasses";
-    style=dashed;
-    color=black;
-    ProtocolType [label="{ProtocolType|
-      MCP\l
-      A2A\l
-      ACP\l
-      STANDARD\l}"];
-    ProtocolType -> Enum [arrowhead=empty, fontsize=9];
+// ProtocolType is an Enum
+subgraph cluster_dataclasses {
+label="dataclasses";
+style=dashed;
+color=black;
+ProtocolType [label="{ProtocolType|
+MCP\l
+A2A\l
+ACP\l
+STANDARD\l}"];
+ProtocolType -> Enum [arrowhead=empty, fontsize=9];
 
-    // ReasoningStep and TestResult
-    ReasoningStep [label="{
-      ReasoningStep|
-      step_number: int\l
-      thought: str\l
-      action: Optional[str]\l
-      action_input: Optional[str]\l
-      observation: Optional[str]\l
-      timestamp: float\l
-    }"];
+// ReasoningStep and TestResult
+ReasoningStep [label="{
+ReasoningStep|
+step_number: int\l
+thought: str\l
+action: Optional[str]\l
+action_input: Optional[str]\l
+observation: Optional[str]\l
+timestamp: float\l
+}"];
 
-    TestResult [label="{
-      TestResult|
-      model_name: str\l
-      protocol: ProtocolType\l
-      framework: str\l
-      task: str\l
-      response: str\l
-      reasoning_steps: List[ReasoningStep]\l
-      latency: float\l
-      success: bool\l
-      error: Optional[str]\l
-      metadata: Dict[str, Any]\l
-    }"];
-  }
+TestResult [label="{
+TestResult|
+model_name: str\l
+protocol: ProtocolType\l
+framework: str\l
+task: str\l
+response: str\l
+reasoning_steps: List[ReasoningStep]\l
+latency: float\l
+success: bool\l
+error: Optional[str]\l
+metadata: Dict[str, Any]\l
+}"];
+}
 
-  TestResult -> ProtocolType [arrowhead=open, fontsize=9];
+TestResult -> ProtocolType [arrowhead=open, fontsize=9];
 
-  TestResult -> ReasoningStep [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9];
+TestResult -> ReasoningStep [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9];
 
-  // BaseProtocol and its implementations
-  subgraph cluster_protocols {
-    label="protocols";
-    style=dashed;
-    color=black;
+// BaseProtocol and its implementations
+subgraph cluster_protocols {
+label="protocols";
+style=dashed;
+color=black;
 
-    BaseProtocol [label="{
-      BaseProtocol\n
-      «abstract»|
-      |
-      send_message(message: str, context: Dict = None): Dict\l
-      receive_message(response: Dict): str\l
-    }"];
-    
-    BaseProtocol -> ABC [arrowhead=empty, fontsize=9];
-    
-    MCPProtocol [label="{MCPProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
-    
-    A2AProtocol [label="{A2AProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
-    
-    ACPProtocol [label="{ACPProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
-    
-    MCPProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
-    
-    A2AProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
-    
-    ACPProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
-  }
+BaseProtocol [label="{
+BaseProtocol\n
+«abstract»|
+|
+send_message(message: str, context: Dict = None): Dict\l
+receive_message(response: Dict): str\l
+}"];
 
-  // HuggingFaceLLM and its adapter
-  HuggingFaceAdapter [label="{
-    HuggingFaceAdapter|
-    model_name: str\l
-    api_key: Optional[str]\l
-    client: InferenceClient\l
-    |
-    __init__(model_name: str, api_key: Optional[str] = None)\l
-    generate(prompt: str, **kwargs): str\l
-    get_langchain_llm(): HuggingFaceEndpoint\l
-    get_llamaindex_llm(): HuggingFaceLLM\l
-  }"];
+BaseProtocol -> ABC [arrowhead=empty, fontsize=9];
 
-  HuggingFaceLLM [label="{
-    HuggingFaceLLM|
-    model_name: str\l
-    adapter: HuggingFaceAdapter\l
-    |
-    __init__(adapter: HuggingFaceAdapter)\l
-    metadata: LLMMetadata\l
-    complete(prompt: str, **kwargs): CompletionResponse\l
-    stream_complete(prompt: str, **kwargs): str\l
-  }"];
-  
-  HuggingFaceLLM -> CustomLLM [arrowhead=empty, fontsize=9];
-  
-  HuggingFaceAdapter -> HuggingFaceLLM [arrowhead=open, fontsize=9];
+MCPProtocol [label="{MCPProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
 
-  // AgentState
-  AgentState [label="{AgentState|task: str\lplan: str\lresearch_results: Annotated[list, operator.add]\lfinal_report: str\lstep: int\l|}"];
-  
-  AgentState -> TypedDict [arrowhead=empty, fontsize=9];
+A2AProtocol [label="{A2AProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
 
-  // Frameworks cluster
-  subgraph cluster_frameworks {
-    label="frameworks";
-    style=dashed;
-    color=black;
+ACPProtocol [label="{ACPProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
 
-    CrewAIAgent [label="{CrewAIAgent|
-      adapter\l
-      role: str\l
-      reasoning_steps: List[ReasoningStep]\l
-      |
-      __init__(adapter, role: str)\l
-      execute_task(task: str, context: Dict = None): str\l
-    }"];
-    
-    SmolAgentWrapper [label="{SmolAgentWrapper|
-      adapter\l
-      llm\l
-      tools: List[FunctionTool]\l
-      agent\l
-      reasoning_steps: List[ReasoningStep]\l
-      |
-      __init__(adapter)\l
-      add_tool(name: str, description: str, func=None)\l
-      run(task: str): str\l
-    }"];
-    
-    LangChainAgent [label="{LangChainAgent|
-      adapter\l
-      tools: List[Tool]\l
-      llm\l
-      reasoning_steps: List[ReasoningStep]\l
-      |
-      __init__(adapter)\l
-      add_tool(name: str, description: str, func=None)\l
-      run(task: str): str\l
-    }"];
+MCPProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
 
-    LangGraphAgent [label="{LangGraphAgent|
-      adapter\l
-      graph\l
-      reasoning_steps: List[ReasoningStep]\l
-      |
-      __init__(adapter)\l
-      build_research_workflow()\l
-      run(task: str): str\l
-    }"];
+A2AProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
 
-    LlamaIndexAgent [label="{LlamaIndexAgent|
-      adapter\l
-      llm\l
-      tools: List[FunctionTool]\l
-      agent\l
-      reasoning_steps: List[ReasoningStep]\l
-      |
-      __init__(adapter)\l
-      add_tool(name: str, description: str, func=None)\l
-      run(task: str): str\l
-    }"];
+ACPProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
+}
 
-    SemanticKernelAgent [label="{SemanticKernelAgent|
-      adapter\l
-      kernel\l
-      reasoning_steps: List[ReasoningStep]\l
-      |
-      __init__(adapter)\l
-      add_semantic_function(name: str, prompt_template: str, description: str)\l
-      run(task: str): str\l
-    }"];
-  }
+// HuggingFaceLLM and its adapter
+HuggingFaceAdapter [label="{
+HuggingFaceAdapter|
+model_name: str\l
+api_key: Optional[str]\l
+client: InferenceClient\l
+|
+__init__(model_name: str, api_key: Optional[str] = None)\l
+generate(prompt: str, **kwargs): str\l
+get_langchain_llm(): HuggingFaceEndpoint\l
+get_llamaindex_llm(): HuggingFaceLLM\l
+}"];
 
-  // Benchmark
-  subgraph cluster_benchmark {
-    label="benchmark";
-    style=dashed;
-    color=black;
+HuggingFaceLLM [label="{
+HuggingFaceLLM|
+model_name: str\l
+adapter: HuggingFaceAdapter\l
+|
+__init__(adapter: HuggingFaceAdapter)\l
+metadata: LLMMetadata\l
+complete(prompt: str, **kwargs): CompletionResponse\l
+stream_complete(prompt: str, **kwargs): str\l
+}"];
 
-    Mind2WebLoader [label="{
-      Mind2WebLoader|
-      split: str = 'test'\l
-      hf_token: str = None\l
-      |
-      __init__(split: str = 'test', hf_token: str = None)\l
-      load_dataset()\l
-       _load_sample_data()\l
-      get_task_sample(num_tasks: Optional[int] = None, seed: int = 42): List[Dict]
-      get_task_by_domain(domain: str): List[Dict]\l
-      get_available_domains(): List[str]\l
-      get_task_statistics(): Dict\l
-    }"];
-    
-    Mind2WebEvaluator [label="{
-      Mind2WebEvaluator|
-      __init__()\l
+HuggingFaceLLM -> CustomLLM [arrowhead=empty, fontsize=9];
 
-      |
-      evaluate_task(task: Dict, agent_response: str, reasoning_steps: List): Dict\l
-      _extract_actions_from_response(response: str): List[str]\l
-      _calculate_action_coverage(extracted: List[str], ground_truth: List[str]): float\l
-      _calculate_action_order_score(extracted: List[str], ground_truth: List[str]): float\l
-      _evaluate_task_understanding(response: str, task_description: str): float\l
-      get_aggregate_metrics(): Dict\l
-    }"];
-  }
+HuggingFaceAdapter -> HuggingFaceLLM [arrowhead=open, fontsize=9];
 
-  // Tester
-  AgenticStackTester [label="{AgenticStackTester|
-    results: List[TestResult]\l
-    protocols: Dict[ProtocolType]\l
-    standard_tools: List[Dict[str, str]]\l
-    mind2web_results: Any\l
-    mind2web_aggregate: Any\l
-    |
-    __init__()\l
-    test_with_protocol(adapter: HuggingFaceAdapter, protocol_type: ProtocolType, task: str, context: Dict = None): TestResult\l
-    test_with_crewai(adapter: HuggingFaceAdapter, role: str, task: str, context: Dict = None): TestResult\l
-    test_with_smolagents(adapter: HuggingFaceAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
-    test_with_langchain(adapter: HuggingFaceAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
-    test_with_langgraph(adapter: HuggingFaceAdapter, task: str): TestResult\l
-    test_with_llamaindex(adapter: HuggingFaceAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
-    test_with_semantic_kernel(adapter: HuggingFaceAdapter, task: str): TestResult\l
-    run_comprehensive_test(models: List[str], hf_token: Optional[str] = None)\l
-    export_results(filename: str = \"test_results.json\")\l
-    print_summary()\l
-    run_mind2web_evaluation(models: List[str], hf_token: Optional[str] = None, num_tasks: Optional[int] = 10, frameworks: Optional[List[str]] = None)\l
-    export_mind2web_results(filename: str)\l
-    get_supported_protocols(): List[ProtocolType]\l
-    get_supported_frameworks(): List[str]\l
-  }"];
+// AgentState
+AgentState [label="{AgentState|task: str\lplan: str\lresearch_results: Annotated[list, operator.add]\lfinal_report: str\lstep: int\l|}"];
 
-  // Relationships for AgenticStackTester
-  AgenticStackTester -> TestResult [arrowhead=open, fontsize=9];
-  AgenticStackTester -> ProtocolType [arrowhead=open, fontsize=9];
-  AgenticStackTester -> MCPProtocol [arrowhead=open, fontsize=9];
-  AgenticStackTester -> A2AProtocol [arrowhead=open, fontsize=9];
-  AgenticStackTester -> ACPProtocol [arrowhead=open, fontsize=9];
-  AgenticStackTester -> HuggingFaceAdapter [arrowhead=open, fontsize=9];
+AgentState -> TypedDict [arrowhead=empty, fontsize=9];
 
-  // Frameworks are used via HuggingFaceAdapter, not directly:
-  HuggingFaceAdapter -> CrewAIAgent [arrowhead=odiamond, fontsize=9];
-  HuggingFaceAdapter -> SmolAgentWrapper [arrowhead=odiamond, fontsize=9];
-  HuggingFaceAdapter -> LangChainAgent [arrowhead=odiamond, fontsize=9];
-  HuggingFaceAdapter -> LangGraphAgent [arrowhead=odiamond, fontsize=9];
-  HuggingFaceAdapter -> LlamaIndexAgent [arrowhead=odiamond, fontsize=9];
-  HuggingFaceAdapter -> SemanticKernelAgent [arrowhead=odiamond, fontsize=9];
-  
-  // Mind2Web
-  AgenticStackTester -> Mind2WebLoader [arrowhead=open, fontsize=9];
-  AgenticStackTester -> Mind2WebEvaluator [arrowhead=open, fontsize=9];
+// Frameworks cluster
+subgraph cluster_frameworks {
+label="frameworks";
+style=dashed;
+color=black;
 
-  // Composition: LangGraphAgent contains AgentState
-  LangGraphAgent -> AgentState [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9, minlen=1] ; 
+CrewAIAgent [label="{CrewAIAgent|
+adapter\l
+role: str\l
+reasoning_steps: List[ReasoningStep]\l
+|
+__init__(adapter, role: str)\l
+execute_task(task: str, context: Dict = None): str\l
+}"];
+
+SmolAgentWrapper [label="{SmolAgentWrapper|
+adapter\l
+llm\l
+tools: List[FunctionTool]\l
+agent\l
+reasoning_steps: List[ReasoningStep]\l
+|
+__init__(adapter)\l
+add_tool(name: str, description: str, func=None)\l
+run(task: str): str\l
+}"];
+
+LangChainAgent [label="{LangChainAgent|
+adapter\l
+tools: List[Tool]\l
+llm\l
+reasoning_steps: List[ReasoningStep]\l
+|
+__init__(adapter)\l
+add_tool(name: str, description: str, func=None)\l
+run(task: str): str\l
+}"];
+
+LangGraphAgent [label="{LangGraphAgent|
+adapter\l
+graph\l
+reasoning_steps: List[ReasoningStep]\l
+|
+__init__(adapter)\l
+build_research_workflow()\l
+run(task: str): str\l
+}"];
+
+LlamaIndexAgent [label="{LlamaIndexAgent|
+adapter\l
+llm\l
+tools: List[FunctionTool]\l
+agent\l
+reasoning_steps: List[ReasoningStep]\l
+|
+__init__(adapter)\l
+add_tool(name: str, description: str, func=None)\l
+run(task: str): str\l
+}"];
+
+SemanticKernelAgent [label="{SemanticKernelAgent|
+adapter\l
+kernel\l
+reasoning_steps: List[ReasoningStep]\l
+|
+__init__(adapter)\l
+add_semantic_function(name: str, prompt_template: str, description: str)\l
+run(task: str): str\l
+}"];
+}
+
+// Benchmark
+subgraph cluster_benchmark {
+label="benchmark";
+style=dashed;
+color=black;
+
+Mind2WebLoader [label="{
+Mind2WebLoader|
+split: str = 'test'\l
+hf_token: str = None\l
+|
+__init__(split: str = 'test', hf_token: str = None)\l
+load_dataset()\l
+_load_sample_data()\l
+get_task_sample(num_tasks: Optional[int] = None, seed: int = 42): List[Dict]
+get_task_by_domain(domain: str): List[Dict]\l
+get_available_domains(): List[str]\l
+get_task_statistics(): Dict\l
+}"];
+
+Mind2WebEvaluator [label="{
+Mind2WebEvaluator|
+__init__()\l
+
+|
+evaluate_task(task: Dict, agent_response: str, reasoning_steps: List): Dict\l
+_extract_actions_from_response(response: str): List[str]\l
+_calculate_action_coverage(extracted: List[str], ground_truth: List[str]): float\l
+_calculate_action_order_score(extracted: List[str], ground_truth: List[str]): float\l
+_evaluate_task_understanding(response: str, task_description: str): float\l
+get_aggregate_metrics(): Dict\l
+}"];
+}
+
+// Tester
+AgenticStackTester [label="{AgenticStackTester|
+results: List[TestResult]\l
+protocols: Dict[ProtocolType]\l
+standard_tools: List[Dict[str, str]]\l
+mind2web_results: Any\l
+mind2web_aggregate: Any\l
+|
+__init__()\l
+test_with_protocol(adapter: HuggingFaceAdapter, protocol_type: ProtocolType, task: str, context: Dict = None): TestResult\l
+test_with_crewai(adapter: HuggingFaceAdapter, role: str, task: str, context: Dict = None): TestResult\l
+test_with_smolagents(adapter: HuggingFaceAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
+test_with_langchain(adapter: HuggingFaceAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
+test_with_langgraph(adapter: HuggingFaceAdapter, task: str): TestResult\l
+test_with_llamaindex(adapter: HuggingFaceAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
+test_with_semantic_kernel(adapter: HuggingFaceAdapter, task: str): TestResult\l
+run_comprehensive_test(models: List[str], hf_token: Optional[str] = None)\l
+export_results(filename: str = \"test_results.json\")\l
+print_summary()\l
+run_mind2web_evaluation(models: List[str], hf_token: Optional[str] = None, num_tasks: Optional[int] = 10, frameworks: Optional[List[str]] = None)\l
+export_mind2web_results(filename: str)\l
+get_supported_protocols(): List[ProtocolType]\l
+get_supported_frameworks(): List[str]\l
+}"];
+
+// Relationships for AgenticStackTester
+AgenticStackTester -> TestResult [arrowhead=open, fontsize=9];
+AgenticStackTester -> ProtocolType [arrowhead=open, fontsize=9];
+AgenticStackTester -> MCPProtocol [arrowhead=open, fontsize=9];
+AgenticStackTester -> A2AProtocol [arrowhead=open, fontsize=9];
+AgenticStackTester -> ACPProtocol [arrowhead=open, fontsize=9];
+AgenticStackTester -> HuggingFaceAdapter [arrowhead=open, fontsize=9];
+
+// Frameworks are used via HuggingFaceAdapter, not directly:
+HuggingFaceAdapter -> CrewAIAgent [arrowhead=odiamond, fontsize=9];
+HuggingFaceAdapter -> SmolAgentWrapper [arrowhead=odiamond, fontsize=9];
+HuggingFaceAdapter -> LangChainAgent [arrowhead=odiamond, fontsize=9];
+HuggingFaceAdapter -> LangGraphAgent [arrowhead=odiamond, fontsize=9];
+HuggingFaceAdapter -> LlamaIndexAgent [arrowhead=odiamond, fontsize=9];
+HuggingFaceAdapter -> SemanticKernelAgent [arrowhead=odiamond, fontsize=9];
+
+// Mind2Web
+AgenticStackTester -> Mind2WebLoader [arrowhead=open, fontsize=9];
+AgenticStackTester -> Mind2WebEvaluator [arrowhead=open, fontsize=9];
+
+// Composition: LangGraphAgent contains AgentState
+LangGraphAgent -> AgentState [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9, minlen=1] ; 
 }
