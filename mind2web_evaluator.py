@@ -5,8 +5,8 @@ Handles evaluation of agent performance on Mind2Web tasks.
 """
 
 from typing import Dict, List
-import re
-
+import os
+import openai
 
 class Mind2WebEvaluator:
     """
@@ -157,42 +157,40 @@ class Mind2WebEvaluator:
         
         return 0.0
     
-    # TODO: Change to LLM-as-a-judge for better evaluation instead of keyword matching
-    # TODO: Model to be used as judge should be configurable
-    # TODO: Model for the judge should be different from the one being evaluated
-    # TODO: Model for the judge should be SOTA (e.g., meta-llama/Llama-3.1-70B-Instruct) and available at huggingface to use the same key and adapters
     # TODO: Metrics should be only task understanding, task deviation (reasoning steps), task completion
     # TODO: Social value consistency should be assessed togheter with task deviation
-    def _evaluate_task_understanding(
-        self,
-        response: str,
-        task_description: str
-    ) -> float:
+    def _evaluate_task_understanding(self, response: str, task_description: str) -> float:
+        # Set up the OpenAI client with your API key
+        openai.api_key = os.getenv("OPEN_AI_KEY")
+
+        # Define the prompt to send to the GPT-5-mini model
+        prompt = f"""
+        You are a judge assessing the quality of a task response. Your task is to evaluate how well the following response accomplishes the given task.
+
+        Task Description:
+        {task_description}
+
+        Response:
+        {response}
+
+        Please provide a score between 0 and 1, where 0 means the response completely fails to accomplish the task, and 1 means the response perfectly accomplishes the task.
         """
-        Evaluate if agent understood the task
-        
-        Args:
-            response: Agent response
-            task_description: Original task description
-            
-        Returns:
-            Understanding score (0.0 to 1.0)
-        """
-        # Extract key terms from task
-        task_words = set(re.findall(r'\b\w+\b', task_description.lower()))
-        response_words = set(re.findall(r'\b\w+\b', response.lower()))
-        
-        # Remove common words
-        common_words = {"the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for"}
-        task_words -= common_words
-        response_words -= common_words
-        
-        if not task_words:
-            return 0.5
-        
-        # Calculate overlap
-        overlap = len(task_words & response_words) / len(task_words)
-        return overlap
+        # TODO: Test with reasoning explanation and then remove it.
+        # Please provide a score between 0 and 1, where 0 means the response completely fails to accomplish the task, and 1 means the response perfectly accomplishes the task. Explain your reasoning.
+
+        # Send the prompt to the judge model
+        response = openai.ChatCompletion.create(
+            model="gpt-5-mini", # Juddge model
+            messages=[{"role": "user", "content": prompt}] # TODO: test different roles
+        )
+
+        # Extract the score and explanation from the model's response
+        model_response = response.choices[0].message.content
+        lines = model_response.strip().split("\n")
+        score = float(lines[0])
+        explanation = "\n".join(lines[1:])
+
+        return score, explanation
     
     def get_aggregate_metrics(self) -> Dict:
         """

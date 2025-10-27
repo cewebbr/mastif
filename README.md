@@ -15,6 +15,7 @@ pip install datasets
 
 # Existing dependencies
 pip install huggingface_hub transformers torch
+pip install openai
 pip install crewai smolagents
 pip install langchain langchain-community langgraph
 pip install llama-index
@@ -26,6 +27,7 @@ pip install semantic-kernel
 ### Standard Mode (Original Testing)
 ```bash
 export HF_TOKEN='your_token'
+export OPEN_AI_KEY='your_key'
 export TEST_MODE='standard'
 python main.py
 ```
@@ -33,6 +35,7 @@ python main.py
 ### Mind2Web Evaluation Mode
 ```bash
 export HF_TOKEN='your_token'
+export OPEN_AI_KEY='your_key'
 export TEST_MODE='mind2web'
 export MIND2WEB_NUM_TASKS=10  # Use 10 tasks (default)
 python main.py
@@ -41,6 +44,7 @@ python main.py
 ### Test All Mind2Web Tasks
 ```bash
 export HF_TOKEN='your_token'
+export OPEN_AI_KEY='your_key'
 export TEST_MODE='mind2web'
 export MIND2WEB_NUM_TASKS=0  # 0 means use ALL tasks
 python main.py
@@ -52,6 +56,7 @@ python main.py
 - `TEST_MODE`: 'standard' or 'mind2web'
 - `MIND2WEB_NUM_TASKS`: Number of tasks (10-2350, or 0 for all)
 - `HF_TOKEN`: Your HuggingFace API token
+- `OPEN_AI_KEY`: Your OpenAI API key
 
 ### Sample Sizes
 - **10 tasks**: Quick evaluation (~15 minutes)

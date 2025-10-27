@@ -30,6 +30,13 @@ def main():
         print("Please set it with: export HF_TOKEN='your_token_here'")
         return 1
     
+    # Get OpenAI key
+    open_ai_key = os.getenv("OPEN_AI_KEY")
+    if not open_ai_key:
+        print("ERROR: OPEN_AI_KEY environment variable not set!")
+        print("Please set it with: export OPEN_AI_KEY='your_key_here'")
+        return 1
+
     # Initialize tester
     tester = AgenticStackTester()
     
