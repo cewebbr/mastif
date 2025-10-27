@@ -102,5 +102,4 @@ Overall Performance:
 
 - Mind2Web requires authentication with HuggingFace
 - The test set requires accepting terms on HuggingFace
-- Evaluation is simplified (keyword matching) as agents don't interact with actual websites
 - Focus is on task understanding and action planning capabilities
