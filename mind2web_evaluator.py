@@ -6,6 +6,7 @@ Handles evaluation of agent performance on Mind2Web tasks.
 
 from typing import Dict, List
 import os
+import re
 import openai
 
 class Mind2WebEvaluator:
@@ -178,19 +179,23 @@ class Mind2WebEvaluator:
         # TODO: Test with reasoning explanation and then remove it.
         # Please provide a score between 0 and 1, where 0 means the response completely fails to accomplish the task, and 1 means the response perfectly accomplishes the task. Explain your reasoning.
 
-        # Send the prompt to the judge model
-        response = openai.ChatCompletion.create(
-            model="gpt-5-mini", # Juddge model
-            messages=[{"role": "user", "content": prompt}] # TODO: test different roles
-        )
+        try:
+            response = openai.ChatCompletion.create(
+                model=os.getenv("JUDGE_MODEL", "gpt-4o-mini"),
+                messages=[{"role": "user", "content": prompt}]
+            )
+            model_response = response.choices[0].message["content"]
+        except Exception as e:
+            print(f"OpenAI evaluation failed: {e}")
+            return 0.0, "Evaluation failed"
 
-        # Extract the score and explanation from the model's response
-        model_response = response.choices[0].message.content
+        # Extract the score from the model's response
+        model_response = response.choices[0].message["content"]
         lines = model_response.strip().split("\n")
-        score = float(lines[0])
-        explanation = "\n".join(lines[1:])
+        match = re.search(r"([01](?:\.\d+)?)", lines[0]) # Matches: 0, 0.0, 0.25, 0.333, 1, 1.0, 1.00
+        score = float(match.group(1)) if match else 0.0
 
-        return score, explanation
+        return score
     
     def get_aggregate_metrics(self) -> Dict:
         """
