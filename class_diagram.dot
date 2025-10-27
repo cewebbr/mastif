@@ -14,7 +14,12 @@ CustomLLM;
 BaseProtocol;
 HuggingFaceLLM;
 AgentState;
+OpenAIAPI [shape=component]
+HuggingFaceAPI [shape=component]
 }
+
+Mind2WebEvaluator -> OpenAIAPI  [arrowhead=open, fontsize=9];
+HuggingFaceAdapter -> HuggingFaceAPI [arrowhead=open, fontsize=9];
 
 // ProtocolType is an Enum
 subgraph cluster_dataclasses {
