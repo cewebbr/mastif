@@ -4,7 +4,7 @@ Mind2Web task evaluator
 Handles evaluation of agent performance on Mind2Web tasks.
 """
 
-from typing import Dict, List, Tuple
+from typing import Dict, List
 import re
 
 
