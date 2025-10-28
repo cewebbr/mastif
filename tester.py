@@ -825,6 +825,7 @@ Please respond according to this protocol structure and complete the task."""
             print(f"  {domain}:")
             print(f"    Tasks: {metrics['count']}")
             print(f"    Avg Understanding: {metrics['avg_understanding']:.2%}")
+            print(f"    Avg Task Deviation: {metrics['avg_task_deviation']:.2%} (lower is better)")
             print(f"    Avg Completion: {metrics['avg_completion']:.2%}")
         
         # Store Mind2Web specific results

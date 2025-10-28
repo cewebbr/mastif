@@ -293,12 +293,14 @@ Respond with ONLY a single number between 0.0 and 1.0, nothing else."""
                 }
             domain_metrics[domain]["count"] += 1
             domain_metrics[domain]["total_understanding"] += result["task_understanding"]
+            domain_metrics[domain]["total_deviation"] += result["task_deviation"]
             domain_metrics[domain]["total_completion"] += result["task_completion"]
         
         # Calculate averages per domain
         for domain in domain_metrics:
             count = domain_metrics[domain]["count"]
             domain_metrics[domain]["avg_understanding"] = domain_metrics[domain]["total_understanding"] / count
+            domain_metrics[domain]["avg_deviation"] = domain_metrics[domain]["total_deviation"] / count
             domain_metrics[domain]["avg_completion"] = domain_metrics[domain]["total_completion"] / count
         
         return {
