@@ -13,7 +13,7 @@ class Mind2WebEvaluator:
     """
     Evaluator for Mind2Web benchmark tasks
     
-    Evaluates agent responses against ground truth actions and elements.
+    Evaluates agent responses against with an llm-as-a-judge.
     """
     
     def __init__(self):
@@ -181,7 +181,7 @@ class Mind2WebEvaluator:
 
         try:
             response = openai.ChatCompletion.create(
-                model=os.getenv("JUDGE_MODEL", "gpt-4o-mini"),
+                model=os.getenv("JUDGE_MODEL"),
                 messages=[{"role": "user", "content": prompt}]
             )
             model_response = response.choices[0].message["content"]
