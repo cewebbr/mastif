@@ -62,7 +62,7 @@ class Mind2WebLoader:
                 
                 # Convert stream to list (load first N examples that work)
                 self.dataset = []
-                max_examples = 1000  # Load up to 1000 examples
+                max_examples = os.getenv("MIND2WEB_NUM_TASKS")
                 
                 print("Loading examples from stream...")
                 for i, example in enumerate(dataset_stream):

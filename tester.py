@@ -782,15 +782,19 @@ Please respond according to this protocol structure and complete the task."""
                         result = test_fn(*args, **kwargs)
                         if result:
                             self.results.append(result)
-                            framework_results.append(result)
+                            
+                            # Evaluate result
                             eval_result = evaluator.evaluate_task(
                                 task,
                                 result.response,
                                 result.reasoning_steps
                             )
+                            
                             print(f"    ✓ Completed")
-                            print(f"      Action Coverage: {eval_result['action_coverage']:.2%}")
-                            print(f"      Task Understanding: {eval_result['task_understanding_score']:.2%}")
+                            print(f"      Task Understanding: {eval_result['task_understanding']:.2%}")
+                            print(f"      Task Deviation: {eval_result['task_deviation']:.2%}")
+                            print(f"      Task Completion: {eval_result['task_completion']:.2%}")
+                            print(f"      Overall Score: {eval_result['overall_score']:.2%}")
                             print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
                     except Exception as e:
                         print(f"    ✗ Error: {str(e)}")
@@ -808,23 +812,25 @@ Please respond according to this protocol structure and complete the task."""
         
         aggregate = evaluator.get_aggregate_metrics()
         print(f"\nOverall Performance:")
+        print(f"  Judge Model: {aggregate['judge_model']}")
         print(f"  Tasks Evaluated: {aggregate['total_tasks_evaluated']}")
-        print(f"  Avg Action Coverage: {aggregate['avg_action_coverage']:.2%}")
-        print(f"  Avg Action Order Score: {aggregate['avg_action_order_score']:.2%}")
         print(f"  Avg Task Understanding: {aggregate['avg_task_understanding']:.2%}")
+        print(f"  Avg Task Deviation: {aggregate['avg_task_deviation']:.2%} (lower is better)")
+        print(f"  Avg Task Completion: {aggregate['avg_task_completion']:.2%}")
+        print(f"  Avg Overall Score: {aggregate['avg_overall_score']:.2%}")
         print(f"  Avg Reasoning Steps: {aggregate['avg_reasoning_steps']:.1f}")
         
         print(f"\nPerformance by Domain:")
         for domain, metrics in aggregate['domain_metrics'].items():
             print(f"  {domain}:")
             print(f"    Tasks: {metrics['count']}")
-            print(f"    Avg Coverage: {metrics['avg_coverage']:.2%}")
             print(f"    Avg Understanding: {metrics['avg_understanding']:.2%}")
+            print(f"    Avg Completion: {metrics['avg_completion']:.2%}")
         
         # Store Mind2Web specific results
         self.mind2web_results = evaluator.results
         self.mind2web_aggregate = aggregate
-
+        
     def export_mind2web_results(self, filename: str):
         """
         Export Mind2Web evaluation results

@@ -4,8 +4,9 @@ Mind2Web task evaluator
 Handles evaluation of agent performance on Mind2Web tasks.
 """
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 import re
+import os
 
 class Mind2WebEvaluator:
     """
@@ -14,7 +15,7 @@ class Mind2WebEvaluator:
     Evaluates agent responses against with an llm-as-a-judge.
     """
     
-    def __init__(self, judge_adapter):
+    def __init__(self, judge_adapter, judge_model: Optional[str] = None):
         """
         Initialize the evaluator with HuggingFace judge model
         
@@ -22,6 +23,7 @@ class Mind2WebEvaluator:
             judge_adapter: HuggingFaceAdapter instance for judge model
         """
         self.judge_adapter = judge_adapter
+        self.judge_model = judge_model or os.getenv("JUDGE_MODEL")
         self.results = []
     
     def evaluate_task(
@@ -301,7 +303,7 @@ Respond with ONLY a single number between 0.0 and 1.0, nothing else."""
         
         return {
             "total_tasks_evaluated": total_tasks,
-            "judge_model": self.judge_model_name,
+            "judge_model": self.judge_model,
             "avg_task_understanding": avg_understanding,
             "avg_task_deviation": avg_deviation,
             "avg_task_completion": avg_completion,
