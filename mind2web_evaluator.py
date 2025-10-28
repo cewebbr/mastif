@@ -289,6 +289,7 @@ Respond with ONLY a single number between 0.0 and 1.0, nothing else."""
                 domain_metrics[domain] = {
                     "count": 0,
                     "total_understanding": 0.0,
+                    "total_deviation": 0.0,
                     "total_completion": 0.0
                 }
             domain_metrics[domain]["count"] += 1
