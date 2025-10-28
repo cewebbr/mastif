@@ -18,6 +18,12 @@ OpenAIAPI [shape=component]
 HuggingFaceAPI [shape=component]
 }
 
+{
+rank=same;
+AgenticStackTester;
+HuggingFaceAdapter;
+}
+
 Mind2WebEvaluator -> OpenAIAPI  [arrowhead=open, fontsize=9];
 HuggingFaceAdapter -> HuggingFaceAPI [arrowhead=open, fontsize=9];
 
