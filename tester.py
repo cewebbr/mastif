@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import List, Dict, Optional
 
 from domain_model import TestResult, ProtocolType, ReasoningStep
-from adapters import HuggingFaceAdapter
+from adapters import HuggingFaceAdapter, OpenAIAdapter
 from protocols import MCPProtocol, A2AProtocol, ACPProtocol
 from frameworks import (
     CrewAIAgent,
@@ -719,7 +719,8 @@ Please respond according to this protocol structure and complete the task."""
             print(f"  - {domain}: {count} tasks")
         
         # Initialize evaluator
-        evaluator = Mind2WebEvaluator()
+        judge_adapter = OpenAIAdapter()
+        evaluator = Mind2WebEvaluator(judge_adapter=judge_adapter)
         
         # Default to testing all frameworks if not specified
         frameworks = ["CrewAI", "Smolagents", "LangChain", "LangGraph", "LlamaIndex", "SemanticKernel"]

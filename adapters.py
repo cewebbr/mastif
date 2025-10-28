@@ -5,10 +5,10 @@ HuggingFace model adapter for unified model access
 import os
 from typing import Optional
 from huggingface_hub import InferenceClient
+import openai
 from langchain_community.llms import HuggingFaceEndpoint
 from llama_index.core.llms import CustomLLM, CompletionResponse, LLMMetadata
 from llama_index.core.llms.callbacks import llm_completion_callback
-
 
 class HuggingFaceAdapter:
     """
@@ -90,3 +90,37 @@ class HuggingFaceAdapter:
                 yield response
         
         return HuggingFaceLLM(adapter=self)
+    
+class OpenAIAdapter:
+    """
+    Unified adapter for OpenAI models
+    
+    Provides a consistent interface for interacting with OpenAI models
+    across different frameworks. Handles API authentication, request formatting,
+    and response parsing.
+    """
+    
+    def __init__(self, model_name: Optional[str] = None, api_key: Optional[str] = None):
+        """
+        Initialize the OpenAI adapter
+        
+        Args:
+            model_name: OpenAI model identifier
+            api_key: OpenAI API key
+        """
+        self.model_name = model_name or os.getenv("JUDGE_MODEL")
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
+    
+    def generate(self, prompt: str, **kwargs) -> str:
+        """Generate text completion from the model"""
+        try:
+            openai.api_key = self.api_key
+            response = openai.Completion.create(
+                model=self.model_name,
+                prompt=prompt,
+                max_tokens=kwargs.get("max_tokens", 512),
+                temperature=kwargs.get("temperature", 0.7),
+            )
+            return response.choices[0].text.strip()
+        except Exception as e:
+            return f"Error: {str(e)}"

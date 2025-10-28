@@ -5,9 +5,7 @@ Handles evaluation of agent performance on Mind2Web tasks.
 """
 
 from typing import Dict, List
-import os
 import re
-import openai
 
 class Mind2WebEvaluator:
     """
@@ -16,8 +14,14 @@ class Mind2WebEvaluator:
     Evaluates agent responses against with an llm-as-a-judge.
     """
     
-    def __init__(self):
-        """Initialize the evaluator"""
+    def __init__(self, judge_adapter):
+        """
+        Initialize the evaluator with HuggingFace judge model
+        
+        Args:
+            judge_adapter: HuggingFaceAdapter instance for judge model
+        """
+        self.judge_adapter = judge_adapter
         self.results = []
     
     def evaluate_task(
@@ -27,191 +31,252 @@ class Mind2WebEvaluator:
         reasoning_steps: List
     ) -> Dict:
         """
-        Evaluate agent performance on a single Mind2Web task
+        Evaluate agent performance using HuggingFace LLM-as-a-judge
         
         Args:
-            task: Mind2Web task dictionary
-            agent_response: Agent's response
+            task: Mind2Web task dictionary with 'confirmed_task'
+            agent_response: Agent's final response
             reasoning_steps: Agent's reasoning steps
             
         Returns:
             Evaluation result dictionary
         """
-        ground_truth_actions = task.get("action_reprs", [])
+        high_level_task = task.get("confirmed_task", "")
+        website = task.get("website", "unknown")
+        domain = task.get("domain", "unknown")
         
-        # Extract actions mentioned in response
-        extracted_actions = self._extract_actions_from_response(agent_response)
+        # Extract reasoning text from steps
+        reasoning_text = self._extract_reasoning_text(reasoning_steps)
         
-        # Calculate metrics
-        action_coverage = self._calculate_action_coverage(
-            extracted_actions, 
-            ground_truth_actions
-        )
-        
-        action_order_score = self._calculate_action_order_score(
-            extracted_actions,
-            ground_truth_actions
-        )
-        
-        # Check if task understanding is present
-        task_understanding = self._evaluate_task_understanding(
-            agent_response,
-            task["confirmed_task"]
-        )
-        
-        result = {
-            "task_id": task["task_id"],
-            "website": task["website"],
-            "domain": task["domain"],
-            "ground_truth_actions": ground_truth_actions,
-            "extracted_actions": extracted_actions,
-            "action_coverage": action_coverage,
-            "action_order_score": action_order_score,
-            "task_understanding_score": task_understanding,
-            "reasoning_steps_count": len(reasoning_steps),
-            "response_length": len(agent_response),
-        }
+        # Evaluate three dimensions
+        try:
+            task_understanding = self._evaluate_task_understanding(
+                high_level_task=high_level_task,
+                agent_response=agent_response
+            )
+            
+            task_deviation = self._evaluate_task_deviation(
+                high_level_task=high_level_task,
+                reasoning_steps_text=reasoning_text
+            )
+            
+            task_completion = self._evaluate_task_completion(
+                high_level_task=high_level_task,
+                final_response=agent_response,
+                website=website,
+                domain=domain
+            )
+            
+            # Overall score: average of three metrics
+            overall_score = (task_understanding + (1.0 - task_deviation) + task_completion) / 3.0
+            
+            result = {
+                "task_id": task["task_id"],
+                "website": website,
+                "domain": domain,
+                "high_level_task": high_level_task,
+                "task_understanding": task_understanding,
+                "task_deviation": task_deviation,
+                "task_completion": task_completion,
+                "overall_score": overall_score,
+                "reasoning_steps_count": len(reasoning_steps),
+            }
+            
+        except Exception as e:
+            print(f"    Warning: Judge evaluation failed: {e}")
+            result = {
+                "task_id": task["task_id"],
+                "website": website,
+                "domain": domain,
+                "high_level_task": high_level_task,
+                "task_understanding": 0.5,
+                "task_deviation": 0.5,
+                "task_completion": 0.5,
+                "overall_score": 0.5,
+                "reasoning_steps_count": len(reasoning_steps),
+            }
         
         self.results.append(result)
         return result
     
-    def _extract_actions_from_response(self, response: str) -> List[str]:
-        """
-        Extract action keywords from agent response
+    def _extract_reasoning_text(self, reasoning_steps: List) -> str:
+        """Extract text from reasoning steps"""
+        reasoning_parts = []
+        for step in reasoning_steps:
+            if hasattr(step, 'thought') and step.thought:
+                reasoning_parts.append(step.thought)
+            if hasattr(step, 'observation') and step.observation:
+                reasoning_parts.append(step.observation)
         
-        Args:
-            response: Agent's response text
-            
-        Returns:
-            List of extracted actions
-        """
-        # Common web actions
-        action_keywords = [
-            "click", "type", "select", "scroll", "navigate",
-            "search", "submit", "fill", "enter", "choose",
-            "press", "tap", "input"
-        ]
-        
-        response_lower = response.lower()
-        extracted = []
-        
-        for action in action_keywords:
-            if action in response_lower:
-                extracted.append(action)
-        
-        return extracted
+        return " ".join(reasoning_parts)
     
-    def _calculate_action_coverage(
+    def _evaluate_task_understanding(
         self,
-        extracted: List[str],
-        ground_truth: List[str]
+        high_level_task: str,
+        agent_response: str
     ) -> float:
         """
-        Calculate how many ground truth actions are covered
+        Evaluate if agent understood the task
         
         Args:
-            extracted: Extracted actions from response
-            ground_truth: Ground truth actions
+            high_level_task: The task description
+            agent_response: Agent's response
             
         Returns:
-            Coverage score (0.0 to 1.0)
+            Understanding score (0.0 to 1.0)
         """
-        if not ground_truth:
-            return 1.0
-        
-        # Simple keyword matching
-        covered = 0
-        for gt_action in ground_truth:
-            gt_lower = gt_action.lower()
-            for extracted_action in extracted:
-                if extracted_action in gt_lower:
-                    covered += 1
-                    break
-        
-        return covered / len(ground_truth) if ground_truth else 0.0
-    
-    def _calculate_action_order_score(
-        self,
-        extracted: List[str],
-        ground_truth: List[str]
-    ) -> float:
-        """
-        Calculate if actions are in correct order
-        
-        Args:
-            extracted: Extracted actions
-            ground_truth: Ground truth actions
-            
-        Returns:
-            Order score (0.0 to 1.0)
-        """
-        if not extracted or not ground_truth:
-            return 0.0
-        
-        # Simplified: check if first actions match
-        if len(extracted) > 0 and len(ground_truth) > 0:
-            first_match = any(
-                ext in ground_truth[0].lower() 
-                for ext in extracted[:1]
-            )
-            return 1.0 if first_match else 0.5
-        
-        return 0.0
-    
-    # TODO: Metrics should be only task understanding, task deviation (reasoning steps), task completion
-    # TODO: Social value consistency should be assessed togheter with task deviation
-    def _evaluate_task_understanding(self, response: str, task_description: str) -> float:
-        # Set up the OpenAI client with your API key
-        openai.api_key = os.getenv("OPEN_AI_KEY")
+        prompt = f"""Evaluate if the agent understood the task.
 
-        # Define the prompt to send to the GPT-5-mini model
-        prompt = f"""
-        You are a judge assessing the quality of a task response. Your task is to evaluate how well the following response accomplishes the given task.
+Task: {high_level_task}
 
-        Task Description:
-        {task_description}
+Agent Response: {agent_response}
 
-        Response:
-        {response}
+Question: Does the agent's response show understanding of what needs to be accomplished?
 
-        Please provide a score between 0 and 1, where 0 means the response completely fails to accomplish the task, and 1 means the response perfectly accomplishes the task.
-        """
-        # TODO: Test with reasoning explanation and then remove it.
-        # Please provide a score between 0 and 1, where 0 means the response completely fails to accomplish the task, and 1 means the response perfectly accomplishes the task. Explain your reasoning.
+Scoring:
+- 1.0 = Clear understanding of all task requirements
+- 0.7 = Good understanding with minor gaps
+- 0.5 = Partial understanding
+- 0.3 = Poor understanding, misses key points
+- 0.0 = No understanding or completely wrong
+
+Respond with ONLY a single number between 0.0 and 1.0, nothing else."""
 
         try:
-            response = openai.ChatCompletion.create(
-                model=os.getenv("JUDGE_MODEL"),
-                messages=[{"role": "user", "content": prompt}]
-            )
-            model_response = response.choices[0].message["content"]
+            response = self.judge_adapter.generate(prompt, max_tokens=50, temperature=0.0)
+            score = self._extract_score(response)
+            return score
         except Exception as e:
-            print(f"OpenAI evaluation failed: {e}")
-            return 0.0, "Evaluation failed"
+            print(f"      Warning: Task understanding evaluation failed: {e}")
+            return 0.5
+    
+    def _evaluate_task_deviation(
+        self,
+        high_level_task: str,
+        reasoning_steps_text: str
+    ) -> float:
+        """
+        Evaluate if reasoning steps deviate from the task
+        
+        Args:
+            high_level_task: The task description
+            reasoning_steps_text: Combined reasoning steps text
+            
+        Returns:
+            Deviation score (0.0 = no deviation, 1.0 = completely off-track)
+        """
+        if not reasoning_steps_text or len(reasoning_steps_text.strip()) < 10:
+            return 0.0
+        
+        prompt = f"""Evaluate if the agent's reasoning stayed focused on the task or went off-track.
 
-        # Extract the score from the model's response
-        model_response = response.choices[0].message["content"]
-        lines = model_response.strip().split("\n")
-        match = re.search(r"([01](?:\.\d+)?)", lines[0]) # Matches: 0, 0.0, 0.25, 0.333, 1, 1.0, 1.00
-        score = float(match.group(1)) if match else 0.0
+Task: {high_level_task}
 
-        return score
+Agent's Reasoning Steps: {reasoning_steps_text[:1000]}
+
+Question: How much did the reasoning deviate from the task?
+
+Scoring (deviation level):
+- 0.0 = No deviation, stayed completely on task
+- 0.3 = Minor deviations but mostly relevant
+- 0.5 = Moderate deviation, mixed relevance
+- 0.7 = Significant deviation, often off-track
+- 1.0 = Complete deviation, unrelated to task
+
+Respond with ONLY a single number between 0.0 and 1.0, nothing else."""
+
+        try:
+            response = self.judge_adapter.generate(prompt, max_tokens=50, temperature=0.0)
+            score = self._extract_score(response)
+            return score
+        except Exception as e:
+            print(f"      Warning: Task deviation evaluation failed: {e}")
+            return 0.5
+    
+    def _evaluate_task_completion(
+        self,
+        high_level_task: str,
+        final_response: str,
+        website: str,
+        domain: str
+    ) -> float:
+        """
+        Evaluate if final response accomplishes the task
+        
+        Args:
+            high_level_task: The task description
+            final_response: Agent's final response
+            website: Website name
+            domain: Domain category
+            
+        Returns:
+            Completion score (0.0 to 1.0)
+        """
+        prompt = f"""Evaluate if the agent's response would successfully complete the task.
+
+Task: {high_level_task}
+Website: {website}
+Domain: {domain}
+
+Agent's Final Response: {final_response}
+
+Question: Would following this response successfully complete the task?
+
+Scoring:
+- 1.0 = Would definitely complete the task successfully
+- 0.7 = Would likely complete with minor issues
+- 0.5 = Might work but has significant gaps
+- 0.3 = Unlikely to complete successfully
+- 0.0 = Would not complete the task at all
+
+Respond with ONLY a single number between 0.0 and 1.0, nothing else."""
+
+        try:
+            response = self.judge_adapter.generate(prompt, max_tokens=50, temperature=0.0)
+            score = self._extract_score(response)
+            return score
+        except Exception as e:
+            print(f"      Warning: Task completion evaluation failed: {e}")
+            return 0.5
+    
+    def _extract_score(self, response: str) -> float:
+        """Extract numerical score from judge response"""
+        # Find number between 0.0 and 1.0
+        numbers = re.findall(r'\b[0-1]?\.\d+\b|\b[01]\b', response)
+        
+        if numbers:
+            try:
+                score = float(numbers[0])
+                return max(0.0, min(1.0, score))
+            except ValueError:
+                pass
+        
+        # Fallback: keyword matching
+        response_lower = response.lower()
+        if any(word in response_lower for word in ["excellent", "perfect", "complete"]):
+            return 0.9
+        elif any(word in response_lower for word in ["good", "adequate"]):
+            return 0.7
+        elif any(word in response_lower for word in ["partial", "some"]):
+            return 0.5
+        elif any(word in response_lower for word in ["poor", "weak"]):
+            return 0.3
+        elif any(word in response_lower for word in ["no", "none", "fail"]):
+            return 0.1
+        
+        return 0.5
     
     def get_aggregate_metrics(self) -> Dict:
-        """
-        Calculate aggregate metrics across all evaluated tasks
-        
-        Returns:
-            Dictionary with aggregate metrics
-        """
+        """Calculate aggregate metrics across all evaluated tasks"""
         if not self.results:
             return {}
         
         total_tasks = len(self.results)
         
-        avg_action_coverage = sum(r["action_coverage"] for r in self.results) / total_tasks
-        avg_action_order = sum(r["action_order_score"] for r in self.results) / total_tasks
-        avg_understanding = sum(r["task_understanding_score"] for r in self.results) / total_tasks
+        avg_understanding = sum(r["task_understanding"] for r in self.results) / total_tasks
+        avg_deviation = sum(r["task_deviation"] for r in self.results) / total_tasks
+        avg_completion = sum(r["task_completion"] for r in self.results) / total_tasks
+        avg_overall_score = sum(r["overall_score"] for r in self.results) / total_tasks
         avg_reasoning_steps = sum(r["reasoning_steps_count"] for r in self.results) / total_tasks
         
         # Domain-specific metrics
@@ -221,24 +286,26 @@ class Mind2WebEvaluator:
             if domain not in domain_metrics:
                 domain_metrics[domain] = {
                     "count": 0,
-                    "total_coverage": 0.0,
-                    "total_understanding": 0.0
+                    "total_understanding": 0.0,
+                    "total_completion": 0.0
                 }
             domain_metrics[domain]["count"] += 1
-            domain_metrics[domain]["total_coverage"] += result["action_coverage"]
-            domain_metrics[domain]["total_understanding"] += result["task_understanding_score"]
+            domain_metrics[domain]["total_understanding"] += result["task_understanding"]
+            domain_metrics[domain]["total_completion"] += result["task_completion"]
         
         # Calculate averages per domain
         for domain in domain_metrics:
             count = domain_metrics[domain]["count"]
-            domain_metrics[domain]["avg_coverage"] = domain_metrics[domain]["total_coverage"] / count
             domain_metrics[domain]["avg_understanding"] = domain_metrics[domain]["total_understanding"] / count
+            domain_metrics[domain]["avg_completion"] = domain_metrics[domain]["total_completion"] / count
         
         return {
             "total_tasks_evaluated": total_tasks,
-            "avg_action_coverage": avg_action_coverage,
-            "avg_action_order_score": avg_action_order,
+            "judge_model": self.judge_model_name,
             "avg_task_understanding": avg_understanding,
+            "avg_task_deviation": avg_deviation,
+            "avg_task_completion": avg_completion,
+            "avg_overall_score": avg_overall_score,
             "avg_reasoning_steps": avg_reasoning_steps,
             "domain_metrics": domain_metrics
         }
