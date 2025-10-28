@@ -22,9 +22,11 @@ HuggingFaceAPI [shape=component]
 rank=same;
 AgenticStackTester;
 HuggingFaceAdapter;
+OpenAIAdapter;
 }
 
-Mind2WebEvaluator -> OpenAIAPI  [arrowhead=open, fontsize=9];
+Mind2WebEvaluator -> OpenAIAdapter [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
+OpenAIAdapter -> OpenAIAPI  [arrowhead=open, fontsize=9];
 HuggingFaceAdapter -> HuggingFaceAPI [arrowhead=open, fontsize=9];
 
 // ProtocolType is an Enum
@@ -127,6 +129,17 @@ stream_complete(prompt: str, **kwargs): str\l
 HuggingFaceLLM -> CustomLLM [arrowhead=empty, fontsize=9];
 
 HuggingFaceAdapter -> HuggingFaceLLM [arrowhead=open, fontsize=9];
+
+// OpenAIAdapter adapter
+OpenAIAdapter [label="{
+OpenAIAdapter|
+model_name: str\l
+api_key: Optional[str]\l
+client: InferenceClient\l
+|
+__init__(model_name: Optional[str], api_key: Optional[str] = None)\l
+generate(prompt: str, **kwargs): str\l
+}"];
 
 // AgentState
 AgentState [label="{AgentState|task: str\lplan: str\lresearch_results: Annotated[list, operator.add]\lfinal_report: str\lstep: int\l|}"];
