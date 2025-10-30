@@ -112,3 +112,6 @@ Overall Performance:
 - Mind2Web requires authentication with HuggingFace
 - The test set requires accepting terms on HuggingFace
 - Focus is on task understanding and action planning capabilities
+
+AIA Human-AI blend, Content edits, Human-initiated, Reviewed, GPT-4.1 and Sonet 4.5 v1.0
+More info: https://aiattribution.github.io/create-attribution
