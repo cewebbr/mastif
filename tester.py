@@ -733,7 +733,35 @@ Please respond according to this protocol structure and complete the task."""
             
             adapter = HuggingFaceAdapter(model_name, hf_token)
             
-            # Test each framework on Mind2Web tasks
+            # ===== Protocol Tests =====
+            print(f"\n{'-'*70}")
+            print("PROTOCOL TESTS")
+            print(f"{'-'*70}")
+
+            for protocol in [ProtocolType.MCP, ProtocolType.A2A, ProtocolType.ACP, ProtocolType.STANDARD]:
+                protocol_results = []
+                for task in tasks:
+                    print(f"\n  Testing with {protocol.value} on task: {task['confirmed_task'][:40]}...")
+                    result = self.test_with_protocol(adapter, protocol, task['confirmed_task'])
+                    protocol_results.append(result)
+                    self.results.append(result)
+                    if result.success:
+                        status = "✓ Success"
+                    else:
+                        status = f"✗ Failed: {result.error}"
+                    print(f"    {status} ({len(result.reasoning_steps)} reasoning steps)")
+
+                # Average metrics for this protocol
+                successes = [r for r in protocol_results if r.success]
+                avg_latency = sum(r.latency for r in protocol_results) / len(protocol_results)
+                avg_reasoning_steps = sum(len(r.reasoning_steps) for r in protocol_results) / len(protocol_results)
+                print(f"\n  Protocol {protocol.value} summary:")
+                print(f"    Success rate: {len(successes)}/{len(protocol_results)}")
+                print(f"    Avg latency: {avg_latency:.2f}s")
+                print(f"    Avg reasoning steps: {avg_reasoning_steps:.2f}")
+                print(f"    \n{'-'*35}")
+
+            # ===== Framework Tests =====
             framework_configs = [
                 ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}),
                 ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
