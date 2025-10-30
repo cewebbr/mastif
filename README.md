@@ -83,8 +83,8 @@ python main.py
 
 ## Example Output
 
-- Standard mode with user defined tasks: [./out-standard.txt](./out-standard.txt)
-- Mind2Web mode with benchmark tasks: [./out-mind2web.txt](./out-mind2web.txt)
+- Standard mode with user defined tasks: [out-standard.txt](./out-standard.txt)
+- Mind2Web mode with benchmark tasks: [out-mind2web.txt](./out-mind2web.txt)
 
 ## Notes
 
