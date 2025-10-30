@@ -1,0 +1,924 @@
+{
+  "test_run_timestamp": "2025-10-30T08:49:17.103854",
+  "total_tests": 20,
+  "results": [
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "MCP",
+      "framework": "direct",
+      "task": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350b9-51cdb60b71263a214cd3e17e;61726799-f3a9-48ef-b0b2-dfe23d9ebfd7)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with MCP protocol",
+          "action": "initialize_protocol",
+          "action_input": "MCP",
+          "observation": null,
+          "timestamp": 1761824953.1662898
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with MCP",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new ",
+          "observation": null,
+          "timestamp": 1761824953.166315
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: MCP\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research r",
+          "observation": null,
+          "timestamp": 1761824953.166326
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 335 characters",
+          "timestamp": 1761824953.60541
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.44s",
+          "timestamp": 1761824953.605421
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.43912315368652344,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "MCP",
+      "framework": "direct",
+      "task": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350b9-538e66e7242c1bc75247d593;f5da92d3-5e53-4592-90db-ec702b91369f)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with MCP protocol",
+          "action": "initialize_protocol",
+          "action_input": "MCP",
+          "observation": null,
+          "timestamp": 1761824953.605511
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with MCP",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws\",\n  \"context\": {\n    \"conver",
+          "observation": null,
+          "timestamp": 1761824953.6055958
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: MCP\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the",
+          "observation": null,
+          "timestamp": 1761824953.605633
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 335 characters",
+          "timestamp": 1761824953.740549
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1761824953.740563
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.13504576683044434,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "A2A",
+      "framework": "direct",
+      "task": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350b9-554b631949e3421f471ca352;81a9b560-ccc8-48c6-916d-29efeb1fde58)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with A2A protocol",
+          "action": "initialize_protocol",
+          "action_input": "A2A",
+          "observation": null,
+          "timestamp": 1761824953.7407548
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with A2A",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Look for dissertation and thesis in Brazil about ope",
+          "observation": null,
+          "timestamp": 1761824953.740872
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: A2A\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Look for dissertat",
+          "observation": null,
+          "timestamp": 1761824953.740918
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1761824953.874746
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.13s",
+          "timestamp": 1761824953.874757
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.13399767875671387,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "A2A",
+      "framework": "direct",
+      "task": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350b9-5492461779105569783318e6;94f33b1c-3e65-4fa3-be5f-c9ffc3428722)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with A2A protocol",
+          "action": "initialize_protocol",
+          "action_input": "A2A",
+          "observation": null,
+          "timestamp": 1761824953.8748622
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with A2A",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Prepare a report about new laws regarding AI use on ",
+          "observation": null,
+          "timestamp": 1761824953.875387
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: A2A\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Prepare a report a",
+          "observation": null,
+          "timestamp": 1761824953.875435
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1761824954.011793
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1761824954.0118022
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.13693690299987793,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "ACP",
+      "framework": "direct",
+      "task": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350ba-5a98571f5ead70032d3488da;cded87f6-17f2-46e5-8b5a-97c28ab1e058)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with ACP protocol",
+          "action": "initialize_protocol",
+          "action_input": "ACP",
+          "observation": null,
+          "timestamp": 1761824954.011931
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with ACP",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Look for dissertation and thesis in Brazil about open data and open research in which datase",
+          "observation": null,
+          "timestamp": 1761824954.012064
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: ACP\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Look for dissertation and thesis in Brazil about open data",
+          "observation": null,
+          "timestamp": 1761824954.012146
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1761824954.149
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1761824954.149009
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.13707280158996582,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "ACP",
+      "framework": "direct",
+      "task": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "{'content': 'Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350ba-6bd270ec496bfc7a77856f3f;c28b2379-facf-4723-b2f9-1b48be0eb419)\\n\\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with ACP protocol",
+          "action": "initialize_protocol",
+          "action_input": "ACP",
+          "observation": null,
+          "timestamp": 1761824954.149104
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with ACP",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Prepare a report about new laws regarding AI use on the web. List people proposing the laws,",
+          "observation": null,
+          "timestamp": 1761824954.149195
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: ACP\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Prepare a report about new laws regarding AI use on the we",
+          "observation": null,
+          "timestamp": 1761824954.1492438
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 352 characters",
+          "timestamp": 1761824954.283773
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.13s",
+          "timestamp": 1761824954.283783
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 0.1346759796142578,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350ba-66449f5b75912dc93a76e57e;a8588e9c-08c5-45a8-8361-fa8dea8a89aa)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1761824954.283932
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824954.283936
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.14s",
+          "timestamp": 1761824954.421264
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.13732624053955078,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350ba-2230064206c3bdf6406778b8;d6ec66c1-ed7e-4d69-ab6c-9aa101a53444)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1761824954.421344
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824954.421348
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 0.13s",
+          "timestamp": 1761824954.555773
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.13442182540893555,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350ba-4ddced374b27443f3ba402c0;30747d16-ca0f-4e26-9ba6-fdc8a458eccd)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Web Automation Specialist, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1761824954.555964
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824954.556004
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 335 characters",
+          "timestamp": 1761824954.690944
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.1349947452545166,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Web Automation Specialist"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350ba-6cdc8e4b7fa77ca90f9aa698;e3344676-23f9-4ffa-80f6-45dd26bbc06b)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Web Automation Specialist, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1761824954.690974
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824954.690986
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 335 characters",
+          "timestamp": 1761824955.050542
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.3595759868621826,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Web Automation Specialist"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350bb-25b2a16e019225591d626dbd;88b332c0-a858-4912-9266-dbe4a180c7a7)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 13 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1761824955.050754
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824955.050771
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824955.050775
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1761824955.1872158
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 0.13650107383728027,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350bb-525d01b93b012ec81be88bf1;79521b77-3bb2-4b23-a172-653f3c00d305)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 13 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1761824955.1872718
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824955.187277
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824955.187279
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1761824955.3219829
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 0.13472723960876465,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "LangChain execution error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350bb-2e099f6c38d51e9304ecabe8;fd053f13-20bd-4d05-9f4d-2e06c591e47c)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 13 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze', 'wikipedia', 'web_browser', 'code_interpreter', 'click_element', 'type_text', 'navigate', 'extract_table', 'summarize', 'translate', 'calendar']",
+          "timestamp": 1761824955.4796412
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824955.481714
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350bb-2e099f6c38d51e9304ecabe8;fd053f13-20bd-4d05-9f4d-2e06c591e47c)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+          "timestamp": 1761824955.6251462
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.30304527282714844,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "LangChain execution error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350bb-28fb48b06804fd3d5daefb27;3026c484-9ed7-4d22-a903-f3ad02f34156)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 13 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze', 'wikipedia', 'web_browser', 'code_interpreter', 'click_element', 'type_text', 'navigate', 'extract_table', 'summarize', 'translate', 'calendar']",
+          "timestamp": 1761824955.767309
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824955.768058
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350bb-28fb48b06804fd3d5daefb27;3026c484-9ed7-4d22-a903-f3ad02f34156)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+          "timestamp": 1761824955.910958
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.28572893142700195,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350bc-296f17fa3dadb5af71e0f5bc;4d336bdb-b579-41e8-ac19-bf95a69df66d)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1761824955.91812
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824955.9216828
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 335 characters",
+          "timestamp": 1761824956.05794
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1761824956.0590441
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1761824956.195755
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1761824956.196148
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1761824956.1968799
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1761824956.329959
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1761824956.330285
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1761824956.33098
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 335 characters",
+          "timestamp": 1761824956.466779
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.556053876876831,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/completions (Request ID: Root=1-690350bd-73a3f14b3ac2b8dc5331d7f3;1594c336-7b5d-4c8c-bca2-8205410c27a9)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1761824956.475416
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+          "observation": null,
+          "timestamp": 1761824956.4763
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 335 characters",
+          "timestamp": 1761824956.688156
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1761824956.688628
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1761824956.8229241
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1761824956.8232372
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1761824956.8238552
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/c...",
+          "timestamp": 1761824956.960644
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1761824956.961003
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1761824956.962185
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 335 characters",
+          "timestamp": 1761824957.0976791
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.6307451725006104,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.0023522377014160156,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.0015988349914550781,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Look for dissertation and thesis in Brazil about open data and open research in which datasets were published with research results.Prepare a report about new laws on Web accessibility in different countries. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 4.601478576660156e-05,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    },
+    {
+      "model_name": "mistralai/Mistral-Nemo-Base-2407",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Prepare a report about new laws regarding AI use on the web. List people proposing the laws, references, and a sumamry of the laws",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 1.4066696166992188e-05,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    }
+  ]
+}

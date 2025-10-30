@@ -56,6 +56,7 @@ def main():
             hf_token=hf_token,
             num_tasks=MIND2WEB_NUM_TASKS if MIND2WEB_NUM_TASKS > 0 else None
         )
+        tester.print_summary()
         
         # Export Mind2Web results
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
