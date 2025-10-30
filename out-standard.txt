@@ -1,0 +1,250 @@
+======================================================================
+STANDARD TESTING MODE
+======================================================================
+
+Testing Configuration:
+  Models: 1
+  Protocols: MCP, A2A, ACP, standard
+  Frameworks: CrewAI, Smolagents, LangChain, LangGraph, LlamaIndex, Semantic Kernel
+
+  Total tests per model: 10 (4 protocols + 6 frameworks)
+  Total tests: 10
+
+Starting tests...
+
+
+======================================================================
+Testing Model: mistralai/Mistral-Nemo-Base-2407
+======================================================================
+
+----------------------------------------------------------------------
+PROTOCOL TESTS
+----------------------------------------------------------------------
+
+  Testing with MCP on task: Look for dissertation and thesis in Braz...
+    ✓ Success (5 reasoning steps)
+
+  Testing with MCP on task: Prepare a report about new laws regardin...
+    ✓ Success (5 reasoning steps)
+
+  Protocol MCP summary:
+    Success rate: 2/2
+    Avg latency: 0.30s
+    Avg reasoning steps: 5.00
+    
+-----------------------------------
+
+  Testing with A2A on task: Look for dissertation and thesis in Braz...
+    ✓ Success (5 reasoning steps)
+
+  Testing with A2A on task: Prepare a report about new laws regardin...
+    ✓ Success (5 reasoning steps)
+
+  Protocol A2A summary:
+    Success rate: 2/2
+    Avg latency: 0.14s
+    Avg reasoning steps: 5.00
+    
+-----------------------------------
+
+  Testing with ACP on task: Look for dissertation and thesis in Braz...
+    ✓ Success (5 reasoning steps)
+
+  Testing with ACP on task: Prepare a report about new laws regardin...
+    ✓ Success (5 reasoning steps)
+
+  Protocol ACP summary:
+    Success rate: 2/2
+    Avg latency: 0.14s
+    Avg reasoning steps: 5.00
+    
+-----------------------------------
+
+  Testing with standard on task: Look for dissertation and thesis in Braz...
+    ✓ Success (3 reasoning steps)
+
+  Testing with standard on task: Prepare a report about new laws regardin...
+    ✓ Success (3 reasoning steps)
+
+  Protocol standard summary:
+    Success rate: 2/2
+    Avg latency: 0.13s
+    Avg reasoning steps: 3.00
+    
+-----------------------------------
+
+----------------------------------------------------------------------
+FRAMEWORK TESTS
+----------------------------------------------------------------------
+
+  Testing with CrewAI...
+    Task 1: ✓ Success (3 reasoning steps)
+    Task 2: ✓ Success (3 reasoning steps)
+
+  CrewAI summary:
+    Success rate: 2/2
+    Avg latency: 0.14s
+    Avg reasoning steps: 3.00
+    
+-----------------------------------
+
+  Testing with Smolagents...
+    Task 1: ✓ Success (4 reasoning steps)
+    Task 2: ✓ Success (4 reasoning steps)
+
+  Smolagents summary:
+    Success rate: 2/2
+    Avg latency: 0.13s
+    Avg reasoning steps: 4.00
+    
+-----------------------------------
+
+  Testing with LangChain...
+
+
+[1m> Entering new AgentExecutor chain...[0m
+    Task 1: ✓ Success (3 reasoning steps)
+
+
+[1m> Entering new AgentExecutor chain...[0m
+    Task 2: ✓ Success (3 reasoning steps)
+
+  LangChain summary:
+    Success rate: 2/2
+    Avg latency: 0.29s
+    Avg reasoning steps: 3.00
+    
+-----------------------------------
+
+  Testing with LangGraph...
+    Task 1: ✓ Success (11 reasoning steps)
+    Task 2: ✓ Success (11 reasoning steps)
+
+  LangGraph summary:
+    Success rate: 2/2
+    Avg latency: 0.58s
+    Avg reasoning steps: 11.00
+    
+-----------------------------------
+
+  Testing with LlamaIndex...
+    Task 1: ✗ Failed: 2 validation errors for HuggingFaceLLM
+model_name
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+adapter
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing (0 reasoning steps)
+    Task 2: ✗ Failed: 2 validation errors for HuggingFaceLLM
+model_name
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing
+adapter
+  Field required [type=missing, input_value={}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.11/v/missing (0 reasoning steps)
+
+  LlamaIndex summary:
+    Success rate: 0/2
+    Avg latency: 0.00s
+    Avg reasoning steps: 0.00
+    
+-----------------------------------
+
+  Testing with SemanticKernel...
+    Task 1: ✗ Failed: 'Kernel' object has no attribute 'add_text_completion_service' (0 reasoning steps)
+    Task 2: ✗ Failed: 'Kernel' object has no attribute 'add_text_completion_service' (0 reasoning steps)
+
+  SemanticKernel summary:
+    Success rate: 0/2
+    Avg latency: 0.00s
+    Avg reasoning steps: 0.00
+    
+-----------------------------------
+
+======================================================================
+TEST SUMMARY
+======================================================================
+
+Overall Statistics:
+  Total Tests: 20
+  Successful: 16 (80.0%)
+  Failed: 4 (20.0%)
+  Total Reasoning Steps: 78
+  Avg Reasoning Steps per Test: 3.9
+
+----------------------------------------------------------------------
+Results by Framework:
+----------------------------------------------------------------------
+
+  CrewAI:
+    Success Rate: 2/2 (100.0%)
+    Avg Latency: 0.14s
+    Avg Reasoning Steps: 3.0
+
+  LangChain:
+    Success Rate: 2/2 (100.0%)
+    Avg Latency: 0.29s
+    Avg Reasoning Steps: 3.0
+
+  LangGraph:
+    Success Rate: 2/2 (100.0%)
+    Avg Latency: 0.58s
+    Avg Reasoning Steps: 11.0
+
+  LlamaIndex:
+    Success Rate: 0/2 (0.0%)
+    Avg Latency: 0.00s
+    Avg Reasoning Steps: 0.0
+
+  SemanticKernel:
+    Success Rate: 0/2 (0.0%)
+    Avg Latency: 0.00s
+    Avg Reasoning Steps: 0.0
+
+  Smolagents:
+    Success Rate: 2/2 (100.0%)
+    Avg Latency: 0.13s
+    Avg Reasoning Steps: 4.0
+
+  direct:
+    Success Rate: 8/8 (100.0%)
+    Avg Latency: 0.18s
+    Avg Reasoning Steps: 4.5
+
+----------------------------------------------------------------------
+Results by Protocol:
+----------------------------------------------------------------------
+
+  A2A:
+    Success Rate: 2/2 (100.0%)
+    Avg Latency: 0.14s
+
+  ACP:
+    Success Rate: 2/2 (100.0%)
+    Avg Latency: 0.14s
+
+  MCP:
+    Success Rate: 2/2 (100.0%)
+    Avg Latency: 0.30s
+
+  standard:
+    Success Rate: 10/14 (71.4%)
+    Avg Latency: 0.25s
+
+----------------------------------------------------------------------
+Results by Model:
+----------------------------------------------------------------------
+
+  mistralai/Mistral-Nemo-Base-2407:
+    Success Rate: 16/20 (80.0%)
+    Avg Latency: 0.23s
+    Avg Reasoning Steps: 3.9
+
+======================================================================
+
+✓ Results exported to ./logs/results-20251030_093954.json
+
+======================================================================
+Testing complete! Check ./logs/results-20251030_093954.json for detailed results.
+======================================================================
+
