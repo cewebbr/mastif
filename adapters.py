@@ -34,14 +34,13 @@ class HuggingFaceAdapter:
     def generate(self, prompt: str, **kwargs) -> str:
         """Generate text completion from the model"""
         try:
-            response = self.client.text_generation(
-                prompt,
+            response = self.client.chat.completions.create(
                 model=self.model_name,
-                max_new_tokens=kwargs.get("max_tokens", 512),
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=kwargs.get("max_tokens", 512), # TODO: Define max token as a environment variable
                 temperature=kwargs.get("temperature", 0.7),
-                return_full_text=False
             )
-            return response
+            return response.choices[0].message["content"]
         except Exception as e:
             return f"Error: {str(e)}"
     

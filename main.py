@@ -18,9 +18,10 @@ def main():
     MIND2WEB_NUM_TASKS = int(os.getenv("MIND2WEB_NUM_TASKS", "10"))  # 0 to all tasks
     
     models_to_test = [ 
-        # "meta-llama/Llama-3.1-8B-Instruct", # Does not work because it only supports conversation; we need text generation
-        # "mistralai/Mistral-7B-Instruct-v0.3", # Does not work because it only supports conversation; we need text generation
-        "mistralai/Mistral-Nemo-Base-2407"
+        "meta-llama/Llama-3.1-8B-Instruct", # Worked well
+        # "meta-llama/Llama-3.3-70B-Instruct", # Workwed well
+        # "openai/gpt-oss-20b", # Worked, but response was empty a bunch of times
+        # "openai/gpt-oss-120b",
     ]
     
     # Get HuggingFace token

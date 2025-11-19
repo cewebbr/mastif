@@ -442,9 +442,12 @@ Please respond according to this protocol structure and complete the task."""
         # Define test tasks for different scenarios
         test_tasks = [
             # TODO: Add more Ceweb.br relevant tasks
-            "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results." # CORDATA
-            "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.", # Acessibilidade
-            "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal." # CGI.br
+            # CORDATA
+            "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.", 
+            # Acessibilidade
+            "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.", 
+            # CGI.br
+            "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal." 
         ]
         
         for model_name in models:

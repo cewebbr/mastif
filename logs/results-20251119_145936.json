@@ -1,0 +1,1383 @@
+{
+  "test_run_timestamp": "2025-11-19T14:59:36.916373",
+  "total_tests": 30,
+  "results": [
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "MCP",
+      "framework": "direct",
+      "task": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+      "response": "",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with MCP protocol",
+          "action": "initialize_protocol",
+          "action_input": "MCP",
+          "observation": null,
+          "timestamp": 1763575133.156055
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with MCP",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.\",\n  \"context\": {",
+          "observation": null,
+          "timestamp": 1763575133.156079
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: MCP\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with ",
+          "observation": null,
+          "timestamp": 1763575133.15609
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 0 characters",
+          "timestamp": 1763575137.0480351
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 3.89s",
+          "timestamp": 1763575137.048049
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 3.8919849395751953,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "MCP",
+      "framework": "direct",
+      "task": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+      "response": "",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with MCP protocol",
+          "action": "initialize_protocol",
+          "action_input": "MCP",
+          "observation": null,
+          "timestamp": 1763575137.048178
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with MCP",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.\",\n  \"context\": {\n    \"conversation_id\": \"",
+          "observation": null,
+          "timestamp": 1763575137.048262
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: MCP\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.\",\n  \"co",
+          "observation": null,
+          "timestamp": 1763575137.0482938
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 0 characters",
+          "timestamp": 1763575139.9917939
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 2.94s",
+          "timestamp": 1763575139.9918048
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 2.9436230659484863,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "MCP",
+      "framework": "direct",
+      "task": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+      "response": "```json\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"## New AI‑Use Laws and Proposals (2023‑2024)\\n\\n### 1. European Union – **Artificial Intelligence Act**\\n\\n- **Proposing bodies**: European Commission (Commissioner Mairead McGuinness), European Parliament (Committee on the Future of Digital Society, FIDS). \\n- **Key references**: [AI Act Proposal (2021)](https://ec.europa.eu/newsroom/dae/document.cfm?doc_id=71821), [Updated draft (2024)](https://ec.europa.eu/commission/presscorner/detail/en/IP_24_3749). \\n- **Summary**: The AI Act introduces a risk‑based regulatory framework classifying AI systems into *unacceptable*, *high‑risk*, *limited risk*, and *minimal risk* categories. High‑risk AI, such as those used for recruitment, credit scoring, or public administration, must undergo conformity assessment, maintain documentation, and be subject to ongoing post‑market monitoring. The Act also mandates transparency for AI systems that generate content or influence decisions, requiring a clear disclosure label. Enforcement is overseen by national competent authorities and the European Artificial Intelligence Board. \\n- **Impact**: Companies operating in the EU must adapt product pipelines, establish data governance protocols, and appoint a compliance officer. Failure to comply can result in penalties up to €30 million or 6 % of global turnover.\\n\\n### 2. United States – **AI in the Public Interest Act of 2024**\\n\\n- **Proposing bodies**: Senator Ron Wy",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with MCP protocol",
+          "action": "initialize_protocol",
+          "action_input": "MCP",
+          "observation": null,
+          "timestamp": 1763575139.991895
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with MCP",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a ",
+          "observation": null,
+          "timestamp": 1763575139.9919832
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: MCP\n\nMessage Structure:\n{\n  \"protocol\": \"MCP/1.0\",\n  \"message\": \"Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people prop",
+          "observation": null,
+          "timestamp": 1763575139.9920099
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 1468 characters",
+          "timestamp": 1763575143.453739
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 3.46s",
+          "timestamp": 1763575143.453747
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 3.461848258972168,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "A2A",
+      "framework": "direct",
+      "task": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+      "response": "{'content': '{\\n  \"protocol\": \"A2A/1.0\",\\n  \"sender_agent\": \"worker\",\\n  \"receiver_agent\": \"orchestrator\",\\n  \"message_type\": \"task_response\",\\n  \"payload\": {\\n    \"task_id\": \"task-001\",\\n    \"status\": \"completed\",\\n    \"priority\": \"medium\",\\n    \"results\": [\\n      {\\n        \"title\": \"Open data and open research: a study of Brazilian scientific publications\",\\n        \"author\": \"Mariana Silva\",\\n        \"year\": 2019,\\n        \"university\": \"Universidade de São Paulo (USP)\",\\n        \"repository\": \"Repositório Institucional USP\",\\n        \"doi\": \"10.1234/usp.2019.001\",\\n        \"summary\": \"Investigates the extent to which Brazilian research outputs are accompanied by open datasets. Provides a catalog of 152 dissertations that include publicly available data.\",\\n        \"download_link\": \"https://repositorio.usp.br/bitstream/handle/123456/7890/dissertation_silva.pdf\"\\n      },\\n      {\\n        \"title\": \"Data Sharing in Brazilian Theses: An Empirical Analysis of Open Data Practices\",\\n        \"author\": \"Carlos Eduardo Costa\",\\n        \"year\": 2020,\\n        \"university\": \"Universidade Federal do Rio de Janeiro (UFRJ)\",\\n        \"repository\": \"Repositório Institucional UFRJ\",\\n        \"doi\": \"10.5678/ufrj.2020.234\",\\n        \"summary\": \"Analyzes 200 theses from UFRJ, identifying 65 cases where datasets were deposited in open repositories (figshare, Zenodo, data.gov.br).\",\\n        \"download_link\": \"https://repositorio.ufrj.br/bitstream/handle'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with A2A protocol",
+          "action": "initialize_protocol",
+          "action_input": "A2A",
+          "observation": null,
+          "timestamp": 1763575143.453844
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with A2A",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Look for dissertation and thesis published in Brazil",
+          "observation": null,
+          "timestamp": 1763575143.453904
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: A2A\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Look for dissertat",
+          "observation": null,
+          "timestamp": 1763575143.453929
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 1466 characters",
+          "timestamp": 1763575147.142484
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 3.69s",
+          "timestamp": 1763575147.142506
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 3.6886470317840576,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "A2A",
+      "framework": "direct",
+      "task": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+      "response": "{'content': '{\\n  \"protocol\": \"A2A/1.0\",\\n  \"sender_agent\": \"worker\",\\n  \"receiver_agent\": \"orchestrator\",\\n  \"message_type\": \"response\",\\n  \"payload\": {\\n    \"task_id\": \"task-001\",\\n    \"priority\": \"medium\",\\n    \"content\": \"Below is a curated list of tools that can help you navigate the web and mitigate common accessibility barriers. These tools cover a range of needs—from real‑time assistance for users with disabilities to automated testing for developers.\",\\n    \"tools\": [\\n      {\\n        \"name\": \"NVDA (NonVisual Desktop Access)\",\\n        \"type\": \"screen reader\",\\n        \"description\": \"A free, open‑source screen reader for Windows that reads aloud text and provides keyboard shortcuts for navigation.\",\\n        \"link\": \"https://www.nvaccess.org/\"\\n      },\\n      {\\n        \"name\": \"VoiceOver\",\\n        \"type\": \"screen reader\",\\n        \"description\": \"Apple’s built‑in screen reader for macOS and i'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with A2A protocol",
+          "action": "initialize_protocol",
+          "action_input": "A2A",
+          "observation": null,
+          "timestamp": 1763575147.142635
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with A2A",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Provide me a set of tools I can use while accessing ",
+          "observation": null,
+          "timestamp": 1763575147.142717
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: A2A\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Provide me a set o",
+          "observation": null,
+          "timestamp": 1763575147.142744
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 921 characters",
+          "timestamp": 1763575150.7325912
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 3.59s",
+          "timestamp": 1763575150.732599
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 3.589962959289551,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "A2A",
+      "framework": "direct",
+      "task": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+      "response": "{'content': '{\\n  \"protocol\": \"A2A/1.0\",\\n  \"sender_agent\": \"worker\",\\n  \"receiver_agent\": \"orchestrator\",\\n  \"message_type\": \"result\",\\n  \"payload\": {\\n    \"task_id\": \"task-001\",\\n    \"content'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with A2A protocol",
+          "action": "initialize_protocol",
+          "action_input": "A2A",
+          "observation": null,
+          "timestamp": 1763575150.732691
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with A2A",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Prepare a report about new laws regarding AI use on ",
+          "observation": null,
+          "timestamp": 1763575150.7329888
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: A2A\n\nMessage Structure:\n{\n  \"protocol\": \"A2A/1.0\",\n  \"sender_agent\": \"orchestrator\",\n  \"receiver_agent\": \"worker\",\n  \"message_type\": \"task\",\n  \"payload\": {\n    \"content\": \"Prepare a report a",
+          "observation": null,
+          "timestamp": 1763575150.7334971
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 195 characters",
+          "timestamp": 1763575153.746258
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 3.01s",
+          "timestamp": 1763575153.7462678
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 3.0135719776153564,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "ACP",
+      "framework": "direct",
+      "task": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+      "response": "{'content': '{\"query\": \"dissertação brasileira open data open research dataset publicado resultados pesquisa\", \"topn\": 10, \"source\": \"news\"}'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with ACP protocol",
+          "action": "initialize_protocol",
+          "action_input": "ACP",
+          "observation": null,
+          "timestamp": 1763575153.746434
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with ACP",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Look for dissertation and thesis published in Brazil about open data and open research in wh",
+          "observation": null,
+          "timestamp": 1763575153.746608
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: ACP\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Look for dissertation and thesis published in Brazil about",
+          "observation": null,
+          "timestamp": 1763575153.746656
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 142 characters",
+          "timestamp": 1763575154.768397
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 1.02s",
+          "timestamp": 1763575154.768404
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 1.021968126296997,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "ACP",
+      "framework": "direct",
+      "task": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+      "response": "{'content': '```json\\n{\\n  \"protocol_version\": \"ACP/2.0\",\\n  \"message\": {\\n    \"id\": \"msg-002\",\\n    \"type\": \"response\",\\n    \"content\": \"Here is a curated list of tools and extensions that can help you navigate the web more accessibly by addressing common barriers:\\\\n\\\\n1. **Screen Readers** – Convert text on the screen into synthesized speech or Braille.\\\\n   - **NVDA** (free, Windows)\\\\n   - **VoiceOver** (built‑in, macOS & iOS)\\\\n   - **JAWS** (commercial, Windows)\\\\n   - **TalkBack** (Android)\\\\n\\\\n2. **Browser Extensions for Accessibility Auditing** – Scan pages for WCAG violations and suggest fixes.\\\\n   - **aXe (by Deque)** – Reports issues and offers remediation guidance.\\\\n   - **WAVE (by WebAIM)** – Visual overlays of accessibility problems.\\\\n   - **Lighthouse** – Built‑in Chrome DevTools audit that includes accessibility checks.\\\\n\\\\n3. **Keyboard‑First Navigation Enhancers** – Improve focus management and shortcut use.\\\\n   - **Vimium / SurfingKeys** – Keyboard‑only navigation for Chrome/Firefox.\\\\n   - **Shortkeys** – Customizable keyboard shortcuts for any webpage.\\\\n\\\\n4. **Text‑to‑Speech & Read‑Aloud Tools** – Read the content of a page aloud.\\\\n   - **Read Aloud: A Text to Speech Voice Reader** – Chrome/'}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with ACP protocol",
+          "action": "initialize_protocol",
+          "action_input": "ACP",
+          "observation": null,
+          "timestamp": 1763575154.7684731
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with ACP",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Provide me a set of tools I can use while accessing the web in a way to overcome existing we",
+          "observation": null,
+          "timestamp": 1763575154.768543
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: ACP\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Provide me a set of tools I can use while accessing the we",
+          "observation": null,
+          "timestamp": 1763575154.768571
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 1244 characters",
+          "timestamp": 1763575157.417281
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 2.65s",
+          "timestamp": 1763575157.417289
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 2.6488120555877686,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "ACP",
+      "framework": "direct",
+      "task": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+      "response": "{'content': None}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with ACP protocol",
+          "action": "initialize_protocol",
+          "action_input": "ACP",
+          "observation": null,
+          "timestamp": 1763575157.417394
+        },
+        {
+          "step_number": 2,
+          "thought": "Formatting message with ACP",
+          "action": "format_message",
+          "action_input": "{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Prepare a report about new laws regarding AI use on the web. Group laws by country or region",
+          "observation": null,
+          "timestamp": 1763575157.417547
+        },
+        {
+          "step_number": 3,
+          "thought": "Sending formatted message to model",
+          "action": "generate_with_protocol",
+          "action_input": "Protocol: ACP\n\nMessage Structure:\n{\n  \"protocol_version\": \"ACP/2.0\",\n  \"message\": {\n    \"id\": \"msg-001\",\n    \"type\": \"query\",\n    \"content\": \"Prepare a report about new laws regarding AI use on the we",
+          "observation": null,
+          "timestamp": 1763575157.417591
+        },
+        {
+          "step_number": 4,
+          "thought": "Received and parsed protocol response",
+          "action": null,
+          "action_input": null,
+          "observation": "Response length: 17 characters",
+          "timestamp": 1763575160.3445811
+        },
+        {
+          "step_number": 5,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 2.93s",
+          "timestamp": 1763575160.3445928
+        }
+      ],
+      "reasoning_steps_count": 5,
+      "latency": 2.9271926879882812,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+      "response": null,
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1763575160.344756
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+          "observation": null,
+          "timestamp": 1763575160.3447602
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 2.82s",
+          "timestamp": 1763575163.1634429
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 2.8186798095703125,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+      "response": "## 1.  Quick‑Start Cheat Sheet  \n| Goal | Tool | OS | Key Things to Know | Quick Shortcut |\n|------|------|----|---------------------|----------------|\n| **Blind / low‑vision browsing** | NVDA (screen reader) | Windows | Free, open‑source, keyboard‑only | `Ctrl+Alt+N` to launch |\n| | VoiceOver | macOS, iOS | Built‑in, rich dictation | `Cmd+F5` to toggle |\n| | TalkBack | Android | Built‑in | `Ctrl+Alt+S` to toggle |\n| | ChromeVox | Chrome | Light‑weight screen reader | `Ctrl+Alt+Z` to toggle |\n| **Magnification** | Windows Magnifier | Windows | 100–1000 % zoom, high‑contrast overlay | `Win+Plus` to zoom in |\n| | macOS Zoom | macOS | Full‑screen magnifier,",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1763575163.1635141
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+          "observation": null,
+          "timestamp": 1763575163.163518
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 3.16s",
+          "timestamp": 1763575166.3192
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 3.1556689739227295,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "direct",
+      "task": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+      "response": "# New Laws & Proposals Governing AI Use on the Web  \n*(Status as of November 2025)*  \n\nThe table below groups recent legislation, regulatory proposals, and policy frameworks that specifically address the deployment, use, or regulation of artificial‑intelligence (AI) systems on the Internet.  For each entry we list the jurisdiction, the name of the law or proposal, the main actors behind it, a short two‑paragraph summary, and a reference link.  Where multiple countries or regions are covered by a single act (e.g., the EU AI Act), we note the overarching jurisdiction.\n\n---\n\n## 1. European Union\n\n| Legislative Item | Proposing Body | Summary (2 para) | Reference |\n|------------------|----------------|------------------|-----------|\n| **Artificial Intelligence Act (EU AI Act)** | European Commission (Commission President Ursula von der Leyen, along with the European Parliament) | The EU AI Act is the world’s first comprehensive regulatory framework that categorizes AI systems by risk—unacceptable, high, limited, and minimal—and imposes corresponding obligations.  High‑risk applications, such",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Testing with standard protocol",
+          "action": "initialize_protocol",
+          "action_input": "standard",
+          "observation": null,
+          "timestamp": 1763575166.319319
+        },
+        {
+          "step_number": 2,
+          "thought": "Using standard API call (no protocol overhead)",
+          "action": "direct_generation",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+          "observation": null,
+          "timestamp": 1763575166.319322
+        },
+        {
+          "step_number": 3,
+          "thought": "Protocol test completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Total latency: 2.94s",
+          "timestamp": 1763575169.263422
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 2.9440813064575195,
+      "success": true,
+      "error": null,
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+      "response": "{\n  \"search_query\": \"dissertação open data Brasil dataset publicado resultados pesquisa\",\n  \"topn\": 10,\n  \"source\": \"news\"\n}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Web Automation Specialist, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1763575169.2638478
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+          "observation": null,
+          "timestamp": 1763575169.263978
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 124 characters",
+          "timestamp": 1763575170.0269692
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.7632808685302734,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Web Automation Specialist"
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+      "response": "## Step‑by‑Step Reasoning\n\n1. **Define “Accessibility Barriers”**  \n   - *Visual*: lack of alt text, low contrast, missing landmarks.  \n   - *Keyboard*: no focus indicators, improper tab order, modal dialogs not focus‑trap.  \n   - *Assistive Tech*: screen readers not supported, ARIA misuse.  \n   - *Performance*: slow load times, large media.  \n   - *Content* : auto‑play videos, hidden text, dynamic updates without ARIA live regions.\n\n2. **Identify the Goal**  \n   - Provide a toolbox that lets a user (or developer) *detect*, *diagnose*, and *mitigate* these barriers while browsing or developing a site.\n\n3. **Categorize the Tools**  \n   - **Built‑in Browser Features** – quick checks.  \n   - **Browser Extensions** – automated scanning and real‑time feedback.  \n   - **Developer Tools** – deeper inspection (ARIA, DOM).  \n   - **Assistive Technology** – simulate real user experience.  \n   - **Automated Testing Suites** – CI‑friendly, repeatable checks.  \n   - **Accessibility‑First Frameworks & Libraries** – help create barrier‑free code.  \n   - **Content‑Level Tools** – image alt generators, color contrast checkers.  \n   - **Performance & Media Tools** – ensure media is accessible.\n\n4. **Select Representative, Widely‑Supported Tools**  \n   - Keep the list concise but comprehensive.  \n   - Prefer open‑source or free versions for accessibility to users.\n\n5. **Organize the Final List**  \n   - Group by “when you’re browsing” vs “when you’re developing.”  \n   - Provide usage tips and links to documentation.\n\n6. **Validate**  \n   - Ensure each tool addresses at least one major barrier category.  \n   - Include brief pros/cons and why it’s useful.\n\n---\n\n## Final Toolset for Overcoming Web Accessibility Barriers\n\n| # | Tool / Category | What It Does | When to Use | Quick Tips |\n|---|-----------------|--------------|-------------|------------|\n| **1** | **Built‑in Browser Accessibility Features",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Web Automation Specialist, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1763575170.027084
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+          "observation": null,
+          "timestamp": 1763575170.0271308
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 1911 characters",
+          "timestamp": 1763575172.793472
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 2.7664031982421875,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Web Automation Specialist"
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+      "response": "{\"query\": \"new laws AI use on the web 2024\", \"topn\": 10, \"source\": \"news\"}",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "As a Web Automation Specialist, I need to analyze this task and determine my approach",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1763575172.7935529
+        },
+        {
+          "step_number": 2,
+          "thought": "Generating response based on role expertise",
+          "action": "generate_response",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+          "observation": null,
+          "timestamp": 1763575172.793613
+        },
+        {
+          "step_number": 3,
+          "thought": "Task completed successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Generated response with 74 characters",
+          "timestamp": 1763575173.919337
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 1.1257898807525635,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "role": "Web Automation Specialist"
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/completions (Request ID: Root=1-691e0585-0186681323b168a3151bdc71;71dd6af9-0e7e-4b19-a305-1f00ad7b5e18)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 13 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1763575173.919509
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+          "observation": null,
+          "timestamp": 1763575173.919512
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+          "observation": null,
+          "timestamp": 1763575173.9195259
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1763575174.0572429
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 0.13783025741577148,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/completions (Request ID: Root=1-691e0586-2a911d167d6eb96b687dcd14;5af1d6dd-0966-4a24-80be-b26f3d174f47)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 13 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1763575174.057358
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+          "observation": null,
+          "timestamp": 1763575174.0573661
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+          "observation": null,
+          "timestamp": 1763575174.057369
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1763575174.19788
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 0.14054393768310547,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "Smolagents",
+      "task": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/completions (Request ID: Root=1-691e0586-0dec579c421de5461d285cb5;086c1b67-ec8f-4be3-a7e3-9ae4e853793f)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyzing task and available tools. I have 13 tools available.",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "timestamp": 1763575174.1980119
+        },
+        {
+          "step_number": 2,
+          "thought": "Planning which tools to use and in what order",
+          "action": "analyze_tools",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+          "observation": null,
+          "timestamp": 1763575174.198028
+        },
+        {
+          "step_number": 3,
+          "thought": "Executing task with selected tools",
+          "action": "execute_task",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+          "observation": null,
+          "timestamp": 1763575174.198032
+        },
+        {
+          "step_number": 4,
+          "thought": "Task execution completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Response generated successfully",
+          "timestamp": 1763575174.339254
+        }
+      ],
+      "reasoning_steps_count": 4,
+      "latency": 0.14129304885864258,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+      "response": "LangChain execution error: Model openai/gpt-oss-20b is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 13 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze', 'wikipedia', 'web_browser', 'code_interpreter', 'click_element', 'type_text', 'navigate', 'extract_table', 'summarize', 'translate', 'calendar']",
+          "timestamp": 1763575174.514154
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+          "observation": null,
+          "timestamp": 1763575174.522654
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: Model openai/gpt-oss-20b is not supported for task text-generation and provider nebius. Supported task: conversational.",
+          "timestamp": 1763575174.5425978
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.2031559944152832,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+      "response": "LangChain execution error: Model openai/gpt-oss-20b is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 13 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze', 'wikipedia', 'web_browser', 'code_interpreter', 'click_element', 'type_text', 'navigate', 'extract_table', 'summarize', 'translate', 'calendar']",
+          "timestamp": 1763575174.947443
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+          "observation": null,
+          "timestamp": 1763575174.9487019
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: Model openai/gpt-oss-20b is not supported for task text-generation and provider nebius. Supported task: conversational.",
+          "timestamp": 1763575174.9527628
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.41015124320983887,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "LangChain",
+      "task": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+      "response": "LangChain execution error: Model openai/gpt-oss-20b is not supported for task text-generation and provider nebius. Supported task: conversational.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing ReAct agent with 13 tools",
+          "action": null,
+          "action_input": null,
+          "observation": "Tools: ['search', 'calculate', 'analyze', 'wikipedia', 'web_browser', 'code_interpreter', 'click_element', 'type_text', 'navigate', 'extract_table', 'summarize', 'translate', 'calendar']",
+          "timestamp": 1763575175.1274
+        },
+        {
+          "step_number": 2,
+          "thought": "Starting ReAct reasoning loop",
+          "action": "execute_agent",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+          "observation": null,
+          "timestamp": 1763575175.128001
+        },
+        {
+          "step_number": 3,
+          "thought": "Error during execution",
+          "action": null,
+          "action_input": null,
+          "observation": "Error: Model openai/gpt-oss-20b is not supported for task text-generation and provider nebius. Supported task: conversational.",
+          "timestamp": 1763575175.131252
+        }
+      ],
+      "reasoning_steps_count": 3,
+      "latency": 0.17844009399414062,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "tools_count": 13,
+        "agent_type": "ReAct"
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/completions (Request ID: Root=1-691e0587-2657ab3d39397c860282ffb2;d80e2f30-a219-4b64-b969-217aaa5f40fa)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1763575175.1526568
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+          "observation": null,
+          "timestamp": 1763575175.15467
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 332 characters",
+          "timestamp": 1763575175.294035
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1763575175.2965078
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/comp...",
+          "timestamp": 1763575175.453303
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1763575175.453666
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1763575175.454407
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/comp...",
+          "timestamp": 1763575175.6064398
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1763575175.606826
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1763575175.60769
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 332 characters",
+          "timestamp": 1763575175.747547
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.6170063018798828,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/completions (Request ID: Root=1-691e0588-7fa6c4822d5dc8b96ac2d352;69f42b7d-0a3c-4032-895d-b4eff6eec7a5)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1763575175.753479
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+          "observation": null,
+          "timestamp": 1763575175.754765
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 332 characters",
+          "timestamp": 1763575175.894882
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1763575175.895846
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/comp...",
+          "timestamp": 1763575176.037925
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1763575176.038293
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1763575176.039076
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/comp...",
+          "timestamp": 1763575176.179096
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1763575176.17951
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1763575176.180544
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 332 characters",
+          "timestamp": 1763575176.3194509
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.5717010498046875,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+      "response": "Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/completions (Request ID: Root=1-691e0588-11054529195f9c9c7f633db9;fd13dbfb-eced-4936-95e5-de28b34447da)\n\nYou have exceeded your monthly included credits for Inference Providers. Subscribe to PRO to get 20x more monthly included credits.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "Graph compiled successfully",
+          "timestamp": 1763575176.32504
+        },
+        {
+          "step_number": 2,
+          "thought": "Creating research plan",
+          "action": "plan",
+          "action_input": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+          "observation": null,
+          "timestamp": 1763575176.326302
+        },
+        {
+          "step_number": 3,
+          "thought": "Research plan created",
+          "action": null,
+          "action_input": null,
+          "observation": "Plan generated with 332 characters",
+          "timestamp": 1763575176.467442
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing research step 1",
+          "action": "research",
+          "action_input": "Step 1 of plan",
+          "observation": null,
+          "timestamp": 1763575176.468362
+        },
+        {
+          "step_number": 5,
+          "thought": "Research step 1 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/comp...",
+          "timestamp": 1763575176.6086762
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing research (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More research needed",
+          "timestamp": 1763575176.6090822
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing research step 2",
+          "action": "research",
+          "action_input": "Step 2 of plan",
+          "observation": null,
+          "timestamp": 1763575176.609826
+        },
+        {
+          "step_number": 8,
+          "thought": "Research step 2 completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Findings: Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/nebius/v1/chat/comp...",
+          "timestamp": 1763575176.7484329
+        },
+        {
+          "step_number": 9,
+          "thought": "Research iterations complete, moving to synthesis",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 2 research steps",
+          "timestamp": 1763575176.748804
+        },
+        {
+          "step_number": 10,
+          "thought": "Synthesizing research findings into final report",
+          "action": "synthesize",
+          "action_input": "2 research findings",
+          "observation": null,
+          "timestamp": 1763575176.749548
+        },
+        {
+          "step_number": 11,
+          "thought": "Final report synthesized successfully",
+          "action": null,
+          "action_input": null,
+          "observation": "Report generated with 332 characters",
+          "timestamp": 1763575176.890614
+        }
+      ],
+      "reasoning_steps_count": 11,
+      "latency": 0.5710358619689941,
+      "success": true,
+      "error": null,
+      "metadata": {
+        "workflow_type": "research_pipeline"
+      }
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.005946159362792969,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.01028585433959961,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "LlamaIndex",
+      "task": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.0019342899322509766,
+      "success": false,
+      "error": "2 validation errors for HuggingFaceLLM\nmodel_name\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing\nadapter\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.11/v/missing",
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 0.0020241737365722656,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 3.695487976074219e-05,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    },
+    {
+      "model_name": "openai/gpt-oss-20b",
+      "protocol": "standard",
+      "framework": "SemanticKernel",
+      "task": "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal.",
+      "response": "",
+      "reasoning_steps": [],
+      "reasoning_steps_count": 0,
+      "latency": 7.867813110351562e-06,
+      "success": false,
+      "error": "'Kernel' object has no attribute 'add_text_completion_service'",
+      "metadata": {}
+    }
+  ]
+}
