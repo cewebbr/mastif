@@ -54,7 +54,7 @@ class SemanticKernelAgent:
             function_name=name,
             skill_name="custom_skills",
             description=description,
-            max_tokens=300,
+            max_tokens=512,
             temperature=0.7
         )
     
@@ -100,7 +100,7 @@ Response:"""
                 prompt_template=reasoning_prompt,
                 function_name="reasoning",
                 skill_name="task_skills",
-                max_tokens=500,
+                max_tokens=512,
                 temperature=0.7
             )
             

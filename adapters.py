@@ -37,10 +37,7 @@ class HuggingFaceAdapter:
             response = self.client.chat.completions.create(
                 model=self.model_name,
                 messages=[{"role": "user", "content": prompt}],
-                # TODO: Define max token as a environment variable.
-                # There must be a max_token for reasoning, generation, and judge
-                # Temperature for all the models and agents must be standardized as well.
-                max_tokens=kwargs.get("max_tokens", 512),
+                max_tokens=kwargs.get("max_tokens", 1024),
                 temperature=kwargs.get("temperature", 0.7),
             )
             return response.choices[0].message["content"]
@@ -120,7 +117,7 @@ class OpenAIAdapter:
             response = openai.Completion.create(
                 model=self.model_name,
                 prompt=prompt,
-                max_tokens=kwargs.get("max_tokens", 512),
+                max_tokens=kwargs.get("max_tokens", 1024),
                 temperature=kwargs.get("temperature", 0.7),
             )
             return response.choices[0].text.strip()

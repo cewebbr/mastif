@@ -62,7 +62,7 @@ class LangGraphAgent:
             
             prompt = f"Create a detailed step-by-step research plan for: {state['task']}"
             try:
-                plan = self.adapter.generate(prompt, max_tokens=300)
+                plan = self.adapter.generate(prompt, max_tokens=512)
                 state["plan"] = plan
                 state["step"] = 1
                 
@@ -94,7 +94,7 @@ class LangGraphAgent:
 
 Execute research step {state['step']} and provide detailed findings."""
             try:
-                findings = self.adapter.generate(prompt, max_tokens=400)
+                findings = self.adapter.generate(prompt, max_tokens=1024)
                 state["research_results"] = [findings]
                 state["step"] += 1
                 
@@ -129,7 +129,7 @@ Execute research step {state['step']} and provide detailed findings."""
 
 Provide a well-structured summary with key insights."""
             try:
-                report = self.adapter.generate(prompt, max_tokens=500)
+                report = self.adapter.generate(prompt, max_tokens=512)
                 state["final_report"] = report
                 
                 self.reasoning_steps.append(ReasoningStep(
