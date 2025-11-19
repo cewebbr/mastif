@@ -18,10 +18,15 @@ def main():
     MIND2WEB_NUM_TASKS = int(os.getenv("MIND2WEB_NUM_TASKS", "10"))  # 0 to all tasks
     
     models_to_test = [ 
-        "meta-llama/Llama-3.3-70B-Instruct" # Workwed well
-        # "meta-llama/Llama-3.1-8B-Instruct", # Worked, but repeated info about the protocols
-        # "openai/gpt-oss-20b", # Worked, but response was empty a bunch of times
-        "openai/gpt-oss-120b", # Worked well
+        # Workwed well
+        "meta-llama/Llama-3.3-70B-Instruct", 
+        "openai/gpt-oss-120b" 
+
+        # Worked, but repeated info about the protocols
+        # "meta-llama/Llama-3.1-8B-Instruct", 
+        
+        # Worked, but response was empty in multiple requests
+        # "openai/gpt-oss-20b", 
     ]
     
     # Get HuggingFace token
