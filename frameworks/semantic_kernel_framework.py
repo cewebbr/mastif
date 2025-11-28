@@ -34,12 +34,12 @@ class SemanticKernelAgent:
         self.protocol = protocol
         
         # Add HuggingFace service to kernel
-        self.kernel.add_text_completion_service(
-            "huggingface",
+        self.kernel.add_service(
             HuggingFaceTextCompletion(
-                model_id=adapter.model_name,
+                ai_model_id=adapter.model_name,
                 task="text-generation"
-            )
+            ),
+            service_id="huggingface"
         )
     
     def add_semantic_function(self, name: str, prompt_template: str, description: str):

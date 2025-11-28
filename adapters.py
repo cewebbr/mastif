@@ -88,7 +88,7 @@ class HuggingFaceAdapter:
                 response = self.complete(prompt, **kwargs)
                 yield response
         
-        return HuggingFaceLLM(adapter=self)
+        return HuggingFaceLLM(adapter=self) #FIXME Model name not propagating correctly
     
 class OpenAIAdapter:
     """
