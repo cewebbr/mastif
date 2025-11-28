@@ -5,6 +5,7 @@ LlamaIndex specializes in data-augmented LLM applications,
 particularly for RAG use cases.
 """
 
+import json
 from typing import List, Dict
 from llama_index.core import Settings
 from llama_index.core.agent import ReActAgent
@@ -22,7 +23,7 @@ class LlamaIndexAgent:
     particularly for RAG (Retrieval Augmented Generation) use cases.
     """
     
-    def __init__(self, adapter):
+    def __init__(self, adapter, protocol=None):
         """
         Initialize LlamaIndex agent
         
@@ -34,6 +35,7 @@ class LlamaIndexAgent:
         self.tools: List[FunctionTool] = []
         self.agent = None
         self.reasoning_steps: List[ReasoningStep] = []
+        self.protocol = protocol
         
         # Configure LlamaIndex settings
         Settings.llm = self.llm
@@ -78,6 +80,15 @@ class LlamaIndexAgent:
         Returns:
             Agent's response
         """
+        # Wrap task with protocol if provided
+        if self.protocol:
+            formatted_msg = self.protocol.send_message(task, {})
+            task = f"""Protocol: {self.protocol.__class__.__name__}
+
+{json.dumps(formatted_msg, indent=2)}
+
+Execute according to protocol."""
+
         self.reasoning_steps = []
         
         try:

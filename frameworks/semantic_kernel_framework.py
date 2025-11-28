@@ -4,6 +4,7 @@ Semantic Kernel Agent Integration
 Semantic Kernel (by Microsoft) provides enterprise-grade AI orchestration.
 """
 
+import json
 from typing import List
 import semantic_kernel as sk
 from semantic_kernel.connectors.ai.hugging_face import HuggingFaceTextCompletion
@@ -20,7 +21,7 @@ class SemanticKernelAgent:
     with a focus on skills/plugins and memory management.
     """
     
-    def __init__(self, adapter):
+    def __init__(self, adapter, protocol=None):
         """
         Initialize Semantic Kernel agent
         
@@ -30,6 +31,7 @@ class SemanticKernelAgent:
         self.adapter = adapter
         self.kernel = sk.Kernel()
         self.reasoning_steps: List[ReasoningStep] = []
+        self.protocol = protocol
         
         # Add HuggingFace service to kernel
         self.kernel.add_text_completion_service(
@@ -68,6 +70,15 @@ class SemanticKernelAgent:
         Returns:
             Execution result
         """
+        # Wrap task with protocol if provided
+        if self.protocol:
+            formatted_msg = self.protocol.send_message(task, {})
+            task = f"""Protocol: {self.protocol.__class__.__name__}
+
+{json.dumps(formatted_msg, indent=2)}
+
+Execute according to protocol."""
+
         self.reasoning_steps = []
         
         try:

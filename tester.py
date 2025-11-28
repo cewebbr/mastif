@@ -183,33 +183,35 @@ Please respond according to this protocol structure and complete the task."""
         adapter: HuggingFaceAdapter,
         role: str,
         task: str,
-        context: Dict = None
+        context: Dict = None,
+        protocol: ProtocolType = None
     ) -> TestResult:
         """Test with CrewAI framework"""
         start_time = time.time()
         
         try:
-            agent = CrewAIAgent(adapter, role)
+            protocol_instance = self.protocols.get(protocol) if protocol else None
+            agent = CrewAIAgent(adapter, role, protocol=protocol_instance)
             response = agent.execute_task(task, context)
             latency = time.time() - start_time
             
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="CrewAI",
                 task=task,
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=True,
-                metadata={"role": role}
+                metadata={"role": role, "protocol_used": protocol.value if protocol else "none"}
             )
         
         except Exception as e:
             latency = time.time() - start_time
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="CrewAI",
                 task=task,
                 response="",
@@ -223,13 +225,16 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: HuggingFaceAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None
+        tools: List[Dict[str, str]] = None,
+        protocol: ProtocolType = None
     ) -> TestResult:
         """Test with Smolagents framework"""
         start_time = time.time()
         
         try:
-            agent = SmolAgentWrapper(adapter)
+            protocol_instance = self.protocols.get(protocol) if protocol else None
+            agent = SmolAgentWrapper(adapter, protocol=protocol_instance)
+            
             for tool in (tools or []):
                 agent.add_tool(tool["name"], tool["description"])
             
@@ -238,21 +243,21 @@ Please respond according to this protocol structure and complete the task."""
             
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="Smolagents",
                 task=task,
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=True,
-                metadata={"tools_count": len(tools or [])}
+                metadata={"tools_count": len(tools or []), "protocol_used": protocol.value if protocol else "none"}
             )
         
         except Exception as e:
             latency = time.time() - start_time
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="Smolagents",
                 task=task,
                 response="",
@@ -266,13 +271,15 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: HuggingFaceAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None
+        tools: List[Dict[str, str]] = None,
+        protocol: ProtocolType = None
     ) -> TestResult:
         """Test with LangChain ReAct agent"""
         start_time = time.time()
         
         try:
-            agent = LangChainAgent(adapter)
+            protocol_instance = self.protocols.get(protocol) if protocol else None
+            agent = LangChainAgent(adapter, protocol=protocol_instance)
             
             # Add tools
             for tool in (tools or []):
@@ -283,21 +290,21 @@ Please respond according to this protocol structure and complete the task."""
             
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="LangChain",
                 task=task,
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=True,
-                metadata={"tools_count": len(tools or []), "agent_type": "ReAct"}
+                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none"}
             )
         
         except Exception as e:
             latency = time.time() - start_time
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="LangChain",
                 task=task,
                 response="",
@@ -310,33 +317,35 @@ Please respond according to this protocol structure and complete the task."""
     def test_with_langgraph(
         self,
         adapter: HuggingFaceAdapter,
-        task: str
+        task: str,
+        protocol: ProtocolType = None
     ) -> TestResult:
         """Test with LangGraph stateful workflow"""
         start_time = time.time()
         
         try:
-            agent = LangGraphAgent(adapter)
+            protocol_instance = self.protocols.get(protocol) if protocol else None
+            agent = LangGraphAgent(adapter, protocol=protocol_instance)
             response = agent.run(task)
             latency = time.time() - start_time
             
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="LangGraph",
                 task=task,
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=True,
-                metadata={"workflow_type": "research_pipeline"}
+                metadata={"workflow_type": "research_pipeline", "protocol_used": protocol.value if protocol else "none"  }
             )
         
         except Exception as e:
             latency = time.time() - start_time
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="LangGraph",
                 task=task,
                 response="",
@@ -350,13 +359,15 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: HuggingFaceAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None
+        tools: List[Dict[str, str]] = None,
+        protocol: ProtocolType = None
     ) -> TestResult:
         """Test with LlamaIndex ReAct agent"""
         start_time = time.time()
         
         try:
-            agent = LlamaIndexAgent(adapter)
+            protocol_instance = self.protocols.get(protocol) if protocol else None
+            agent = LlamaIndexAgent(adapter, protocol=protocol_instance)
             
             # Add tools
             for tool in (tools or []):
@@ -367,21 +378,21 @@ Please respond according to this protocol structure and complete the task."""
             
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="LlamaIndex",
                 task=task,
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=True,
-                metadata={"tools_count": len(tools or []), "agent_type": "ReAct"}
+                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none" }
             )
         
         except Exception as e:
             latency = time.time() - start_time
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="LlamaIndex",
                 task=task,
                 response="",
@@ -394,33 +405,35 @@ Please respond according to this protocol structure and complete the task."""
     def test_with_semantic_kernel(
         self,
         adapter: HuggingFaceAdapter,
-        task: str
+        task: str,
+        protocol: ProtocolType = None
     ) -> TestResult:
         """Test with Semantic Kernel"""
         start_time = time.time()
         
         try:
-            agent = SemanticKernelAgent(adapter)
+            protocol_instance = self.protocols.get(protocol) if protocol else None
+            agent = SemanticKernelAgent(adapter, protocol=protocol_instance)
             response = agent.run(task)
             latency = time.time() - start_time
             
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="SemanticKernel",
                 task=task,
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=True,
-                metadata={"kernel_type": "huggingface"}
+                metadata={"kernel_type": "huggingface", "protocol_used": protocol.value if protocol else "none" }
             )
         
         except Exception as e:
             latency = time.time() - start_time
             return TestResult(
                 model_name=adapter.model_name,
-                protocol=ProtocolType.STANDARD,
+                protocol=protocol or ProtocolType.STANDARD,
                 framework="SemanticKernel",
                 task=task,
                 response="",
@@ -432,7 +445,8 @@ Please respond according to this protocol structure and complete the task."""
     
     def run_comprehensive_test(self, models: List[str], hf_token: Optional[str] = None):
         """
-        Run comprehensive tests across all models, protocols, and frameworks
+        Run comprehensive tests across all models, protocols, and frameworks.
+        Tests all combinations of protocols x frameworks for each model.
         
         Args:
             models: List of HuggingFace model identifiers
@@ -450,6 +464,19 @@ Please respond according to this protocol structure and complete the task."""
             "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal." 
         ]
         
+        # Define protocols to test
+        protocols = [ProtocolType.MCP, ProtocolType.A2A, ProtocolType.ACP, ProtocolType.STANDARD]
+        
+        # Define frameworks with their test functions and arguments
+        frameworks = [
+            ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}),
+            ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
+            ("LangChain", self.test_with_langchain, {"tools": self.standard_tools}),
+            ("LangGraph", self.test_with_langgraph, {}),
+            ("LlamaIndex", self.test_with_llamaindex, {"tools": self.standard_tools}),
+            ("SemanticKernel", self.test_with_semantic_kernel, {})
+        ]
+        
         for model_name in models:
             print(f"\n{'='*70}")
             print(f"Testing Model: {model_name}")
@@ -457,75 +484,60 @@ Please respond according to this protocol structure and complete the task."""
             
             adapter = HuggingFaceAdapter(model_name, hf_token)
             
-            # ===== Protocol Tests =====
+            # ===== Test Protocol × Framework Combinations =====
             print(f"\n{'-'*70}")
-            print("PROTOCOL TESTS")
+            print("PROTOCOL × FRAMEWORK COMBINATIONS")
             print(f"{'-'*70}")
-
-            for protocol in [ProtocolType.MCP, ProtocolType.A2A, ProtocolType.ACP, ProtocolType.STANDARD]:
-                protocol_results = []
-                for task in test_tasks:
-                    print(f"\n  Testing with {protocol.value} on task: {task[:40]}...")
-                    result = self.test_with_protocol(adapter, protocol, task)
-                    protocol_results.append(result)
-                    self.results.append(result)
-                    if result.success:
-                        status = "✓ Success"
-                    else:
-                        status = f"✗ Failed: {result.error}"
-                    print(f"    {status} ({len(result.reasoning_steps)} reasoning steps)")
-
-                # Average metrics for this protocol
-                successes = [r for r in protocol_results if r.success]
-                avg_latency = sum(r.latency for r in protocol_results) / len(protocol_results)
-                avg_reasoning_steps = sum(len(r.reasoning_steps) for r in protocol_results) / len(protocol_results)
-                print(f"\n  Protocol {protocol.value} summary:")
-                print(f"    Success rate: {len(successes)}/{len(protocol_results)}")
-                print(f"    Avg latency: {avg_latency:.2f}s")
-                print(f"    Avg reasoning steps: {avg_reasoning_steps:.2f}")
-                print(f"    \n{'-'*35}")
             
-            # ===== Framework Tests =====
-            print(f"\n{'-'*70}")
-            print("FRAMEWORK TESTS")
-            print(f"{'-'*70}")
-
-            frameworks = [
-                ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}), # TODO: Research about additional roles for CrewAI
-                ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
-                ("LangChain", self.test_with_langchain, {"tools": self.standard_tools}),
-                ("LangGraph", self.test_with_langgraph, {}),
-                ("LlamaIndex", self.test_with_llamaindex, {"tools": self.standard_tools}),
-                ("SemanticKernel", self.test_with_semantic_kernel, {})
-            ]
-
-            for framework_name, test_fn, extra_args in frameworks:
-                print(f"\n  Testing with {framework_name}...")
-                framework_results = []
-                for i, task in enumerate(test_tasks):
-                    args = [adapter, task]
-                    # Insert role for CrewAI
-                    if framework_name == "CrewAI":
-                        args.insert(1, extra_args["role"])
-                    # Add tools if needed
-                    kwargs = {}
-                    if "tools" in extra_args:
-                        kwargs["tools"] = extra_args["tools"]
-                    result = test_fn(*args, **kwargs)
-                    framework_results.append(result)
-                    self.results.append(result)
-                    status = "✓ Success" if result.success else f"✗ Failed: {result.error}"
-                    print(f"    Task {i+1}: {status} ({len(result.reasoning_steps)} reasoning steps)")
-
-                # Summarize metrics by framework
-                successes = [r for r in framework_results if r.success]
-                avg_latency = sum(r.latency for r in framework_results) / len(framework_results)
-                avg_reasoning_steps = sum(len(r.reasoning_steps) for r in framework_results) / len(framework_results)
-                print(f"\n  {framework_name} summary:")
-                print(f"    Success rate: {len(successes)}/{len(framework_results)}")
-                print(f"    Avg latency: {avg_latency:.2f}s")
-                print(f"    Avg reasoning steps: {avg_reasoning_steps:.2f}")
-                print(f"    \n{'-'*35}")
+            for protocol in protocols:
+                print(f"\n{'─'*70}")
+                print(f"Protocol: {protocol.value}")
+                print(f"{'─'*70}")
+                
+                for framework_name, test_fn, extra_args in frameworks:
+                    print(f"\n  {framework_name} with {protocol.value}:")
+                    combination_results = []
+                    
+                    for i, task in enumerate(test_tasks, 1):
+                        print(f"    Task {i}/{len(test_tasks)}: {task[:50]}...")
+                        
+                        # Build arguments for test function
+                        args = [adapter, task]
+                        kwargs = {"protocol": protocol}  # Add protocol to kwargs
+                        
+                        # Handle CrewAI's role parameter
+                        if framework_name == "CrewAI":
+                            args.insert(1, extra_args["role"])
+                        
+                        # Add tools if framework needs them
+                        if "tools" in extra_args:
+                            kwargs["tools"] = extra_args["tools"]
+                        
+                        # Execute test
+                        try:
+                            result = test_fn(*args, **kwargs)
+                            combination_results.append(result)
+                            self.results.append(result)
+                            
+                            status = "✓" if result.success else "✗"
+                            print(f"      {status} Latency: {result.latency:.2f}s, Steps: {len(result.reasoning_steps)}")
+                        except Exception as e:
+                            print(f"      ✗ Error: {str(e)}")
+                    
+                    # Summary for this protocol-framework combination
+                    if combination_results:
+                        successes = [r for r in combination_results if r.success]
+                        avg_latency = sum(r.latency for r in combination_results) / len(combination_results)
+                        avg_steps = sum(len(r.reasoning_steps) for r in combination_results) / len(combination_results)
+                        
+                        print(f"\n  {framework_name} + {protocol.value} Summary:")
+                        print(f"    Success: {len(successes)}/{len(combination_results)} ({len(successes)/len(combination_results)*100:.1f}%)")
+                        print(f"    Avg Latency: {avg_latency:.2f}s")
+                        print(f"    Avg Steps: {avg_steps:.1f}")
+            
+            print(f"\n{'='*70}")
+            print(f"Model {model_name} Complete")
+            print(f"{'='*70}")
     
     def export_results(self, filename: str = "test_results.json"):
         """

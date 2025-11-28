@@ -4,6 +4,7 @@ LangGraph Stateful Workflow Integration
 LangGraph provides graph-based agent orchestration with explicit state management.
 """
 
+import json
 from typing import List, TypedDict, Annotated
 import operator
 from langgraph.graph import StateGraph, END
@@ -21,7 +22,7 @@ class LangGraphAgent:
     with conditional branching.
     """
     
-    def __init__(self, adapter):
+    def __init__(self, adapter, protocol=None):
         """
         Initialize LangGraph agent
         
@@ -197,6 +198,15 @@ Provide a well-structured summary with key insights."""
         Returns:
             Final research report
         """
+        # Wrap task with protocol if provided
+        if self.protocol:
+            formatted_msg = self.protocol.send_message(task, {})
+            task = f"""Protocol: {self.protocol.__class__.__name__}
+
+{json.dumps(formatted_msg, indent=2)}
+
+Execute according to protocol."""
+
         self.reasoning_steps = []
         
         try:

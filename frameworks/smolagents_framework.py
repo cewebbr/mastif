@@ -5,6 +5,7 @@ Smolagents is a lightweight agent framework focusing on simplicity
 and efficiency with minimal overhead.
 """
 
+import json
 from typing import Dict, List
 import sys
 sys.path.append('..')
@@ -20,7 +21,7 @@ class SmolAgentWrapper:
     tool-use capabilities.
     """
     
-    def __init__(self, adapter):
+    def __init__(self, adapter, protocol=None):
         """
         Initialize Smolagents wrapper
         
@@ -30,6 +31,7 @@ class SmolAgentWrapper:
         self.adapter = adapter
         self.tools: List[Dict[str, str]] = []
         self.reasoning_steps: List[ReasoningStep] = []
+        self.protocol = protocol
     
     def add_tool(self, name: str, description: str):
         """
@@ -51,6 +53,16 @@ class SmolAgentWrapper:
         Returns:
             Execution result
         """
+        
+        # Wrap task with protocol if provided
+        if self.protocol:
+            formatted_msg = self.protocol.send_message(task, {})
+            task = f"""Protocol: {self.protocol.__class__.__name__}
+
+{json.dumps(formatted_msg, indent=2)}
+
+Execute according to protocol."""
+            
         self.reasoning_steps = []
         
         # Step 1: Analyze available tools

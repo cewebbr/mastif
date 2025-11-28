@@ -4,6 +4,7 @@ LangChain ReAct Agent Integration
 LangChain implements the ReAct (Reasoning + Acting) pattern.
 """
 
+import json
 from typing import List, Dict
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain.tools import Tool
@@ -21,7 +22,7 @@ class LangChainAgent:
     which interleaves reasoning steps with action execution.
     """
     
-    def __init__(self, adapter):
+    def __init__(self, adapter, protocol=None):
         """
         Initialize LangChain ReAct agent
         
@@ -32,6 +33,7 @@ class LangChainAgent:
         self.tools: List[Tool] = []
         self.llm = adapter.get_langchain_llm()
         self.reasoning_steps: List[ReasoningStep] = []
+        self.protocol = protocol
     
     def add_tool(self, name: str, description: str, func=None):
         """
@@ -77,6 +79,15 @@ class LangChainAgent:
         Returns:
             Final answer from the agent
         """
+        # Wrap task with protocol if provided
+        if self.protocol:
+            formatted_msg = self.protocol.send_message(task, {})
+            task = f"""Protocol: {self.protocol.__class__.__name__}
+
+{json.dumps(formatted_msg, indent=2)}
+
+Execute according to protocol."""
+
         self.reasoning_steps = []
         
         try:
