@@ -7,7 +7,7 @@ Semantic Kernel (by Microsoft) provides enterprise-grade AI orchestration.
 import json
 from typing import List
 import semantic_kernel as sk
-from semantic_kernel.connectors.ai.hugging_face import HuggingFaceTextCompletion
+from huggingface_hub import InferenceClient
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
@@ -32,14 +32,11 @@ class SemanticKernelAgent:
         self.kernel = sk.Kernel()
         self.reasoning_steps: List[ReasoningStep] = []
         self.protocol = protocol
-        
-        # Add HuggingFace service to kernel
-        self.kernel.add_service(
-            HuggingFaceTextCompletion(
-                ai_model_id=adapter.model_name,
-                task="text-generation"
-            ),
-            service_id="huggingface"
+
+        # Use InferenceClient for remote Hugging Face inference
+        self.inference_client = InferenceClient(
+            model=adapter.model_name,
+            token=adapter.api_key if hasattr(adapter, "api_key") else None
         )
     
     def add_semantic_function(self, name: str, prompt_template: str, description: str):
@@ -51,18 +48,17 @@ class SemanticKernelAgent:
             prompt_template: Prompt template with {{$input}} placeholder
             description: Function description
         """
-        self.kernel.create_semantic_function(
-            prompt_template=prompt_template,
-            function_name=name,
-            skill_name="custom_skills",
-            description=description,
-            max_tokens=512,
-            temperature=0.7
-        )
+        # Store function info for later use
+        if not hasattr(self, "semantic_functions"):
+            self.semantic_functions = {}
+        self.semantic_functions[name] = {
+            "prompt_template": prompt_template,
+            "description": description
+        }
     
     def run(self, task: str) -> str:
         """
-        Execute task using Semantic Kernel
+        Execute task using Hugging Face InferenceClient
         
         Args:
             task: Task to execute
@@ -85,13 +81,13 @@ Execute according to protocol."""
             self.reasoning_steps.append(ReasoningStep(
                 step_number=1,
                 thought="Initializing Semantic Kernel execution",
-                observation="Kernel configured with HuggingFace service"
+                observation="Kernel configured with HuggingFace InferenceClient"
             ))
             
-            # Create a reasoning semantic function
+            # Use a reasoning prompt
             reasoning_prompt = """You are an AI assistant helping to solve a task.
 
-Task: {{$input}}
+Task: {input}
 
 Think through this step-by-step:
 1. Understand the task requirements
@@ -102,28 +98,23 @@ Response:"""
             
             self.reasoning_steps.append(ReasoningStep(
                 step_number=2,
-                thought="Creating semantic function for task execution",
-                action="create_semantic_function",
-                action_input="reasoning_function"
+                thought="Preparing prompt for remote inference",
+                action="prepare_prompt",
+                action_input="reasoning_prompt"
             ))
-            
-            reasoning_func = self.kernel.create_semantic_function(
-                prompt_template=reasoning_prompt,
-                function_name="reasoning",
-                skill_name="task_skills",
-                max_tokens=512,
-                temperature=0.7
-            )
+
+            # Format the prompt
+            prompt = reasoning_prompt.replace("{input}", task)
             
             self.reasoning_steps.append(ReasoningStep(
                 step_number=3,
-                thought="Executing semantic function",
-                action="invoke_function",
-                action_input=task
+                thought="Sending prompt to HuggingFace InferenceClient",
+                action="inference_client.text_generation",
+                action_input=prompt
             ))
             
-            # Execute the function
-            result = self.kernel.run(reasoning_func, input_str=task)
+            # Execute the function using InferenceClient
+            result = self.inference_client.text_generation(prompt, max_new_tokens=512, temperature=0.7)
             
             self.reasoning_steps.append(ReasoningStep(
                 step_number=4,
