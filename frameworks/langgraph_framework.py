@@ -25,11 +25,13 @@ class LangGraphAgent:
     def __init__(self, adapter, protocol=None):
         """
         Initialize LangGraph agent
-        
+
         Args:
             adapter: HuggingFace model adapter
+            protocol: Optional protocol object
         """
         self.adapter = adapter
+        self.protocol = protocol
         self.graph = None
         self.reasoning_steps: List[ReasoningStep] = []
     
