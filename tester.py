@@ -458,8 +458,15 @@ Please respond according to this protocol structure and complete the task."""
             # TODO: Add more Ceweb.br relevant tasks
             # CORDATA
             "Look for dissertation and thesis published in Brazil about open data and open research in which datasets were published with research results.", 
-            # Acessibilidade
+            # Accessibility
             # "Provide me a set of tools I can use while accessing the web in a way to overcome existing web accessibility barriers.", 
+            # "Create a report about accessibility issues for website ... based on requirements A and AA from ABNT 17225.",
+            # "Assess ABNT NBR 17225 and recommend how to make it more robust and less succeptible to short-term technology advances.",
+            # "Simulate access to the website ... using a screen reader. Identify and list all accessibility barriers found during the navigation.",
+            # "Create a figure description for the image located at URL .... Consider the contex of the surrounding text on the webpage.",
+            # "Evaluate the HTML code of the webpage located at URL ... and provide suggestions on how to improve code semantices following ABNT NBR 17225.",
+            # "Create a heading structure for the webpage located at URL ... following best practices for web accessibility and ABNT NBR 17225 guidelines.",
+            # 
             # CGI.br
             # "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal." 
         ]
