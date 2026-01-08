@@ -19,8 +19,10 @@ def main():
     
     models_to_test = [ 
         # Workwed well
-        "meta-llama/Llama-3.3-70B-Instruct", 
-        "openai/gpt-oss-120b" 
+        # "meta-llama/Llama-3.3-70B-Instruct", 
+        # "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+        "openai/gpt-oss-120b"
+        # "deepseek-ai/DeepSeek-V3.2"
 
         # Worked, but repeated info about the protocols
         # "meta-llama/Llama-3.1-8B-Instruct", 
