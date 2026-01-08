@@ -25,6 +25,7 @@ from frameworks import (
 
 from mind2web_loader import Mind2WebLoader
 from mind2web_evaluator import Mind2WebEvaluator
+from transformers import AutoTokenizer
 
 class AgenticStackTester:
     """
@@ -770,6 +771,18 @@ Your answer MUST be only in the CVS format as specified above.
             print(f"    Avg Latency: {avg_lat:.2f}s")
             print(f"    Avg Reasoning Steps: {avg_steps:.1f}")
         
+        # Print token usage metrics
+        print("\n" + "-"*70)
+        print("Token Usage by Model:")
+        print("-"*70)
+        for model in set(r.model_name for r in self.results):
+            model_results = [r for r in self.results if r.model_name == model]
+            reasoning, output = self.compute_token_metrics(model, model_results)
+            print(f"Model: {model}")
+            print(f"  Reasoning tokens: {reasoning}")
+            print(f"  Output tokens: {output}")
+            print(f"  Total tokens: {reasoning + output}")
+        
         print("\n" + "="*70)
 
     def run_mind2web_evaluation(
@@ -1002,3 +1015,20 @@ Your answer MUST be only in the CVS format as specified above.
             "LlamaIndex",
             "Semantic Kernel"
         ]
+    
+    def compute_token_metrics(self, model_name: str, results: List[TestResult]):
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        total_reasoning_tokens = 0
+        total_output_tokens = 0
+
+        for result in results:
+            # Count tokens in all reasoning steps
+            for step in result.reasoning_steps:
+                total_reasoning_tokens += len(tokenizer.encode(step.thought or ""))
+                total_reasoning_tokens += len(tokenizer.encode(step.action or "")) if step.action else 0
+                total_reasoning_tokens += len(tokenizer.encode(step.action_input or "")) if step.action_input else 0
+                total_reasoning_tokens += len(tokenizer.encode(step.observation or "")) if step.observation else 0
+            # Count tokens in output/response
+            total_output_tokens += len(tokenizer.encode(result.response or ""))
+
+        return total_reasoning_tokens, total_output_tokens
