@@ -114,12 +114,12 @@ class OpenAIAdapter:
         """Generate text completion from the model"""
         try:
             openai.api_key = self.api_key
-            response = openai.Completion.create(
+            response = openai.ChatCompletion.create(
                 model=self.model_name,
-                prompt=prompt,
+                messages=[{"role": "user", "content": prompt}],
                 max_tokens=kwargs.get("max_tokens", 1024),
                 temperature=kwargs.get("temperature", 0.7),
             )
-            return response.choices[0].text.strip()
+            return response.choices[0].message["content"].strip()
         except Exception as e:
             return f"Error: {str(e)}"

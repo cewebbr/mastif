@@ -224,7 +224,8 @@ Please respond according to this protocol structure and complete the task."""
     
     def test_with_smolagents(
         self,
-        adapter: HuggingFaceAdapter,
+        # adapter: HuggingFaceAdapter,
+        adapter: OpenAIAdapter,
         task: str,
         tools: List[Dict[str, str]] = None,
         protocol: ProtocolType = None
@@ -235,10 +236,10 @@ Please respond according to this protocol structure and complete the task."""
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
             agent = SmolAgentWrapper(adapter, protocol=protocol_instance)
-            
+
             for tool in (tools or []):
                 agent.add_tool(tool["name"], tool["description"])
-            
+
             response = agent.run(task)
             latency = time.time() - start_time
             
@@ -562,7 +563,8 @@ Your answer MUST be only in the CVS format as specified above.
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
             
-            adapter = HuggingFaceAdapter(model_name, hf_token)
+            # adapter = HuggingFaceAdapter(model_name, hf_token)
+            adapter = OpenAIAdapter(model_name, api_key=hf_token)
             
             # ===== Test Protocol × Framework Combinations =====
             print(f"\n{'-'*70}")
@@ -1017,18 +1019,21 @@ Your answer MUST be only in the CVS format as specified above.
         ]
     
     def compute_token_metrics(self, model_name: str, results: List[TestResult]):
+        # Only attempt to load tokenizer for Hugging Face models
+        if model_name.startswith("gpt-") or model_name.startswith("openai") or model_name in ["gpt-4o", "gpt-3.5-turbo", "gpt-4"]:
+            print(f"Skipping token metrics for non-HuggingFace model: {model_name}")
+            return 0, 0
+
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         total_reasoning_tokens = 0
         total_output_tokens = 0
 
         for result in results:
-            # Count tokens in all reasoning steps
             for step in result.reasoning_steps:
                 total_reasoning_tokens += len(tokenizer.encode(step.thought or ""))
                 total_reasoning_tokens += len(tokenizer.encode(step.action or "")) if step.action else 0
                 total_reasoning_tokens += len(tokenizer.encode(step.action_input or "")) if step.action_input else 0
                 total_reasoning_tokens += len(tokenizer.encode(step.observation or "")) if step.observation else 0
-            # Count tokens in output/response
             total_output_tokens += len(tokenizer.encode(result.response or ""))
 
         return total_reasoning_tokens, total_output_tokens
