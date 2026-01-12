@@ -181,7 +181,8 @@ Please respond according to this protocol structure and complete the task."""
     
     def test_with_crewai(
         self,
-        adapter: HuggingFaceAdapter,
+        # adapter: HuggingFaceAdapter,
+        adapter: OpenAIAdapter,
         role: str,
         task: str,
         context: Dict = None,
@@ -318,7 +319,8 @@ Please respond according to this protocol structure and complete the task."""
     
     def test_with_langgraph(
         self,
-        adapter: HuggingFaceAdapter,
+        # adapter: HuggingFaceAdapter,
+        adapter: OpenAIAdapter,
         task: str,
         protocol: ProtocolType = None
     ) -> TestResult:
@@ -550,10 +552,10 @@ Your answer MUST be only in the CVS format as specified above.
         
         # Define frameworks with their test functions and arguments
         frameworks = [
-            # ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}),
+            ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}),
             ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
             # ("LangChain", self.test_with_langchain, {"tools": self.standard_tools}),
-            # ("LangGraph", self.test_with_langgraph, {}),
+            ("LangGraph", self.test_with_langgraph, {}),
             # ("LlamaIndex", self.test_with_llamaindex, {"tools": self.standard_tools}),
             # ("SemanticKernel", self.test_with_semantic_kernel, {})
         ]

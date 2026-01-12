@@ -34,13 +34,12 @@ class HuggingFaceAdapter:
     def generate(self, prompt: str, **kwargs) -> str:
         """Generate text completion from the model"""
         try:
-            response = self.client.chat.completions.create(
-                model=self.model_name,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=kwargs.get("max_tokens", 1024),
+            response = self.client.text_generation(
+                prompt,
+                max_new_tokens=kwargs.get("max_tokens", 1024),
                 temperature=kwargs.get("temperature", 0.7),
             )
-            return response.choices[0].message["content"]
+            return response
         except Exception as e:
             return f"Error: {str(e)}"
     
@@ -113,13 +112,13 @@ class OpenAIAdapter:
     def generate(self, prompt: str, **kwargs) -> str:
         """Generate text completion from the model"""
         try:
-            openai.api_key = self.api_key
-            response = openai.ChatCompletion.create(
+            client = openai.OpenAI(api_key=self.api_key)
+            response = client.chat.completions.create(
                 model=self.model_name,
                 messages=[{"role": "user", "content": prompt}],
                 max_tokens=kwargs.get("max_tokens", 1024),
                 temperature=kwargs.get("temperature", 0.7),
             )
-            return response.choices[0].message["content"].strip()
+            return response.choices[0].message.content.strip()
         except Exception as e:
             return f"Error: {str(e)}"
