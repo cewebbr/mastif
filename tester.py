@@ -182,8 +182,9 @@ Please respond according to this protocol structure and complete the task."""
     
     def test_with_crewai(
         self,
+        #TODO: Refactor needed to receive a common Adapter type
         # adapter: HuggingFaceAdapter,
-        adapter: OpenAIAdapter, #TODO: Refactor needed to receive a common Adapter type
+        adapter: OpenAIAdapter, 
         role: str,
         task: str,
         context: Dict = None,
