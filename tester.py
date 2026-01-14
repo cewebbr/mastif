@@ -26,6 +26,7 @@ from frameworks import (
 from mind2web_loader import Mind2WebLoader
 from mind2web_evaluator import Mind2WebEvaluator
 from transformers import AutoTokenizer
+import tiktoken
 
 class AgenticStackTester:
     """
@@ -182,7 +183,7 @@ Please respond according to this protocol structure and complete the task."""
     def test_with_crewai(
         self,
         # adapter: HuggingFaceAdapter,
-        adapter: OpenAIAdapter,
+        adapter: OpenAIAdapter, #TODO: Refactor needed to receive a common Adapter type
         role: str,
         task: str,
         context: Dict = None,
@@ -779,6 +780,7 @@ Your answer MUST be only in the CVS format as specified above.
         print("\n" + "-"*70)
         print("Token Usage by Model:")
         print("-"*70)
+        # TODO: Break down tokens by framework and protocol as well
         for model in set(r.model_name for r in self.results):
             model_results = [r for r in self.results if r.model_name == model]
             reasoning, output = self.compute_token_metrics(model, model_results)
@@ -1021,11 +1023,28 @@ Your answer MUST be only in the CVS format as specified above.
         ]
     
     def compute_token_metrics(self, model_name: str, results: List[TestResult]):
-        # Only attempt to load tokenizer for Hugging Face models
-        if model_name.startswith("gpt-") or model_name.startswith("openai") or model_name in ["gpt-4o", "gpt-3.5-turbo", "gpt-4"]:
-            print(f"Skipping token metrics for non-HuggingFace model: {model_name}")
-            return 0, 0
+        # Use tiktoken for OpenAI models
+        openai_models = ["gpt-4o", "gpt-4", "gpt-3.5-turbo"]
+        if any(model_name.startswith(m) for m in ["gpt-", "openai"]) or model_name in openai_models:
+            try:
+                encoding = tiktoken.encoding_for_model(model_name)
+            except Exception:
+                encoding = tiktoken.get_encoding("cl100k_base")  # fallback
 
+            total_reasoning_tokens = 0
+            total_output_tokens = 0
+
+            for result in results:
+                for step in result.reasoning_steps:
+                    total_reasoning_tokens += len(encoding.encode(step.thought or ""))
+                    total_reasoning_tokens += len(encoding.encode(step.action or "")) if step.action else 0
+                    total_reasoning_tokens += len(encoding.encode(step.action_input or "")) if step.action_input else 0
+                    total_reasoning_tokens += len(encoding.encode(step.observation or "")) if step.observation else 0
+                total_output_tokens += len(encoding.encode(result.response or ""))
+
+            return total_reasoning_tokens, total_output_tokens
+
+        # Hugging Face models
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         total_reasoning_tokens = 0
         total_output_tokens = 0
