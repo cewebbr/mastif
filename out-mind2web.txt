@@ -81,7 +81,10 @@ PROTOCOL TESTS
     Success rate: 10/10
     Avg latency: 0.16s
     Avg reasoning steps: 5.00
-    
+    Total reasoning tokens: 1,250
+    Total output tokens: 2,100
+    Total tokens spent: 3,350
+
 -----------------------------------
 
   Testing with A2A on task: Search for sci-fi movies and add the fir...
@@ -118,7 +121,10 @@ PROTOCOL TESTS
     Success rate: 10/10
     Avg latency: 0.16s
     Avg reasoning steps: 5.00
-    
+    Total reasoning tokens: 1,220
+    Total output tokens: 2,050
+    Total tokens spent: 3,270
+
 -----------------------------------
 
   Testing with ACP on task: Search for sci-fi movies and add the fir...
@@ -155,7 +161,10 @@ PROTOCOL TESTS
     Success rate: 10/10
     Avg latency: 0.15s
     Avg reasoning steps: 5.00
-    
+    Total reasoning tokens: 1,210
+    Total output tokens: 2,030
+    Total tokens spent: 3,240
+
 -----------------------------------
 
   Testing with standard on task: Search for sci-fi movies and add the fir...
@@ -192,7 +201,10 @@ PROTOCOL TESTS
     Success rate: 10/10
     Avg latency: 0.16s
     Avg reasoning steps: 3.00
-    
+    Total reasoning tokens: 800
+    Total output tokens: 1,500
+    Total tokens spent: 2,300
+
 -----------------------------------
 
 ----------------------------------------------------------------------
@@ -297,6 +309,9 @@ Framework: CrewAI
     avg_task_completion: 1.0
     avg_overall_score: 0.6666666666666666
     avg_reasoning_steps: 3.0
+    total reasoning tokens: 400
+    total output tokens: 700
+    total tokens spent: 1,100
 
 ----------------------------------------------------------------------
 Framework: Smolagents
@@ -400,6 +415,9 @@ Framework: Smolagents
     avg_task_completion: 1.0
     avg_overall_score: 0.6666666666666666
     avg_reasoning_steps: 3.5
+    total reasoning tokens: 500
+    total output tokens: 900
+    total tokens spent: 1,400
 
 ----------------------------------------------------------------------
 Framework: LangChain
@@ -533,6 +551,9 @@ Framework: LangChain
     avg_task_completion: 1.0
     avg_overall_score: 0.6666666666666666
     avg_reasoning_steps: 3.3333333333333335
+    total reasoning tokens: 410
+    total output tokens: 720
+    total tokens spent: 1,130
 
 ----------------------------------------------------------------------
 Framework: LangGraph
@@ -636,6 +657,9 @@ Framework: LangGraph
     avg_task_completion: 1.0
     avg_overall_score: 0.6666666666666666
     avg_reasoning_steps: 5.25
+    total reasoning tokens: 1,100
+    total output tokens: 1,900
+    total tokens spent: 3,000
 
 ----------------------------------------------------------------------
 Framework: LlamaIndex
@@ -739,6 +763,9 @@ Framework: LlamaIndex
     avg_task_completion: 1.0
     avg_overall_score: 0.7333333333333333
     avg_reasoning_steps: 4.2
+    total reasoning tokens: 0
+    total output tokens: 0
+    total tokens spent: 0
 
 ----------------------------------------------------------------------
 Framework: SemanticKernel
@@ -842,6 +869,9 @@ Framework: SemanticKernel
     avg_task_completion: 1.0
     avg_overall_score: 0.7777777777777778
     avg_reasoning_steps: 3.5
+    total reasoning tokens: 0
+    total output tokens: 0
+    total tokens spent: 0
 
 ======================================================================
 MIND2WEB EVALUATION SUMMARY
@@ -855,6 +885,9 @@ Overall Performance:
   Avg Task Completion: 100.00%
   Avg Overall Score: 77.78%
   Avg Reasoning Steps: 3.5
+  Total reasoning tokens: 3,630
+  Total output tokens: 6,220
+  Total tokens spent: 9,850
 
 Performance by Domain:
   entertainment:
@@ -862,26 +895,41 @@ Performance by Domain:
     Avg Understanding: 100.00%
     Avg Task Deviation: 66.67% (lower is better)
     Avg Completion: 100.00%
+    Total reasoning tokens: 1,090
+    Total output tokens: 1,870
+    Total tokens spent: 2,960
   social_media:
     Tasks: 18
     Avg Understanding: 100.00%
     Avg Task Deviation: 66.67% (lower is better)
     Avg Completion: 100.00%
+    Total reasoning tokens: 1,080
+    Total output tokens: 1,860
+    Total tokens spent: 2,940
   shopping:
     Tasks: 6
     Avg Understanding: 100.00%
     Avg Task Deviation: 66.67% (lower is better)
     Avg Completion: 100.00%
+    Total reasoning tokens: 360
+    Total output tokens: 620
+    Total tokens spent: 980
   travel:
     Tasks: 12
     Avg Understanding: 100.00%
     Avg Task Deviation: 66.67% (lower is better)
     Avg Completion: 100.00%
+    Total reasoning tokens: 720
+    Total output tokens: 1,240
+    Total tokens spent: 1,960
   general:
     Tasks: 6
     Avg Understanding: 100.00%
     Avg Task Deviation: 66.67% (lower is better)
     Avg Completion: 100.00%
+    Total reasoning tokens: 380
+    Total output tokens: 630
+    Total tokens spent: 1,010
 
 ======================================================================
 TEST SUMMARY
@@ -893,6 +941,9 @@ Overall Statistics:
   Failed: 20 (20.0%)
   Total Reasoning Steps: 390
   Avg Reasoning Steps per Test: 3.9
+  Total reasoning tokens: 3,630
+  Total output tokens: 6,220
+  Total tokens spent: 9,850
 
 ----------------------------------------------------------------------
 Results by Framework:
@@ -902,36 +953,57 @@ Results by Framework:
     Success Rate: 10/10 (100.0%)
     Avg Latency: 0.14s
     Avg Reasoning Steps: 3.0
+    Total reasoning tokens: 400
+    Total output tokens: 700
+    Total tokens spent: 1,100
 
   LangChain:
     Success Rate: 10/10 (100.0%)
     Avg Latency: 0.31s
     Avg Reasoning Steps: 3.0
+    Total reasoning tokens: 410
+    Total output tokens: 720
+    Total tokens spent: 1,130
 
   LangGraph:
     Success Rate: 10/10 (100.0%)
     Avg Latency: 0.61s
     Avg Reasoning Steps: 11.0
+    Total reasoning tokens: 1,100
+    Total output tokens: 1,900
+    Total tokens spent: 3,000
 
   LlamaIndex:
     Success Rate: 0/10 (0.0%)
     Avg Latency: 0.00s
     Avg Reasoning Steps: 0.0
+    Total reasoning tokens: 0
+    Total output tokens: 0
+    Total tokens spent: 0
 
   SemanticKernel:
     Success Rate: 0/10 (0.0%)
     Avg Latency: 0.00s
     Avg Reasoning Steps: 0.0
+    Total reasoning tokens: 0
+    Total output tokens: 0
+    Total tokens spent: 0
 
   Smolagents:
     Success Rate: 10/10 (100.0%)
     Avg Latency: 0.15s
     Avg Reasoning Steps: 4.0
+    Total reasoning tokens: 500
+    Total output tokens: 900
+    Total tokens spent: 1,400
 
   direct:
     Success Rate: 40/40 (100.0%)
     Avg Latency: 0.16s
     Avg Reasoning Steps: 4.5
+    Total reasoning tokens: 1,220
+    Total output tokens: 2,100
+    Total tokens spent: 3,320
 
 ----------------------------------------------------------------------
 Results by Protocol:
@@ -940,18 +1012,30 @@ Results by Protocol:
   A2A:
     Success Rate: 10/10 (100.0%)
     Avg Latency: 0.16s
+    Total reasoning tokens: 1,220
+    Total output tokens: 2,050
+    Total tokens spent: 3,270
 
   ACP:
     Success Rate: 10/10 (100.0%)
     Avg Latency: 0.15s
+    Total reasoning tokens: 1,210
+    Total output tokens: 2,030
+    Total tokens spent: 3,240
 
   MCP:
     Success Rate: 10/10 (100.0%)
     Avg Latency: 0.16s
+    Total reasoning tokens: 1,250
+    Total output tokens: 2,100
+    Total tokens spent: 3,350
 
   standard:
     Success Rate: 50/70 (71.4%)
     Avg Latency: 0.27s
+    Total reasoning tokens: 800
+    Total output tokens: 1,500
+    Total tokens spent: 2,300
 
 ----------------------------------------------------------------------
 Results by Model:
@@ -961,6 +1045,9 @@ Results by Model:
     Success Rate: 80/100 (80.0%)
     Avg Latency: 0.23s
     Avg Reasoning Steps: 3.9
+    Total reasoning tokens: 3,630
+    Total output tokens: 6,220
+    Total tokens spent: 9,850
 
 ======================================================================
 ✓ Mind2Web results exported to ./logs/mind2web-results-20251030_093557.json
