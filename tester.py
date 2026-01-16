@@ -459,6 +459,7 @@ Please respond according to this protocol structure and complete the task."""
             hf_token: HuggingFace API token
         """
         
+        # TODO: move template, inner prompt, and tasks to config files to keep this method cleaner and allow multiple experiments to be setup.
         # W4A 2026 - Experiment
         prompt_template = """"
 You are an Accessibility Expert (WCAG Specialist) responsible for detecting WCAG 2.2 violations on websites. 

@@ -1,10 +1,10 @@
-# Agentic Stack Testing Framework
+# MASTIF (Multi-Agent System TestIng Framework)
 
-![Class Diagram](class_diagram.png)
+![MASTIF logo](images/mastif-logo.jpg)
 
 ## Overview
 
-The Agentic Stack Testing Framework is a comprehensive benchmarking suite for evaluating agentic AI technologies across multiple frameworks, protocols, and large language models (LLMs). It supports both standard user-defined tasks and the Mind2Web benchmark, enabling reproducible assessment of agent reasoning, tool use, and web interaction capabilities.
+The MASTIF (Multi-Agent System TestIng Framework) is a comprehensive benchmarking suite for evaluating agentic AI technologies across multiple frameworks, protocols, and large language models (LLMs). It supports both standard user-defined tasks and the Mind2Web benchmark, enabling reproducible assessment of agent reasoning, tool use, and web interaction capabilities.
 
 **Key Capabilities:**
 
@@ -21,6 +21,7 @@ The Agentic Stack Testing Framework is a comprehensive benchmarking suite for ev
 
 This framework is designed for researchers, developers, and practitioners who want to systematically compare agentic AI stacks, understand their strengths and weaknesses, and drive improvements in agent reasoning and web automation.
 
+![Class Diagram](class_diagram.png)
 
 
 ## Installation
