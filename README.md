@@ -1,10 +1,12 @@
 # MASTIF (Multi-Agent System TestIng Framework)
 
-<img src="images/mastif-logo.jpg" with="200px" alt="Black and white logo showing the head of a mastiff breed dog looking forward">
+<div align="center">
+  <img src="images/mastif-logo.jpg" width="250px" alt="Black and white logo showing the head of a mastiff breed dog looking forward">
+</div>
 
 ## Overview
 
-MASTIF (Multi-Agent System TestIng Framework) is a comprehensive benchmarking suite for evaluating agentic AI technologies across multiple frameworks, protocols, and large language models (LLMs). It supports both standard user-defined tasks and the [https://github.com/OSU-NLP-Group/Mind2Web](Mind2Web benchmark), enabling reproducible assessment of agent reasoning, tool use, and web interaction capabilities.
+MASTIF (Multi-Agent System TestIng Framework) is a comprehensive benchmarking suite for evaluating agentic AI technologies across multiple frameworks, protocols, and large language models (LLMs). It supports both standard user-defined tasks and the [!https://github.com/OSU-NLP-Group/Mind2Web](Mind2Web benchmark), enabling reproducible assessment of agent reasoning, tool use, and web interaction capabilities.
 
 **Key Capabilities:**
 
