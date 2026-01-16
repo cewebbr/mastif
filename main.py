@@ -9,6 +9,8 @@ import os
 import datetime
 from tester import AgenticStackTester
 
+# TODO: Compute the number of tests dynamically based on selected models, protocols, and frameworks and provide a warning before people start the tests. It is necessary inform that all combinations will be tested and this may incurr a high number of API calls and associated costs.
+
 
 def main():
     """Main execution function with Mind2Web support"""

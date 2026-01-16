@@ -28,14 +28,15 @@ from mind2web_evaluator import Mind2WebEvaluator
 from transformers import AutoTokenizer
 import tiktoken
 
+# TODO: Update name of this class to match the new repo name
 class AgenticStackTester:
     """
     Main testing framework for comprehensive agentic technology evaluation
     
     This class orchestrates testing across multiple:
-    - Models (different HuggingFace models)
-    - Protocols (MCP, A2A, ACP, Standard)
-    - Frameworks (CrewAI, Smolagents, LangChain, LangGraph, LlamaIndex, Semantic Kernel)
+    - Models (different HuggingFace and OpenAI models)
+    - Protocols (e.g., MCP, A2A, ACP, Standard)
+    - Frameworks (CrewAI, Smolagents, LangChain, LangGraph, LlamaIndex, and Semantic Kernel)
     
     Collects detailed metrics including reasoning steps, latency, and success rates.
     """
