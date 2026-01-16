@@ -1,6 +1,6 @@
 # MASTIF (Multi-Agent System TestIng Framework)
 
-![MASTIF logo](images/mastif-logo.jpg)
+<div style="text-align: center;"> <img src="images/mastif-logo.jpg" with="30%" alt="Description"> </div>
 
 ## Overview
 
