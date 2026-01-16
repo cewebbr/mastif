@@ -14,8 +14,7 @@ CustomLLM;
 BaseProtocol;
 HuggingFaceLLM;
 AgentState;
-OpenAIAPI [shape=component]
-HuggingFaceAPI [shape=component]
+BaseAdapter; // <-- Added BaseAdapter
 }
 
 {
@@ -23,7 +22,23 @@ rank=same;
 AgenticStackTester;
 HuggingFaceAdapter;
 OpenAIAdapter;
+OpenAIAPI [shape=component]
+HuggingFaceAPI [shape=component]
 }
+
+// Add BaseAdapter abstract class
+BaseAdapter [label="{
+BaseAdapter\n
+«abstract»|
+model_name: str\l
+|
+generate(prompt: str, **kwargs): str\l
+}"];
+BaseAdapter -> ABC [arrowhead=empty, fontsize=9];
+
+// Adapters inherit from BaseAdapter
+HuggingFaceAdapter -> BaseAdapter [arrowhead=empty, fontsize=9];
+OpenAIAdapter -> BaseAdapter [arrowhead=empty, fontsize=9];
 
 Mind2WebEvaluator -> OpenAIAdapter [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
 OpenAIAdapter -> OpenAIAPI  [arrowhead=open, fontsize=9];
@@ -262,13 +277,13 @@ mind2web_results: Any\l
 mind2web_aggregate: Any\l
 |
 __init__()\l
-test_with_protocol(adapter: HuggingFaceAdapter, protocol_type: ProtocolType, task: str, context: Dict = None): TestResult\l
-test_with_crewai(adapter: HuggingFaceAdapter, role: str, task: str, context: Dict = None): TestResult\l
-test_with_smolagents(adapter: HuggingFaceAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
-test_with_langchain(adapter: HuggingFaceAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
-test_with_langgraph(adapter: HuggingFaceAdapter, task: str): TestResult\l
-test_with_llamaindex(adapter: HuggingFaceAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
-test_with_semantic_kernel(adapter: HuggingFaceAdapter, task: str): TestResult\l
+test_with_protocol(adapter: BaseAdapter, protocol_type: ProtocolType, task: str, context: Dict = None): TestResult\l
+test_with_crewai(adapter: BaseAdapter, role: str, task: str, context: Dict = None): TestResult\l
+test_with_smolagents(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
+test_with_langchain(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
+test_with_langgraph(adapter: BaseAdapter, task: str): TestResult\l
+test_with_llamaindex(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
+test_with_semantic_kernel(adapter: BaseAdapter, task: str): TestResult\l
 run_comprehensive_test(models: List[str], hf_token: Optional[str] = None)\l
 export_results(filename: str = \"test_results.json\")\l
 print_summary()\l
@@ -284,15 +299,15 @@ AgenticStackTester -> ProtocolType [arrowhead=open, fontsize=9];
 AgenticStackTester -> MCPProtocol [arrowhead=open, fontsize=9];
 AgenticStackTester -> A2AProtocol [arrowhead=open, fontsize=9];
 AgenticStackTester -> ACPProtocol [arrowhead=open, fontsize=9];
-AgenticStackTester -> HuggingFaceAdapter [arrowhead=open, fontsize=9];
+AgenticStackTester -> BaseAdapter [arrowhead=open, fontsize=9];
 
-// Frameworks are used via HuggingFaceAdapter, not directly:
-HuggingFaceAdapter -> CrewAIAgent [arrowhead=odiamond, fontsize=9];
-HuggingFaceAdapter -> SmolAgentWrapper [arrowhead=odiamond, fontsize=9];
-HuggingFaceAdapter -> LangChainAgent [arrowhead=odiamond, fontsize=9];
-HuggingFaceAdapter -> LangGraphAgent [arrowhead=odiamond, fontsize=9];
-HuggingFaceAdapter -> LlamaIndexAgent [arrowhead=odiamond, fontsize=9];
-HuggingFaceAdapter -> SemanticKernelAgent [arrowhead=odiamond, fontsize=9];
+// Frameworks are used via BaseAdapter, not directly:
+BaseAdapter -> CrewAIAgent [arrowhead=odiamond, fontsize=9];
+BaseAdapter -> SmolAgentWrapper [arrowhead=odiamond, fontsize=9];
+BaseAdapter -> LangChainAgent [arrowhead=odiamond, fontsize=9];
+BaseAdapter -> LangGraphAgent [arrowhead=odiamond, fontsize=9];
+BaseAdapter -> LlamaIndexAgent [arrowhead=odiamond, fontsize=9];
+BaseAdapter -> SemanticKernelAgent [arrowhead=odiamond, fontsize=9];
 
 // Mind2Web
 AgenticStackTester -> Mind2WebLoader [arrowhead=open, fontsize=9];

@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import List, Dict, Optional
 
 from domain_model import TestResult, ProtocolType, ReasoningStep
-from adapters import HuggingFaceAdapter, OpenAIAdapter
+from adapters import HuggingFaceAdapter, OpenAIAdapter, BaseAdapter
 from protocols import MCPProtocol, A2AProtocol, ACPProtocol
 from frameworks import (
     CrewAIAgent,
@@ -68,7 +68,7 @@ class AgenticStackTester:
 
     def test_with_protocol(
         self,
-        adapter: HuggingFaceAdapter,
+        adapter: BaseAdapter,
         protocol_type: ProtocolType,
         task: str,
         context: Dict = None
@@ -182,9 +182,7 @@ Please respond according to this protocol structure and complete the task."""
     
     def test_with_crewai(
         self,
-        #TODO: Refactor needed to receive a common Adapter type
-        # adapter: HuggingFaceAdapter,
-        adapter: OpenAIAdapter, 
+        adapter: BaseAdapter, 
         role: str,
         task: str,
         context: Dict = None,
@@ -227,8 +225,7 @@ Please respond according to this protocol structure and complete the task."""
     
     def test_with_smolagents(
         self,
-        # adapter: HuggingFaceAdapter,
-        adapter: OpenAIAdapter,
+        adapter: BaseAdapter,
         task: str,
         tools: List[Dict[str, str]] = None,
         protocol: ProtocolType = None
@@ -274,7 +271,7 @@ Please respond according to this protocol structure and complete the task."""
     
     def test_with_langchain(
         self,
-        adapter: HuggingFaceAdapter,
+        adapter: BaseAdapter,
         task: str,
         tools: List[Dict[str, str]] = None,
         protocol: ProtocolType = None
@@ -321,8 +318,7 @@ Please respond according to this protocol structure and complete the task."""
     
     def test_with_langgraph(
         self,
-        # adapter: HuggingFaceAdapter,
-        adapter: OpenAIAdapter,
+        adapter: BaseAdapter,
         task: str,
         protocol: ProtocolType = None
     ) -> TestResult:
@@ -363,7 +359,7 @@ Please respond according to this protocol structure and complete the task."""
     
     def test_with_llamaindex(
         self,
-        adapter: HuggingFaceAdapter,
+        adapter: BaseAdapter,
         task: str,
         tools: List[Dict[str, str]] = None,
         protocol: ProtocolType = None
@@ -410,7 +406,7 @@ Please respond according to this protocol structure and complete the task."""
     
     def test_with_semantic_kernel(
         self,
-        adapter: HuggingFaceAdapter,
+        adapter: BaseAdapter,
         task: str,
         protocol: ProtocolType = None
     ) -> TestResult:
@@ -506,29 +502,29 @@ Your answer MUST be only in the CVS format as specified above.
             # 1.1.1	No
             "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.1.1, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Assess the quality of image descriptions for each of the images present in the following URL. URL: https://www.bbc.com/culture/article/20251215-avatar-fire-and-ash-review",
             # 1.2.2	Yes
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/captions-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether captions are available or not in the videos provided in the following URL. If captions are available, verify also whether captions provided are open or closed caption. URL: https://www.youtube.com/watch?v=JKL_JhJbrHA",
-            # 1.2.2	No
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/captions-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether captions are available or not in the videos provided in the following URL. If captions are available, verify also whether captions provided are open or closed caption. URL: https://www.youtube.com/watch?v=27RTgiTL5P4",
-            # 1.2.5	Yes
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.5, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/audio-description-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether audiodescription is available or not for the following URL. URL: https://www.youtube.com/watch?v=JKL_JhJbrHA",
-            # 1.2.5	No
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.5, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/audio-description-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether audiodescription is available or not for the following URL. URL: https://www.youtube.com/watch?v=27RTgiTL5P4",
-            # 1.2.6	Yes
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.6, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sign-language-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether there is sign language is available or not in the following URL. URL: https://www.youtube.com/watch?v=JKL_JhJbrHA",
-            # 1.2.6	No
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.6, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sign-language-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether there is sign language is available or not in the following URL. URL: https://www.youtube.com/watch?v=27RTgiTL5P4",
-            # 1.3.3	Yes
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.3.3, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sensory-characteristics.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is any information displayed based on sensory characteristics for the following URL. URL: https://www.atgtickets.com/shows/disneys-the-lion-king/lyceum-theatre/tickets/FF1F0145-16A1-42A4-89DC-C36CD090617A",
-            # 1.3.3	No
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.3.3, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sensory-characteristics.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is any information displayed based on sensory characteristics for the following URL. URL: https://checkout.ingresso.com/assentos?sessionId=83453356&partnership=home",
-            # 2.1.2	Yes
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.1.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is a keyboard trap in the following URL. If needed, explore different interaction paths to detect keyboard traps. URL: https://www.singaporeair.com/pt_BR/br/home#/book/bookflight",
-            # 2.1.2	No
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.1.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is a keyboard trap in the following URL. If needed, explore different interaction paths to detect keyboard traps. URL: https://www.aa.com.br/homePage.do?locale=pt_BR",
-            # 2.3.2	Yes
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.3.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/three-flashes.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether if there is content flashing over three times per second in the following URL. URL: https://www.youtube.com/watch?v=GSTB2MVHtMk",
-            # 2.3.2	No
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.3.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/three-flashes.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether if there is content flashing over three times per second in the following URL. URL: https://www.youtube.com/watch?v=rutR-jrfsiM",
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/captions-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether captions are available or not in the videos provided in the following URL. If captions are available, verify also whether captions provided are open or closed caption. URL: https://www.youtube.com/watch?v=JKL_JhJbrHA",
+            # # 1.2.2	No
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/captions-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether captions are available or not in the videos provided in the following URL. If captions are available, verify also whether captions provided are open or closed caption. URL: https://www.youtube.com/watch?v=27RTgiTL5P4",
+            # # 1.2.5	Yes
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.5, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/audio-description-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether audiodescription is available or not for the following URL. URL: https://www.youtube.com/watch?v=JKL_JhJbrHA",
+            # # 1.2.5	No
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.5, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/audio-description-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether audiodescription is available or not for the following URL. URL: https://www.youtube.com/watch?v=27RTgiTL5P4",
+            # # 1.2.6	Yes
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.6, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sign-language-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether there is sign language is available or not in the following URL. URL: https://www.youtube.com/watch?v=JKL_JhJbrHA",
+            # # 1.2.6	No
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.6, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sign-language-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether there is sign language is available or not in the following URL. URL: https://www.youtube.com/watch?v=27RTgiTL5P4",
+            # # 1.3.3	Yes
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.3.3, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sensory-characteristics.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is any information displayed based on sensory characteristics for the following URL. URL: https://www.atgtickets.com/shows/disneys-the-lion-king/lyceum-theatre/tickets/FF1F0145-16A1-42A4-89DC-C36CD090617A",
+            # # 1.3.3	No
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.3.3, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sensory-characteristics.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is any information displayed based on sensory characteristics for the following URL. URL: https://checkout.ingresso.com/assentos?sessionId=83453356&partnership=home",
+            # # 2.1.2	Yes
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.1.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is a keyboard trap in the following URL. If needed, explore different interaction paths to detect keyboard traps. URL: https://www.singaporeair.com/pt_BR/br/home#/book/bookflight",
+            # # 2.1.2	No
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.1.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is a keyboard trap in the following URL. If needed, explore different interaction paths to detect keyboard traps. URL: https://www.aa.com.br/homePage.do?locale=pt_BR",
+            # # 2.3.2	Yes
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.3.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/three-flashes.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether if there is content flashing over three times per second in the following URL. URL: https://www.youtube.com/watch?v=GSTB2MVHtMk",
+            # # 2.3.2	No
+            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.3.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/three-flashes.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether if there is content flashing over three times per second in the following URL. URL: https://www.youtube.com/watch?v=rutR-jrfsiM",
 
             # TODO: Add more Ceweb.br relevant tasks
             # CORDATA

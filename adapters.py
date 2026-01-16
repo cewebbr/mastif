@@ -1,5 +1,5 @@
 """
-HuggingFace model adapter for unified model access
+HuggingFace and OpenAI model adapters for unified model access
 """
 
 import os
@@ -9,8 +9,27 @@ import openai
 from langchain_community.llms import HuggingFaceEndpoint
 from llama_index.core.llms import CustomLLM, CompletionResponse, LLMMetadata
 from llama_index.core.llms.callbacks import llm_completion_callback
+from abc import ABC, abstractmethod
 
-class HuggingFaceAdapter:
+class BaseAdapter(ABC):
+    """
+    Abstract base class for all model adapters.
+    Ensures a consistent interface for all adapters.
+    """
+
+    @property
+    @abstractmethod
+    def model_name(self) -> str:
+        pass
+
+    @abstractmethod
+    def generate(self, prompt: str, **kwargs) -> str:
+        """
+        Generate a response from the model given a prompt.
+        """
+        pass
+
+class HuggingFaceAdapter(BaseAdapter):
     """
     Unified adapter for HuggingFace models
     
@@ -27,10 +46,14 @@ class HuggingFaceAdapter:
             model_name: HuggingFace model identifier
             api_key: HuggingFace API token
         """
-        self.model_name = model_name
+        self._model_name = model_name
         self.api_key = api_key or os.getenv("HF_TOKEN")
         self.client = InferenceClient(token=self.api_key)
     
+    @property
+    def model_name(self) -> str:
+        return self._model_name
+
     def generate(self, prompt: str, **kwargs) -> str:
         """Generate text completion from the model"""
         try:
@@ -89,7 +112,7 @@ class HuggingFaceAdapter:
         
         return HuggingFaceLLM(adapter=self) #FIXME Model name not propagating correctly
     
-class OpenAIAdapter:
+class OpenAIAdapter(BaseAdapter):
     """
     Unified adapter for OpenAI models
     
@@ -106,9 +129,13 @@ class OpenAIAdapter:
             model_name: OpenAI model identifier
             api_key: OpenAI API key
         """
-        self.model_name = model_name or os.getenv("JUDGE_MODEL")
+        self._model_name = model_name or os.getenv("JUDGE_MODEL")
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
     
+    @property
+    def model_name(self) -> str:
+        return self._model_name
+
     def generate(self, prompt: str, **kwargs) -> str:
         """Generate text completion from the model"""
         try:
