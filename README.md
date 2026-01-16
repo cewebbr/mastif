@@ -56,6 +56,7 @@ pip install crewai smolagents
 pip install langchain langchain-community langgraph
 pip install llama-index
 pip install semantic-kernel
+pip install transformers
 ```
 
 ## Usage

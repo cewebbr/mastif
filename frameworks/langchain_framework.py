@@ -6,9 +6,9 @@ LangChain implements the ReAct (Reasoning + Acting) pattern.
 
 import json
 from typing import List, Dict
-from langchain.agents import AgentExecutor, create_react_agent
-from langchain.tools import Tool
-from langchain.prompts import PromptTemplate
+from langchain.agents import create_agent
+from langchain_community.tools import Tool
+from langchain_core.prompts import PromptTemplate
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
@@ -17,9 +17,6 @@ from domain_model import ReasoningStep
 class LangChainAgent:
     """
     LangChain ReAct Agent Integration
-    
-    LangChain implements the ReAct (Reasoning + Acting) pattern,
-    which interleaves reasoning steps with action execution.
     """
     
     def __init__(self, adapter, protocol=None):
@@ -121,15 +118,8 @@ Thought: {agent_scratchpad}"""
 
             prompt = PromptTemplate.from_template(template)
             
-            # Create and execute agent
-            agent = create_react_agent(self.llm, self.tools, prompt)
-            agent_executor = AgentExecutor(
-                agent=agent,
-                tools=self.tools,
-                verbose=True,
-                handle_parsing_errors=True,
-                max_iterations=5
-            )
+            # Create the agent using the new API
+            agent = create_agent(self.llm, self.tools, prompt)
             
             self.reasoning_steps.append(ReasoningStep(
                 step_number=2,
@@ -138,7 +128,7 @@ Thought: {agent_scratchpad}"""
                 action_input=task
             ))
             
-            result = agent_executor.invoke({"input": task})
+            result = agent.invoke({"input": task})
             
             self.reasoning_steps.append(ReasoningStep(
                 step_number=len(self.reasoning_steps) + 1,
