@@ -4,25 +4,26 @@
 
 ## Overview
 
-The MASTIF (Multi-Agent System TestIng Framework) is a comprehensive benchmarking suite for evaluating agentic AI technologies across multiple frameworks, protocols, and large language models (LLMs). It supports both standard user-defined tasks and the Mind2Web benchmark, enabling reproducible assessment of agent reasoning, tool use, and web interaction capabilities.
+MASTIF (Multi-Agent System TestIng Framework) is a comprehensive benchmarking suite for evaluating agentic AI technologies across multiple frameworks, protocols, and large language models (LLMs). It supports both standard user-defined tasks and the [https://github.com/OSU-NLP-Group/Mind2Web](Mind2Web benchmark), enabling reproducible assessment of agent reasoning, tool use, and web interaction capabilities.
 
 **Key Capabilities:**
 
-- **Multi-Framework Support:** Evaluate agents built with CrewAI, Smolagents, LangChain, LangGraph, LlamaIndex, and Semantic Kernel.
+- **Multi-Framework Support:** Evaluates agents built with CrewAI, Smolagents, LangChain, LangGraph, LlamaIndex, and Semantic Kernel.
 - **Multi-Model Support:** Supports models from both HuggingFace and OpenAI models, including open-source and proprietary LLMs.
-- **Protocol Flexibility:** Assess agent performance under various prompting and reasoning protocols (e.g., MCP, A2A, ACP, standard).
-- **Mind2Web Benchmark Integration:** Run large-scale, real-world web interaction tasks from the Mind2Web dataset, with automatic sampling and domain breakdowns.
-- **Token Consumption Metrics:** Track and report reasoning tokens, output tokens, and total tokens spent for each test, framework, protocol, and model.
-- **Detailed Metrics Collection:** Capture reasoning steps, latency, task understanding, task deviation, task completion, and domain-specific performance.
-- **Extensible Tool Use:** Evaluate agent tool-calling and web search capabilities.
+- **Protocol Flexibility:** Assesses agent performance under various prompting and reasoning protocols (e.g., MCP, A2A, ACP, standard).
+- **Mind2Web Benchmark Integration:** Runs large-scale, real-world web interaction tasks from the Mind2Web dataset, with automatic sampling and domain breakdowns.
+- **Token Consumption Metrics:** Tracks and reports reasoning tokens, output tokens, and total tokens spent for each test, framework, protocol, and model.
+- **Detailed Metrics Collection:** Captures reasoning steps, latency, task understanding, task deviation, task completion, and domain-specific performance.
+- **Extensible Tool Use:** Evaluates agent tool-calling and web search capabilities.
 - **Flexible Configuration:** Supports switching between models, frameworks, and protocols via environment variables or code.
-- **Comprehensive Output:** Export results in machine-readable (JSON) formats with detailed summaries and breakdowns. Files `out-standard.txt` and `out-mind2web.txt` show examples of human readable console output.
+- **Comprehensive Output:** Exports results in machine-readable (JSON) formats with detailed summaries and breakdowns. Files `out-standard.txt` and `out-mind2web.txt` show examples of human readable console output.
 - **Judge Model Integration:** You can use LLM-as-a-judge (e.g., GPT-4o-mini) for scoring and evaluation of agent outputs.
 
-This framework is designed for researchers, developers, and practitioners who want to systematically compare agentic AI stacks, understand their strengths and weaknesses, and drive improvements in agent reasoning and web automation.
+MASTIF framework is designed for researchers, developers, and practitioners who want to systematically compare agentic AI stacks, understand their strengths and weaknesses, and drive improvements in agent reasoning and web automation.
+
+## Class Diagram
 
 ![Class Diagram](class_diagram.png)
-
 
 ## Installation
 
