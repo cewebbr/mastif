@@ -29,6 +29,22 @@ MASTIF framework is designed for researchers, developers, and practitioners who 
 
 ## Installation
 
+### 1. Create and Activate a Virtual Environment
+
+On macOS/Linux:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+On Windows:
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### 2. Install Dependencies
+
 ```bash
 # Install additional dependency for Mind2Web
 pip install datasets
