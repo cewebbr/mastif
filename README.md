@@ -1,6 +1,6 @@
 # MASTIF (Multi-Agent System TestIng Framework)
 
-<div style="text-align: center;"> <img src="images/mastif-logo.jpg" with="30%" alt="Black and white logo showing the head of a mastiff breed dog looking forward"> </div>
+<div style="text-align: center;"> <img src="images/mastif-logo.jpg" with="200px" alt="Black and white logo showing the head of a mastiff breed dog looking forward"> </div>
 
 ## Overview
 
