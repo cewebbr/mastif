@@ -23,14 +23,14 @@ def main():
         # Workwed well
         # "meta-llama/Llama-3.3-70B-Instruct", 
         # "meta-llama/Llama-4-Scout-17B-16E-Instruct"
-        "gpt-4o"
+        # "gpt-4o"
         # "deepseek-ai/DeepSeek-V3.2"
 
         # Worked, but repeated info about the protocols
         # "meta-llama/Llama-3.1-8B-Instruct", 
         
         # Worked, but response was empty in multiple requests
-        # "openai/gpt-oss-20b", 
+        "openai/gpt-oss-120b", 
     ]
     
     # Get HuggingFace token
@@ -102,8 +102,7 @@ def main():
         print(f"  Total tests: {len(models_to_test) * (len(protocol_names) + len(framework_names))}")
         print("\nStarting tests...\n")
         
-        # tester.run_comprehensive_test(models_to_test, hf_token)
-        tester.run_comprehensive_test(models_to_test, open_ai_key)
+        tester.run_comprehensive_test(models_to_test)
         tester.print_summary()
         
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")

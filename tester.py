@@ -553,9 +553,9 @@ Your answer MUST be only in the CVS format as specified above.
         # Define frameworks with their test functions and arguments
         frameworks = [
             ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}),
-            ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
+            # ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
             # ("LangChain", self.test_with_langchain, {"tools": self.standard_tools}),
-            ("LangGraph", self.test_with_langgraph, {}),
+            # ("LangGraph", self.test_with_langgraph, {}),
             # ("LlamaIndex", self.test_with_llamaindex, {"tools": self.standard_tools}),
             # ("SemanticKernel", self.test_with_semantic_kernel, {})
         ]
@@ -565,8 +565,11 @@ Your answer MUST be only in the CVS format as specified above.
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
             
-            # adapter = HuggingFaceAdapter(model_name, hf_token)
-            adapter = OpenAIAdapter(model_name, api_key=hf_token)
+            if(model_name.startswith("gpt-")):
+                adapter = OpenAIAdapter(model_name)
+            else:                
+                adapter = HuggingFaceAdapter(model_name)
+            
             
             # ===== Test Protocol × Framework Combinations =====
             print(f"\n{'-'*70}")
@@ -836,7 +839,7 @@ Your answer MUST be only in the CVS format as specified above.
         
         # Default to testing all frameworks if not specified
         # frameworks = ["CrewAI", "Smolagents", "LangChain", "LangGraph", "LlamaIndex", "SemanticKernel"]
-        frameworks = ["CrewAI", "Smolagents", "LangGraph"]
+        frameworks = ["CrewAI"]
 
         # Run tests for each model
         for model_name in models:

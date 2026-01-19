@@ -48,7 +48,7 @@ class HuggingFaceAdapter(BaseAdapter):
         """
         self._model_name = model_name
         self.api_key = api_key or os.getenv("HF_TOKEN")
-        self.client = InferenceClient(token=self.api_key)
+        self.client = InferenceClient(model=model_name, token=self.api_key)
     
     @property
     def model_name(self) -> str:
@@ -59,8 +59,10 @@ class HuggingFaceAdapter(BaseAdapter):
         try:
             response = self.client.text_generation(
                 prompt,
-                max_new_tokens=kwargs.get("max_tokens", 1024),
-                temperature=kwargs.get("temperature", 0.7),
+                model=self.model_name,
+                max_new_tokens=kwargs.get("max_tokens", 1024), # TODO: Move this to config file
+                temperature=kwargs.get("temperature", 0.7), # TODO: Move this to config file
+                do_sample=kwargs.get("do_sample", True)
             )
             return response
         except Exception as e:
@@ -143,8 +145,8 @@ class OpenAIAdapter(BaseAdapter):
             response = client.chat.completions.create(
                 model=self.model_name,
                 messages=[{"role": "user", "content": prompt}],
-                max_tokens=kwargs.get("max_tokens", 1024),
-                temperature=kwargs.get("temperature", 0.7),
+                max_tokens=kwargs.get("max_tokens", 1024), # TODO: Move this to config file
+                temperature=kwargs.get("temperature", 0.7), # TODO: Move this to config file
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
