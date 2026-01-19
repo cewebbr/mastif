@@ -29,7 +29,6 @@ from transformers import AutoTokenizer
 import tiktoken
 import yaml
 
-# TODO: Update name of this class to match the new repo name
 class Mastif:
     """
     Main testing framework for comprehensive agentic technology evaluation

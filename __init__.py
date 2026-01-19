@@ -1,8 +1,8 @@
 """
-HuggingFace Agentic Stack Testing Framework
+Agentic Stack Testing Framework
 
 A framework for testing and evaluating different agentic
-technology stacks using HuggingFace models.
+technology stacks using different inference providers.
 
 Package structure:
 - domain_model: Domain model (dataclasses) and enums
@@ -25,5 +25,6 @@ __all__ = [
     'ReasoningStep',
     'TestResult',
     'HuggingFaceAdapter',
+    'OpenAIAdapter',
     'Mastif',
 ]
