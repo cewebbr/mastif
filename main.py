@@ -19,7 +19,6 @@ def main():
     if len(sys.argv) > 1:
         config_path = sys.argv[1]
     else:
-        # TODO: Change to an example test config with a simple experiment
         config_path = "experiments/example.yaml" # Default config file
 
     # Configuration

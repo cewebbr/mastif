@@ -55,16 +55,25 @@ class HuggingFaceAdapter(BaseAdapter):
         return self._model_name
 
     def generate(self, prompt: str, **kwargs) -> str:
-        """Generate text completion from the model"""
+        """Generate conversational response from the model"""
         try:
-            response = self.client.text_generation(
-                prompt,
+            # Conversational models expect a list of message objects
+            messages = [{"role": "user", "content": prompt}]
+            
+            response = self.client.chat_completion(
+                messages=messages,
                 model=self.model_name,
-                max_new_tokens=kwargs.get("max_tokens", 1024), # TODO: Move this to config file
-                temperature=kwargs.get("temperature", 0.7), # TODO: Move this to config file
-                do_sample=kwargs.get("do_sample", True)
+                max_tokens=kwargs.get("max_tokens", 1024),
+                temperature=kwargs.get("temperature", 0.7),
+                # 'do_sample' is often inferred from temperature in chat_completion,
+                # but can be passed via kwargs if the specific model requires it.
+                **kwargs 
             )
-            return response
+            
+            # chat_completion returns a FullChatCompletion object; 
+            # we extract the text from the first choice.
+            return response.choices[0].message.content
+            
         except Exception as e:
             return f"Error: {str(e)}"
     

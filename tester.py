@@ -789,7 +789,7 @@ Please respond according to this protocol structure and complete the task."""
         evaluator = Mind2WebEvaluator(judge_adapter=judge_adapter)
 
         # Run tests for each model
-        for model_name in models: # TODO: load models from config
+        for model_name in models:
             print(f"\n{'='*70}")
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
