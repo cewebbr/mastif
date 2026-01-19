@@ -20,7 +20,7 @@ def main():
         config_path = sys.argv[1]
     else:
         # TODO: Change to an example test config with a simple experiment
-        config_path = "experiments/w4a2026.yaml" # Default config file
+        config_path = "experiments/example.yaml" # Default config file
 
     # Configuration
     # TODO: Add this to config file as well

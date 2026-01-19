@@ -738,13 +738,33 @@ Please respond according to this protocol structure and complete the task."""
             num_tasks: Number of tasks to evaluate (None for all, default 10)
             frameworks: List of frameworks to test (None for all)
         """
+
         # Initialize Mind2Web loader
         loader = Mind2WebLoader(split="train")
         
         # Load and sample tasks
         tasks = loader.get_task_sample(num_tasks=num_tasks)
         
-        # TODO: retrieve models, judge model, tools, protocols, etc. from config
+        # Load config
+        config = self.load_experiment_config(config_path)
+
+        # Extract experiment configuration
+        models = config['models']
+        protocols = [ProtocolType[p] for p in config['protocols']]
+        framework_names = config['frameworks']
+        tools = config.get('tools', self.standard_tools)
+
+        # Map framework names to functions
+        framework_map = {
+            "CrewAI": (self.test_with_crewai, {"role": "Web Automation Specialist"}),
+            "Smolagents": (self.test_with_smolagents, {"tools": tools}),
+            "LangChain": (self.test_with_langchain, {"tools": tools}),
+            "LangGraph": (self.test_with_langgraph, {}),
+            "LlamaIndex": (self.test_with_llamaindex, {"tools": tools}),
+            "SemanticKernel": (self.test_with_semantic_kernel, {})
+        }
+
+        frameworks = [(name, *framework_map[name]) for name in framework_names]
 
         if not tasks:
             print("Failed to load Mind2Web tasks!")
@@ -767,11 +787,6 @@ Please respond according to this protocol structure and complete the task."""
         # Initialize evaluator
         judge_adapter = OpenAIAdapter()
         evaluator = Mind2WebEvaluator(judge_adapter=judge_adapter)
-        
-        # Default to testing all frameworks if not specified
-        # TODO: Get frameworks from config instead
-        # frameworks = ["CrewAI", "Smolagents", "LangChain", "LangGraph", "LlamaIndex", "SemanticKernel"]
-        frameworks = ["CrewAI"]
 
         # Run tests for each model
         for model_name in models: # TODO: load models from config
@@ -786,7 +801,7 @@ Please respond according to this protocol structure and complete the task."""
             print("PROTOCOL TESTS")
             print(f"{'-'*70}")
 
-            for protocol in [ProtocolType.MCP, ProtocolType.A2A, ProtocolType.ACP, ProtocolType.STANDARD]:
+            for protocol in protocols:
                 protocol_results = []
                 for task in tasks:
                     print(f"\n  Testing with {protocol.value} on task: {task['confirmed_task'][:40]}...")

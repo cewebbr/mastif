@@ -1,0 +1,77 @@
+experiment:
+  name: "Cordata 2026"
+  description: "Test how agents retrieve and use open data from Brazilian research repositories."
+  
+models:
+  # - "gpt-4o"
+  # - "meta-llama/Llama-3.3-70B-Instruct"
+  # - "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+  - "deepseek-ai/DeepSeek-V3.2"  
+  # - "openai/gpt-oss-120b"
+  
+protocols:
+  - "STANDARD"
+  # - "MCP"
+  # - "A2A"
+  # - "ACP"
+
+frameworks:
+  - "CrewAI"
+  # - "Smolagents"
+  # - "LangChain"
+  # - "LangGraph"
+  # - "LlamaIndex"
+  # - "SemanticKernel"
+
+prompt_template: |
+  You are an Accessibility Expert (WCAG Specialist) with knowledge about WCAG 2.2 and ABNT NBR 17225. 
+  Your expertise is crucial in making the web more accessible for everyone. 
+  Your job is to perform the following task:
+
+  {task}
+
+  Be confident in your expertise.
+  Do not provide hypothetical answers.
+  Use any available tool that is a fit for performing the given task.
+
+
+tasks:
+  - "Provide me a set of accessibility tools I can use while accessing the web in a way to overcome existing web accessibility barriers."
+  - "Create a report about accessibility issues for website www.globo.com based on requirements A and AA from ABNT NBR 17225."
+  - "Assess ABNT NBR 17225 and recommend how to make it less succeptible to short-term technology advances."
+  - "Simulate access to the website www.globo.com using a screen reader. Identify and list all accessibility barriers found during the navigation."
+  - "Create a figure description for the image located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html. Consider the contex of the surrounding text on the webpage."
+  - "Evaluate the HTML code of the webpage located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html and provide suggestions on how to improve code semantices following ABNT NBR 17225."
+  - "Create a heading structure for the webpage located at URLhttps://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html following best practices for web accessibility and ABNT NBR 17225 guidelines."
+
+tools:
+  - name: "web_browser"
+  - description: "Browse web pages and extract content"
+  - name: "search"
+  - description: "Search for information on the web"
+  - name: "calculate"
+  - description: "Perform mathematical calculations"
+  - name: "analyze"
+  - description: "Analyze data and generate insights" 
+  - name: "wikipedia"
+  - description: "Retrieve information from Wikipedia" 
+  - name: "code_interpreter"
+  - description: "Interpret and execute code snippets" 
+  - name: "click_element"
+  - description: "Click on a web element" 
+  - name: "type_text"
+  - description: "Type text into a field" 
+  - name: "navigate"
+  - description: "Navigate to a URL" 
+  - name: "extract_table"
+  - description: "Extract tables from web pages" 
+  - name: "summarize"
+  - description: "Summarize text or web content" 
+  - name: "translate"
+  - description: "Translate text between languages" 
+  - name: "calendar"
+  - description: "Manage calendar events" 
+  - name: "download"
+  - description: "Download files from the web"
+  # - name: "file_upload"  # Not now    
+  # - description: "Upload a file to a website" # Not now    
