@@ -6,32 +6,27 @@ Usage:
 """
 
 import os
+import sys
 import datetime
 from tester import AgenticStackTester
 
 # TODO: Compute the number of tests dynamically based on selected models, protocols, and frameworks and provide a warning before people start the tests. It is necessary inform that all combinations will be tested and this may incurr a high number of API calls and associated costs.
 
-
 def main():
     """Main execution function with Mind2Web support"""
     
+    # Check for config file argument
+    if len(sys.argv) > 1:
+        config_path = sys.argv[1]
+    else:
+        # TODO: Change to an example test config with a simple experiment
+        config_path = "experiments/w4a2026.yaml" # Default config file
+
     # Configuration
+    # TODO: Add this to config file as well
     MODE = os.getenv("TEST_MODE", "standard")  # "standard" or "mind2web"
     MIND2WEB_NUM_TASKS = int(os.getenv("MIND2WEB_NUM_TASKS", "10"))  # 0 to all tasks
     
-    models_to_test = [ 
-        # Workwed well
-        # "meta-llama/Llama-3.3-70B-Instruct", 
-        # "meta-llama/Llama-4-Scout-17B-16E-Instruct"
-        # "gpt-4o"
-        # "deepseek-ai/DeepSeek-V3.2"
-
-        # Worked, but repeated info about the protocols
-        # "meta-llama/Llama-3.1-8B-Instruct", 
-        
-        # Worked, but response was empty in multiple requests
-        "openai/gpt-oss-120b", 
-    ]
     
     # Get HuggingFace token
     hf_token = os.getenv("HF_TOKEN")
@@ -55,15 +50,11 @@ def main():
         print("="*70)
         print("MIND2WEB BENCHMARK MODE")
         print("="*70)
-        print(f"\nConfiguration:")
-        print(f"  Models: {len(models_to_test)}")
-        print(f"  Tasks: {MIND2WEB_NUM_TASKS if MIND2WEB_NUM_TASKS > 0 else 'ALL'}")
-        print(f"  Frameworks: All 6 frameworks")
+        # TODO: Print info from config file
         
         # Run Mind2Web evaluation
         tester.run_mind2web_evaluation(
-            models=models_to_test,
-            hf_token=hf_token,
+            config_path=config_path,
             num_tasks=MIND2WEB_NUM_TASKS if MIND2WEB_NUM_TASKS > 0 else None
         )
         tester.print_summary()
@@ -88,21 +79,22 @@ def main():
         print("="*70)
         print("STANDARD TESTING MODE")
         print("="*70)
-        print("\nTesting Configuration:")
-        print(f"  Models: {len(models_to_test)}")
+        # TODO: Print info from config file
+        # print("\nTesting Configuration:")
+        # print(f"  Models: {len(models_to_test)}")
 
-        # Dynamically get protocols and frameworks from tester
-        protocol_names = [p.value if hasattr(p, "value") else str(p) for p in tester.get_supported_protocols()]
-        framework_names = tester.get_supported_frameworks()
+        # # Dynamically get protocols and frameworks from tester
+        # protocol_names = [p.value if hasattr(p, "value") else str(p) for p in tester.get_supported_protocols()]
+        # framework_names = tester.get_supported_frameworks()
 
-        print(f"  Protocols: {', '.join(protocol_names)}")
-        print(f"  Frameworks: {', '.join(framework_names)}")
-        print(f"\n  Total tests per model: {len(protocol_names) + len(framework_names)} "
-              f"({len(protocol_names)} protocols + {len(framework_names)} frameworks)")
-        print(f"  Total tests: {len(models_to_test) * (len(protocol_names) + len(framework_names))}")
-        print("\nStarting tests...\n")
+        # print(f"  Protocols: {', '.join(protocol_names)}")
+        # print(f"  Frameworks: {', '.join(framework_names)}")
+        # print(f"\n  Total tests per model: {len(protocol_names) + len(framework_names)} "
+        #       f"({len(protocol_names)} protocols + {len(framework_names)} frameworks)")
+        # print(f"  Total tests: {len(models_to_test) * (len(protocol_names) + len(framework_names))}")
+        # print("\nStarting tests...\n")
         
-        tester.run_comprehensive_test(models_to_test)
+        tester.run_comprehensive_test(config_path)
         tester.print_summary()
         
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")

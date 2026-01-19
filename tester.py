@@ -27,6 +27,7 @@ from mind2web_loader import Mind2WebLoader
 from mind2web_evaluator import Mind2WebEvaluator
 from transformers import AutoTokenizer
 import tiktoken
+import yaml
 
 # TODO: Update name of this class to match the new repo name
 class AgenticStackTester:
@@ -66,6 +67,12 @@ class AgenticStackTester:
             {"name": "download", "description": "Download files from the web"}
             # {"name": "file_upload", "description": "Upload a file to a website"}, # Not now
         ]
+
+    def load_experiment_config(self, config_path: str) -> Dict:
+        """Load experiment configuration from YAML file"""
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        return config
 
     def test_with_protocol(
         self,
@@ -446,119 +453,41 @@ Please respond according to this protocol structure and complete the task."""
                 error=str(e)
             )
     
-    def run_comprehensive_test(self, models: List[str], hf_token: Optional[str] = None):
+    def run_comprehensive_test(self, config_path: str, api_key: Optional[str] = None):
         """
         Run comprehensive tests across all models, protocols, and frameworks.
         Tests all combinations of protocols x frameworks for each model.
         
         Args:
-            models: List of HuggingFace model identifiers
-            hf_token: HuggingFace API token
+            config_path: Path to the experiment configuration file
+            api_key: API token for the model (either HuggingFace or OpenAI)
         """
         
-        # TODO: move template, inner prompt, and tasks to config files to keep this method cleaner and allow multiple experiments to be setup.
-        # W4A 2026 - Experiment
-        prompt_template = """"
-You are an Accessibility Expert (WCAG Specialist) responsible for detecting WCAG 2.2 violations on websites. 
-Your expertise is crucial in making the web more accessible for everyone. 
-Please analyze the provided URL, related HTML, CSS, Javascript and additional audiovisual elements for compliance with the specified WCAG Success Criterion.
-
-{task}
-
-Be confident in your expertise. 
-Do not omit any issue. 
-After analyzing all elements, do not provide individual element-by-element analysis first. 
-Instead, summarize the overall result.
-
-Use any available tool that is a fit for performing the given task.
-You must need to base your answers only on provided URL and success criterion.
-If the web page contains asynchronous elements, make sure to wait until they load before performing the task.
-Make sure you evaluate all instances of appropriate tags, content, video, etc. of the given web page.
-
-Your output must consist of one of the following test results following WCAG accessibility conformance testing rules (WCAG-ACT):
-Passed (P): when corresponding success criterion was checked and the content was deemed to pass it;
-Failed (F): when the corresponding success criterion was checked and the content was deemed to fail it;
-Cannot Tell (CT): when you cannot provide an outcome for the corresponding success criterion;
-Not Present (NP): when there is no content applicable to the corresponding success criterion.
-
-Beyond test result, your assessment must include a confidence score. 
-Hence, based on the tools you utilized and WCAG 2.2 documentation, inform a confidence score ranging from 0.0 to 1.0 for each assessment performed.
-
-Do not provide hypothetical answers. If you cannot determine an answer, provide 'Cannot Tell' (CT) as the test result with an appropriate confidence score and explain in the rationale the cause for that.
-
-Format your output in a CSV format according to the example shown next:
-Success Criteria, URL, Instance, Test Result, Confidence Score, Code context, Rationale
-1.1.1, https://www.youtube.com, 1, P, 0.4, <img src="..." alt="">, This alt text describes the image correctly in context.
-1.1.1, https://www.youtube.com, 2, CT, 0.6, <img src="..." alt="">, I cannot tell whether this image requires alt text or not.
-1.1.1, https://www.youtube.com, 3, F, 0.9, <img src="..." alt="">, This image requires alt text, but it is not providing an informative one.
-
-Your answer MUST be only in the CVS format as specified above.
-"""
-
-        # Define test tasks for different scenarios
-        inner_tasks = [
-            # W4A 2026 - Experiment
-            # 1.1.1	Yes
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.1.1, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Assess the quality of image descriptions for each of the images present in the following URL. URL: https://www.indiatimes.com/trending/pandora-looks-better-than-ever-but-netizens-hail-the-visuals-of-avatar-fire-and-ash-yet-slam-storytellingcheck-out-reactions/articleshow/126069886.html",
-            # 1.1.1	No
-            "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.1.1, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Assess the quality of image descriptions for each of the images present in the following URL. URL: https://www.bbc.com/culture/article/20251215-avatar-fire-and-ash-review",
-            # 1.2.2	Yes
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/captions-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether captions are available or not in the videos provided in the following URL. If captions are available, verify also whether captions provided are open or closed caption. URL: https://www.youtube.com/watch?v=JKL_JhJbrHA",
-            # # 1.2.2	No
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/captions-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether captions are available or not in the videos provided in the following URL. If captions are available, verify also whether captions provided are open or closed caption. URL: https://www.youtube.com/watch?v=27RTgiTL5P4",
-            # # 1.2.5	Yes
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.5, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/audio-description-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether audiodescription is available or not for the following URL. URL: https://www.youtube.com/watch?v=JKL_JhJbrHA",
-            # # 1.2.5	No
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.5, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/audio-description-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether audiodescription is available or not for the following URL. URL: https://www.youtube.com/watch?v=27RTgiTL5P4",
-            # # 1.2.6	Yes
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.6, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sign-language-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether there is sign language is available or not in the following URL. URL: https://www.youtube.com/watch?v=JKL_JhJbrHA",
-            # # 1.2.6	No
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.2.6, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sign-language-prerecorded.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether there is sign language is available or not in the following URL. URL: https://www.youtube.com/watch?v=27RTgiTL5P4",
-            # # 1.3.3	Yes
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.3.3, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sensory-characteristics.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is any information displayed based on sensory characteristics for the following URL. URL: https://www.atgtickets.com/shows/disneys-the-lion-king/lyceum-theatre/tickets/FF1F0145-16A1-42A4-89DC-C36CD090617A",
-            # # 1.3.3	No
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 1.3.3, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/sensory-characteristics.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is any information displayed based on sensory characteristics for the following URL. URL: https://checkout.ingresso.com/assentos?sessionId=83453356&partnership=home",
-            # # 2.1.2	Yes
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.1.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is a keyboard trap in the following URL. If needed, explore different interaction paths to detect keyboard traps. URL: https://www.singaporeair.com/pt_BR/br/home#/book/bookflight",
-            # # 2.1.2	No
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.1.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify if there is a keyboard trap in the following URL. If needed, explore different interaction paths to detect keyboard traps. URL: https://www.aa.com.br/homePage.do?locale=pt_BR",
-            # # 2.3.2	Yes
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.3.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/three-flashes.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether if there is content flashing over three times per second in the following URL. URL: https://www.youtube.com/watch?v=GSTB2MVHtMk",
-            # # 2.3.2	No
-            # "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.3.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/three-flashes.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether if there is content flashing over three times per second in the following URL. URL: https://www.youtube.com/watch?v=rutR-jrfsiM",
-
-            # TODO: Add more Ceweb.br relevant tasks
-            # CORDATA
-            # "Look for dissertations and thesis published in Brazil about open data and open research in which datasets were published with research results.", 
-            # 
-            # Accessibility
-            # "Provide me a set of accessibility tools I can use while accessing the web in a way to overcome existing web accessibility barriers.", 
-            # "Create a report about accessibility issues for website www.globo.com based on requirements A and AA from ABNT NBR 17225.",
-            # "Assess ABNT NBR 17225 and recommend how to make it less succeptible to short-term technology advances.",
-            # "Simulate access to the website www.globo.com using a screen reader. Identify and list all accessibility barriers found during the navigation.",
-            # "Create a figure description for the image located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html. Consider the contex of the surrounding text on the webpage.",
-            # "Evaluate the HTML code of the webpage located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html and provide suggestions on how to improve code semantices following ABNT NBR 17225.",
-            # "Create a heading structure for the webpage located at URLhttps://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html following best practices for web accessibility and ABNT NBR 17225 guidelines.",
-            # 
-            # CGI.br
-            # "Prepare a report about new laws regarding AI use on the web. Group laws by country or region, if applicable. List people proposing the laws, references, and a two-paragraph summary of each proposal." 
-        ]
+        # Load config
+        config = self.load_experiment_config(config_path)
+    
+        # Extract experiment configuration
+        models = config['models']
+        protocols = [ProtocolType[p] for p in config['protocols']]
+        framework_names = config['frameworks']
+        prompt_template = config['prompt_template']
+        inner_tasks = config['tasks']
+        tools = config.get('tools', self.standard_tools)    
         
+        # Format tasks with template
         test_tasks = [prompt_template.format(task=task) for task in inner_tasks]
-
-        # Define protocols to test
-        # protocols = [ProtocolType.MCP, ProtocolType.A2A, ProtocolType.ACP, ProtocolType.STANDARD]
-        protocols = [ProtocolType.STANDARD]
         
-        # Define frameworks with their test functions and arguments
-        frameworks = [
-            ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}),
-            # ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
-            # ("LangChain", self.test_with_langchain, {"tools": self.standard_tools}),
-            # ("LangGraph", self.test_with_langgraph, {}),
-            # ("LlamaIndex", self.test_with_llamaindex, {"tools": self.standard_tools}),
-            # ("SemanticKernel", self.test_with_semantic_kernel, {})
-        ]
+        # Map framework names to functions
+        framework_map = {
+            "CrewAI": (self.test_with_crewai, {"role": "Web Automation Specialist"}),
+            "Smolagents": (self.test_with_smolagents, {"tools": tools}),
+            "LangChain": (self.test_with_langchain, {"tools": tools}),
+            "LangGraph": (self.test_with_langgraph, {}),
+            "LlamaIndex": (self.test_with_llamaindex, {"tools": tools}),
+            "SemanticKernel": (self.test_with_semantic_kernel, {})
+        }
+
+        frameworks = [(name, *framework_map[name]) for name in framework_names]
         
         for model_name in models:
             print(f"\n{'='*70}")
@@ -795,7 +724,7 @@ Your answer MUST be only in the CVS format as specified above.
 
     def run_mind2web_evaluation(
         self,
-        models: List[str],
+        config_path: str,
         hf_token: Optional[str] = None,
         num_tasks: Optional[int] = 10,
         frameworks: Optional[List[str]] = None
@@ -804,7 +733,7 @@ Your answer MUST be only in the CVS format as specified above.
         Run evaluation on Mind2Web benchmark tasks
         
         Args:
-            models: List of HuggingFace model identifiers
+            config_path: Path to the experiment configuration file
             hf_token: HuggingFace API token
             num_tasks: Number of tasks to evaluate (None for all, default 10)
             frameworks: List of frameworks to test (None for all)
@@ -815,6 +744,8 @@ Your answer MUST be only in the CVS format as specified above.
         # Load and sample tasks
         tasks = loader.get_task_sample(num_tasks=num_tasks)
         
+        # TODO: retrieve models, judge model, tools, protocols, etc. from config
+
         if not tasks:
             print("Failed to load Mind2Web tasks!")
             return
@@ -838,11 +769,12 @@ Your answer MUST be only in the CVS format as specified above.
         evaluator = Mind2WebEvaluator(judge_adapter=judge_adapter)
         
         # Default to testing all frameworks if not specified
+        # TODO: Get frameworks from config instead
         # frameworks = ["CrewAI", "Smolagents", "LangChain", "LangGraph", "LlamaIndex", "SemanticKernel"]
         frameworks = ["CrewAI"]
 
         # Run tests for each model
-        for model_name in models:
+        for model_name in models: # TODO: load models from config
             print(f"\n{'='*70}")
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
