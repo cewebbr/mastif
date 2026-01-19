@@ -70,13 +70,19 @@ pip install transformers
 
 ## Usage
 
-### Standard Mode (Original Testing)
+### Standard Mode (Customized Testing)
 ```bash
 export HF_TOKEN='your_token'
 export OPEN_AI_KEY='your_key'
 export JUDGE_MODEL='gpt-4o-mini'
 export TEST_MODE='standard'
-python main.py
+```
+
+Make a copy of [experiments.yaml](./experiments/example.yaml).
+Edit and customize it according to your needs.
+
+```bash
+python main.py experiments/[your experiment file].yaml
 ```
 
 ### Mind2Web Evaluation Mode
