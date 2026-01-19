@@ -45,11 +45,20 @@ venv\Scripts\activate
 
 ### 2. Install Dependencies
 
+#### 2.1 Requirements.txt
+
 ```bash
-# Install additional dependency for Mind2Web
+# Install all dependencies considering all the specific versions used in the project
+pip install -r requirements.txt
+```
+
+#### 2.2 Fresh Install
+
+```bash
+# Install dependency for Mind2Web
 pip install datasets
 
-# Existing dependencies
+# Install all dependencies
 pip install huggingface_hub transformers torch
 pip install openai
 pip install crewai smolagents
