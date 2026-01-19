@@ -19,7 +19,7 @@ BaseAdapter; // <-- Added BaseAdapter
 
 {
 rank=same;
-AgenticStackTester;
+Mastif;
 HuggingFaceAdapter;
 OpenAIAdapter;
 OpenAIAPI [shape=component]
@@ -269,7 +269,7 @@ get_aggregate_metrics(): Dict\l
 }
 
 // Tester
-AgenticStackTester [label="{AgenticStackTester|
+Mastif [label="{Mastif|
 results: List[TestResult]\l
 protocols: Dict[ProtocolType]\l
 standard_tools: List[Dict[str, str]]\l
@@ -294,13 +294,13 @@ get_supported_protocols(): List[ProtocolType]\l
 get_supported_frameworks(): List[str]\l
 }"];
 
-// Relationships for AgenticStackTester
-AgenticStackTester -> TestResult [arrowhead=open, fontsize=9];
-AgenticStackTester -> ProtocolType [arrowhead=open, fontsize=9];
-AgenticStackTester -> MCPProtocol [arrowhead=open, fontsize=9];
-AgenticStackTester -> A2AProtocol [arrowhead=open, fontsize=9];
-AgenticStackTester -> ACPProtocol [arrowhead=open, fontsize=9];
-AgenticStackTester -> BaseAdapter [arrowhead=open, fontsize=9];
+// Relationships for Mastif
+Mastif -> TestResult [arrowhead=open, fontsize=9];
+Mastif -> ProtocolType [arrowhead=open, fontsize=9];
+Mastif -> MCPProtocol [arrowhead=open, fontsize=9];
+Mastif -> A2AProtocol [arrowhead=open, fontsize=9];
+Mastif -> ACPProtocol [arrowhead=open, fontsize=9];
+Mastif -> BaseAdapter [arrowhead=open, fontsize=9];
 
 // Frameworks are used via BaseAdapter, not directly:
 BaseAdapter -> CrewAIAgent [arrowhead=odiamond, fontsize=9];
@@ -311,8 +311,8 @@ BaseAdapter -> LlamaIndexAgent [arrowhead=odiamond, fontsize=9];
 BaseAdapter -> SemanticKernelAgent [arrowhead=odiamond, fontsize=9];
 
 // Mind2Web
-AgenticStackTester -> Mind2WebLoader [arrowhead=open, fontsize=9];
-AgenticStackTester -> Mind2WebEvaluator [arrowhead=open, fontsize=9];
+Mastif -> Mind2WebLoader [arrowhead=open, fontsize=9];
+Mastif -> Mind2WebEvaluator [arrowhead=open, fontsize=9];
 
 // Composition: LangGraphAgent contains AgentState
 LangGraphAgent -> AgentState [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9, minlen=1] ; 

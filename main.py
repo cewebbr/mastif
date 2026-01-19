@@ -1,5 +1,5 @@
 """
-Main entry point for the HuggingFace Agentic Stack Testing Framework
+Main entry point for the Agentic Stack Testing Framework
 
 Usage:
     python main.py
@@ -8,7 +8,7 @@ Usage:
 import os
 import sys
 import datetime
-from tester import AgenticStackTester
+from tester import Mastif
 
 # TODO: Compute the number of tests dynamically based on selected models, protocols, and frameworks and provide a warning before people start the tests. It is necessary inform that all combinations will be tested and this may incurr a high number of API calls and associated costs.
 
@@ -42,7 +42,7 @@ def main():
         return 1
 
     # Initialize tester
-    tester = AgenticStackTester()
+    tester = Mastif()
     
     if MODE == "mind2web":
         # Run Mind2Web evaluation

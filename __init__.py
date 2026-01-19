@@ -14,16 +14,16 @@ Package structure:
 """
 
 __version__ = "1.0.0"
-__author__ = "Agentic Testing Framework Team"
+__author__ = "Vagner Figueredo de Santana"
 
 from .domain_model import ProtocolType, ReasoningStep, TestResult
 from .adapters import HuggingFaceAdapter
-from .tester import AgenticStackTester
+from .tester import Mastif
 
 __all__ = [
     'ProtocolType',
     'ReasoningStep',
     'TestResult',
     'HuggingFaceAdapter',
-    'AgenticStackTester',
+    'Mastif',
 ]
