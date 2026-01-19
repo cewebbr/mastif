@@ -58,7 +58,7 @@ pip install -r requirements.txt
 # Install dependency for Mind2Web
 pip install datasets
 
-# Install all dependencies
+# Install dependencies
 pip install huggingface_hub transformers torch
 pip install openai
 pip install crewai smolagents
