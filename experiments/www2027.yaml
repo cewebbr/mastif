@@ -1,0 +1,76 @@
+experiment:
+  name: "WWW 2027"
+  description: "Test different framework and protocol combinations."
+
+test_mode: "mind2web"  # Options: "MIND2WEB", "STANDARD"
+
+models:
+  # - "gpt-4o"
+  # - "meta-llama/Llama-3.3-70B-Instruct"
+  # - "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+  - "deepseek-ai/DeepSeek-V3.2"  
+  # - "openai/gpt-oss-120b"
+
+# ====== Used only in MIND2WEB test mode ====== 
+judge_model: "gpt-4o"
+# ============================================= 
+
+protocols:
+  - "STANDARD"
+  # - "MCP"
+  # - "A2A"
+  # - "ACP"
+
+frameworks:
+  - "CrewAI"
+  # - "Smolagents"
+  # - "LangChain"
+  # - "LangGraph"
+  # - "LlamaIndex"
+  # - "SemanticKernel"
+
+# ====== Used only in MIND2WEB test mode ====== 
+mind2web_num_tasks: 10  # Set to 0 to run all tasks in the config file
+# ============================================= 
+
+# ====== Used only in STANDARD test mode ====== 
+# prompt_template: |
+#   {task}
+
+# tasks:
+#   - Look for dissertations and thesis published in Brazil about open data and open research in which datasets were published with research results.
+#   - Look for technical reports published in Brazil about open data and open research in which datasets were published with research results.
+#   - Look for blog posts published in Brazil about open data and open research in which datasets were published with research results.
+# ============================================= 
+
+tools:
+  - name: "web_browser"
+  - description: "Browse web pages and extract content"
+  - name: "search"
+  - description: "Search for information on the web"
+  - name: "calculate"
+  - description: "Perform mathematical calculations"
+  - name: "analyze"
+  - description: "Analyze data and generate insights" 
+  - name: "wikipedia"
+  - description: "Retrieve information from Wikipedia" 
+  - name: "code_interpreter"
+  - description: "Interpret and execute code snippets" 
+  - name: "click_element"
+  - description: "Click on a web element" 
+  - name: "type_text"
+  - description: "Type text into a field" 
+  - name: "navigate"
+  - description: "Navigate to a URL" 
+  - name: "extract_table"
+  - description: "Extract tables from web pages" 
+  - name: "summarize"
+  - description: "Summarize text or web content" 
+  - name: "translate"
+  - description: "Translate text between languages" 
+  - name: "calendar"
+  - description: "Manage calendar events" 
+  - name: "download"
+  - description: "Download files from the web"
+  # - name: "file_upload"  # Not now    
+  # - description: "Upload a file to a website" # Not now    

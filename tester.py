@@ -29,6 +29,7 @@ from transformers import AutoTokenizer
 import tiktoken
 import yaml
 
+# TODO: Change this to a singleton pattern
 class Mastif:
     """
     Main testing framework for comprehensive agentic technology evaluation
@@ -66,6 +67,7 @@ class Mastif:
             {"name": "download", "description": "Download files from the web"}
             # {"name": "file_upload", "description": "Upload a file to a website"}, # Not now
         ]
+        # TODO: load config on init and create a get_confg to ease other classes to reuse experiment info
 
     def load_experiment_config(self, config_path: str) -> Dict:
         """Load experiment configuration from YAML file"""
@@ -857,23 +859,7 @@ Please respond according to this protocol structure and complete the task."""
                 print(f"    \n{'-'*35}")
 
             # ===== Framework Tests =====
-            # TODO: Reuse framework selection logic from comprehensive test
-            framework_configs = [
-                ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}),
-                ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
-                ("LangChain", self.test_with_langchain, {"tools": self.standard_tools}),
-                ("LangGraph", self.test_with_langgraph, {}),
-                ("LlamaIndex", self.test_with_llamaindex, {"tools": self.standard_tools}),
-                ("SemanticKernel", self.test_with_semantic_kernel, {})
-            ]
-            # If frameworks is None, use all names from framework_configs
-            if frameworks is None:
-                frameworks = [f[0] for f in framework_configs]
-
-            # Then filter framework_configs accordingly
-            frameworks_to_run = [f for f in framework_configs if f[0] in frameworks]
-
-            for framework_name, test_fn, extra_args in frameworks_to_run:
+            for framework_name, test_fn, extra_args in frameworks:
                 print(f"\n{'-'*70}")
                 print(f"Framework: {framework_name}")
                 print(f"{'-'*70}")

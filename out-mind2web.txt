@@ -1,26 +1,11 @@
 ======================================================================
 MIND2WEB BENCHMARK MODE
 ======================================================================
-
-Configuration:
-  Models: 1
-  Tasks: 10
-  Frameworks: All 6 frameworks
 Loading Mind2Web dataset (split: train)...
 Attempting to load with streaming mode...
-Streaming mode failed: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
-Falling back to sample data...
-
-======================================================================
-USING SAMPLE MIND2WEB DATA
-======================================================================
-Note: Full dataset could not be loaded due to formatting issues.
-Using representative sample tasks for demonstration.
-
-✓ Loaded 15 sample tasks
-These tasks represent typical Mind2Web scenarios.
-
-Sampled 10 tasks from 15 total tasks
+Loading examples from stream...
+✓ Loaded 10 tasks from Mind2Web (streaming mode)
+Using all 10 tasks
 
 ======================================================================
 MIND2WEB BENCHMARK EVALUATION
@@ -28,1035 +13,192 @@ MIND2WEB BENCHMARK EVALUATION
 
 Dataset Statistics:
   Total Tasks: 10
-  Unique Domains: 5
-  Unique Websites: 10
+  Unique Domains: 2
+  Unique Websites: 6
   Avg Actions per Task: 0.0
 
 Top Domains:
-  - entertainment: 3 tasks
-  - social_media: 3 tasks
-  - travel: 2 tasks
-  - shopping: 1 tasks
-  - general: 1 tasks
+  - Travel: 6 tasks
+  - Shopping: 4 tasks
+
+----------------------------------------------------------------------
+You are about to run a Mind2Web test with the following configuration:
+Models: 1
+Protocols: 1
+Frameworks: 1
+Tasks: 10
+Total: 10
+----------------------------------------------------------------------
 
 ======================================================================
-Testing Model: mistralai/Mistral-Nemo-Base-2407
+Testing Model: deepseek-ai/DeepSeek-V3.2
 ======================================================================
 
 ----------------------------------------------------------------------
 PROTOCOL TESTS
 ----------------------------------------------------------------------
 
-  Testing with MCP on task: Search for sci-fi movies and add the fir...
-    ✓ Success (5 reasoning steps)
-
-  Testing with MCP on task: Find the top post in r/programming and u...
-    ✓ Success (5 reasoning steps)
-
-  Testing with MCP on task: Find the cheapest laptop under $800 and ...
-    ✓ Success (5 reasoning steps)
-
-  Testing with MCP on task: Find entire apartments in Tokyo for 2 gu...
-    ✓ Success (5 reasoning steps)
-
-  Testing with MCP on task: Search for Software Engineer jobs in San...
-    ✓ Success (5 reasoning steps)
-
-  Testing with MCP on task: Find a hotel in Paris for 2 adults, chec...
-    ✓ Success (5 reasoning steps)
-
-  Testing with MCP on task: Search for tweets about 'AI news' and re...
-    ✓ Success (5 reasoning steps)
-
-  Testing with MCP on task: Search for 'Artificial Intelligence' and...
-    ✓ Success (5 reasoning steps)
-
-  Testing with MCP on task: Search for 'Python tutorial' videos and ...
-    ✓ Success (5 reasoning steps)
-
-  Testing with MCP on task: Find the highest rated action movies fro...
-    ✓ Success (5 reasoning steps)
-
-  Protocol MCP summary:
-    Success rate: 10/10
-    Avg latency: 0.16s
-    Avg reasoning steps: 5.00
-    Total reasoning tokens: 1,250
-    Total output tokens: 2,100
-    Total tokens spent: 3,350
-
------------------------------------
-
-  Testing with A2A on task: Search for sci-fi movies and add the fir...
-    ✓ Success (5 reasoning steps)
-
-  Testing with A2A on task: Find the top post in r/programming and u...
-    ✓ Success (5 reasoning steps)
-
-  Testing with A2A on task: Find the cheapest laptop under $800 and ...
-    ✓ Success (5 reasoning steps)
-
-  Testing with A2A on task: Find entire apartments in Tokyo for 2 gu...
-    ✓ Success (5 reasoning steps)
-
-  Testing with A2A on task: Search for Software Engineer jobs in San...
-    ✓ Success (5 reasoning steps)
-
-  Testing with A2A on task: Find a hotel in Paris for 2 adults, chec...
-    ✓ Success (5 reasoning steps)
-
-  Testing with A2A on task: Search for tweets about 'AI news' and re...
-    ✓ Success (5 reasoning steps)
-
-  Testing with A2A on task: Search for 'Artificial Intelligence' and...
-    ✓ Success (5 reasoning steps)
-
-  Testing with A2A on task: Search for 'Python tutorial' videos and ...
-    ✓ Success (5 reasoning steps)
-
-  Testing with A2A on task: Find the highest rated action movies fro...
-    ✓ Success (5 reasoning steps)
-
-  Protocol A2A summary:
-    Success rate: 10/10
-    Avg latency: 0.16s
-    Avg reasoning steps: 5.00
-    Total reasoning tokens: 1,220
-    Total output tokens: 2,050
-    Total tokens spent: 3,270
-
------------------------------------
-
-  Testing with ACP on task: Search for sci-fi movies and add the fir...
-    ✓ Success (5 reasoning steps)
-
-  Testing with ACP on task: Find the top post in r/programming and u...
-    ✓ Success (5 reasoning steps)
-
-  Testing with ACP on task: Find the cheapest laptop under $800 and ...
-    ✓ Success (5 reasoning steps)
-
-  Testing with ACP on task: Find entire apartments in Tokyo for 2 gu...
-    ✓ Success (5 reasoning steps)
-
-  Testing with ACP on task: Search for Software Engineer jobs in San...
-    ✓ Success (5 reasoning steps)
-
-  Testing with ACP on task: Find a hotel in Paris for 2 adults, chec...
-    ✓ Success (5 reasoning steps)
-
-  Testing with ACP on task: Search for tweets about 'AI news' and re...
-    ✓ Success (5 reasoning steps)
-
-  Testing with ACP on task: Search for 'Artificial Intelligence' and...
-    ✓ Success (5 reasoning steps)
-
-  Testing with ACP on task: Search for 'Python tutorial' videos and ...
-    ✓ Success (5 reasoning steps)
-
-  Testing with ACP on task: Find the highest rated action movies fro...
-    ✓ Success (5 reasoning steps)
-
-  Protocol ACP summary:
-    Success rate: 10/10
-    Avg latency: 0.15s
-    Avg reasoning steps: 5.00
-    Total reasoning tokens: 1,210
-    Total output tokens: 2,030
-    Total tokens spent: 3,240
-
------------------------------------
-
-  Testing with standard on task: Search for sci-fi movies and add the fir...
+  Testing with standard on task: Check for pickup restaurant available in...
     ✓ Success (3 reasoning steps)
 
-  Testing with standard on task: Find the top post in r/programming and u...
+  Testing with standard on task: Book a winery tour in Napa Valley in a w...
     ✓ Success (3 reasoning steps)
 
-  Testing with standard on task: Find the cheapest laptop under $800 and ...
+  Testing with standard on task: Sign Allan Smith for email offers with t...
     ✓ Success (3 reasoning steps)
 
-  Testing with standard on task: Find entire apartments in Tokyo for 2 gu...
+  Testing with standard on task: Find a mini van at Brooklyn City from Ap...
     ✓ Success (3 reasoning steps)
 
-  Testing with standard on task: Search for Software Engineer jobs in San...
+  Testing with standard on task: Find the highest rated dog collar under ...
     ✓ Success (3 reasoning steps)
 
-  Testing with standard on task: Find a hotel in Paris for 2 adults, chec...
+  Testing with standard on task: Compare the fare types to book a 1-adult...
     ✓ Success (3 reasoning steps)
 
-  Testing with standard on task: Search for tweets about 'AI news' and re...
+  Testing with standard on task: Get an SUV with an additional driver and...
     ✓ Success (3 reasoning steps)
 
-  Testing with standard on task: Search for 'Artificial Intelligence' and...
+  Testing with standard on task: Find a men's UA outlet T-shirt of XL siz...
     ✓ Success (3 reasoning steps)
 
-  Testing with standard on task: Search for 'Python tutorial' videos and ...
+  Testing with standard on task: Browse for wall art with a price range o...
     ✓ Success (3 reasoning steps)
 
-  Testing with standard on task: Find the highest rated action movies fro...
+  Testing with standard on task: Add the cheapest Women's Sweaters to my ...
     ✓ Success (3 reasoning steps)
 
   Protocol standard summary:
     Success rate: 10/10
-    Avg latency: 0.16s
+    Avg latency: 16.93s
     Avg reasoning steps: 3.00
-    Total reasoning tokens: 800
-    Total output tokens: 1,500
-    Total tokens spent: 2,300
-
+    
 -----------------------------------
 
 ----------------------------------------------------------------------
 Framework: CrewAI
 ----------------------------------------------------------------------
 
-  Task 1/10: netflix.com (entertainment)
-  Goal: Search for sci-fi movies and add the first result to my list...
+  Task 1/10: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just o...
     ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
+      Task Understanding: 50.00%
+      Task Deviation: 50.00%
+      Task Completion: 50.00%
+      Overall Score: 50.00%
       Reasoning Steps: 3
 
-  Task 2/10: reddit.com (social_media)
-  Goal: Find the top post in r/programming and upvote it...
+  Task 2/10: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine...
     ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
+      Task Understanding: 50.00%
+      Task Deviation: 50.00%
+      Task Completion: 50.00%
+      Overall Score: 50.00%
       Reasoning Steps: 3
 
-  Task 3/10: amazon.com (shopping)
-  Goal: Find the cheapest laptop under $800 and add it to cart...
+  Task 3/10: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip c...
     ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
+      Task Understanding: 50.00%
+      Task Deviation: 50.00%
+      Task Completion: 50.00%
+      Overall Score: 50.00%
       Reasoning Steps: 3
 
-  Task 4/10: airbnb.com (travel)
-  Goal: Find entire apartments in Tokyo for 2 guests from Jan 10-15...
+  Task 4/10: enterprise (Travel)
+  Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old r...
     ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
+      Task Understanding: 50.00%
+      Task Deviation: 50.00%
+      Task Completion: 50.00%
+      Overall Score: 50.00%
       Reasoning Steps: 3
 
-  Task 5/10: linkedin.com (social_media)
-  Goal: Search for Software Engineer jobs in San Francisco and filter by remote...
+  Task 5/10: kohls (Shopping)
+  Goal: Find the highest rated dog collar under 10 dollar....
     ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
+      Task Understanding: 50.00%
+      Task Deviation: 50.00%
+      Task Completion: 50.00%
+      Overall Score: 50.00%
       Reasoning Steps: 3
 
-  Task 6/10: booking.com (travel)
-  Goal: Find a hotel in Paris for 2 adults, check-in Dec 15, check-out Dec 20...
+  Task 6/10: united (Travel)
+  Goal: Compare the fare types to book a 1-adult ticket from Springfiels, IL to Austin, ...
     ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
+      Task Understanding: 50.00%
+      Task Deviation: 50.00%
+      Task Completion: 50.00%
+      Overall Score: 50.00%
       Reasoning Steps: 3
 
-  Task 7/10: twitter.com (social_media)
-  Goal: Search for tweets about 'AI news' and retweet the most recent one...
+  Task 7/10: budget (Travel)
+  Goal: Get an SUV with an additional driver and wifi for pick up in  any rental locatio...
     ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
+      Task Understanding: 50.00%
+      Task Deviation: 50.00%
+      Task Completion: 50.00%
+      Overall Score: 50.00%
       Reasoning Steps: 3
 
-  Task 8/10: wikipedia.org (general)
-  Goal: Search for 'Artificial Intelligence' and read the introduction...
+  Task 8/10: underarmour (Shopping)
+  Goal: Find a men's UA outlet T-shirt of XL size and add to cart....
     ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
+      Task Understanding: 50.00%
+      Task Deviation: 50.00%
+      Task Completion: 50.00%
+      Overall Score: 50.00%
       Reasoning Steps: 3
 
-  Task 9/10: youtube.com (entertainment)
-  Goal: Search for 'Python tutorial' videos and play the most viewed one...
+  Task 9/10: kohls (Shopping)
+  Goal: Browse for wall art with a price range of $25 to $50....
     ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
+      Task Understanding: 50.00%
+      Task Deviation: 50.00%
+      Task Completion: 50.00%
+      Overall Score: 50.00%
       Reasoning Steps: 3
 
-  Task 10/10: imdb.com (entertainment)
-  Goal: Find the highest rated action movies from 2023...
+  Task 10/10: kohls (Shopping)
+  Goal: Add the cheapest Women's Sweaters to my shopping cart....
     ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
+      Task Understanding: 50.00%
+      Task Deviation: 50.00%
+      Task Completion: 50.00%
+      Overall Score: 50.00%
       Reasoning Steps: 3
 
   CrewAI Mind2Web Summary:
     total_tasks_evaluated: 10
-    judge_model: gpt-4o-mini
-    avg_task_understanding: 1.0
-    avg_task_deviation: 1.0
-    avg_task_completion: 1.0
-    avg_overall_score: 0.6666666666666666
+    judge_model: None
+    avg_task_understanding: 0.5
+    avg_task_deviation: 0.5
+    avg_task_completion: 0.5
+    avg_overall_score: 0.5
     avg_reasoning_steps: 3.0
-    total reasoning tokens: 400
-    total output tokens: 700
-    total tokens spent: 1,100
-
-----------------------------------------------------------------------
-Framework: Smolagents
-----------------------------------------------------------------------
-
-  Task 1/10: netflix.com (entertainment)
-  Goal: Search for sci-fi movies and add the first result to my list...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 4
-
-  Task 2/10: reddit.com (social_media)
-  Goal: Find the top post in r/programming and upvote it...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 4
-
-  Task 3/10: amazon.com (shopping)
-  Goal: Find the cheapest laptop under $800 and add it to cart...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 4
-
-  Task 4/10: airbnb.com (travel)
-  Goal: Find entire apartments in Tokyo for 2 guests from Jan 10-15...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 4
-
-  Task 5/10: linkedin.com (social_media)
-  Goal: Search for Software Engineer jobs in San Francisco and filter by remote...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 4
-
-  Task 6/10: booking.com (travel)
-  Goal: Find a hotel in Paris for 2 adults, check-in Dec 15, check-out Dec 20...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 4
-
-  Task 7/10: twitter.com (social_media)
-  Goal: Search for tweets about 'AI news' and retweet the most recent one...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 4
-
-  Task 8/10: wikipedia.org (general)
-  Goal: Search for 'Artificial Intelligence' and read the introduction...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 4
-
-  Task 9/10: youtube.com (entertainment)
-  Goal: Search for 'Python tutorial' videos and play the most viewed one...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 4
-
-  Task 10/10: imdb.com (entertainment)
-  Goal: Find the highest rated action movies from 2023...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 4
-
-  Smolagents Mind2Web Summary:
-    total_tasks_evaluated: 20
-    judge_model: gpt-4o-mini
-    avg_task_understanding: 1.0
-    avg_task_deviation: 1.0
-    avg_task_completion: 1.0
-    avg_overall_score: 0.6666666666666666
-    avg_reasoning_steps: 3.5
-    total reasoning tokens: 500
-    total output tokens: 900
-    total tokens spent: 1,400
-
-----------------------------------------------------------------------
-Framework: LangChain
-----------------------------------------------------------------------
-
-  Task 1/10: netflix.com (entertainment)
-  Goal: Search for sci-fi movies and add the first result to my list...
-
-
-[1m> Entering new AgentExecutor chain...[0m
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 3
-
-  Task 2/10: reddit.com (social_media)
-  Goal: Find the top post in r/programming and upvote it...
-
-
-[1m> Entering new AgentExecutor chain...[0m
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 3
-
-  Task 3/10: amazon.com (shopping)
-  Goal: Find the cheapest laptop under $800 and add it to cart...
-
-
-[1m> Entering new AgentExecutor chain...[0m
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 3
-
-  Task 4/10: airbnb.com (travel)
-  Goal: Find entire apartments in Tokyo for 2 guests from Jan 10-15...
-
-
-[1m> Entering new AgentExecutor chain...[0m
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 3
-
-  Task 5/10: linkedin.com (social_media)
-  Goal: Search for Software Engineer jobs in San Francisco and filter by remote...
-
-
-[1m> Entering new AgentExecutor chain...[0m
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 3
-
-  Task 6/10: booking.com (travel)
-  Goal: Find a hotel in Paris for 2 adults, check-in Dec 15, check-out Dec 20...
-
-
-[1m> Entering new AgentExecutor chain...[0m
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 3
-
-  Task 7/10: twitter.com (social_media)
-  Goal: Search for tweets about 'AI news' and retweet the most recent one...
-
-
-[1m> Entering new AgentExecutor chain...[0m
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 3
-
-  Task 8/10: wikipedia.org (general)
-  Goal: Search for 'Artificial Intelligence' and read the introduction...
-
-
-[1m> Entering new AgentExecutor chain...[0m
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 3
-
-  Task 9/10: youtube.com (entertainment)
-  Goal: Search for 'Python tutorial' videos and play the most viewed one...
-
-
-[1m> Entering new AgentExecutor chain...[0m
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 3
-
-  Task 10/10: imdb.com (entertainment)
-  Goal: Find the highest rated action movies from 2023...
-
-
-[1m> Entering new AgentExecutor chain...[0m
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 3
-
-  LangChain Mind2Web Summary:
-    total_tasks_evaluated: 30
-    judge_model: gpt-4o-mini
-    avg_task_understanding: 1.0
-    avg_task_deviation: 1.0
-    avg_task_completion: 1.0
-    avg_overall_score: 0.6666666666666666
-    avg_reasoning_steps: 3.3333333333333335
-    total reasoning tokens: 410
-    total output tokens: 720
-    total tokens spent: 1,130
-
-----------------------------------------------------------------------
-Framework: LangGraph
-----------------------------------------------------------------------
-
-  Task 1/10: netflix.com (entertainment)
-  Goal: Search for sci-fi movies and add the first result to my list...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 11
-
-  Task 2/10: reddit.com (social_media)
-  Goal: Find the top post in r/programming and upvote it...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 11
-
-  Task 3/10: amazon.com (shopping)
-  Goal: Find the cheapest laptop under $800 and add it to cart...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 11
-
-  Task 4/10: airbnb.com (travel)
-  Goal: Find entire apartments in Tokyo for 2 guests from Jan 10-15...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 11
-
-  Task 5/10: linkedin.com (social_media)
-  Goal: Search for Software Engineer jobs in San Francisco and filter by remote...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 11
-
-  Task 6/10: booking.com (travel)
-  Goal: Find a hotel in Paris for 2 adults, check-in Dec 15, check-out Dec 20...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 11
-
-  Task 7/10: twitter.com (social_media)
-  Goal: Search for tweets about 'AI news' and retweet the most recent one...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 11
-
-  Task 8/10: wikipedia.org (general)
-  Goal: Search for 'Artificial Intelligence' and read the introduction...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 11
-
-  Task 9/10: youtube.com (entertainment)
-  Goal: Search for 'Python tutorial' videos and play the most viewed one...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 11
-
-  Task 10/10: imdb.com (entertainment)
-  Goal: Find the highest rated action movies from 2023...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 100.00%
-      Task Completion: 100.00%
-      Overall Score: 66.67%
-      Reasoning Steps: 11
-
-  LangGraph Mind2Web Summary:
-    total_tasks_evaluated: 40
-    judge_model: gpt-4o-mini
-    avg_task_understanding: 1.0
-    avg_task_deviation: 1.0
-    avg_task_completion: 1.0
-    avg_overall_score: 0.6666666666666666
-    avg_reasoning_steps: 5.25
-    total reasoning tokens: 1,100
-    total output tokens: 1,900
-    total tokens spent: 3,000
-
-----------------------------------------------------------------------
-Framework: LlamaIndex
-----------------------------------------------------------------------
-
-  Task 1/10: netflix.com (entertainment)
-  Goal: Search for sci-fi movies and add the first result to my list...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 2/10: reddit.com (social_media)
-  Goal: Find the top post in r/programming and upvote it...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 3/10: amazon.com (shopping)
-  Goal: Find the cheapest laptop under $800 and add it to cart...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 4/10: airbnb.com (travel)
-  Goal: Find entire apartments in Tokyo for 2 guests from Jan 10-15...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 5/10: linkedin.com (social_media)
-  Goal: Search for Software Engineer jobs in San Francisco and filter by remote...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 6/10: booking.com (travel)
-  Goal: Find a hotel in Paris for 2 adults, check-in Dec 15, check-out Dec 20...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 7/10: twitter.com (social_media)
-  Goal: Search for tweets about 'AI news' and retweet the most recent one...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 8/10: wikipedia.org (general)
-  Goal: Search for 'Artificial Intelligence' and read the introduction...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 9/10: youtube.com (entertainment)
-  Goal: Search for 'Python tutorial' videos and play the most viewed one...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 10/10: imdb.com (entertainment)
-  Goal: Find the highest rated action movies from 2023...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  LlamaIndex Mind2Web Summary:
-    total_tasks_evaluated: 50
-    judge_model: gpt-4o-mini
-    avg_task_understanding: 1.0
-    avg_task_deviation: 0.8
-    avg_task_completion: 1.0
-    avg_overall_score: 0.7333333333333333
-    avg_reasoning_steps: 4.2
-    total reasoning tokens: 0
-    total output tokens: 0
-    total tokens spent: 0
-
-----------------------------------------------------------------------
-Framework: SemanticKernel
-----------------------------------------------------------------------
-
-  Task 1/10: netflix.com (entertainment)
-  Goal: Search for sci-fi movies and add the first result to my list...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 2/10: reddit.com (social_media)
-  Goal: Find the top post in r/programming and upvote it...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 3/10: amazon.com (shopping)
-  Goal: Find the cheapest laptop under $800 and add it to cart...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 4/10: airbnb.com (travel)
-  Goal: Find entire apartments in Tokyo for 2 guests from Jan 10-15...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 5/10: linkedin.com (social_media)
-  Goal: Search for Software Engineer jobs in San Francisco and filter by remote...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 6/10: booking.com (travel)
-  Goal: Find a hotel in Paris for 2 adults, check-in Dec 15, check-out Dec 20...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 7/10: twitter.com (social_media)
-  Goal: Search for tweets about 'AI news' and retweet the most recent one...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 8/10: wikipedia.org (general)
-  Goal: Search for 'Artificial Intelligence' and read the introduction...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 9/10: youtube.com (entertainment)
-  Goal: Search for 'Python tutorial' videos and play the most viewed one...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  Task 10/10: imdb.com (entertainment)
-  Goal: Find the highest rated action movies from 2023...
-    ✓ Completed
-      Task Understanding: 100.00%
-      Task Deviation: 0.00%
-      Task Completion: 100.00%
-      Overall Score: 100.00%
-      Reasoning Steps: 0
-
-  SemanticKernel Mind2Web Summary:
-    total_tasks_evaluated: 60
-    judge_model: gpt-4o-mini
-    avg_task_understanding: 1.0
-    avg_task_deviation: 0.6666666666666666
-    avg_task_completion: 1.0
-    avg_overall_score: 0.7777777777777778
-    avg_reasoning_steps: 3.5
-    total reasoning tokens: 0
-    total output tokens: 0
-    total tokens spent: 0
 
 ======================================================================
 MIND2WEB EVALUATION SUMMARY
 ======================================================================
 
 Overall Performance:
-  Judge Model: gpt-4o-mini
-  Tasks Evaluated: 60
-  Avg Task Understanding: 100.00%
-  Avg Task Deviation: 66.67% (lower is better)
-  Avg Task Completion: 100.00%
-  Avg Overall Score: 77.78%
-  Avg Reasoning Steps: 3.5
-  Total reasoning tokens: 3,630
-  Total output tokens: 6,220
-  Total tokens spent: 9,850
+  Judge Model: None
+  Tasks Evaluated: 10
+  Avg Task Understanding: 50.00%
+  Avg Task Deviation: 50.00% (lower is better)
+  Avg Task Completion: 50.00%
+  Avg Overall Score: 50.00%
+  Avg Reasoning Steps: 3.0
 
 Performance by Domain:
-  entertainment:
-    Tasks: 18
-    Avg Understanding: 100.00%
-    Avg Task Deviation: 66.67% (lower is better)
-    Avg Completion: 100.00%
-    Total reasoning tokens: 1,090
-    Total output tokens: 1,870
-    Total tokens spent: 2,960
-  social_media:
-    Tasks: 18
-    Avg Understanding: 100.00%
-    Avg Task Deviation: 66.67% (lower is better)
-    Avg Completion: 100.00%
-    Total reasoning tokens: 1,080
-    Total output tokens: 1,860
-    Total tokens spent: 2,940
-  shopping:
+  Travel:
     Tasks: 6
-    Avg Understanding: 100.00%
-    Avg Task Deviation: 66.67% (lower is better)
-    Avg Completion: 100.00%
-    Total reasoning tokens: 360
-    Total output tokens: 620
-    Total tokens spent: 980
-  travel:
-    Tasks: 12
-    Avg Understanding: 100.00%
-    Avg Task Deviation: 66.67% (lower is better)
-    Avg Completion: 100.00%
-    Total reasoning tokens: 720
-    Total output tokens: 1,240
-    Total tokens spent: 1,960
-  general:
-    Tasks: 6
-    Avg Understanding: 100.00%
-    Avg Task Deviation: 66.67% (lower is better)
-    Avg Completion: 100.00%
-    Total reasoning tokens: 380
-    Total output tokens: 630
-    Total tokens spent: 1,010
-
-======================================================================
-TEST SUMMARY
-======================================================================
-
-Overall Statistics:
-  Total Tests: 100
-  Successful: 80 (80.0%)
-  Failed: 20 (20.0%)
-  Total Reasoning Steps: 390
-  Avg Reasoning Steps per Test: 3.9
-  Total reasoning tokens: 3,630
-  Total output tokens: 6,220
-  Total tokens spent: 9,850
-
-----------------------------------------------------------------------
-Results by Framework:
-----------------------------------------------------------------------
-
-  CrewAI:
-    Success Rate: 10/10 (100.0%)
-    Avg Latency: 0.14s
-    Avg Reasoning Steps: 3.0
-    Total reasoning tokens: 400
-    Total output tokens: 700
-    Total tokens spent: 1,100
-
-  LangChain:
-    Success Rate: 10/10 (100.0%)
-    Avg Latency: 0.31s
-    Avg Reasoning Steps: 3.0
-    Total reasoning tokens: 410
-    Total output tokens: 720
-    Total tokens spent: 1,130
-
-  LangGraph:
-    Success Rate: 10/10 (100.0%)
-    Avg Latency: 0.61s
-    Avg Reasoning Steps: 11.0
-    Total reasoning tokens: 1,100
-    Total output tokens: 1,900
-    Total tokens spent: 3,000
-
-  LlamaIndex:
-    Success Rate: 0/10 (0.0%)
-    Avg Latency: 0.00s
-    Avg Reasoning Steps: 0.0
-    Total reasoning tokens: 0
-    Total output tokens: 0
-    Total tokens spent: 0
-
-  SemanticKernel:
-    Success Rate: 0/10 (0.0%)
-    Avg Latency: 0.00s
-    Avg Reasoning Steps: 0.0
-    Total reasoning tokens: 0
-    Total output tokens: 0
-    Total tokens spent: 0
-
-  Smolagents:
-    Success Rate: 10/10 (100.0%)
-    Avg Latency: 0.15s
-    Avg Reasoning Steps: 4.0
-    Total reasoning tokens: 500
-    Total output tokens: 900
-    Total tokens spent: 1,400
-
-  direct:
-    Success Rate: 40/40 (100.0%)
-    Avg Latency: 0.16s
-    Avg Reasoning Steps: 4.5
-    Total reasoning tokens: 1,220
-    Total output tokens: 2,100
-    Total tokens spent: 3,320
-
-----------------------------------------------------------------------
-Results by Protocol:
-----------------------------------------------------------------------
-
-  A2A:
-    Success Rate: 10/10 (100.0%)
-    Avg Latency: 0.16s
-    Total reasoning tokens: 1,220
-    Total output tokens: 2,050
-    Total tokens spent: 3,270
-
-  ACP:
-    Success Rate: 10/10 (100.0%)
-    Avg Latency: 0.15s
-    Total reasoning tokens: 1,210
-    Total output tokens: 2,030
-    Total tokens spent: 3,240
-
-  MCP:
-    Success Rate: 10/10 (100.0%)
-    Avg Latency: 0.16s
-    Total reasoning tokens: 1,250
-    Total output tokens: 2,100
-    Total tokens spent: 3,350
-
-  standard:
-    Success Rate: 50/70 (71.4%)
-    Avg Latency: 0.27s
-    Total reasoning tokens: 800
-    Total output tokens: 1,500
-    Total tokens spent: 2,300
-
-----------------------------------------------------------------------
-Results by Model:
-----------------------------------------------------------------------
-
-  mistralai/Mistral-Nemo-Base-2407:
-    Success Rate: 80/100 (80.0%)
-    Avg Latency: 0.23s
-    Avg Reasoning Steps: 3.9
-    Total reasoning tokens: 3,630
-    Total output tokens: 6,220
-    Total tokens spent: 9,850
-
-======================================================================
-✓ Mind2Web results exported to ./logs/mind2web-results-20251030_093557.json
-
-✓ Results exported to ./logs/results-20251030_093557.json
-
-======================================================================
-Mind2Web evaluation complete!
-Results: ./logs/mind2web-results-20251030_093557.json
-Full logs: ./logs/results-20251030_093557.json
-======================================================================
-
+    Avg Understanding: 50.00%
+    Avg Task Deviation: 50.00% (lower is better)
+    Avg Completion: 50.00%
+  Shopping:
+    Tasks: 4
+    Avg Understanding: 50.00%
+    Avg Task Deviation: 50.00% (lower is better)
+    Avg Completion: 50.00%
