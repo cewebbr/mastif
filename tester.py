@@ -29,7 +29,6 @@ from transformers import AutoTokenizer
 import tiktoken
 import yaml
 
-# TODO: Change this to a singleton pattern
 class Mastif:
     """
     Main testing framework for comprehensive agentic technology evaluation
@@ -67,8 +66,12 @@ class Mastif:
             {"name": "download", "description": "Download files from the web"}
             # {"name": "file_upload", "description": "Upload a file to a website"}, # Not now
         ]
-        # TODO: load config on init and create a get_confg to ease other classes to reuse experiment info
-
+       
+    # TODO: Create a configuration class using singleton pattern with an easey access get_config method
+    # For instance: 
+    # ConfigExpert.get_instance().get("test_mode")
+    # ConfigExpert.get_instance().get("temperature")
+    # etc.
     def load_experiment_config(self, config_path: str) -> Dict:
         """Load experiment configuration from YAML file"""
         with open(config_path, 'r') as f:

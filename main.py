@@ -21,6 +21,7 @@ def main():
 
     # Configuration
     # TODO: Add this to config file as well
+    # Instantiate ConfigExpert singleton here later
     MODE = os.getenv("TEST_MODE", "standard")  # "standard" or "mind2web"
     MIND2WEB_NUM_TASKS = int(os.getenv("MIND2WEB_NUM_TASKS", "10"))  # 0 to all tasks
     

@@ -2,13 +2,20 @@ experiment:
   name: "Accessiblity Expert WCAG"
   description: "Accessibility Expert on ABNT NBR 17225 and WCAG 2.2."
   
-models:
+test_mode: "standard"  # Options: "mind2web", "standard"
+
+# Any model ID listed here must be available on HuggingFace or OpenAI
+models: 
   # - "gpt-4o"
   # - "meta-llama/Llama-3.3-70B-Instruct"
   # - "meta-llama/Llama-4-Scout-17B-16E-Instruct"
   - "deepseek-ai/DeepSeek-V3.2"  
   # - "openai/gpt-oss-120b"
   
+# ====== Used only in MIND2WEB test mode ====== 
+# judge_model: "gpt-4o"
+# ============================================= 
+
 protocols:
   - "STANDARD"
   # - "MCP"
@@ -23,6 +30,11 @@ frameworks:
   # - "LlamaIndex"
   # - "SemanticKernel"
 
+# ====== Used only in MIND2WEB test mode ====== 
+# mind2web_num_tasks: 10  # Set to 0 to run all tasks in the config file
+# ============================================= 
+
+# ====== Used only in STANDARD test mode ====== 
 prompt_template: |
   You are an Accessibility Expert (WCAG Specialist) with knowledge about WCAG 2.2 and ABNT NBR 17225. 
   Your expertise is crucial in making the web more accessible for everyone. 
@@ -43,6 +55,7 @@ tasks:
   - "Create a figure description for the image located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html. Consider the contex of the surrounding text on the webpage."
   - "Evaluate the HTML code of the webpage located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html and provide suggestions on how to improve code semantices following ABNT NBR 17225."
   - "Create a heading structure for the webpage located at URLhttps://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html following best practices for web accessibility and ABNT NBR 17225 guidelines."
+# ============================================= 
 
 tools:
   - name: "web_browser"
