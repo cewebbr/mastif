@@ -12,7 +12,7 @@ import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
 
-# TODO: Create similar workflows for all the other frameworks
+# TODO: Improve workflows for all the other frameworks
 class LangGraphAgent:
     """
     LangGraph Stateful Workflow Integration

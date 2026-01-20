@@ -515,7 +515,6 @@ Please respond according to this protocol structure and complete the task."""
             else:                
                 adapter = HuggingFaceAdapter(model_name)
             
-            
             # ===== Test Protocol x Framework Combinations =====
             print(f"\n{'-'*70}")
             print("PROTOCOL x FRAMEWORK COMBINATIONS")
