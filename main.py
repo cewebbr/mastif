@@ -10,8 +10,6 @@ import sys
 import datetime
 from tester import Mastif
 
-# TODO: Compute the number of tests dynamically based on selected models, protocols, and frameworks and provide a warning before people start the tests. It is necessary inform that all combinations will be tested and this may incurr a high number of API calls and associated costs.
-
 def main():
     """Main execution function with Mind2Web support"""
     
@@ -49,63 +47,47 @@ def main():
         print("="*70)
         print("MIND2WEB BENCHMARK MODE")
         print("="*70)
-        # TODO: Print info from config file
         
         # Run Mind2Web evaluation
-        tester.run_mind2web_evaluation(
+        if(tester.run_mind2web_evaluation(
             config_path=config_path,
             num_tasks=MIND2WEB_NUM_TASKS if MIND2WEB_NUM_TASKS > 0 else None
-        )
-        tester.print_summary()
-        
-        # Export Mind2Web results
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"./logs/mind2web-results-{timestamp}.json"
-        tester.export_mind2web_results(filename)
-        
-        # Also export standard results
-        standard_filename = f"./logs/results-{timestamp}.json"
-        tester.export_results(standard_filename)
-        
-        print(f"\n{'='*70}")
-        print(f"Mind2Web evaluation complete!")
-        print(f"Results: {filename}")
-        print(f"Full logs: {standard_filename}")
-        print(f"{'='*70}\n")
+        )):
+            tester.print_summary()
+            
+            # Export Mind2Web results
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"./logs/mind2web-results-{timestamp}.json"
+            tester.export_mind2web_results(filename)
+            
+            # Also export standard results
+            standard_filename = f"./logs/results-{timestamp}.json"
+            tester.export_results(standard_filename)
+            
+            print(f"\n{'='*70}")
+            print(f"Mind2Web evaluation complete!")
+            print(f"Results: {filename}")
+            print(f"Full logs: {standard_filename}")
+            print(f"{'='*70}\n")
         
     else:
         # Run standard evaluation
         print("="*70)
         print("STANDARD TESTING MODE")
         print("="*70)
-        # TODO: Print info from config file
-        # print("\nTesting Configuration:")
-        # print(f"  Models: {len(models_to_test)}")
 
-        # # Dynamically get protocols and frameworks from tester
-        # protocol_names = [p.value if hasattr(p, "value") else str(p) for p in tester.get_supported_protocols()]
-        # framework_names = tester.get_supported_frameworks()
-
-        # print(f"  Protocols: {', '.join(protocol_names)}")
-        # print(f"  Frameworks: {', '.join(framework_names)}")
-        # print(f"\n  Total tests per model: {len(protocol_names) + len(framework_names)} "
-        #       f"({len(protocol_names)} protocols + {len(framework_names)} frameworks)")
-        # print(f"  Total tests: {len(models_to_test) * (len(protocol_names) + len(framework_names))}")
-        # print("\nStarting tests...\n")
-        
-        tester.run_comprehensive_test(config_path)
-        tester.print_summary()
-        
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"./logs/results-{timestamp}.json"
-        tester.export_results(filename)
-        
-        print(f"\n{'='*70}")
-        print(f"Testing complete! Check {filename} for detailed results.")
-        print(f"{'='*70}\n")
+        if(tester.run_comprehensive_test(config_path)):
+            tester.print_summary()
+            
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"./logs/results-{timestamp}.json"
+            tester.export_results(filename)
+            
+            print(f"\n{'='*70}")
+            print(f"Testing complete! Check {filename} for detailed results.")
+            print(f"{'='*70}\n")
     
     return 0
-
 
 if __name__ == "__main__":
     exit(main())

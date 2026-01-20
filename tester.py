@@ -488,6 +488,23 @@ Please respond according to this protocol structure and complete the task."""
 
         frameworks = [(name, *framework_map[name]) for name in framework_names]
         
+        # Compute the number of tests and alert the user
+        print(f"\n{'-'*70}")
+        print("You are about to run a test with the following configuration:")
+        print(f"Models: {len(models)}")
+        print(f"Protocols: {len(protocols)}")
+        print(f"Frameworks: {len(frameworks)}")
+        print(f"Tasks: {len(test_tasks)}")
+        print(f"Total: {len(models) * len(protocols) * len(frameworks) * len(test_tasks)}")
+        print(f"{'-'*70}")
+        if( len(models) * len(protocols) * len(frameworks) * len(test_tasks) > 1000 ):
+            print("WARNING: This may incur a high number of API calls and associated costs.")
+            response = input("\nDo you want to proceed? (yes/no): ").strip().lower()
+            if response not in ['yes', 'y']:
+                print("\n❌ Test execution cancelled by user.")
+                return False        
+            print("\n✓ Starting test execution...\n")
+
         for model_name in models:
             print(f"\n{'='*70}")
             print(f"Testing Model: {model_name}")
@@ -499,9 +516,9 @@ Please respond according to this protocol structure and complete the task."""
                 adapter = HuggingFaceAdapter(model_name)
             
             
-            # ===== Test Protocol × Framework Combinations =====
+            # ===== Test Protocol x Framework Combinations =====
             print(f"\n{'-'*70}")
-            print("PROTOCOL × FRAMEWORK COMBINATIONS")
+            print("PROTOCOL x FRAMEWORK COMBINATIONS")
             print(f"{'-'*70}")
             
             for protocol in protocols:
@@ -534,10 +551,10 @@ Please respond according to this protocol structure and complete the task."""
                             combination_results.append(result)
                             self.results.append(result)
                             
-                            status = "✓" if result.success else "✗"
+                            status = "✓" if result.success else "❌"
                             print(f"      {status} Latency: {result.latency:.2f}s, Steps: {len(result.reasoning_steps)}")
                         except Exception as e:
-                            print(f"      ✗ Error: {str(e)}")
+                            print(f"      ❌ Error: {str(e)}")
                     
                     # Summary for this protocol-framework combination
                     if combination_results:
@@ -787,6 +804,23 @@ Please respond according to this protocol structure and complete the task."""
         judge_adapter = OpenAIAdapter()
         evaluator = Mind2WebEvaluator(judge_adapter=judge_adapter)
 
+        # Compute the number of tests and alert the user
+        print(f"\n{'-'*70}")
+        print("You are about to run a Mind2Web test with the following configuration:")
+        print(f"Models: {len(models)}")
+        print(f"Protocols: {len(protocols)}")
+        print(f"Frameworks: {len(frameworks)}")
+        print(f"Tasks: {len(tasks)}")
+        print(f"Total: {len(models) * len(protocols) * len(frameworks) * len(tasks)}")
+        print(f"{'-'*70}")
+        if( len(models) * len(protocols) * len(frameworks) * len(tasks) > 1000 ):
+            print("WARNING: This may incur a high number of API calls and associated costs.")
+            response = input("\nDo you want to proceed? (yes/no): ").strip().lower()
+            if response not in ['yes', 'y']:
+                print("\n❌ Test execution cancelled by user.")
+                return False        
+            print("\n✓ Starting test execution...\n")
+
         # Run tests for each model
         for model_name in models:
             print(f"\n{'='*70}")
@@ -810,7 +844,7 @@ Please respond according to this protocol structure and complete the task."""
                     if result.success:
                         status = "✓ Success"
                     else:
-                        status = f"✗ Failed: {result.error}"
+                        status = f"❌ Failed: {result.error}"
                     print(f"    {status} ({len(result.reasoning_steps)} reasoning steps)")
 
                 # Average metrics for this protocol
@@ -824,6 +858,7 @@ Please respond according to this protocol structure and complete the task."""
                 print(f"    \n{'-'*35}")
 
             # ===== Framework Tests =====
+            # TODO: Reuse framework selection logic from comprehensive test
             framework_configs = [
                 ("CrewAI", self.test_with_crewai, {"role": "Web Automation Specialist"}),
                 ("Smolagents", self.test_with_smolagents, {"tools": self.standard_tools}),
@@ -887,7 +922,7 @@ Please respond according to this protocol structure and complete the task."""
                             print(f"      Overall Score: {eval_result['overall_score']:.2%}")
                             print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
                     except Exception as e:
-                        print(f"    ✗ Error: {str(e)}")
+                        print(f"    ❌ Error: {str(e)}")
 
                 # Summarize metrics for this framework
                 metrics = evaluator.get_aggregate_metrics()

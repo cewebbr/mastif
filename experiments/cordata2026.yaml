@@ -6,7 +6,7 @@ models:
   # - "gpt-4o"
   # - "meta-llama/Llama-3.3-70B-Instruct"
   # - "meta-llama/Llama-4-Scout-17B-16E-Instruct"
-  # - "deepseek-ai/DeepSeek-V3.2"  
+  - "deepseek-ai/DeepSeek-V3.2"  
   - "openai/gpt-oss-120b"
   
 protocols:
@@ -24,10 +24,31 @@ frameworks:
   # - "SemanticKernel"
 
 prompt_template: |
-  "{task}"
+  You are an AI agent specialized in researching academic publications. Your task is to find dissertations and theses published in Brazil about open data and open research, specifically those that have published datasets alongside their research results.
+  Do not explain your reasoning, just provide the final answer.
+  Your task is:
+  Task: {task}
+
+  Your output should be a concise list of relevant dissertations and theses, including the title, author, year of publication, a brief summary of how they utilized open data in their research, URL of the work, and a URL of the dataset if any.
+  The format of the output must be as follows:
+  1. Title: [Title of the dissertation/thesis]
+  - Author: [Author's name]
+  - Year: [Year of publication]
+  - Summary: [Brief summary of the research and dataset usage]
+  - URL: [URL of the dissertation/thesis]
+  - Dataset URL: [URL of the dataset if available]
+
+  2. Title: [Title of the dissertation/thesis]
+  - Author: [Author's name]
+  - Year: [Year of publication]
+  - Summary: [Brief summary of the research and dataset usage]
+  - URL: [URL of the dissertation/thesis]
+  - Dataset URL: [URL of the dataset if available]  
 
 tasks:
   - Look for dissertations and thesis published in Brazil about open data and open research in which datasets were published with research results.
+  - Look for technical reports published in Brazil about open data and open research in which datasets were published with research results.
+  - Look for blog posts published in Brazil about open data and open research in which datasets were published with research results.
 
 tools:
   - name: "web_browser"

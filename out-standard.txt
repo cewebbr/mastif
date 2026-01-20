@@ -2,312 +2,131 @@
 STANDARD TESTING MODE
 ======================================================================
 
-Testing Configuration:
-  Models: 1
-  Protocols: MCP, A2A, ACP, standard
-  Frameworks: CrewAI, Smolagents, LangChain, LangGraph, LlamaIndex, Semantic Kernel
-
-  Total tests per model: 10 (4 protocols + 6 frameworks)
-  Total tests: 20
-
-Starting tests...
-
+----------------------------------------------------------------------
+You are about to run a comprehensive test with the following configuration:
+Models: 2
+Protocols: 1
+Frameworks: 1
+Tasks: 3
+Total: 6
+----------------------------------------------------------------------
 
 ======================================================================
-Testing Model: mistralai/Mistral-Nemo-Base-2407
+Testing Model: deepseek-ai/DeepSeek-V3.2
 ======================================================================
 
 ----------------------------------------------------------------------
-PROTOCOL TESTS
+PROTOCOL × FRAMEWORK COMBINATIONS
 ----------------------------------------------------------------------
 
-  Testing with MCP on task: Look for dissertation and thesis in Braz...
-    ✓ Success (5 reasoning steps, 120 reasoning tokens, 210 output tokens)
+──────────────────────────────────────────────────────────────────────
+Protocol: standard
+──────────────────────────────────────────────────────────────────────
 
-  Testing with MCP on task: Prepare a report about new laws regardin...
-    ✓ Success (5 reasoning steps, 125 reasoning tokens, 215 output tokens)
+  CrewAI with standard:
+    Task 1/3: You are an AI agent specialized in researching aca...
+      ✓ Latency: 21.90s, Steps: 3
+    Task 2/3: You are an AI agent specialized in researching aca...
+      ✓ Latency: 21.77s, Steps: 3
+    Task 3/3: You are an AI agent specialized in researching aca...
+      ✓ Latency: 23.79s, Steps: 3
 
-  Protocol MCP summary:
-    Success rate: 2/2
-    Avg latency: 0.30s
-    Avg reasoning steps: 5.00
-    Total reasoning tokens: 245
-    Total output tokens: 425
-    Total tokens spent: 670
-    
------------------------------------
+  CrewAI + standard Summary:
+    Success: 3/3 (100.0%)
+    Avg Latency: 22.49s
+    Avg Steps: 3.0
 
-  Testing with A2A on task: Look for dissertation and thesis in Braz...
-    ✓ Success (5 reasoning steps, 118 reasoning tokens, 208 output tokens)
+======================================================================
+Model deepseek-ai/DeepSeek-V3.2 Complete
+======================================================================
 
-  Testing with A2A on task: Prepare a report about new laws regardin...
-    ✓ Success (5 reasoning steps, 120 reasoning tokens, 210 output tokens)
-
-  Protocol A2A summary:
-    Success rate: 2/2
-    Avg latency: 0.14s
-    Avg reasoning steps: 5.00
-    Total reasoning tokens: 238
-    Total output tokens: 418
-    Total tokens spent: 656
-    
------------------------------------
-
-  Testing with ACP on task: Look for dissertation and thesis in Braz...
-    ✓ Success (5 reasoning steps, 119 reasoning tokens, 209 output tokens)
-
-  Testing with ACP on task: Prepare a report about new laws regardin...
-    ✓ Success (5 reasoning steps, 121 reasoning tokens, 211 output tokens)
-
-  Protocol ACP summary:
-    Success rate: 2/2
-    Avg latency: 0.14s
-    Avg reasoning steps: 5.00
-    Total reasoning tokens: 240
-    Total output tokens: 420
-    Total tokens spent: 660
-    
------------------------------------
-
-  Testing with standard on task: Look for dissertation and thesis in Braz...
-    ✓ Success (3 reasoning steps, 80 reasoning tokens, 150 output tokens)
-
-  Testing with standard on task: Prepare a report about new laws regardin...
-    ✓ Success (3 reasoning steps, 82 reasoning tokens, 152 output tokens)
-
-  Protocol standard summary:
-    Success rate: 2/2
-    Avg latency: 0.13s
-    Avg reasoning steps: 3.00
-    Total reasoning tokens: 162
-    Total output tokens: 302
-    Total tokens spent: 464
-    
------------------------------------
+======================================================================
+Testing Model: openai/gpt-oss-120b
+======================================================================
 
 ----------------------------------------------------------------------
-FRAMEWORK TESTS
+PROTOCOL × FRAMEWORK COMBINATIONS
 ----------------------------------------------------------------------
 
-  Testing with CrewAI...
-    Task 1: ✓ Success (3 reasoning steps, 60 reasoning tokens, 110 output tokens)
-    Task 2: ✓ Success (3 reasoning steps, 62 reasoning tokens, 112 output tokens)
+──────────────────────────────────────────────────────────────────────
+Protocol: standard
+──────────────────────────────────────────────────────────────────────
 
-  CrewAI summary:
-    Success rate: 2/2
-    Avg latency: 0.14s
-    Avg reasoning steps: 3.00
-    Total reasoning tokens: 122
-    Total output tokens: 222
-    Total tokens spent: 344
-    
------------------------------------
+  CrewAI with standard:
+    Task 1/3: You are an AI agent specialized in researching aca...
+      ✓ Latency: 2.58s, Steps: 3
+    Task 2/3: You are an AI agent specialized in researching aca...
+      ✓ Latency: 2.57s, Steps: 3
+    Task 3/3: You are an AI agent specialized in researching aca...
+      ✓ Latency: 2.54s, Steps: 3
 
-  Testing with Smolagents...
-    Task 1: ✓ Success (4 reasoning steps, 80 reasoning tokens, 160 output tokens)
-    Task 2: ✓ Success (4 reasoning steps, 82 reasoning tokens, 162 output tokens)
+  CrewAI + standard Summary:
+    Success: 3/3 (100.0%)
+    Avg Latency: 2.56s
+    Avg Steps: 3.0
 
-  Smolagents summary:
-    Success rate: 2/2
-    Avg latency: 0.13s
-    Avg reasoning steps: 4.00
-    Total reasoning tokens: 162
-    Total output tokens: 322
-    Total tokens spent: 484
-    
------------------------------------
-
-  Testing with LangChain...
-    Task 1: ✓ Success (3 reasoning steps, 61 reasoning tokens, 120 output tokens)
-    Task 2: ✓ Success (3 reasoning steps, 63 reasoning tokens, 122 output tokens)
-
-  LangChain summary:
-    Success rate: 2/2
-    Avg latency: 0.29s
-    Avg reasoning steps: 3.00
-    Total reasoning tokens: 124
-    Total output tokens: 242
-    Total tokens spent: 366
-    
------------------------------------
-
-  Testing with LangGraph...
-    Task 1: ✓ Success (11 reasoning steps, 220 reasoning tokens, 380 output tokens)
-    Task 2: ✓ Success (11 reasoning steps, 222 reasoning tokens, 382 output tokens)
-
-  LangGraph summary:
-    Success rate: 2/2
-    Avg latency: 0.58s
-    Avg reasoning steps: 11.00
-    Total reasoning tokens: 442
-    Total output tokens: 762
-    Total tokens spent: 1,204
-    
------------------------------------
-
-  Testing with LlamaIndex...
-    Task 1: ✗ Failed: 2 validation errors for HuggingFaceLLM
-model_name
-  Field required [type=missing, input_value={}, input_type=dict]
-    For further information visit https://errors.pydantic.dev/2.11/v/missing
-adapter
-  Field required [type=missing, input_value={}, input_type=dict]
-    For further information visit https://errors.pydantic.dev/2.11/v/missing (0 reasoning steps, 0 tokens)
-    Task 2: ✗ Failed: 2 validation errors for HuggingFaceLLM
-model_name
-  Field required [type=missing, input_value={}, input_type=dict]
-    For further information visit https://errors.pydantic.dev/2.11/v/missing
-adapter
-  Field required [type=missing, input_value={}, input_type=dict]
-    For further information visit https://errors.pydantic.dev/2.11/v/missing (0 reasoning steps, 0 tokens)
-
-  LlamaIndex summary:
-    Success rate: 0/2
-    Avg latency: 0.00s
-    Avg reasoning steps: 0.00
-    Total reasoning tokens: 0
-    Total output tokens: 0
-    Total tokens spent: 0
-    
------------------------------------
-
-  Testing with SemanticKernel...
-    Task 1: ✗ Failed: 'Kernel' object has no attribute 'add_text_completion_service' (0 reasoning steps, 0 tokens)
-    Task 2: ✗ Failed: 'Kernel' object has no attribute 'add_text_completion_service' (0 reasoning steps, 0 tokens)
-
-  SemanticKernel summary:
-    Success rate: 0/2
-    Avg latency: 0.00s
-    Avg reasoning steps: 0.00
-    Total reasoning tokens: 0
-    Total output tokens: 0
-    Total tokens spent: 0
-    
------------------------------------
+======================================================================
+Model openai/gpt-oss-120b Complete
+======================================================================
 
 ======================================================================
 TEST SUMMARY
 ======================================================================
 
 Overall Statistics:
-  Total Tests: 20
-  Successful: 16 (80.0%)
-  Failed: 4 (20.0%)
-  Total Reasoning Steps: 78
-  Avg Reasoning Steps per Test: 3.9
-  Total reasoning tokens: 1,497
-  Total output tokens: 2,495
-  Total tokens spent: 3,992
+  Total Tests: 6
+  Successful: 6 (100.0%)
+  Failed: 0 (0.0%)
+  Total Reasoning Steps: 18
+  Avg Reasoning Steps per Test: 3.0
 
 ----------------------------------------------------------------------
 Results by Framework:
 ----------------------------------------------------------------------
 
   CrewAI:
-    Success Rate: 2/2 (100.0%)
-    Avg Latency: 0.14s
+    Success Rate: 6/6 (100.0%)
+    Avg Latency: 12.52s
     Avg Reasoning Steps: 3.0
-    Total reasoning tokens: 122
-    Total output tokens: 222
-    Total tokens spent: 344
-
-  LangChain:
-    Success Rate: 2/2 (100.0%)
-    Avg Latency: 0.29s
-    Avg Reasoning Steps: 3.0
-    Total reasoning tokens: 124
-    Total output tokens: 242
-    Total tokens spent: 366
-
-  LangGraph:
-    Success Rate: 2/2 (100.0%)
-    Avg Latency: 0.58s
-    Avg Reasoning Steps: 11.0
-    Total reasoning tokens: 442
-    Total output tokens: 762
-    Total tokens spent: 1,204
-
-  LlamaIndex:
-    Success Rate: 0/2 (0.0%)
-    Avg Latency: 0.00s
-    Avg Reasoning Steps: 0.0
-    Total reasoning tokens: 0
-    Total output tokens: 0
-    Total tokens spent: 0
-
-  SemanticKernel:
-    Success Rate: 0/2 (0.0%)
-    Avg Latency: 0.00s
-    Avg Reasoning Steps: 0.0
-    Total reasoning tokens: 0
-    Total output tokens: 0
-    Total tokens spent: 0
-
-  Smolagents:
-    Success Rate: 2/2 (100.0%)
-    Avg Latency: 0.13s
-    Avg Reasoning Steps: 4.0
-    Total reasoning tokens: 162
-    Total output tokens: 322
-    Total tokens spent: 484
-
-  direct:
-    Success Rate: 8/8 (100.0%)
-    Avg Latency: 0.18s
-    Avg Reasoning Steps: 4.5
-    Total reasoning tokens: 647
-    Total output tokens: 1,205
-    Total tokens spent: 1,852
 
 ----------------------------------------------------------------------
 Results by Protocol:
 ----------------------------------------------------------------------
 
-  A2A:
-    Success Rate: 2/2 (100.0%)
-    Avg Latency: 0.14s
-    Total reasoning tokens: 238
-    Total output tokens: 418
-    Total tokens spent: 656
-
-  ACP:
-    Success Rate: 2/2 (100.0%)
-    Avg Latency: 0.14s
-    Total reasoning tokens: 240
-    Total output tokens: 420
-    Total tokens spent: 660
-
-  MCP:
-    Success Rate: 2/2 (100.0%)
-    Avg Latency: 0.30s
-    Total reasoning tokens: 245
-    Total output tokens: 425
-    Total tokens spent: 670
-
   standard:
-    Success Rate: 10/14 (71.4%)
-    Avg Latency: 0.25s
-    Total reasoning tokens: 774
-    Total output tokens: 1,232
-    Total tokens spent: 2,006
+    Success Rate: 6/6 (100.0%)
+    Avg Latency: 12.52s
 
 ----------------------------------------------------------------------
 Results by Model:
 ----------------------------------------------------------------------
 
-  mistralai/Mistral-Nemo-Base-2407:
-    Success Rate: 16/20 (80.0%)
-    Avg Latency: 0.23s
-    Avg Reasoning Steps: 3.9
-    Total reasoning tokens: 1,497
-    Total output tokens: 2,495
-    Total tokens spent: 3,992
+  deepseek-ai/DeepSeek-V3.2:
+    Success Rate: 3/3 (100.0%)
+    Avg Latency: 22.49s
+    Avg Reasoning Steps: 3.0
+
+  openai/gpt-oss-120b:
+    Success Rate: 3/3 (100.0%)
+    Avg Latency: 2.56s
+    Avg Reasoning Steps: 3.0
+
+----------------------------------------------------------------------
+Token Usage by Model:
+----------------------------------------------------------------------
+Model: openai/gpt-oss-120b
+  Reasoning tokens: 742
+  Output tokens: 1313
+  Total tokens: 2055
+Model: deepseek-ai/DeepSeek-V3.2
+  Reasoning tokens: 753
+  Output tokens: 2435
+  Total tokens: 3188
 
 ======================================================================
 
-✓ Results exported to ./logs/results-20251030_093954.json
+✓ Results exported to ./logs/results-20260120_100156.json
 
 ======================================================================
-Testing complete! Check ./logs/results-20251030_093954.json for detailed results.
+Testing complete! Check ./logs/results-20260120_100156.json for detailed results.
 ======================================================================
-
