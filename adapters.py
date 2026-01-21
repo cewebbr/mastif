@@ -10,6 +10,7 @@ from langchain_community.llms import HuggingFaceEndpoint
 from llama_index.core.llms import CustomLLM, CompletionResponse, LLMMetadata
 from llama_index.core.llms.callbacks import llm_completion_callback
 from abc import ABC, abstractmethod
+from config import ConfigExpert
 
 class BaseAdapter(ABC):
     """
@@ -59,12 +60,12 @@ class HuggingFaceAdapter(BaseAdapter):
         try:
             # Conversational models expect a list of message objects
             messages = [{"role": "user", "content": prompt}]
-            
+            config = ConfigExpert.get_instance()
             response = self.client.chat_completion(
                 messages=messages,
                 model=self.model_name,
-                max_tokens=kwargs.get("max_tokens", 1024),
-                temperature=kwargs.get("temperature", 0.7),
+                max_tokens=kwargs.get("max_tokens", config.get("max_tokens", 1024)),
+                temperature=kwargs.get("temperature", config.get("temperature", 0.7)),
                 # 'do_sample' is often inferred from temperature in chat_completion,
                 # but can be passed via kwargs if the specific model requires it.
                 **kwargs 
@@ -151,11 +152,12 @@ class OpenAIAdapter(BaseAdapter):
         """Generate text completion from the model"""
         try:
             client = openai.OpenAI(api_key=self.api_key)
+            config = ConfigExpert.get_instance()
             response = client.chat.completions.create(
                 model=self.model_name,
                 messages=[{"role": "user", "content": prompt}],
-                max_tokens=kwargs.get("max_tokens", 1024), # TODO: Move this to config file
-                temperature=kwargs.get("temperature", 0.7), # TODO: Move this to config file
+                max_tokens=kwargs.get("max_tokens", config.get("max_tokens", 1024)),
+                temperature=kwargs.get("temperature", config.get("temperature", 0.7)),
             )
             return response.choices[0].message.content.strip()
         except Exception as e:

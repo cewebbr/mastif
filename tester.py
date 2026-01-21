@@ -25,9 +25,9 @@ from frameworks import (
 
 from mind2web_loader import Mind2WebLoader
 from mind2web_evaluator import Mind2WebEvaluator
+from config import ConfigExpert
 from transformers import AutoTokenizer
 import tiktoken
-import yaml
 
 class Mastif:
     """
@@ -67,17 +67,6 @@ class Mastif:
             # {"name": "file_upload", "description": "Upload a file to a website"}, # Not now
         ]
        
-    # TODO: Create a configuration class using singleton pattern with an easey access get_config method
-    # For instance: 
-    # ConfigExpert.get_instance().get("test_mode")
-    # ConfigExpert.get_instance().get("temperature")
-    # etc.
-    def load_experiment_config(self, config_path: str) -> Dict:
-        """Load experiment configuration from YAML file"""
-        with open(config_path, 'r') as f:
-            config = yaml.safe_load(f)
-        return config
-
     def test_with_protocol(
         self,
         adapter: BaseAdapter,
@@ -457,25 +446,22 @@ Please respond according to this protocol structure and complete the task."""
                 error=str(e)
             )
     
-    def run_comprehensive_test(self, config_path: str, api_key: Optional[str] = None):
+    def run_comprehensive_test(self, api_key: Optional[str] = None):
         """
         Run comprehensive tests across all models, protocols, and frameworks.
         Tests all combinations of protocols x frameworks for each model.
         
         Args:
-            config_path: Path to the experiment configuration file
             api_key: API token for the model (either HuggingFace or OpenAI)
         """
-        
-        # Load config
-        config = self.load_experiment_config(config_path)
-    
+            
         # Extract experiment configuration
-        models = config['models']
-        protocols = [ProtocolType[p] for p in config['protocols']]
-        framework_names = config['frameworks']
-        prompt_template = config['prompt_template']
-        inner_tasks = config['tasks']
+        config = ConfigExpert.get_instance()
+        models = config.get("models")
+        protocols = [ProtocolType[p] for p in config.get("protocols")]
+        framework_names = config.get("frameworks")
+        prompt_template = config.get("prompt_template")
+        inner_tasks = config.get("tasks")
         tools = config.get('tools', self.standard_tools)    
         
         # Format tasks with template
@@ -502,7 +488,7 @@ Please respond according to this protocol structure and complete the task."""
         print(f"Tasks: {len(test_tasks)}")
         print(f"Total: {len(models) * len(protocols) * len(frameworks) * len(test_tasks)}")
         print(f"{'-'*70}")
-        if( len(models) * len(protocols) * len(frameworks) * len(test_tasks) > 1000 ):
+        if( len(models) * len(protocols) * len(frameworks) * len(test_tasks) > config.get ):
             print("WARNING: This may incur a high number of API calls and associated costs.")
             response = input("\nDo you want to proceed? (yes/no): ").strip().lower()
             if response not in ['yes', 'y']:
@@ -744,7 +730,6 @@ Please respond according to this protocol structure and complete the task."""
 
     def run_mind2web_evaluation(
         self,
-        config_path: str,
         hf_token: Optional[str] = None,
         num_tasks: Optional[int] = 10,
         frameworks: Optional[List[str]] = None
@@ -753,7 +738,6 @@ Please respond according to this protocol structure and complete the task."""
         Run evaluation on Mind2Web benchmark tasks
         
         Args:
-            config_path: Path to the experiment configuration file
             hf_token: HuggingFace API token
             num_tasks: Number of tasks to evaluate (None for all, default 10)
             frameworks: List of frameworks to test (None for all)
@@ -766,12 +750,12 @@ Please respond according to this protocol structure and complete the task."""
         tasks = loader.get_task_sample(num_tasks=num_tasks)
         
         # Load config
-        config = self.load_experiment_config(config_path)
+        config = ConfigExpert.get_instance()
 
         # Extract experiment configuration
-        models = config['models']
-        protocols = [ProtocolType[p] for p in config['protocols']]
-        framework_names = config['frameworks']
+        models = config.get("models")
+        protocols = [ProtocolType[p] for p in config.get("protocols")]
+        framework_names = config.get("frameworks")
         tools = config.get('tools', self.standard_tools)
 
         # Map framework names to functions
@@ -817,7 +801,7 @@ Please respond according to this protocol structure and complete the task."""
         print(f"Tasks: {len(tasks)}")
         print(f"Total: {len(models) * len(protocols) * len(frameworks) * len(tasks)}")
         print(f"{'-'*70}")
-        if( len(models) * len(protocols) * len(frameworks) * len(tasks) > 1000 ):
+        if( len(models) * len(protocols) * len(frameworks) * len(tasks) > config.get("requests_soft_limit", 1000) ):
             print("WARNING: This may incur a high number of API calls and associated costs.")
             response = input("\nDo you want to proceed? (yes/no): ").strip().lower()
             if response not in ['yes', 'y']:

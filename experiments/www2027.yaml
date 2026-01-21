@@ -2,9 +2,13 @@ experiment:
   name: "WWW 2027"
   description: "Test different framework and protocol combinations."
 
-test_mode: "mind2web"  # Options: "MIND2WEB", "STANDARD"
+temperature: 0.7 # Model temperature setting
+max_tokens: 1024 # Max tokens per request
+requests_soft_limit: 1000  # Requires user confirmation if exceeded
+test_mode: "mind2web"  # Options: "mind2web", "standard"
 
-models: # Any model ID listed here must be available on HuggingFace or OpenAI
+# Any model ID listed here must be available on HuggingFace or OpenAI
+models: 
   # - "gpt-4o"
   # - "meta-llama/Llama-3.3-70B-Instruct"
   # - "meta-llama/Llama-4-Scout-17B-16E-Instruct"

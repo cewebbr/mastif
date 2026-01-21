@@ -9,6 +9,7 @@ import os
 import sys
 import datetime
 from tester import Mastif
+from config import ConfigExpert
 
 def main():
     """Main execution function with Mind2Web support"""
@@ -20,11 +21,10 @@ def main():
         config_path = "experiments/example.yaml" # Default config file
 
     # Configuration
-    # TODO: Add this to config file as well
-    # Instantiate ConfigExpert singleton here later
-    MODE = os.getenv("TEST_MODE", "standard")  # "standard" or "mind2web"
-    MIND2WEB_NUM_TASKS = int(os.getenv("MIND2WEB_NUM_TASKS", "10"))  # 0 to all tasks
-    
+    # First singleton initialization requires path to yaml experiment file
+    config = ConfigExpert.get_instance(config_path) 
+    MODE = config.get("test_mode", "standard")  # "standard" or "mind2web"
+    MIND2WEB_NUM_TASKS = config.get("mind2web_num_tasks", 10)  # 0 to all tasks
     
     # Get HuggingFace token
     hf_token = os.getenv("HF_TOKEN")
@@ -51,7 +51,6 @@ def main():
         
         # Run Mind2Web evaluation
         if(tester.run_mind2web_evaluation(
-            config_path=config_path,
             num_tasks=MIND2WEB_NUM_TASKS if MIND2WEB_NUM_TASKS > 0 else None
         )):
             tester.print_summary()
@@ -77,16 +76,16 @@ def main():
         print("STANDARD TESTING MODE")
         print("="*70)
 
-        if(tester.run_comprehensive_test(config_path)):
-            tester.print_summary()
-            
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"./logs/results-{timestamp}.json"
-            tester.export_results(filename)
-            
-            print(f"\n{'='*70}")
-            print(f"Testing complete! Check {filename} for detailed results.")
-            print(f"{'='*70}\n")
+        tester.run_comprehensive_test()
+        tester.print_summary()
+        
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"./logs/results-{timestamp}.json"
+        tester.export_results(filename)
+        
+        print(f"\n{'='*70}")
+        print(f"Testing complete! Check {filename} for detailed results.")
+        print(f"{'='*70}\n")
     
     return 0
 

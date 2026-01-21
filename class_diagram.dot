@@ -284,11 +284,10 @@ test_with_langchain(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]]
 test_with_langgraph(adapter: BaseAdapter, task: str): TestResult\l
 test_with_llamaindex(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
 test_with_semantic_kernel(adapter: BaseAdapter, task: str): TestResult\l
-load_experiment_config(config_path: str): Dict\l
-run_comprehensive_test(config_path: str, hf_token: Optional[str] = None)\l
+run_comprehensive_test(hf_token: Optional[str] = None)\l
 export_results(filename: str = \"test_results.json\")\l
 print_summary()\l
-run_mind2web_evaluation(config_path: str, hf_token: Optional[str] = None, num_tasks: Optional[int] = 10, frameworks: Optional[List[str]] = None)\l
+run_mind2web_evaluation(hf_token: Optional[str] = None, num_tasks: Optional[int] = 10, frameworks: Optional[List[str]] = None)\l
 export_mind2web_results(filename: str)\l
 get_supported_protocols(): List[ProtocolType]\l
 get_supported_frameworks(): List[str]\l

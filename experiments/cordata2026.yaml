@@ -1,7 +1,13 @@
 experiment:
   name: "Cordata 2026"
   description: "Test how agents retrieve and use open data from Brazilian research repositories."
-  
+
+temperature: 0.7 # Model temperature setting
+max_tokens: 1024 # Max tokens per request
+requests_soft_limit: 1000 # Requires user confirmation if exceeded
+test_mode: "standard"  # Options: "mind2web", "standard"
+
+# Any model ID listed here must be available on HuggingFace or OpenAI
 models:
   # - "gpt-4o"
   # - "meta-llama/Llama-3.3-70B-Instruct"
@@ -9,6 +15,10 @@ models:
   - "deepseek-ai/DeepSeek-V3.2"  
   - "openai/gpt-oss-120b"
   
+# ====== Used only in MIND2WEB test mode ====== 
+# judge_model: "gpt-4o"
+# ============================================= 
+
 protocols:
   - "STANDARD"
   # - "MCP"
@@ -23,6 +33,11 @@ frameworks:
   # - "LlamaIndex"
   # - "SemanticKernel"
 
+# ====== Used only in MIND2WEB test mode ====== 
+# mind2web_num_tasks: 10  # Set to 0 to run all tasks in the config file
+# ============================================= 
+
+# ====== Used only in STANDARD test mode ======
 prompt_template: |
   You are an AI agent specialized in researching academic publications. Your task is to find dissertations and theses published in Brazil about open data and open research, specifically those that have published datasets alongside their research results.
   Do not explain your reasoning, just provide the final answer.
@@ -49,6 +64,7 @@ tasks:
   - Look for dissertations and thesis published in Brazil about open data and open research in which datasets were published with research results.
   - Look for technical reports published in Brazil about open data and open research in which datasets were published with research results.
   - Look for blog posts published in Brazil about open data and open research in which datasets were published with research results.
+# ============================================= 
 
 tools:
   - name: "web_browser"
