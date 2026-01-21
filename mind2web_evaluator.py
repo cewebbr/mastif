@@ -7,6 +7,7 @@ Handles evaluation of agent performance on Mind2Web tasks.
 from typing import Dict, List, Optional
 import re
 import os
+from config import ConfigExpert
 
 class Mind2WebEvaluator:
     """
@@ -23,7 +24,7 @@ class Mind2WebEvaluator:
             judge_adapter: HuggingFaceAdapter instance for judge model
         """
         self.judge_adapter = judge_adapter
-        self.judge_model = judge_model or os.getenv("JUDGE_MODEL")
+        self.judge_model = judge_model or ConfigExpert.get_instance().get("judge_model", "gpt-4o-mini")
         self.results = []
     
     def evaluate_task(
