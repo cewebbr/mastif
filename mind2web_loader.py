@@ -268,7 +268,7 @@ class Mind2WebLoader:
         Get a sample of tasks from the dataset
         
         Args:
-            num_tasks: Number of tasks to sample (None for all tasks)
+            num_tasks: Number of tasks to sample
             seed: Random seed for reproducibility
             
         Returns:
