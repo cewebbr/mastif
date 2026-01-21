@@ -31,16 +31,9 @@ MASTIF framework is designed for researchers, developers, and practitioners who 
 
 ### 1. Create and Activate a Virtual Environment
 
-On macOS/Linux:
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-```
-
-On Windows:
-```bash
-python -m venv venv
-venv\Scripts\activate
 ```
 
 ### 2. Install Dependencies
