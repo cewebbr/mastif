@@ -14,7 +14,7 @@ CustomLLM;
 BaseProtocol;
 HuggingFaceLLM;
 AgentState;
-BaseAdapter; // <-- Added BaseAdapter
+BaseAdapter
 }
 
 {
@@ -43,6 +43,9 @@ OpenAIAdapter -> BaseAdapter [arrowhead=empty, fontsize=9];
 Mind2WebEvaluator -> OpenAIAdapter [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
 OpenAIAdapter -> OpenAIAPI  [arrowhead=open, fontsize=9];
 HuggingFaceAdapter -> HuggingFaceAPI [arrowhead=open, fontsize=9];
+
+HuggingFaceAdapter -> ConfigManager [arrowhead=open, fontsize=9];
+OpenAIAdapter -> ConfigManager [arrowhead=open, fontsize=9];
 
 // ProtocolType is an Enum
 subgraph cluster_dataclasses {
@@ -300,6 +303,7 @@ Mastif -> MCPProtocol [arrowhead=open, fontsize=9];
 Mastif -> A2AProtocol [arrowhead=open, fontsize=9];
 Mastif -> ACPProtocol [arrowhead=open, fontsize=9];
 Mastif -> BaseAdapter [arrowhead=open, fontsize=9];
+Mastif -> ConfigManager [arrowhead=open, fontsize=9];
 
 // Frameworks are used via BaseAdapter, not directly:
 BaseAdapter -> CrewAIAgent [arrowhead=odiamond, fontsize=9];
@@ -315,4 +319,23 @@ Mastif -> Mind2WebEvaluator [arrowhead=open, fontsize=9];
 
 // Composition: LangGraphAgent contains AgentState
 LangGraphAgent -> AgentState [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9, minlen=1] ; 
+
+ConfigManager [label="{
+ConfigManager\n
+«singleton»|
+_instance\l
+_config\l
+_config_path\l
+|
+__new__(config_path: Optional[str] = None)\l
+_load_config(config_path: str)\l
+get_instance(config_path: Optional[str] = None): 'ConfigExpert'\l
+get(key: str, default: Any = None): Any\l
+get_all(): Dict\l
+has(key: str): bool\l
+reload(config_path: Optional[str] = None)\l
+get_config_path(): Optional[str]\l
+reset()\l
+}"];
+
 }

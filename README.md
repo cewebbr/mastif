@@ -70,12 +70,18 @@ pip install transformers
 
 ## Usage
 
-### Standard Mode (Customized Testing)
+MASTIF supports 2 types of tests: 
+
+1. Customizable tasks 
+2. Benchmark tasks. The currently supported benchmark is [Mind2Web benchmark](https://github.com/OSU-NLP-Group/Mind2Web).
+
+For customizeable tasks, HF_TOKEN is required and OPEN_AI_KEY is only needed if you configure tests with gtp-* models.
+
+For Mind2Web tasks, the following two keys are required, as MASTIF currently considers OpenAI models to judge outputs from benckmark tasks.
+
 ```bash
 export HF_TOKEN='your_token'
 export OPEN_AI_KEY='your_key'
-export JUDGE_MODEL='gpt-4o-mini'
-export TEST_MODE='standard'
 ```
 
 Make a copy of [experiments.yaml](./experiments/example.yaml), rename it, and customize it according to your needs.
@@ -84,36 +90,7 @@ Make a copy of [experiments.yaml](./experiments/example.yaml), rename it, and cu
 python main.py experiments/[your experiment file].yaml
 ```
 
-### Mind2Web Evaluation Mode
-```bash
-export HF_TOKEN='your_token'
-export OPEN_AI_KEY='your_key'
-export JUDGE_MODEL='gpt-4o-mini'
-export TEST_MODE='mind2web'
-export MIND2WEB_NUM_TASKS=10  # Use 10 tasks (default)
-python main.py
-```
-
-### Test All Mind2Web Tasks
-```bash
-export HF_TOKEN='your_token'
-export OPEN_AI_KEY='your_key'
-export JUDGE_MODEL='gpt-4o-mini'
-export TEST_MODE='mind2web'
-export MIND2WEB_NUM_TASKS=0  # 0 means use ALL tasks
-python main.py
-```
-
-## Configuration
-
-### Environment Variables
-- `TEST_MODE`: 'standard' or 'mind2web'
-- `MIND2WEB_NUM_TASKS`: Number of tasks (10-2350, or 0 for all)
-- `HF_TOKEN`: Your HuggingFace API token
-- `OPEN_AI_KEY`: Your OpenAI API key
-- `JUDGE_MODEL`: OpenAI llm-as-a-judge model
-
-### Sample Sizes
+### Mind2Web Sample Sizes
 - **10 tasks**: Quick evaluation (~15 minutes)
 - **50 tasks**: Medium evaluation (~1 hour)
 - **100 tasks**: Comprehensive sample (~2 hours)
