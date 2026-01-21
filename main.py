@@ -50,25 +50,23 @@ def main():
         print("="*70)
         
         # Run Mind2Web evaluation
-        if(tester.run_mind2web_evaluation(
-            num_tasks=MIND2WEB_NUM_TASKS if MIND2WEB_NUM_TASKS > 0 else None
-        )):
-            tester.print_summary()
-            
-            # Export Mind2Web results
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"./logs/mind2web-results-{timestamp}.json"
-            tester.export_mind2web_results(filename)
-            
-            # Also export standard results
-            standard_filename = f"./logs/results-{timestamp}.json"
-            tester.export_results(standard_filename)
-            
-            print(f"\n{'='*70}")
-            print(f"Mind2Web evaluation complete!")
-            print(f"Results: {filename}")
-            print(f"Full logs: {standard_filename}")
-            print(f"{'='*70}\n")
+        tester.run_mind2web_evaluation()
+        tester.print_summary()
+        
+        # Export Mind2Web results
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"./logs/mind2web-results-{timestamp}.json"
+        tester.export_mind2web_results(filename)
+        
+        # Also export standard results
+        standard_filename = f"./logs/results-{timestamp}.json"
+        tester.export_results(standard_filename)
+        
+        print(f"\n{'='*70}")
+        print(f"Mind2Web evaluation complete!")
+        print(f"Results: {filename}")
+        print(f"Full logs: {standard_filename}")
+        print(f"{'='*70}\n")
         
     else:
         # Run standard evaluation

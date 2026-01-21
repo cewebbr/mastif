@@ -730,28 +730,24 @@ Please respond according to this protocol structure and complete the task."""
 
     def run_mind2web_evaluation(
         self,
-        hf_token: Optional[str] = None,
-        num_tasks: Optional[int] = 10,
-        frameworks: Optional[List[str]] = None
+        hf_token: Optional[str] = None
     ):
         """
         Run evaluation on Mind2Web benchmark tasks
         
         Args:
             hf_token: HuggingFace API token
-            num_tasks: Number of tasks to evaluate (None for all, default 10)
-            frameworks: List of frameworks to test (None for all)
         """
+
+        # Load config
+        config = ConfigExpert.get_instance()
 
         # Initialize Mind2Web loader
         loader = Mind2WebLoader(split="train")
         
         # Load and sample tasks
-        tasks = loader.get_task_sample(num_tasks=num_tasks)
+        tasks = loader.get_task_sample(num_tasks=config.get("mind2web_num_tasks", 10))
         
-        # Load config
-        config = ConfigExpert.get_instance()
-
         # Extract experiment configuration
         models = config.get("models")
         protocols = [ProtocolType[p] for p in config.get("protocols")]
