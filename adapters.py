@@ -141,7 +141,7 @@ class OpenAIAdapter(BaseAdapter):
             model_name: OpenAI model identifier
             api_key: OpenAI API key
         """
-        self._model_name = model_name or os.getenv("JUDGE_MODEL")
+        self._model_name = model_name
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
     
     @property

@@ -8,7 +8,7 @@ and managing task sampling for testing.
 from typing import List, Dict, Optional
 import random
 import os
-
+from config import ConfigExpert
 
 class Mind2WebLoader:
     """
@@ -61,7 +61,8 @@ class Mind2WebLoader:
                 
                 # Convert stream to list (load first N examples that work)
                 self.dataset = []
-                max_examples = int(os.getenv("MIND2WEB_NUM_TASKS")) or 100
+                config = ConfigExpert.get_instance()
+                max_examples = int(config.get("mind2web_num_tasks", 2350))
                 
                 print("Loading examples from stream...")
                 for i, example in enumerate(dataset_stream):
