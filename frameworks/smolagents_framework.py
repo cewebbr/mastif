@@ -84,10 +84,9 @@ Execute according to protocol."""
         # Create prompt with reasoning structure
         prompt = f"""You are an AI agent operating in the Smolagents framework.
 
-Task:
-{task}
+Task: {task}
 
-Tools:
+Available tools:
 {tools_desc}
 
 Instructions:
@@ -104,7 +103,6 @@ Output:
 Reasoning:
 Final Answer:
 """
-
         
         # Step 3: Execute
         self.reasoning_steps.append(ReasoningStep(

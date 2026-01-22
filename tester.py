@@ -495,7 +495,7 @@ Please respond according to this protocol structure and complete the task."""
             if response not in ['yes', 'y']:
                 print("\n❌ Test execution cancelled by user.")
                 return False        
-            print("\n✓ Starting test execution...\n")
+            print("\n✅️ Starting test execution...\n")
 
         for model_name in models:
             print(f"\n{'='*70}")
@@ -542,7 +542,7 @@ Please respond according to this protocol structure and complete the task."""
                             combination_results.append(result)
                             self.results.append(result)
                             
-                            status = "✓" if result.success else "❌"
+                            status = "✅️" if result.success else "❌"
                             print(f"      {status} Latency: {result.latency:.2f}s, Steps: {len(result.reasoning_steps)}")
                         except Exception as e:
                             print(f"      ❌ Error: {str(e)}")
@@ -612,7 +612,7 @@ Please respond according to this protocol structure and complete the task."""
                 "results": results_dict
             }, f, indent=2, ensure_ascii=False)
         
-        print(f"\n✓ Results exported to {filename}")
+        print(f"\n✅️ Results exported to {filename}")
     
     def print_summary(self):
         """Print comprehensive summary of test results with detailed statistics"""
@@ -804,7 +804,7 @@ Please respond according to this protocol structure and complete the task."""
             if response not in ['yes', 'y']:
                 print("\n❌ Test execution cancelled by user.")
                 return False        
-            print("\n✓ Starting test execution...\n")
+            print("\n✅️ Starting test execution...\n")
 
         # Run tests for each model
         for model_name in models:
@@ -827,7 +827,7 @@ Please respond according to this protocol structure and complete the task."""
                     protocol_results.append(result)
                     self.results.append(result)
                     if result.success:
-                        status = "✓ Success"
+                        status = "✅️ Success"
                     else:
                         status = f"❌ Failed: {result.error}"
                     print(f"    {status} ({len(result.reasoning_steps)} reasoning steps)")
@@ -884,7 +884,7 @@ Please respond according to this protocol structure and complete the task."""
                                 result.reasoning_steps
                             )
                             
-                            print(f"    ✓ Completed")
+                            print(f"    ✅️ Completed")
                             print(f"      Task Understanding: {eval_result['task_understanding']:.2%}")
                             print(f"      Task Deviation: {eval_result['task_deviation']:.2%}")
                             print(f"      Task Completion: {eval_result['task_completion']:.2%}")
@@ -959,7 +959,7 @@ Please respond according to this protocol structure and complete the task."""
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(export_data, f, indent=2, ensure_ascii=False)
         
-        print(f"✓ Mind2Web results exported to {filename}")
+        print(f"✅️ Mind2Web results exported to {filename}")
     
     def get_supported_protocols(self):
         return [ProtocolType.MCP, ProtocolType.A2A, ProtocolType.ACP, ProtocolType.STANDARD]

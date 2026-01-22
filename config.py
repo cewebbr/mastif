@@ -66,7 +66,7 @@ class ConfigExpert:
         
         # Skip if already loaded from this path
         if self._config_path == config_path and self._config is not None:
-            print(f"✓ Config already loaded from: {config_path}")
+            print(f"✅️ Config already loaded from: {config_path}")
             return
         
         print(f"📖 Loading configuration from: {config_path}")
@@ -76,7 +76,7 @@ class ConfigExpert:
                 self._config = yaml.safe_load(f)
             
             self._config_path = config_path
-            print(f"✓ Configuration loaded successfully")
+            print(f"✅️ Configuration loaded successfully")
             
         except FileNotFoundError:
             raise FileNotFoundError(f"Configuration file not found: {config_path}")

@@ -73,10 +73,10 @@ class Mind2WebLoader:
                         print(f"  Loaded {i + 1} examples...")
                 
                 if len(self.dataset) > 0:
-                    print(f"✓ Loaded {len(self.dataset)} tasks from Mind2Web (streaming mode)")
+                    print(f"✅️ Loaded {len(self.dataset)} tasks from Mind2Web (streaming mode)")
                     return True
                 else:
-                    print("✗ No examples loaded from streaming mode")
+                    print("❌ No examples loaded from streaming mode")
                     return self._load_sample_data()
                     
             except Exception as stream_error:
@@ -85,7 +85,7 @@ class Mind2WebLoader:
                 return self._load_sample_data()
                 
         except Exception as e:
-            print(f"✗ Error loading Mind2Web dataset: {e}")
+            print(f"❌ Error loading Mind2Web dataset: {e}")
             print("Using sample data for demonstration...")
             return self._load_sample_data()
     
@@ -258,7 +258,7 @@ class Mind2WebLoader:
             }
         ]
         
-        print(f"✓ Loaded {len(self.dataset)} sample tasks")
+        print(f"✅️ Loaded {len(self.dataset)} sample tasks")
         print("These tasks represent typical Mind2Web scenarios.\n")
         
         return True
