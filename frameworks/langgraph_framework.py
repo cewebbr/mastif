@@ -63,7 +63,20 @@ class LangGraphAgent:
                 action_input=state['task']
             ))
             
-            prompt = f"Create a detailed step-by-step research plan for: {state['task']}"
+            prompt = f"""You are an AI agent operating in the LangGraph framework.
+
+Task:
+{state['task']}
+
+Instructions:
+• Think step-by-step.
+• Create a detailed research plan for this task.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
+"""
+            
             try:
                 plan = self.adapter.generate(prompt, max_tokens=512)
                 state["plan"] = plan
@@ -93,9 +106,26 @@ class LangGraphAgent:
                 action_input=f"Step {state['step']} of plan"
             ))
             
-            prompt = f"""Based on this plan: {state['plan']}
+            prompt = f"""You are an AI agent operating in the LangGraph framework.
 
-Execute research step {state['step']} and provide detailed findings."""
+Task:
+{state['task']}
+
+Plan:
+{state['plan']}
+
+Step:
+{state['step']}
+
+Instructions:
+• Execute this step carefully.
+• Provide detailed findings.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
+"""
+
             try:
                 findings = self.adapter.generate(prompt, max_tokens=1024)
                 state["research_results"] = [findings]
@@ -126,11 +156,23 @@ Execute research step {state['step']} and provide detailed findings."""
             ))
             
             results_text = "\n\n".join(state["research_results"])
-            prompt = f"""Synthesize these research findings into a comprehensive final report:
+            prompt = f"""
+You are an AI agent operating in the LangGraph framework.
 
+Task:
+{state['task']}
+
+Findings:
 {results_text}
 
-Provide a well-structured summary with key insights."""
+Instructions:
+• Synthesize these findings into a comprehensive final report.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
+"""
+
             try:
                 report = self.adapter.generate(prompt, max_tokens=512)
                 state["final_report"] = report

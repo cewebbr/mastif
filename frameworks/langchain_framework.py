@@ -96,15 +96,29 @@ Execute according to protocol."""
             ))
             
             # Create ReAct prompt template
-            template = """Answer the following question as best you can. You have access to the following tools:
+            template = """You are an AI agent operating in the LangChain framework.
 
+Task:
+{input}
+
+Tools:
 {tools}
+
+Instructions:
+• Think step-by-step.
+• Decide what actions to take.
+• Use tools when appropriate.
+• Arrive at a final answer.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
 
 Use the following format:
 
-Question: the input question you must answer
-Thought: you should always think about what to do
-Action: the action to take, should be one of [{tool_names}]
+Question: {input}
+Thought: {agent_scratchpad}
+Action: one of [{tool_names}]
 Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times)
@@ -112,9 +126,7 @@ Thought: I now know the final answer
 Final Answer: the final answer to the original input question
 
 Begin!
-
-Question: {input}
-Thought: {agent_scratchpad}"""
+"""
 
             prompt = PromptTemplate.from_template(template)
             

@@ -85,16 +85,26 @@ Execute according to protocol."""
             ))
             
             # Use a reasoning prompt
-            reasoning_prompt = """You are an AI assistant helping to solve a task.
+            reasoning_prompt = """You are an AI assistant operating in the Semantic Kernel framework.
 
-Task: {input}
+Task:
+{input}
 
-Think through this step-by-step:
-1. Understand the task requirements
-2. Break down the approach
-3. Execute and provide the answer
+Instructions:
+• Think through this step-by-step:
+  1. Understand the task requirements
+  2. Break down the approach
+  3. Execute and provide the answer
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
+  
+Response:
+Reasoning:
+Final Answer:
+"""
 
-Response:"""
             
             self.reasoning_steps.append(ReasoningStep(
                 step_number=2,

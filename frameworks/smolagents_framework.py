@@ -82,19 +82,29 @@ Execute according to protocol."""
         ))
         
         # Create prompt with reasoning structure
-        prompt = f"""You are a lightweight agent using the Smolagents framework.
+        prompt = f"""You are an AI agent operating in the Smolagents framework.
 
-Available Tools:
+Task:
+{task}
+
+Tools:
 {tools_desc}
 
-Task: {task}
+Instructions:
+• Think step-by-step.
+• Decide what tools are needed.
+• Plan your approach.
+• Execute and provide the result.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
 
-Think step by step:
-1. What tools do you need?
-2. What's your approach?
-3. Execute and provide the result.
+Output:
+Reasoning:
+Final Answer:
+"""
 
-Provide your reasoning and final answer:"""
         
         # Step 3: Execute
         self.reasoning_steps.append(ReasoningStep(

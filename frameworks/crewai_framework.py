@@ -68,15 +68,28 @@ Complete the task according to this protocol structure."""
 
 
         # Create role-specific prompt
-        prompt = f"""You are a {self.role} agent in a CrewAI system.
+        prompt = f"""You are a {self.role} agent operating in a CrewAI system.
+Role:
+{self.role}
 
-Your Role: {self.role}
-Task: {task_with_protocol}
-Context: {json.dumps(context or {}, indent=2)}
+Task:
+{task_with_protocol}
 
-Think step-by-step about how to complete this task given your role and expertise.
-Provide your reasoning process and final answer."""
-        
+Context:
+{json.dumps(context or {}, indent=2)}
+
+Instructions:
+• Think step-by-step about how to complete the task given your role and expertise.
+• Provide your reasoning process and your final answer.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
+
+Output:
+Reasoning:
+Final Answer:
+"""     
         # Log the action
         self.reasoning_steps.append(ReasoningStep(
             step_number=2,
