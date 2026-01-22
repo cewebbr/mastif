@@ -124,7 +124,7 @@ Final Answer:
             ))
             
             # Execute the function using InferenceClient
-            result = self.inference_client.text_generation(prompt, max_new_tokens=512, temperature=0.7)
+            result = self.inference_client.text_generation(prompt, max_new_tokens=1024, temperature=0.7)
             
             self.reasoning_steps.append(ReasoningStep(
                 step_number=4,

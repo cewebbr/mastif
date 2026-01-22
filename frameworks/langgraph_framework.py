@@ -77,7 +77,7 @@ Instructions:
 """
             
             try:
-                plan = self.adapter.generate(prompt, max_tokens=512)
+                plan = self.adapter.generate(prompt, max_tokens=1024)
                 state["plan"] = plan
                 state["step"] = 1
                 
@@ -173,7 +173,7 @@ Instructions:
 """
 
             try:
-                report = self.adapter.generate(prompt, max_tokens=512)
+                report = self.adapter.generate(prompt, max_tokens=1024)
                 state["final_report"] = report
                 
                 self.reasoning_steps.append(ReasoningStep(

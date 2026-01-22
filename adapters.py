@@ -64,11 +64,8 @@ class HuggingFaceAdapter(BaseAdapter):
             response = self.client.chat_completion(
                 messages=messages,
                 model=self.model_name,
-                max_tokens=kwargs.get("max_tokens", config.get("max_tokens", 1024)),
-                temperature=kwargs.get("temperature", config.get("temperature", 0.7)),
-                # 'do_sample' is often inferred from temperature in chat_completion,
-                # but can be passed via kwargs if the specific model requires it.
-                **kwargs 
+                max_tokens=config.get("max_tokens", 1024),
+                temperature=config.get("temperature", 0.7)
             )
             
             # chat_completion returns a FullChatCompletion object; 
@@ -84,7 +81,7 @@ class HuggingFaceAdapter(BaseAdapter):
             repo_id=self.model_name,
             huggingfacehub_api_token=self.api_key,
             temperature=0.7,
-            max_new_tokens=512
+            max_new_tokens=1024
         )
     
     def get_llamaindex_llm(self):
