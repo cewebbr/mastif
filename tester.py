@@ -5,6 +5,7 @@ This module orchestrates testing across multiple models, protocols, and framewor
 collecting detailed metrics including reasoning steps, latency, and success rates.
 """
 
+import os
 import json
 import time
 import datetime
@@ -446,7 +447,7 @@ Please respond according to this protocol structure and complete the task."""
                 error=str(e)
             )
     
-    def run_comprehensive_test(self, api_key: Optional[str] = None):
+    def run_comprehensive_test(self):
         """
         Run comprehensive tests across all models, protocols, and frameworks.
         Tests all combinations of protocols x frameworks for each model.
@@ -488,7 +489,7 @@ Please respond according to this protocol structure and complete the task."""
         print(f"Tasks: {len(test_tasks)}")
         print(f"Total: {len(models) * len(protocols) * len(frameworks) * len(test_tasks)}")
         print(f"{'-'*70}")
-        if( len(models) * len(protocols) * len(frameworks) * len(test_tasks) > config.get ):
+        if( len(models) * len(protocols) * len(frameworks) * len(test_tasks) > config.get("requests_soft_limit", 1000) ):
             print("WARNING: This may incur a high number of API calls and associated costs.")
             response = input("\nDo you want to proceed? (yes/no): ").strip().lower()
             if response not in ['yes', 'y']:
@@ -502,9 +503,9 @@ Please respond according to this protocol structure and complete the task."""
             print(f"{'='*70}")
             
             if(model_name.startswith("gpt-")):
-                adapter = OpenAIAdapter(model_name)
+                adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPEN_AI_KEY"))
             else:                
-                adapter = HuggingFaceAdapter(model_name)
+                adapter = HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))
             
             # ===== Test Protocol x Framework Combinations =====
             print(f"\n{'-'*70}")
