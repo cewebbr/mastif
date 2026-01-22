@@ -24,7 +24,6 @@ def main():
     # First singleton initialization requires path to yaml experiment file
     config = ConfigExpert.get_instance(config_path) 
     MODE = config.get("test_mode", "standard")  # "standard" or "mind2web"
-    MIND2WEB_NUM_TASKS = config.get("mind2web_num_tasks", 10)
     
     # Get HuggingFace token
     hf_token = os.getenv("HF_TOKEN")
