@@ -10,7 +10,10 @@ from typing import Dict, List
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
+from smolagents import CodeAgent
+from smolagents import VisitWebpageTool
 
+# FIXME Smolagents is failing silently sometimes; needs investigation
 
 class SmolAgentWrapper:
     """
@@ -20,7 +23,7 @@ class SmolAgentWrapper:
     and efficiency. It emphasizes minimal overhead while maintaining
     tool-use capabilities.
     """
-    
+
     def __init__(self, adapter, protocol=None):
         """
         Initialize Smolagents wrapper
@@ -32,7 +35,11 @@ class SmolAgentWrapper:
         self.tools: List[Dict[str, str]] = []
         self.reasoning_steps: List[ReasoningStep] = []
         self.protocol = protocol
-    
+        self.code_agent = CodeAgent(
+            model=self.adapter,
+            tools=[VisitWebpageTool()]
+        )
+
     def add_tool(self, name: str, description: str):
         """
         Add a tool to the agent's toolkit
@@ -112,7 +119,7 @@ Final Answer:
             action_input=task
         ))
         
-        response = self.adapter.generate(prompt)
+        response = self.code_agent.run(prompt)
         
         # Step 4: Complete
         self.reasoning_steps.append(ReasoningStep(
