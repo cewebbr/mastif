@@ -22,6 +22,17 @@ def main():
 
     # Configuration
     # First singleton initialization requires path to yaml experiment file
+    # TODO: Retrieve agents workflow from config
+    # Idea: use a DOT structure to define workflows
+    # - workflow: 
+    #   - nodes:
+    #     - planning
+    #     - research
+    #     - synthesis
+    #   - edges:
+    #     - [ planning, research ]
+    #     - [ research, synthesis ]
+    #     - [ synthesis, end ]
     config = ConfigExpert.get_instance(config_path) 
     MODE = config.get("test_mode", "standard")  # "standard" or "mind2web"
     
