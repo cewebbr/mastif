@@ -11,6 +11,7 @@ import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
 
+# FIXME Some built-in tools are conflicting with other imports; needs investigation
 
 class CrewAIAgent:
     """
