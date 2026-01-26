@@ -23,6 +23,9 @@ class LlamaIndexAgent:
     particularly for RAG (Retrieval Augmented Generation) use cases.
     """
     
+    # FIXME: There is an ongoing issue with HF API calls in LlamaIndex
+    # that causes a 'description' response. There is a need to verify 
+    # any conflict with added tools and protocols.
     def __init__(self, adapter, protocol=None):
         """
         Initialize LlamaIndex agent
