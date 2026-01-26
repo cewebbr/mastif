@@ -64,16 +64,22 @@ class HuggingFaceAdapter(BaseAdapter):
             response = self.client.chat_completion(
                 messages=messages,
                 model=self.model_name,
-                max_tokens=config.get("max_tokens", 1024),
-                temperature=config.get("temperature", 0.7)
+                max_tokens=kwargs.get("max_tokens", config.get("max_tokens", 1024)),
+                temperature=kwargs.get("temperature", config.get("temperature", 0.7))
             )
             
-            # chat_completion returns a FullChatCompletion object; 
-            # we extract the text from the first choice.
-            return response.choices[0].message.content
+            # Check if response is the expected object or an error dict
+            if hasattr(response, 'choices') and len(response.choices) > 0:
+                return response.choices[0].message.content
             
+            # If Hugging Face returns an error dictionary
+            if isinstance(response, dict) and "error" in response:
+                return f"API Error: {response.get('error')} - {response.get('description', 'No description provided')}"
+            
+            return "Error: Unexpected response format."
+        
         except Exception as e:
-            return f"Error: {str(e)}"
+            return f"Inference Error: {str(e)}"
     
     def get_langchain_llm(self):
         """Create LangChain-compatible LLM instance"""
