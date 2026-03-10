@@ -68,13 +68,13 @@ MASTIF supports 2 types of tests:
 1. Custom tasks 
 2. Benchmark tasks; the currently supported benchmark is [Mind2Web benchmark](https://github.com/OSU-NLP-Group/Mind2Web).
 
-For custom tasks, `HF_TOKEN` is required and `OPEN_AI_KEY` is only needed if you configure tests with `gpt-*` models.
+For custom tasks, `HF_TOKEN` is required and `OPENAI_API_KEY` is only needed if you configure tests with `gpt-*` models.
 
 For Mind2Web tasks, the following two keys are required, as MASTIF currently considers OpenAI models to judge outputs from benckmark tasks.
 
 ```bash
 export HF_TOKEN='your_token'
-export OPEN_AI_KEY='your_key'
+export OPENAI_API_KEY='your_key'
 ```
 
 Make a copy of [experiments.yaml](./experiments/example.yaml), rename it, and customize it according to your needs.

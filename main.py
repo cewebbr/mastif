@@ -44,10 +44,10 @@ def main():
         return 1
     
     # Get OpenAI key
-    open_ai_key = os.getenv("OPEN_AI_KEY")
+    open_ai_key = os.getenv("OPENAI_API_KEY")
     if not open_ai_key:
-        print("ERROR: OPEN_AI_KEY environment variable not set!")
-        print("Please set it with: export OPEN_AI_KEY='your_key_here'")
+        print("ERROR: OPENAI_API_KEY environment variable not set!")
+        print("Please set it with: export OPENAI_API_KEY='your_key_here'")
         return 1
 
     # Initialize tester

@@ -503,7 +503,7 @@ Please respond according to this protocol structure and complete the task."""
             print(f"{'='*70}")
             
             if(model_name.startswith("gpt-")):
-                adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPEN_AI_KEY"))
+                adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
             else:                
                 adapter = HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))
             
