@@ -143,7 +143,7 @@ Instructions:
                 )
 
                 # Use InferenceClient for remote Hugging Face inference
-                plan = self.inference_client.text_generation(planning_fn.prompt, max_new_tokens=1024)
+                plan = self.inference_client.text_generation(prompt, max_new_tokens=1024)
                 state["plan"] = plan
                 state["step"] = 1
 
@@ -209,7 +209,7 @@ Instructions:
                 )
 
                 # Use InferenceClient for remote Hugging Face inference
-                findings = self.inference_client.text_generation(research_fn.prompt, max_new_tokens=1024)
+                findings = self.inference_client.text_generation(prompt, max_new_tokens=1024)
                 state["research_results"] = state.get("research_results", []) + [findings]
                 state["step"] += 1
 
@@ -264,7 +264,7 @@ Instructions:
                 )
 
                 # Use InferenceClient for remote Hugging Face inference
-                report = self.inference_client.text_generation(synthesis_fn.prompt, max_new_tokens=1024)
+                report = self.inference_client.text_generation(prompt, max_new_tokens=1024)
                 state["final_report"] = report
 
                 self.reasoning_steps.append(ReasoningStep(
