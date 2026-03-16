@@ -6,12 +6,13 @@ has a specific role and expertise.
 """
 
 import json
-from typing import Dict, List, Optional
+from typing import List, Dict, Callable, Optional
+from crewai.tools import BaseTool
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
+from tool_pool import ToolPool
 
-# FIXME Some built-in tools are conflicting with other imports; needs investigation
 
 class CrewAIAgent:
     """
@@ -32,81 +33,261 @@ class CrewAIAgent:
         """
         self.adapter = adapter
         self.role = role
-        self.reasoning_steps: List[ReasoningStep] = []
         self.protocol = protocol
-    
-    def execute_task(self, task: str, context: Dict = None) -> str:
-        """
-        Execute a task using CrewAI-style role-based approach
-        
-        Args:
-            task: Task description
-            context: Additional context information
-            
-        Returns:
-            Task execution result
-        """
-        self.reasoning_steps = []
-        
-        # Log initial thought
-        self.reasoning_steps.append(ReasoningStep(
-            step_number=1,
-            thought=f"As a {self.role}, I need to analyze this task and determine my approach"
-        ))
-        
-        # Wrap task with protocol if provided
-        if self.protocol:
-            formatted_msg = self.protocol.send_message(task, context or {})
-            # Convert protocol message to prompt string
-            task_with_protocol = f"""Protocol: {self.protocol.__class__.__name__}
+        self.chain = None
+        self.tools: Dict[str, BaseTool] = {}
+        self.reasoning_steps: List[ReasoningStep] = []
 
-Message Structure:
-{json.dumps(formatted_msg, indent=2)}
-
-Complete the task according to this protocol structure."""
+    def add_tool(self, name: str, func: Optional[Callable] = None, description: Optional[str] = None):
+        if name in ToolPool.available_tools:
+            tool = ToolPool.get_tool(name, framework="crewai")
         else:
-            task_with_protocol = task
+            if func is None:
+                def _dummy(x):
+                    result = f"Tool '{name}' executed with input: {x}"
+                    self.reasoning_steps.append(ReasoningStep(
+                        step_number=len(self.reasoning_steps) + 1,
+                        thought=f"Executed tool: {name}",
+                        action=name,
+                        action_input=str(x),
+                        observation=result
+                    ))
+                    return result
+                func = _dummy
 
+            from pydantic import BaseModel, Field
 
-        # Create role-specific prompt
-        prompt = f"""You are a {self.role} agent operating in a CrewAI system.
-Role:
-{self.role}
+            class _Input(BaseModel):
+                query: str = Field(description="Input query or argument for the tool.")
+
+            def _run(self_tool, query: str) -> str:
+                return func(query)
+
+            tool = type(
+                name,
+                (BaseTool,),
+                {
+                    "name": name,
+                    "description": description or f"Custom tool: {name}",
+                    "args_schema": _Input,
+                    "_run": _run,
+                },
+            )()
+
+        self.tools[tool.name] = tool
+
+    def build_research_workflow(self):
+
+        def planning_node(state: dict) -> dict:
+            self.reasoning_steps.append(ReasoningStep(
+                step_number=len(self.reasoning_steps) + 1,
+                thought="Creating research plan",
+                action="plan",
+                action_input=state['task']
+            ))
+
+            tools_text = (
+                "\n".join(f"- {t.name}: {t.description}" for t in state["tools"].values())
+                if state["tools"] else "None"
+            )
+            prompt = f"""You are a {self.role} agent operating in the CrewAI framework.
 
 Task:
-{task_with_protocol}
+{state['task']}
 
-Context:
-{json.dumps(context or {}, indent=2)}
+Available Tools:
+{tools_text}
 
 Instructions:
-• Think step-by-step about how to complete the task given your role and expertise.
-• Provide your reasoning process and your final answer.
+• Think step-by-step.
+• Create a detailed research plan for this task.
+• Use available tools where appropriate.
 • Do not skip steps.
 • Make intermediate decisions explicit.
 • If information is missing, state assumptions clearly.
 • If the output format is not provided in the task, favor correctness and completeness over brevity.
+"""
 
-Output:
-Reasoning:
-Final Answer:
-"""     
-        # Log the action
-        self.reasoning_steps.append(ReasoningStep(
-            step_number=2,
-            thought="Generating response based on role expertise",
-            action="generate_response",
-            action_input=task
-        ))
-        
-        # Generate response
-        response = self.adapter.generate(prompt)
-        
-        # Log observation
-        self.reasoning_steps.append(ReasoningStep(
-            step_number=3,
-            thought="Task completed successfully",
-            observation=f"Generated response with {len(response)} characters"
-        ))
-        
-        return response
+            try:
+                plan = self.adapter.generate(prompt, max_tokens=1024)
+                state["plan"] = plan
+                state["step"] = 1
+
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Research plan created",
+                    observation=f"Plan generated with {len(plan)} characters"
+                ))
+            except Exception as e:
+                state["plan"] = f"Planning error: {str(e)}"
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Error in planning phase",
+                    observation=str(e)
+                ))
+            return state
+
+        def research_node(state: dict) -> dict:
+            self.reasoning_steps.append(ReasoningStep(
+                step_number=len(self.reasoning_steps) + 1,
+                thought=f"Executing research step {state['step']}",
+                action="research",
+                action_input=f"Step {state['step']} of plan"
+            ))
+
+            tools_text = (
+                "\n".join(f"- {t.name}: {t.description}" for t in state["tools"].values())
+                if state["tools"] else "None"
+            )
+            prompt = f"""You are a {self.role} agent operating in the CrewAI framework.
+
+Task:
+{state['task']}
+
+Plan:
+{state['plan']}
+
+Step:
+{state['step']}
+
+Available Tools:
+{tools_text}
+
+Instructions:
+• Execute this step carefully.
+• Provide detailed findings.
+• Use available tools where appropriate.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
+"""
+
+            try:
+                findings = self.adapter.generate(prompt, max_tokens=1024)
+                state["research_results"] = state.get("research_results", []) + [findings]
+                state["step"] += 1
+
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought=f"Research step {state['step']-1} completed",
+                    observation=f"Findings: {findings[:100]}..."
+                ))
+            except Exception as e:
+                state["research_results"] = state.get("research_results", []) + [f"Research error: {str(e)}"]
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Error in research phase",
+                    observation=str(e)
+                ))
+            return state
+
+        def synthesis_node(state: dict) -> dict:
+            self.reasoning_steps.append(ReasoningStep(
+                step_number=len(self.reasoning_steps) + 1,
+                thought="Synthesizing research findings into final report",
+                action="synthesize",
+                action_input=f"{len(state['research_results'])} research findings"
+            ))
+
+            results_text = "\n\n".join(state["research_results"])
+            prompt = f"""You are a {self.role} agent operating in the CrewAI framework.
+
+Task:
+{state['task']}
+
+Findings:
+{results_text}
+
+Instructions:
+• Synthesize these findings into a comprehensive final report.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
+"""
+
+            try:
+                report = self.adapter.generate(prompt, max_tokens=1024)
+                state["final_report"] = report
+
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Final report synthesized successfully",
+                    observation=f"Report generated with {len(report)} characters"
+                ))
+            except Exception as e:
+                state["final_report"] = f"Synthesis error: {str(e)}"
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Error in synthesis phase",
+                    observation=str(e)
+                ))
+            return state
+
+        def should_continue(state: dict) -> bool:
+            if state["step"] > 2:
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Research iterations complete, moving to synthesis",
+                    observation=f"Completed {state['step']-1} research steps"
+                ))
+                return False
+
+            self.reasoning_steps.append(ReasoningStep(
+                step_number=len(self.reasoning_steps) + 1,
+                thought=f"Continuing research (step {state['step']})",
+                observation="More research needed"
+            ))
+            return True
+
+        def workflow(state: dict) -> dict:
+            state = planning_node(state)
+            state = research_node(state)
+            while should_continue(state):
+                state = research_node(state)
+            state = synthesis_node(state)
+            return state
+
+        self.chain = workflow
+
+    def execute_task(self, task: str, context: Dict = None) -> str:
+        if self.protocol:
+            formatted_msg = self.protocol.send_message(task, context or {})
+            task = f"""Protocol: {self.protocol.__class__.__name__}
+
+{json.dumps(formatted_msg, indent=2)}
+
+Execute according to protocol."""
+
+        self.reasoning_steps = []
+
+        try:
+            if self.chain is None:
+                self.build_research_workflow()
+
+            self.reasoning_steps.append(ReasoningStep(
+                step_number=1,
+                thought="Initializing CrewAI workflow",
+                observation="Chain compiled successfully"
+            ))
+
+            initial_state = {
+                "task": task,
+                "plan": "",
+                "research_results": [],
+                "final_report": "",
+                "step": 0,
+                "tools": self.tools
+            }
+
+            result = self.chain(initial_state)
+            return result.get("final_report", "No report generated")
+
+        except Exception as e:
+            self.reasoning_steps.append(ReasoningStep(
+                step_number=len(self.reasoning_steps) + 1,
+                thought="Error during workflow execution",
+                observation=str(e)
+            ))
+            return f"CrewAI execution error: {str(e)}"
