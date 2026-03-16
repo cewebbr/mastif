@@ -285,9 +285,10 @@ Please respond according to this protocol structure and complete the task."""
             protocol_instance = self.protocols.get(protocol) if protocol else None
             agent = LangChainAgent(adapter, protocol=protocol_instance)
             
+            # FIXME: LangChain is failing silently when adding tools, need to investigate.
             # Add tools
-            for tool in (tools or []):
-                agent.add_tool(tool["name"], tool["description"])
+            # for tool in (tools or []):
+            #     agent.add_tool(tool["name"], tool["description"])
             
             response = agent.run(task)
             latency = time.time() - start_time

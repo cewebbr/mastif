@@ -1,14 +1,16 @@
 """
-LangChain ReAct Agent Integration
-
-LangChain implements the ReAct (Reasoning + Acting) pattern.
+LangChain Agent Integration
+s
+This module defines a LangChainAgent class that integrates with the LangChain framework
 """
 
 import json
-from typing import List
+from typing import List, Dict, Callable, Optional
+from langchain_community.tools import Tool
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
+from tool_pool import ToolPool
 
 
 class LangChainAgent:
@@ -31,22 +33,46 @@ class LangChainAgent:
         self.adapter = adapter
         self.protocol = protocol
         self.chain = None
+        self.tools: Dict[str, Tool] = {}
         self.reasoning_steps: List[ReasoningStep] = []
 
-    def add_tool(self, name: str, description: str, func=None):
+    def add_tool(self, name: str, func: Optional[Callable] = None, description: Optional[str] = None):
         """
-        Add a tool to the agent
-        
+        Add a tool to the agent.
+
+        For builtin tools available in the shared pool ("web_search", "web_browser",
+        "wikipedia"), pass only the name — the tool is cloned from ToolPool.
+
+        For custom tools, provide both func and description.
+
         Args:
-            name: Tool name
-            description: Tool description and usage instructions
-            func: Tool function (uses dummy if not provided)
+            name:        Tool name. Use a pool tool name or any custom name.
+            func:        Callable for custom tools. Ignored for pool tools.
+            description: Description for custom tools. Ignored for pool tools.
         """
-        if func is None:
-            # Create a dummy function that logs the call
-            def dummy_func(x):
-                result = f"Tool '{name}' executed with input: {x}"
-                # Log tool execution as reasoning step
+        if name in ToolPool.available_tools:
+            tool = ToolPool.get_tool(name, framework="langchain")
+        else:
+            if func is None:
+                def _dummy(x):
+                    result = f"Tool '{name}' executed with input: {x}"
+                    self.reasoning_steps.append(ReasoningStep(
+                        step_number=len(self.reasoning_steps) + 1,
+                        thought=f"Executed tool: {name}",
+                        action=name,
+                        action_input=str(x),
+                        observation=result
+                    ))
+                    return result
+                func = _dummy
+
+            tool = Tool(
+                name=name,
+                func=func,
+                description=description or f"Custom tool: {name}"
+            )
+
+        self.tools[tool.name] = tool
 
     def build_research_workflow(self):
         """
@@ -68,14 +94,22 @@ class LangChainAgent:
                 action_input=state['task']
             ))
 
+            tools_text = (
+                "\n".join(f"- {t.name}: {t.description}" for t in state["tools"].values())
+                if state["tools"] else "None"
+            )
             prompt = f"""You are an AI agent operating in the LangChain framework.
 
 Task:
 {state['task']}
 
+Available Tools:
+{tools_text}
+
 Instructions:
 • Think step-by-step.
 • Create a detailed research plan for this task.
+• Use available tools where appropriate.
 • Do not skip steps.
 • Make intermediate decisions explicit.
 • If information is missing, state assumptions clearly.
@@ -111,6 +145,10 @@ Instructions:
                 action_input=f"Step {state['step']} of plan"
             ))
 
+            tools_text = (
+                "\n".join(f"- {t.name}: {t.description}" for t in state["tools"].values())
+                if state["tools"] else "None"
+            )
             prompt = f"""You are an AI agent operating in the LangChain framework.
 
 Task:
@@ -122,9 +160,13 @@ Plan:
 Step:
 {state['step']}
 
+Available Tools:
+{tools_text}
+
 Instructions:
 • Execute this step carefully.
 • Provide detailed findings.
+• Use available tools where appropriate.
 • Do not skip steps.
 • Make intermediate decisions explicit.
 • If information is missing, state assumptions clearly.
@@ -260,7 +302,8 @@ Execute according to protocol."""
                 "plan": "",
                 "research_results": [],
                 "final_report": "",
-                "step": 0
+                "step": 0,
+                "tools": self.tools
             }
 
             result = self.chain(initial_state)
