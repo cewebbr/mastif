@@ -447,8 +447,9 @@ Please respond according to this protocol structure and complete the task."""
         framework_names = config.get("frameworks")
         prompt_template = config.get("prompt_template")
         inner_tasks = config.get("tasks")
-        tools = config.get('tools', self.standard_tools)    
-        
+        raw_tools = config.get("tools", self.standard_tools)
+        tools = [t["name"] if isinstance(t, dict) else t for t in raw_tools]
+
         # Format tasks with template
         test_tasks = [prompt_template.format(task=task) for task in inner_tasks]
         
@@ -737,7 +738,8 @@ Please respond according to this protocol structure and complete the task."""
         models = config.get("models")
         protocols = [ProtocolType[p] for p in config.get("protocols")]
         framework_names = config.get("frameworks")
-        tools = config.get('tools', self.standard_tools)
+        raw_tools = config.get('tools', self.standard_tools)
+        tools = [t["name"] if isinstance(t, dict) else t for t in raw_tools]
 
         # Map framework names to functions
         framework_map = {
