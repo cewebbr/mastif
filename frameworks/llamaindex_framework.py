@@ -6,13 +6,14 @@ particularly for RAG use cases.
 """
 
 import json
-from typing import List, Dict
+from typing import List, Dict, Callable, Optional
 from llama_index.core import Settings
 from llama_index.core.agent import ReActAgent
 from llama_index.core.tools import FunctionTool
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
+from tool_pool import ToolPool
 
 
 class LlamaIndexAgent:
@@ -22,7 +23,7 @@ class LlamaIndexAgent:
     LlamaIndex specializes in data-augmented LLM applications,
     particularly for RAG (Retrieval Augmented Generation) use cases.
     """
-    
+
     # FIXME: There is an ongoing issue with HF API calls in LlamaIndex
     # that causes a 'description' response. There is a need to verify 
     # any conflict with added tools and protocols.
@@ -35,44 +36,241 @@ class LlamaIndexAgent:
         """
         self.adapter = adapter
         self.llm = adapter.get_llamaindex_llm()
-        self.tools: List[FunctionTool] = []
-        self.agent = None
-        self.reasoning_steps: List[ReasoningStep] = []
         self.protocol = protocol
-        
+        self.chain = None
+        self.tools: Dict[str, FunctionTool] = {}
+        self.reasoning_steps: List[ReasoningStep] = []
+
         # Configure LlamaIndex settings
         Settings.llm = self.llm
         Settings.chunk_size = 512
-    
-    def add_tool(self, name: str, description: str, func=None):
-        """
-        Add a tool to the agent
-        
-        Args:
-            name: Tool name
-            description: Tool description
-            func: Tool function (uses dummy if not provided)
-        """
-        if func is None:
-            def dummy_func(query: str) -> str:
-                result = f"Tool '{name}' processed: {query}"
+
+    def add_tool(self, name: str, func: Optional[Callable] = None, description: Optional[str] = None):
+        if name in ToolPool.available_tools:
+            tool = ToolPool.get_tool(name, framework="llamaindex")
+        else:
+            if func is None:
+                def _dummy(query: str) -> str:
+                    result = f"Tool '{name}' executed with input: {query}"
+                    self.reasoning_steps.append(ReasoningStep(
+                        step_number=len(self.reasoning_steps) + 1,
+                        thought=f"Executed tool: {name}",
+                        action=name,
+                        action_input=query,
+                        observation=result
+                    ))
+                    return result
+                func = _dummy
+
+            tool = FunctionTool.from_defaults(
+                fn=func,
+                name=name,
+                description=description or f"Custom tool: {name}"
+            )
+
+        self.tools[tool.metadata.name] = tool
+
+    def build_research_workflow(self):
+
+        tool_list = list(self.tools.values())
+
+        # Create ReActAgent as the LlamaIndex primitive for each node
+        planning_agent = ReActAgent.from_tools(
+            tool_list,
+            llm=self.llm,
+            verbose=False,
+            max_iterations=5
+        )
+
+        research_agent = ReActAgent.from_tools(
+            tool_list,
+            llm=self.llm,
+            verbose=False,
+            max_iterations=5
+        )
+
+        synthesis_agent = ReActAgent.from_tools(
+            tool_list,
+            llm=self.llm,
+            verbose=False,
+            max_iterations=5
+        )
+
+        def planning_node(state: dict) -> dict:
+            self.reasoning_steps.append(ReasoningStep(
+                step_number=len(self.reasoning_steps) + 1,
+                thought="Creating research plan",
+                action="plan",
+                action_input=state['task']
+            ))
+
+            tools_text = (
+                "\n".join(f"- {t.metadata.name}: {t.metadata.description}" for t in state["tools"].values())
+                if state["tools"] else "None"
+            )
+            prompt = f"""You are an AI agent operating in the LlamaIndex framework.
+
+Task:
+{state['task']}
+
+Available Tools:
+{tools_text}
+
+Instructions:
+• Think step-by-step.
+• Create a detailed research plan for this task.
+• Use available tools where appropriate.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
+"""
+
+            try:
+                plan = str(planning_agent.query(prompt))
+                state["plan"] = plan
+                state["step"] = 1
+
                 self.reasoning_steps.append(ReasoningStep(
                     step_number=len(self.reasoning_steps) + 1,
-                    thought=f"Used tool: {name}",
-                    action=name,
-                    action_input=query,
-                    observation=result
+                    thought="Research plan created",
+                    observation=f"Plan generated with {len(plan)} characters"
                 ))
-                return result
-            func = dummy_func
-        
-        tool = FunctionTool.from_defaults(
-            fn=func,
-            name=name,
-            description=description
-        )
-        self.tools.append(tool)
-    
+            except Exception as e:
+                state["plan"] = f"Planning error: {str(e)}"
+                state["step"] = 1
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Error in planning phase",
+                    observation=str(e)
+                ))
+            return state
+
+        def research_node(state: dict) -> dict:
+            self.reasoning_steps.append(ReasoningStep(
+                step_number=len(self.reasoning_steps) + 1,
+                thought=f"Executing research step {state['step']}",
+                action="research",
+                action_input=f"Step {state['step']} of plan"
+            ))
+
+            tools_text = (
+                "\n".join(f"- {t.metadata.name}: {t.metadata.description}" for t in state["tools"].values())
+                if state["tools"] else "None"
+            )
+            prompt = f"""You are an AI agent operating in the LlamaIndex framework.
+
+Task:
+{state['task']}
+
+Plan:
+{state['plan']}
+
+Step:
+{state['step']}
+
+Available Tools:
+{tools_text}
+
+Instructions:
+• Execute this step carefully.
+• Provide detailed findings.
+• Use available tools where appropriate.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
+"""
+
+            try:
+                findings = str(research_agent.query(prompt))
+                state["research_results"] = state.get("research_results", []) + [findings]
+                state["step"] += 1
+
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought=f"Research step {state['step']-1} completed",
+                    observation=f"Findings: {findings[:100]}..."
+                ))
+            except Exception as e:
+                state["research_results"] = state.get("research_results", []) + [f"Research error: {str(e)}"]
+                state["step"] += 1
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Error in research phase",
+                    observation=str(e)
+                ))
+            return state
+
+        def synthesis_node(state: dict) -> dict:
+            self.reasoning_steps.append(ReasoningStep(
+                step_number=len(self.reasoning_steps) + 1,
+                thought="Synthesizing research findings into final report",
+                action="synthesize",
+                action_input=f"{len(state['research_results'])} research findings"
+            ))
+
+            results_text = "\n\n".join(state["research_results"])
+            prompt = f"""You are an AI agent operating in the LlamaIndex framework.
+
+Task:
+{state['task']}
+
+Findings:
+{results_text}
+
+Instructions:
+• Synthesize these findings into a comprehensive final report.
+• Do not skip steps.
+• Make intermediate decisions explicit.
+• If information is missing, state assumptions clearly.
+• If the output format is not provided in the task, favor correctness and completeness over brevity.
+"""
+
+            try:
+                report = str(synthesis_agent.query(prompt))
+                state["final_report"] = report
+
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Final report synthesized successfully",
+                    observation=f"Report generated with {len(report)} characters"
+                ))
+            except Exception as e:
+                state["final_report"] = f"Synthesis error: {str(e)}"
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Error in synthesis phase",
+                    observation=str(e)
+                ))
+            return state
+
+        def should_continue(state: dict) -> bool:
+            if state["step"] > 2:
+                self.reasoning_steps.append(ReasoningStep(
+                    step_number=len(self.reasoning_steps) + 1,
+                    thought="Research iterations complete, moving to synthesis",
+                    observation=f"Completed {state['step']-1} research steps"
+                ))
+                return False
+
+            self.reasoning_steps.append(ReasoningStep(
+                step_number=len(self.reasoning_steps) + 1,
+                thought=f"Continuing research (step {state['step']})",
+                observation="More research needed"
+            ))
+            return True
+
+        def workflow(state: dict) -> dict:
+            state = planning_node(state)
+            state = research_node(state)
+            while should_continue(state):
+                state = research_node(state)
+            state = synthesis_node(state)
+            return state
+
+        self.chain = workflow
+
     def run(self, task: str) -> str:
         """
         Execute task using LlamaIndex ReAct agent
@@ -93,41 +291,29 @@ class LlamaIndexAgent:
 Execute according to protocol."""
 
         self.reasoning_steps = []
-        
+
         try:
+            if self.chain is None:
+                self.build_research_workflow()
+
             self.reasoning_steps.append(ReasoningStep(
                 step_number=1,
-                thought=f"Initializing LlamaIndex ReAct agent with {len(self.tools)} tools",
-                observation=f"Tools available: {[t.metadata.name for t in self.tools]}"
+                thought="Initializing LlamaIndex workflow",
+                observation=f"Tools available: {list(self.tools.keys())}"
             ))
-            
-            # Create ReAct agent
-            if self.agent is None:
-                self.agent = ReActAgent.from_tools(
-                    self.tools,
-                    llm=self.llm,
-                    verbose=True,
-                    max_iterations=5
-                )
-            
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=2,
-                thought="Executing task with ReAct reasoning",
-                action="query_agent",
-                action_input=task
-            ))
-            
-            # Execute query
-            response = self.agent.query(task)
-            
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought="Task completed successfully",
-                observation=f"Response: {str(response)[:100]}..."
-            ))
-            
-            return str(response)
-        
+
+            initial_state = {
+                "task": task,
+                "plan": "",
+                "research_results": [],
+                "final_report": "",
+                "step": 0,
+                "tools": self.tools
+            }
+
+            result = self.chain(initial_state)
+            return result.get("final_report", "No report generated")
+
         except Exception as e:
             self.reasoning_steps.append(ReasoningStep(
                 step_number=len(self.reasoning_steps) + 1,

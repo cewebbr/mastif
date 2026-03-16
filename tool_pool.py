@@ -2,7 +2,7 @@
 Singleton Tool Pool
 
 Provides a shared pool of builtin tools that can be used across
-multiple agentic frameworks (LangChain, CrewAI, smolagents, Semantic Kernel).
+multiple agentic frameworks (LangChain, CrewAI, smolagents, LlamaIndex, Semantic Kernel).
 
 Tools in the pool:
     - web_search  : DuckDuckGo web search (via langchain-community)
@@ -95,6 +95,17 @@ def _to_smolagents(tool_def: ToolDefinition):
     return _SmolWrapper()
 
 
+def _to_llamaindex(tool_def: ToolDefinition):
+    """Return a LlamaIndex FunctionTool wrapping this definition."""
+    from llama_index.core.tools import FunctionTool
+
+    return FunctionTool.from_defaults(
+        fn=tool_def.func,
+        name=tool_def.name,
+        description=tool_def.description
+    )
+
+
 def _to_semantic_kernel(tool_def: ToolDefinition):
     """Return a Semantic Kernel KernelFunction wrapping this definition.
 
@@ -123,6 +134,7 @@ _ADAPTERS = {
     "langchain":        _to_langchain,
     "crewai":           _to_crewai,
     "smolagents":       _to_smolagents,
+    "llamaindex":       _to_llamaindex,
     "semantic_kernel":  _to_semantic_kernel,
 }
 
@@ -244,7 +256,7 @@ class _ToolPool:
 
         Args:
             name:      One of "web_search", "web_browser", "wikipedia".
-            framework: One of "langchain", "crewai", "smolagents", "semantic_kernel".
+            framework: One of "langchain", "crewai", "smolagents", "llamaindex", "semantic_kernel".
 
         Returns:
             A tool object ready to be used by the specified framework.
@@ -266,7 +278,7 @@ class _ToolPool:
         Return framework-specific clones of all tools in the pool.
 
         Args:
-            framework: One of "langchain", "crewai", "smolagents", "semantic_kernel".
+            framework: One of "langchain", "crewai", "smolagents", "llamaindex", "semantic_kernel".
 
         Returns:
             List of tool objects ready to be used by the specified framework.
