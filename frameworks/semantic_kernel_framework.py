@@ -46,19 +46,13 @@ class SemanticKernelAgent:
 
     def add_tool(self, name: str, func: Optional[Callable] = None, description: Optional[str] = None):
         if name in ToolPool.available_tools:
-            # Store pool tool definition; SK wraps it as a KernelFunction via plugin
-            tool_def = ToolPool._registry[name]
-
-            # Register as a native kernel function inside an inline plugin
-            @sk.kernel_function(name=name, description=tool_def.description)
-            def _kernel_func(query: str) -> str:
-                return tool_def.func(query)
-
-            plugin = self.kernel.add_plugin(
-                plugin=type(name, (), {name: staticmethod(_kernel_func)})(),
+            # Retrieve KernelFunction from the pool and register it on this kernel
+            kernel_fn = ToolPool.get_tool(name, framework="semantic_kernel")
+            self.kernel.add_plugin(
+                plugin=type(name, (), {name: staticmethod(kernel_fn)})(),
                 plugin_name=name
             )
-            self.tools[name] = plugin[name]
+            self.tools[name] = kernel_fn
         else:
             if func is None:
                 def _dummy(x):
