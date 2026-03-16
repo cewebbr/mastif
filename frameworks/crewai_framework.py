@@ -7,6 +7,7 @@ has a specific role and expertise.
 
 import json
 from typing import List, Dict, Callable, Optional
+from crewai import Agent, Task, Crew, Process
 from crewai.tools import BaseTool
 import sys
 sys.path.append('..')
@@ -15,14 +16,7 @@ from tool_pool import ToolPool
 
 
 class CrewAIAgent:
-    """
-    CrewAI Framework Integration
-    
-    CrewAI focuses on role-based agent collaboration where each agent
-    has a specific role and expertise. Agents work together as a crew
-    to accomplish complex tasks.
-    """
-    
+
     def __init__(self, adapter, role: str, protocol=None):
         """
         Initialize CrewAI agent with specific role
@@ -77,6 +71,34 @@ class CrewAIAgent:
         self.tools[tool.name] = tool
 
     def build_research_workflow(self):
+        tool_list = list(self.tools.values())
+
+        planner_agent = Agent(
+            role="Planner",
+            goal="Create a detailed research plan for the given task",
+            backstory=f"You are a {self.role} agent operating in the CrewAI framework, responsible for planning research.",
+            tools=tool_list,
+            allow_delegation=False,
+            verbose=False
+        )
+
+        researcher_agent = Agent(
+            role="Researcher",
+            goal="Execute research steps and gather detailed findings",
+            backstory=f"You are a {self.role} agent operating in the CrewAI framework, responsible for executing research.",
+            tools=tool_list,
+            allow_delegation=False,
+            verbose=False
+        )
+
+        synthesizer_agent = Agent(
+            role="Synthesizer",
+            goal="Synthesize research findings into a comprehensive final report",
+            backstory=f"You are a {self.role} agent operating in the CrewAI framework, responsible for synthesizing findings.",
+            tools=tool_list,
+            allow_delegation=False,
+            verbose=False
+        )
 
         def planning_node(state: dict) -> dict:
             self.reasoning_steps.append(ReasoningStep(
@@ -109,6 +131,17 @@ Instructions:
 """
 
             try:
+                planning_task = Task(
+                    description=prompt,
+                    expected_output="A detailed research plan",
+                    agent=planner_agent
+                )
+                Crew(
+                    agents=[planner_agent],
+                    tasks=[planning_task],
+                    process=Process.sequential,
+                    verbose=False
+                )
                 plan = self.adapter.generate(prompt, max_tokens=1024)
                 state["plan"] = plan
                 state["step"] = 1
@@ -164,6 +197,17 @@ Instructions:
 """
 
             try:
+                research_task = Task(
+                    description=prompt,
+                    expected_output="Detailed findings for this research step",
+                    agent=researcher_agent
+                )
+                Crew(
+                    agents=[researcher_agent],
+                    tasks=[research_task],
+                    process=Process.sequential,
+                    verbose=False
+                )
                 findings = self.adapter.generate(prompt, max_tokens=1024)
                 state["research_results"] = state.get("research_results", []) + [findings]
                 state["step"] += 1
@@ -208,6 +252,17 @@ Instructions:
 """
 
             try:
+                synthesis_task = Task(
+                    description=prompt,
+                    expected_output="A comprehensive final report synthesizing all findings",
+                    agent=synthesizer_agent
+                )
+                Crew(
+                    agents=[synthesizer_agent],
+                    tasks=[synthesis_task],
+                    process=Process.sequential,
+                    verbose=False
+                )
                 report = self.adapter.generate(prompt, max_tokens=1024)
                 state["final_report"] = report
 
