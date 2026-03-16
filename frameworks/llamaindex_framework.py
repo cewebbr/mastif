@@ -72,30 +72,6 @@ class LlamaIndexAgent:
 
     def build_research_workflow(self):
 
-        tool_list = list(self.tools.values())
-
-        # Create ReActAgent as the LlamaIndex primitive for each node
-        planning_agent = ReActAgent.from_tools(
-            tool_list,
-            llm=self.llm,
-            verbose=False,
-            max_iterations=5
-        )
-
-        research_agent = ReActAgent.from_tools(
-            tool_list,
-            llm=self.llm,
-            verbose=False,
-            max_iterations=5
-        )
-
-        synthesis_agent = ReActAgent.from_tools(
-            tool_list,
-            llm=self.llm,
-            verbose=False,
-            max_iterations=5
-        )
-
         def planning_node(state: dict) -> dict:
             self.reasoning_steps.append(ReasoningStep(
                 step_number=len(self.reasoning_steps) + 1,
@@ -103,6 +79,14 @@ class LlamaIndexAgent:
                 action="plan",
                 action_input=state['task']
             ))
+
+            # Create ReActAgent as the LlamaIndex primitive for this node
+            planning_agent = ReActAgent.from_tools(
+                list(state["tools"].values()),
+                llm=self.llm,
+                verbose=False,
+                max_iterations=5
+            )
 
             tools_text = (
                 "\n".join(f"- {t.metadata.name}: {t.metadata.description}" for t in state["tools"].values())
@@ -153,6 +137,14 @@ Instructions:
                 action="research",
                 action_input=f"Step {state['step']} of plan"
             ))
+
+            # Create ReActAgent as the LlamaIndex primitive for this node
+            research_agent = ReActAgent.from_tools(
+                list(state["tools"].values()),
+                llm=self.llm,
+                verbose=False,
+                max_iterations=5
+            )
 
             tools_text = (
                 "\n".join(f"- {t.metadata.name}: {t.metadata.description}" for t in state["tools"].values())
@@ -209,6 +201,14 @@ Instructions:
                 action="synthesize",
                 action_input=f"{len(state['research_results'])} research findings"
             ))
+
+            # Create ReActAgent as the LlamaIndex primitive for this node
+            synthesis_agent = ReActAgent.from_tools(
+                list(state["tools"].values()),
+                llm=self.llm,
+                verbose=False,
+                max_iterations=5
+            )
 
             results_text = "\n\n".join(state["research_results"])
             prompt = f"""You are an AI agent operating in the LlamaIndex framework.
