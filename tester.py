@@ -27,6 +27,7 @@ from frameworks import (
 from mind2web_loader import Mind2WebLoader
 from mind2web_evaluator import Mind2WebEvaluator
 from config import ConfigExpert
+from tool_pool import ToolPool
 from transformers import AutoTokenizer
 import tiktoken
 
@@ -50,23 +51,7 @@ class Mastif:
             ProtocolType.A2A: A2AProtocol(),
             ProtocolType.ACP: ACPProtocol()
         }
-        self.standard_tools = [
-            {"name": "web_browser", "description": "Browse web pages and extract content"},
-            {"name": "search", "description": "Search for information on the web"},
-            {"name": "calculate", "description": "Perform mathematical calculations"},
-            {"name": "analyze", "description": "Analyze data and generate insights"},
-            {"name": "wikipedia", "description": "Retrieve information from Wikipedia"},
-            {"name": "code_interpreter", "description": "Interpret and execute code snippets"},
-            {"name": "click_element", "description": "Click on a web element"},
-            {"name": "type_text", "description": "Type text into a field"},
-            {"name": "navigate", "description": "Navigate to a URL"},
-            {"name": "extract_table", "description": "Extract tables from web pages"},
-            {"name": "summarize", "description": "Summarize text or web content"},
-            {"name": "translate", "description": "Translate text between languages"},
-            {"name": "calendar", "description": "Manage calendar events"},
-            {"name": "download", "description": "Download files from the web"}
-            # {"name": "file_upload", "description": "Upload a file to a website"}, # Not now
-        ]
+        self.standard_tools = ToolPool.available_tools
        
     def test_with_protocol(
         self,
@@ -239,8 +224,8 @@ Please respond according to this protocol structure and complete the task."""
             protocol_instance = self.protocols.get(protocol) if protocol else None
             agent = SmolAgentWrapper(adapter, protocol=protocol_instance)
 
-            for tool in (tools or []):
-                agent.add_tool(tool["name"], tool["description"])
+            for tool_name in (tools or []):
+                agent.add_tool(tool_name)
 
             response = agent.run(task)
             latency = time.time() - start_time
@@ -284,12 +269,10 @@ Please respond according to this protocol structure and complete the task."""
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
             agent = LangChainAgent(adapter, protocol=protocol_instance)
-            
-            # FIXME: LangChain is failing silently when adding tools, need to investigate.
-            # Add tools
-            # for tool in (tools or []):
-            #     agent.add_tool(tool["name"], tool["description"])
-            
+
+            for tool_name in (tools or []):
+                agent.add_tool(tool_name)
+
             response = agent.run(task)
             latency = time.time() - start_time
             
@@ -375,8 +358,8 @@ Please respond according to this protocol structure and complete the task."""
             agent = LlamaIndexAgent(adapter, protocol=protocol_instance)
             
             # Add tools
-            for tool in (tools or []):
-                agent.add_tool(tool["name"], tool["description"])
+            for tool_name in (tools or []):
+                agent.add_tool(tool_name)
             
             response = agent.run(task)
             latency = time.time() - start_time
