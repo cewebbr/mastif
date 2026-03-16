@@ -100,9 +100,10 @@ class HuggingFaceAdapter(BaseAdapter):
             adapter: 'HuggingFaceAdapter'
             
             def __init__(self, adapter: 'HuggingFaceAdapter'):
-                super().__init__()
-                self.adapter = adapter
-                self.model_name = adapter.model_name
+                super().__init__(
+                    model_name=adapter.model_name,
+                    adapter=adapter
+                )
             
             @property
             def metadata(self) -> LLMMetadata:
@@ -125,7 +126,7 @@ class HuggingFaceAdapter(BaseAdapter):
                 response = self.complete(prompt, **kwargs)
                 yield response
         
-        return HuggingFaceLLM(adapter=self) #FIXME It seems that model name not propagating correctly
+        return HuggingFaceLLM(adapter=self)
     
 class OpenAIAdapter(BaseAdapter):
     """
