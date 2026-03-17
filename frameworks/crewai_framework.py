@@ -143,7 +143,7 @@ Instructions:
                     verbose=False
                 )
                 config = ConfigExpert.get_instance()
-                plan = self.adapter.generate(prompt, config.get("max_tokens", 1024))
+                plan = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
                 state["plan"] = plan
                 state["step"] = 1
 
@@ -210,7 +210,7 @@ Instructions:
                     verbose=False
                 )
                 config = ConfigExpert.get_instance()
-                findings = self.adapter.generate(prompt, config.get("max_tokens", 1024))
+                findings = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
                 state["research_results"] = state.get("research_results", []) + [findings]
                 state["step"] += 1
 
@@ -266,7 +266,7 @@ Instructions:
                     verbose=False
                 )
                 config = ConfigExpert.get_instance()
-                report = self.adapter.generate(prompt, config.get("max_tokens", 1024))
+                report = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
                 state["final_report"] = report
 
                 self.reasoning_steps.append(ReasoningStep(
