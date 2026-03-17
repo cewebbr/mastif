@@ -140,6 +140,7 @@ Instructions:
                 ))
             except Exception as e:
                 state["research_results"] = [f"Research error: {str(e)}"]
+                state["step"] += 1
                 self.reasoning_steps.append(ReasoningStep(
                     step_number=len(self.reasoning_steps) + 1,
                     thought="Error in research phase",
