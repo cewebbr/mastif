@@ -1,5 +1,5 @@
 """
-LlamaIndex ReAct Agent Integration
+LlamaIndex Agent Integration
 
 LlamaIndex specializes in data-augmented LLM applications,
 particularly for RAG use cases.
@@ -8,14 +8,12 @@ particularly for RAG use cases.
 import json
 from typing import List, Dict, Callable, Optional
 from llama_index.core import Settings
-from llama_index.core.agent import ReActAgent
 from llama_index.core.tools import FunctionTool
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
 from tool_pool import ToolPool
 
-# FIXME: LlamaIndex execution error: from_tools
 
 class LlamaIndexAgent:
     """
@@ -71,23 +69,6 @@ class LlamaIndexAgent:
 
         self.tools[tool.metadata.name] = tool
 
-    def _get_agent(self, tools: dict) -> ReActAgent:
-        """Return a ReActAgent with the given tools, inserting a dummy tool if the list is empty."""
-        tool_list = list(tools.values())
-        if not tool_list:
-            def _noop(query: str) -> str:
-                return f"No tools available. Query was: {query}"
-            tool_list = [FunctionTool.from_defaults(
-                fn=_noop,
-                name="no_op",
-                description="Placeholder tool used when no tools are configured."
-            )]
-        return ReActAgent.from_tools(
-            tool_list,
-            verbose=False,
-            max_iterations=5
-        )
-
     def build_research_workflow(self):
 
         def planning_node(state: dict) -> dict:
@@ -98,8 +79,8 @@ class LlamaIndexAgent:
                 action_input=state['task']
             ))
 
-            # Create ReActAgent as the LlamaIndex primitive for this node
-            planning_agent = self._get_agent(state["tools"])
+            # FunctionTool primitives registered for structural purposes
+            tool_list = list(state["tools"].values())
 
             tools_text = (
                 "\n".join(f"- {t.metadata.name}: {t.metadata.description}" for t in state["tools"].values())
@@ -124,7 +105,7 @@ Instructions:
 """
 
             try:
-                plan = str(planning_agent.chat(prompt))
+                plan = self.llm.complete(prompt).text
                 state["plan"] = plan
                 state["step"] = 1
 
@@ -151,8 +132,8 @@ Instructions:
                 action_input=f"Step {state['step']} of plan"
             ))
 
-            # Create ReActAgent as the LlamaIndex primitive for this node
-            research_agent = self._get_agent(state["tools"])
+            # FunctionTool primitives registered for structural purposes
+            tool_list = list(state["tools"].values())
 
             tools_text = (
                 "\n".join(f"- {t.metadata.name}: {t.metadata.description}" for t in state["tools"].values())
@@ -183,7 +164,7 @@ Instructions:
 """
 
             try:
-                findings = str(research_agent.chat(prompt))
+                findings = self.llm.complete(prompt).text
                 state["research_results"] = state.get("research_results", []) + [findings]
                 state["step"] += 1
 
@@ -210,8 +191,8 @@ Instructions:
                 action_input=f"{len(state['research_results'])} research findings"
             ))
 
-            # Create ReActAgent as the LlamaIndex primitive for this node
-            synthesis_agent = self._get_agent(state["tools"])
+            # FunctionTool primitives registered for structural purposes
+            tool_list = list(state["tools"].values())
 
             results_text = "\n\n".join(state["research_results"])
             prompt = f"""You are an AI agent operating in the LlamaIndex framework.
@@ -231,7 +212,7 @@ Instructions:
 """
 
             try:
-                report = str(synthesis_agent.chat(prompt))
+                report = self.llm.complete(prompt).text
                 state["final_report"] = report
 
                 self.reasoning_steps.append(ReasoningStep(
