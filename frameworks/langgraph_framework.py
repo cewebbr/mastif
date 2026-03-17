@@ -11,6 +11,7 @@ from langgraph.graph import StateGraph, END
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
+from config import ConfigExpert
 
 class LangGraphAgent:
     """
@@ -77,7 +78,8 @@ Instructions:
 """
             
             try:
-                plan = self.adapter.generate(prompt, max_tokens=1024)
+                config = ConfigExpert.get_instance()
+                plan = self.adapter.generate(prompt, config.get("max_tokens", 1024))
                 state["plan"] = plan
                 state["step"] = 1
                 
@@ -126,7 +128,8 @@ Instructions:
 """
 
             try:
-                findings = self.adapter.generate(prompt, max_tokens=1024)
+                config = ConfigExpert.get_instance()
+                findings = self.adapter.generate(prompt, config.get("max_tokens", 1024))
                 state["research_results"] = [findings]
                 state["step"] += 1
                 
@@ -173,7 +176,8 @@ Instructions:
 """
 
             try:
-                report = self.adapter.generate(prompt, max_tokens=1024)
+                config = ConfigExpert.get_instance()
+                report = self.adapter.generate(prompt, config.get("max_tokens", 1024))
                 state["final_report"] = report
                 
                 self.reasoning_steps.append(ReasoningStep(
