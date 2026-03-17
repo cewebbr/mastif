@@ -69,7 +69,7 @@ class LlamaIndexAgent:
 
         self.tools[tool.metadata.name] = tool
 
-    def build_research_workflow(self):
+    def build_workflow(self):
 
         def planning_node(state: dict) -> dict:
             self.reasoning_steps.append(ReasoningStep(
@@ -278,7 +278,7 @@ Execute according to protocol."""
 
         try:
             if self.chain is None:
-                self.build_research_workflow()
+                self.build_workflow()
 
             self.reasoning_steps.append(ReasoningStep(
                 step_number=1,

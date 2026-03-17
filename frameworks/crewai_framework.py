@@ -70,7 +70,7 @@ class CrewAIAgent:
 
         self.tools[tool.name] = tool
 
-    def build_research_workflow(self):
+    def build_workflow(self):
         tool_list = list(self.tools.values())
 
         planner_agent = Agent(
@@ -322,7 +322,7 @@ Execute according to protocol."""
 
         try:
             if self.chain is None:
-                self.build_research_workflow()
+                self.build_workflow()
 
             self.reasoning_steps.append(ReasoningStep(
                 step_number=1,

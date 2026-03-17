@@ -35,13 +35,13 @@ class LangGraphAgent:
         self.graph = None
         self.reasoning_steps: List[ReasoningStep] = []
     
-    def build_research_workflow(self):
+    def build_workflow(self):
         """
-        Build a multi-step research workflow using LangGraph
+        Build a multi-step workflow using LangGraph
         
         The workflow consists of:
-        1. Planning: Create research plan
-        2. Research: Execute research steps (iterative)
+        1. Planning: Create plan
+        2. Research: Execute steps (iterative)
         3. Synthesis: Compile final report
         """
         
@@ -258,7 +258,7 @@ Execute according to protocol."""
         
         try:
             if self.graph is None:
-                self.build_research_workflow()
+                self.build_workflow()
             
             self.reasoning_steps.append(ReasoningStep(
                 step_number=1,
