@@ -14,7 +14,7 @@ import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
 from tool_pool import ToolPool
-
+from config import ConfigExpert
 
 class SemanticKernelAgent:
     """
@@ -276,7 +276,7 @@ Instructions:
             return state
 
         def should_continue(state: dict) -> bool:
-            if state["step"] > 2:
+            if state["step"] > state["max_steps"]:
                 self.reasoning_steps.append(ReasoningStep(
                     step_number=len(self.reasoning_steps) + 1,
                     thought="Research iterations complete, moving to synthesis",
@@ -332,13 +332,15 @@ Execute according to protocol."""
                 observation="Kernel configured with HuggingFace InferenceClient"
             ))
 
+            config = ConfigExpert.get_instance()
             initial_state = {
                 "task": task,
                 "plan": "",
                 "research_results": [],
                 "final_report": "",
                 "step": 0,
-                "tools": self.tools
+                "tools": self.tools,
+                "max_steps": config.get("max_steps", 2)
             }
 
             result = self.chain(initial_state)

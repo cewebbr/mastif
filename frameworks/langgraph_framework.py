@@ -52,6 +52,7 @@ class LangGraphAgent:
             research_results: Annotated[list, operator.add]
             final_report: str
             step: int
+            max_steps: int
         
         # Node 1: Planning
         def planning_node(state: AgentState) -> AgentState:
@@ -198,7 +199,7 @@ Instructions:
         # Conditional edge function
         def should_continue(state: AgentState) -> str:
             """Decide whether to continue research or synthesize"""
-            if state["step"] > 2:  # Limit to 2 research iterations
+            if state["step"] > state["max_steps"]:
                 self.reasoning_steps.append(ReasoningStep(
                     step_number=len(self.reasoning_steps) + 1,
                     thought="Research iterations complete, moving to synthesis",
@@ -267,12 +268,14 @@ Execute according to protocol."""
                 observation="Graph compiled successfully"
             ))
             
+            config = ConfigExpert.get_instance()
             initial_state = {
                 "task": task,
                 "plan": "",
                 "research_results": [],
                 "final_report": "",
-                "step": 0
+                "step": 0,
+                "max_steps": config.get("max_steps", 2)
             }
             
             result = self.graph.invoke(initial_state)

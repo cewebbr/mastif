@@ -13,7 +13,6 @@ from domain_model import ReasoningStep
 from tool_pool import ToolPool
 from config import ConfigExpert
 
-
 class LangChainAgent:
     """
     LangChain Stateful Workflow Integration
@@ -245,7 +244,7 @@ Instructions:
         # Conditional function
         def should_continue(state: dict) -> bool:
             """Decide whether to continue research or synthesize"""
-            if state["step"] > 2:  # Limit to 2 research iterations
+            if state["step"] > state["max_steps"]:
                 self.reasoning_steps.append(ReasoningStep(
                     step_number=len(self.reasoning_steps) + 1,
                     thought="Research iterations complete, moving to synthesis",
@@ -301,13 +300,15 @@ Execute according to protocol."""
                 observation="Chain compiled successfully"
             ))
 
+            config = ConfigExpert.get_instance()
             initial_state = {
                 "task": task,
                 "plan": "",
                 "research_results": [],
                 "final_report": "",
                 "step": 0,
-                "tools": self.tools
+                "tools": self.tools,
+                "max_steps": config.get("max_steps", 2)
             }
 
             result = self.chain(initial_state)

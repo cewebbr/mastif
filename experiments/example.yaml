@@ -1,29 +1,60 @@
+# =============================================================================
+# MASTIF — Multi-Agent System Testing & Interoperability Framework
+# Example configuration file — copy and edit to create your own experiment.
+# =============================================================================
+
 experiment:
-  name: "Accessiblity Expert WCAG"
+  name: "Accessibility Expert WCAG"
   description: "Accessibility Expert on ABNT NBR 17225 and WCAG 2.2."
 
-temperature: 0.7 # Model temperature setting
-max_tokens: 1024 # Max tokens per request
-requests_soft_limit: 1000 # Requires user confirmation if exceeded
-test_mode: "standard"  # Options: "mind2web", "standard"
+# -----------------------------------------------------------------------------
+# Model settings
+# -----------------------------------------------------------------------------
 
-# Any model ID listed here must be available on HuggingFace or OpenAI
-models: 
+temperature: 0.7          # Sampling temperature (0.0 = deterministic, 1.0 = creative)
+max_tokens: 1024          # Max tokens generated per request
+max_steps: 3              # Max research iterations per agent workflow (default: 3)
+
+# -----------------------------------------------------------------------------
+# Test settings
+# -----------------------------------------------------------------------------
+
+test_mode: "standard"     # "standard" | "mind2web"
+requests_soft_limit: 1000 # Prompts for confirmation if total API calls exceed this value
+                          # Total calls = models × protocols × frameworks × tasks × max_steps
+
+# -----------------------------------------------------------------------------
+# Models
+# Any model ID listed here must be available on HuggingFace or OpenAI.
+# Prefix OpenAI models with "gpt-". All others are treated as HuggingFace models.
+# -----------------------------------------------------------------------------
+
+models:
   # - "gpt-4o"
   # - "meta-llama/Llama-3.3-70B-Instruct"
   # - "meta-llama/Llama-4-Scout-17B-16E-Instruct"
-  - "deepseek-ai/DeepSeek-V3.2"  
+  - "deepseek-ai/DeepSeek-V3.2"
   # - "openai/gpt-oss-120b"
-  
-# ====== Used only in MIND2WEB test mode ====== 
-# judge_model: "gpt-4o"
-# ============================================= 
+
+# -----------------------------------------------------------------------------
+# Protocols
+# Controls how messages are structured between agents and the model.
+#   STANDARD : Direct API call with no protocol overhead
+#   MCP      : Model Context Protocol
+#   A2A      : Agent-to-Agent Protocol
+#   ACP      : Agent Communication Protocol
+# -----------------------------------------------------------------------------
 
 protocols:
   - "STANDARD"
   # - "MCP"
   # - "A2A"
   # - "ACP"
+
+# -----------------------------------------------------------------------------
+# Frameworks
+# Agentic frameworks to test. Each runs the same workflow independently.
+# -----------------------------------------------------------------------------
 
 frameworks:
   - "CrewAI"
@@ -33,32 +64,17 @@ frameworks:
   # - "LlamaIndex"
   # - "SemanticKernel"
 
-# ====== Used only in MIND2WEB test mode ====== 
-# mind2web_num_tasks: 10 # Set to 2350 to run all tasks from the benchmark
-# ============================================= 
-
-# ====== Used only in STANDARD test mode ====== 
-prompt_template: |
-  You are an Accessibility Expert (WCAG Specialist) with knowledge about WCAG 2.2 and ABNT NBR 17225. 
-  Your expertise is crucial in making the web more accessible for everyone. 
-  Your job is to perform the following task:
-
-  {task}
-
-  Be confident in your expertise.
-  Do not provide hypothetical answers.
-  Use any available tool that is a fit for performing the given task.
-
-
-tasks:
-  - "Provide me a set of accessibility tools I can use while accessing the web in a way to overcome existing web accessibility barriers."
-  - "Create a report about accessibility issues for website www.globo.com based on requirements A and AA from ABNT NBR 17225."
-  - "Assess ABNT NBR 17225 and recommend how to make it less succeptible to short-term technology advances."
-  - "Simulate access to the website www.globo.com using a screen reader. Identify and list all accessibility barriers found during the navigation."
-  - "Create a figure description for the image located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html. Consider the contex of the surrounding text on the webpage."
-  - "Evaluate the HTML code of the webpage located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html and provide suggestions on how to improve code semantices following ABNT NBR 17225."
-  - "Create a heading structure for the webpage located at URLhttps://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html following best practices for web accessibility and ABNT NBR 17225 guidelines."
-# ============================================= 
+# -----------------------------------------------------------------------------
+# Tools
+# Tools available to all agents. Must match names registered in tool_pool.py.
+# Available builtin tools:
+#   web_search   — DuckDuckGo web search (no API key required)
+#   web_browser  — Playwright headless browser navigation
+#   wikipedia    — Wikipedia topic lookup
+#   arxiv        — Academic paper search on arXiv
+#   python_repl  — Sandboxed Python code execution
+#   requests_get — Simple HTTP GET requests
+# -----------------------------------------------------------------------------
 
 tools:
   - name: "web_search"
@@ -73,3 +89,38 @@ tools:
     description: "Execute a snippet of Python code in a sandboxed environment"
   - name: "requests_get"
     description: "Perform an HTTP GET request to a URL and return the response text"
+
+# =============================================================================
+# STANDARD test mode settings
+# Used when test_mode is "standard".
+# =============================================================================
+
+# prompt_template wraps each task before it is sent to the agent.
+# Use {task} as the placeholder for the actual task text.
+prompt_template: |
+  You are an Accessibility Expert (WCAG Specialist) with knowledge about WCAG 2.2 and ABNT NBR 17225.
+  Your expertise is crucial in making the web more accessible for everyone.
+  Your job is to perform the following task:
+
+  {task}
+
+  Be confident in your expertise.
+  Do not provide hypothetical answers.
+  Use any available tool that is a fit for performing the given task.
+
+tasks:
+  - "Provide me a set of accessibility tools I can use while accessing the web in a way to overcome existing web accessibility barriers."
+  - "Create a report about accessibility issues for website www.globo.com based on requirements A and AA from ABNT NBR 17225."
+  - "Assess ABNT NBR 17225 and recommend how to make it less susceptible to short-term technology advances."
+  - "Simulate access to the website www.globo.com using a screen reader. Identify and list all accessibility barriers found during the navigation."
+  - "Create a figure description for the image located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html. Consider the context of the surrounding text on the webpage."
+  - "Evaluate the HTML code of the webpage located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html and provide suggestions on how to improve code semantics following ABNT NBR 17225."
+  - "Create a heading structure for the webpage located at URL https://www.terra.com.br/noticias/educacao/fuvest-divulga-lista-de-convocados-e-locais-da-2-fase,3f7901dcac109963816c46d327a225efgi55074i.html following best practices for web accessibility and ABNT NBR 17225 guidelines."
+
+# =============================================================================
+# MIND2WEB test mode settings
+# Used when test_mode is "mind2web".
+# =============================================================================
+
+# mind2web_num_tasks: 10   # Number of tasks to sample (max: 2350 for full benchmark)
+# judge_model: "gpt-4o"   # Model used to evaluate task completion quality
