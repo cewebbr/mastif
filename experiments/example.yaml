@@ -61,10 +61,15 @@ tasks:
 # ============================================= 
 
 tools:
-  - name: "web_browser"
-    description: "Browse web pages and extract content"
   - name: "web_search"
-    description: "Search for information on the web"
+    description: "Search the web using DuckDuckGo"
+  - name: "web_browser"
+    description: "Navigate a headless browser to a URL and return page text"
   - name: "wikipedia"
-    description: "Retrieve information from Wikipedia" 
-    
+    description: "Look up a topic on Wikipedia and return a short summary"
+  - name: "arxiv"
+    description: "Search academic papers on arXiv"
+  - name: "python_repl"
+    description: "Execute a snippet of Python code in a sandboxed environment"
+  - name: "requests_get"
+    description: "Perform an HTTP GET request to a URL and return the response text"

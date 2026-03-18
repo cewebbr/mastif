@@ -11,9 +11,9 @@ test_mode: "standard"  # Options: "mind2web", "standard"
 models:
   # - "gpt-4o"
   # - "meta-llama/Llama-3.3-70B-Instruct"
-  # - "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+  - "meta-llama/Llama-4-Scout-17B-16E-Instruct"
   - "deepseek-ai/DeepSeek-V3.2"  
-  # - "openai/gpt-oss-120b"
+  - "openai/gpt-oss-120b"
 
 # ====== Used only in MIND2WEB test mode ====== 
 # judge_model: "gpt-4o"
@@ -106,10 +106,15 @@ tasks:
   - "You will be provided a task, success criterion from WCAG 2.2 and a URL to evaluate. Success criterion 2.3.2, detailed at: https://www.w3.org/WAI/WCAG22/Understanding/three-flashes.html. You must consider the provided WCAG 2.2 success criterion and perform the following task. Task: Verify whether if there is content flashing over three times per second in the following URL. URL: https://www.youtube.com/watch?v=rutR-jrfsiM"
 
 tools:
-  - name: "web_browser"
-    description: "Browse web pages and extract content"
   - name: "web_search"
-    description: "Search for information on the web"
+    description: "Search the web using DuckDuckGo"
+  - name: "web_browser"
+    description: "Navigate a headless browser to a URL and return page text"
   - name: "wikipedia"
-    description: "Retrieve information from Wikipedia" 
-  
+    description: "Look up a topic on Wikipedia and return a short summary"
+  - name: "arxiv"
+    description: "Search academic papers on arXiv"
+  - name: "python_repl"
+    description: "Execute a snippet of Python code in a sandboxed environment"
+  - name: "requests_get"
+    description: "Perform an HTTP GET request to a URL and return the response text"

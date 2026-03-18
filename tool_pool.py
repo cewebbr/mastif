@@ -5,9 +5,12 @@ Provides a shared pool of builtin tools that can be used across
 multiple agentic frameworks (LangChain, CrewAI, smolagents, LlamaIndex, Semantic Kernel).
 
 Tools in the pool:
-    - web_search  : DuckDuckGo web search (via langchain-community)
-    - web_browser : Playwright browser navigation (via langchain-community)
-    - wikipedia   : Wikipedia lookup (via langchain-community)
+    - web_search   : DuckDuckGo web search (via duckduckgo-search)
+    - web_browser  : Playwright headless browser navigation
+    - wikipedia    : Wikipedia lookup (via wikipedia)
+    - arxiv        : Academic paper search (via arxiv)
+    - python_repl  : Sandboxed Python code execution (via RestrictedPython)
+    - requests_get : Simple HTTP GET requests (via requests)
 
 Each framework requests a clone of the tool via get_tool(name, framework).
 The pool itself is a singleton — only one instance is ever created.
@@ -176,6 +179,9 @@ class _ToolPool:
         self._register_web_search()
         self._register_web_browser()
         self._register_wikipedia()
+        self._register_arxiv()
+        self._register_python_repl()
+        self._register_requests_get()
 
     def _register_web_search(self):
         """DuckDuckGo web search — works natively with LangChain, CrewAI, smolagents."""
@@ -227,7 +233,7 @@ class _ToolPool:
         )
 
     def _register_wikipedia(self):
-        """Wikipedia lookup — well-supported across all three frameworks."""
+        """Wikipedia lookup — well-supported across all frameworks."""
         def _wiki(query: str) -> str:
             try:
                 import wikipedia
@@ -246,6 +252,88 @@ class _ToolPool:
             func=_wiki,
         )
 
+    def _register_arxiv(self):
+        """Arxiv academic paper search — no API key required."""
+        def _arxiv(query: str) -> str:
+            try:
+                import arxiv
+                search = arxiv.Search(query=query, max_results=5)
+                results = list(search.results())
+                if not results:
+                    return "No papers found."
+                return "\n\n".join(
+                    f"Title: {r.title}\nAuthors: {', '.join(a.name for a in r.authors[:3])}\n"
+                    f"Published: {r.published.strftime('%Y-%m-%d')}\nSummary: {r.summary[:300]}..."
+                    for r in results
+                )
+            except Exception as e:
+                return f"Arxiv error: {str(e)}"
+
+        self._registry["arxiv"] = ToolDefinition(
+            name="arxiv",
+            description=(
+                "Search academic papers on arXiv. "
+                "Input should be a plain-text search query about a research topic. "
+                "Returns titles, authors, publication dates, and abstracts of the top results."
+            ),
+            func=_arxiv,
+        )
+
+    def _register_python_repl(self):
+        """Sandboxed Python REPL — executes code via RestrictedPython."""
+        def _python_repl(code: str) -> str:
+            try:
+                from RestrictedPython import compile_restricted, safe_globals
+                from RestrictedPython.Eval import default_guarded_getiter
+                from RestrictedPython.Guards import safe_builtins, guarded_iter_unpack_sequence
+
+                byte_code = compile_restricted(code, "<string>", "exec")
+                local_vars = {}
+                restricted_globals = {
+                    **safe_globals,
+                    "__builtins__": safe_builtins,
+                    "_getiter_": default_guarded_getiter,
+                    "_iter_unpack_sequence_": guarded_iter_unpack_sequence,
+                }
+                exec(byte_code, restricted_globals, local_vars)  # noqa: S102
+                output = local_vars.get("result", restricted_globals.get("_print_", None))
+                return str(output) if output is not None else "Code executed successfully with no output."
+            except Exception as e:
+                return f"Python REPL error: {str(e)}"
+
+        self._registry["python_repl"] = ToolDefinition(
+            name="python_repl",
+            description=(
+                "Execute a snippet of Python code in a sandboxed environment. "
+                "Input should be valid Python code as a string. "
+                "Assign the final result to a variable named 'result' to capture output. "
+                "Useful for calculations, data transformations, and logic evaluation."
+            ),
+            func=_python_repl,
+        )
+
+    def _register_requests_get(self):
+        """Simple HTTP GET — fetches raw content from a URL via requests."""
+        def _get(url: str) -> str:
+            try:
+                import requests
+                response = requests.get(url, timeout=10)
+                response.raise_for_status()
+                # Return plain text truncated to avoid token overflow
+                return response.text[:4000]
+            except Exception as e:
+                return f"HTTP GET error: {str(e)}"
+
+        self._registry["requests_get"] = ToolDefinition(
+            name="requests_get",
+            description=(
+                "Perform an HTTP GET request to a URL and return the raw response text. "
+                "Input should be a valid URL string (including https://). "
+                "Useful for fetching JSON APIs, plain-text files, or lightweight web pages."
+            ),
+            func=_get,
+        )
+
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
@@ -255,7 +343,8 @@ class _ToolPool:
         Return a framework-specific clone of the requested tool.
 
         Args:
-            name:      One of "web_search", "web_browser", "wikipedia".
+            name:      One of "web_search", "web_browser", "wikipedia",
+                       "arxiv", "python_repl", "requests_get".
             framework: One of "langchain", "crewai", "smolagents", "llamaindex", "semantic_kernel".
 
         Returns:
@@ -281,7 +370,8 @@ class _ToolPool:
             framework: One of "langchain", "crewai", "smolagents", "llamaindex", "semantic_kernel".
 
         Returns:
-            List of tool objects ready to be used by the specified framework.
+            List of all tool objects ready to be used by the specified framework.
+            Includes: web_search, web_browser, wikipedia, arxiv, python_repl, requests_get.
         """
         return [self.get_tool(name, framework) for name in self._registry]
 
