@@ -74,6 +74,13 @@ frameworks:
 #   arxiv        — Academic paper search on arXiv
 #   python_repl  — Sandboxed Python code execution
 #   requests_get — Simple HTTP GET requests
+#   beautifulsoup_scraper — Extract structured HTML content from a URL
+#   pdf_reader   — Extract text from PDF files or URLs
+#   datetime     — Get current UTC date and time
+#   json_parser  — Parse and query JSON strings
+#   pubmed       — Search biomedical literature on PubMed
+#   youtube_transcript — Retrieve YouTube video transcripts
+#   sympy         — Evaluate or simplify symbolic math expressions
 # -----------------------------------------------------------------------------
 
 tools:
@@ -89,6 +96,20 @@ tools:
     description: "Execute a snippet of Python code in a sandboxed environment"
   - name: "requests_get"
     description: "Perform an HTTP GET request to a URL and return the response text"
+  - name: "beautifulsoup_scraper"
+    description: "Extract structured HTML content from a URL"
+  - name: "pdf_reader"
+    description: "Extract text content from a PDF file or URL"
+  - name: "datetime"
+    description: "Return the current UTC date and time"
+  - name: "json_parser"
+    description: "Parse and query a JSON string"
+  - name: "pubmed"
+    description: "Search biomedical literature on PubMed"
+  - name: "youtube_transcript"
+    description: "Retrieve the transcript of a YouTube video"
+  - name: "sympy"
+    description: "Evaluate or simplify a symbolic mathematical expression"
 
 # =============================================================================
 # STANDARD test mode settings

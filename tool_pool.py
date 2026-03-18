@@ -5,12 +5,19 @@ Provides a shared pool of builtin tools that can be used across
 multiple agentic frameworks (LangChain, CrewAI, smolagents, LlamaIndex, Semantic Kernel).
 
 Tools in the pool:
-    - web_search   : DuckDuckGo web search (via duckduckgo-search)
-    - web_browser  : Playwright headless browser navigation
-    - wikipedia    : Wikipedia lookup (via wikipedia)
-    - arxiv        : Academic paper search (via arxiv)
-    - python_repl  : Sandboxed Python code execution (via RestrictedPython)
-    - requests_get : Simple HTTP GET requests (via requests)
+    - web_search            : DuckDuckGo web search (via duckduckgo-search)
+    - web_browser           : Playwright headless browser navigation
+    - wikipedia             : Wikipedia lookup (via wikipedia)
+    - arxiv                 : Academic paper search (via arxiv)
+    - python_repl           : Sandboxed Python code execution (via RestrictedPython)
+    - requests_get          : Simple HTTP GET requests (via requests)
+    - beautifulsoup_scraper : HTML structure extraction (via beautifulsoup4)
+    - pdf_reader            : PDF text extraction (via pypdf)
+    - datetime              : Current date and time (stdlib)
+    - json_parser           : JSON string parsing and querying (stdlib)
+    - pubmed                : Biomedical paper search (via biopython)
+    - youtube_transcript    : YouTube video transcript retrieval (via youtube-transcript-api)
+    - sympy                 : Symbolic math and logic evaluation (via sympy)
 
 Each framework requests a clone of the tool via get_tool(name, framework).
 The pool itself is a singleton — only one instance is ever created.
@@ -182,6 +189,13 @@ class _ToolPool:
         self._register_arxiv()
         self._register_python_repl()
         self._register_requests_get()
+        self._register_beautifulsoup_scraper()
+        self._register_pdf_reader()
+        self._register_datetime()
+        self._register_json_parser()
+        self._register_pubmed()
+        self._register_youtube_transcript()
+        self._register_sympy()
 
     def _register_web_search(self):
         """DuckDuckGo web search — works natively with LangChain, CrewAI, smolagents."""
@@ -334,6 +348,206 @@ class _ToolPool:
             func=_get,
         )
 
+    def _register_beautifulsoup_scraper(self):
+        """HTML structure extraction — parses and returns structured content from a URL."""
+        def _scrape(url: str) -> str:
+            try:
+                import requests
+                from bs4 import BeautifulSoup
+                response = requests.get(url, timeout=10)
+                response.raise_for_status()
+                soup = BeautifulSoup(response.text, "html.parser")
+                # Remove script and style elements
+                for tag in soup(["script", "style", "noscript"]):
+                    tag.decompose()
+                headings = [f"{tag.name.upper()}: {tag.get_text(strip=True)}"
+                            for tag in soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])]
+                paragraphs = [p.get_text(strip=True) for p in soup.find_all("p") if p.get_text(strip=True)]
+                output = ""
+                if headings:
+                    output += "Headings:\n" + "\n".join(headings[:20]) + "\n\n"
+                if paragraphs:
+                    output += "Content:\n" + "\n".join(paragraphs[:20])
+                return output[:4000] if output else "No structured content found."
+            except Exception as e:
+                return f"BeautifulSoup scraper error: {str(e)}"
+
+        self._registry["beautifulsoup_scraper"] = ToolDefinition(
+            name="beautifulsoup_scraper",
+            description=(
+                "Extract structured HTML content (headings and paragraphs) from a URL. "
+                "Input should be a valid URL string (including https://). "
+                "Lighter than web_browser — does not execute JavaScript. "
+                "Useful for HTML structure analysis and accessibility evaluation."
+            ),
+            func=_scrape,
+        )
+
+    def _register_pdf_reader(self):
+        """PDF text extraction — reads text from a PDF at a URL or local file path."""
+        def _read_pdf(source: str) -> str:
+            try:
+                import io
+                import pypdf
+                import requests
+                if source.startswith("http://") or source.startswith("https://"):
+                    response = requests.get(source, timeout=15)
+                    response.raise_for_status()
+                    file = io.BytesIO(response.content)
+                else:
+                    file = open(source, "rb")
+                reader = pypdf.PdfReader(file)
+                text = "\n\n".join(
+                    page.extract_text() or "" for page in reader.pages
+                )
+                if hasattr(file, "close"):
+                    file.close()
+                return text[:4000] if text.strip() else "No text could be extracted from the PDF."
+            except Exception as e:
+                return f"PDF reader error: {str(e)}"
+
+        self._registry["pdf_reader"] = ToolDefinition(
+            name="pdf_reader",
+            description=(
+                "Extract text content from a PDF file. "
+                "Input should be a URL to a PDF (including https://) or a local file path. "
+                "Useful for reading accessibility standards, technical documents, and reports."
+            ),
+            func=_read_pdf,
+        )
+
+    def _register_datetime(self):
+        """Current date and time — zero dependencies, stdlib only."""
+        def _datetime(_: str = "") -> str:
+            from datetime import datetime, timezone
+            now = datetime.now(timezone.utc)
+            return (
+                f"Current UTC date and time: {now.strftime('%Y-%m-%d %H:%M:%S %Z')}\n"
+                f"ISO 8601: {now.isoformat()}\n"
+                f"Day of week: {now.strftime('%A')}"
+            )
+
+        self._registry["datetime"] = ToolDefinition(
+            name="datetime",
+            description=(
+                "Return the current UTC date and time. "
+                "Input is ignored — pass any string or leave empty. "
+                "Useful for time-aware reasoning, logging, and report generation."
+            ),
+            func=_datetime,
+        )
+
+    def _register_json_parser(self):
+        """JSON parsing and querying — stdlib only, zero dependencies."""
+        def _parse_json(input_str: str) -> str:
+            import json
+            try:
+                # Support "key::json_string" syntax for targeted key lookup
+                if "::" in input_str:
+                    key, json_str = input_str.split("::", 1)
+                    data = json.loads(json_str.strip())
+                    result = data.get(key.strip(), f"Key '{key.strip()}' not found.")
+                    return json.dumps(result, indent=2)
+                else:
+                    data = json.loads(input_str.strip())
+                    return json.dumps(data, indent=2)
+            except Exception as e:
+                return f"JSON parser error: {str(e)}"
+
+        self._registry["json_parser"] = ToolDefinition(
+            name="json_parser",
+            description=(
+                "Parse and pretty-print a JSON string, or extract a specific key from it. "
+                "For full parsing, input should be a valid JSON string. "
+                "For key lookup, use format: 'key::json_string'. "
+                "Useful for processing API responses and structured data."
+            ),
+            func=_parse_json,
+        )
+
+    def _register_pubmed(self):
+        """PubMed biomedical paper search — via biopython, no API key required."""
+        def _pubmed(query: str) -> str:
+            try:
+                from Bio import Entrez
+                Entrez.email = "agent@toolpool.local"
+                handle = Entrez.esearch(db="pubmed", term=query, retmax=5)
+                record = Entrez.read(handle)
+                handle.close()
+                ids = record["IdList"]
+                if not ids:
+                    return "No PubMed results found."
+                handle = Entrez.efetch(db="pubmed", id=",".join(ids), rettype="abstract", retmode="text")
+                abstracts = handle.read()
+                handle.close()
+                return abstracts[:4000]
+            except Exception as e:
+                return f"PubMed error: {str(e)}"
+
+        self._registry["pubmed"] = ToolDefinition(
+            name="pubmed",
+            description=(
+                "Search biomedical and life science literature on PubMed. "
+                "Input should be a plain-text search query about a medical or biological topic. "
+                "Returns abstracts of the top matching papers. No API key required."
+            ),
+            func=_pubmed,
+        )
+
+    def _register_youtube_transcript(self):
+        """YouTube transcript retrieval — via youtube-transcript-api, no API key required."""
+        def _transcript(input_str: str) -> str:
+            try:
+                from youtube_transcript_api import YouTubeTranscriptApi
+                # Accept full URL or bare video ID
+                if "v=" in input_str:
+                    video_id = input_str.split("v=")[-1].split("&")[0]
+                elif "youtu.be/" in input_str:
+                    video_id = input_str.split("youtu.be/")[-1].split("?")[0]
+                else:
+                    video_id = input_str.strip()
+                transcript = YouTubeTranscriptApi.get_transcript(video_id)
+                text = " ".join(entry["text"] for entry in transcript)
+                return text[:4000]
+            except Exception as e:
+                return f"YouTube transcript error: {str(e)}"
+
+        self._registry["youtube_transcript"] = ToolDefinition(
+            name="youtube_transcript",
+            description=(
+                "Retrieve the transcript of a YouTube video. "
+                "Input should be a YouTube video URL or bare video ID. "
+                "Useful for media accessibility evaluation and content analysis."
+            ),
+            func=_transcript,
+        )
+
+    def _register_sympy(self):
+        """Symbolic math and logic evaluation — via sympy, no API key required."""
+        def _sympy(expression: str) -> str:
+            try:
+                import sympy
+                result = sympy.sympify(expression)
+                simplified = sympy.simplify(result)
+                return (
+                    f"Input:      {expression}\n"
+                    f"Parsed:     {result}\n"
+                    f"Simplified: {simplified}\n"
+                    f"Numeric:    {float(simplified.evalf()) if simplified.is_number else 'N/A'}"
+                )
+            except Exception as e:
+                return f"SymPy error: {str(e)}"
+
+        self._registry["sympy"] = ToolDefinition(
+            name="sympy",
+            description=(
+                "Evaluate, simplify, or solve a symbolic mathematical expression. "
+                "Input should be a valid mathematical expression string (e.g. 'x**2 + 2*x + 1'). "
+                "Useful for calculations, formula verification, and logic evaluation."
+            ),
+            func=_sympy,
+        )
+
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
@@ -343,8 +557,10 @@ class _ToolPool:
         Return a framework-specific clone of the requested tool.
 
         Args:
-            name:      One of "web_search", "web_browser", "wikipedia",
-                       "arxiv", "python_repl", "requests_get".
+            name:      One of "web_search", "web_browser", "wikipedia", "arxiv",
+                       "python_repl", "requests_get", "beautifulsoup_scraper",
+                       "pdf_reader", "datetime", "json_parser", "pubmed",
+                       "youtube_transcript", "sympy".
             framework: One of "langchain", "crewai", "smolagents", "llamaindex", "semantic_kernel".
 
         Returns:
@@ -371,7 +587,9 @@ class _ToolPool:
 
         Returns:
             List of all tool objects ready to be used by the specified framework.
-            Includes: web_search, web_browser, wikipedia, arxiv, python_repl, requests_get.
+            Includes: web_search, web_browser, wikipedia, arxiv, python_repl,
+            requests_get, beautifulsoup_scraper, pdf_reader, datetime, json_parser,
+            pubmed, youtube_transcript, sympy.
         """
         return [self.get_tool(name, framework) for name in self._registry]
 
