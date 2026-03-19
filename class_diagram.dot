@@ -14,7 +14,8 @@ CustomLLM;
 BaseProtocol;
 HuggingFaceLLM;
 AgentState;
-BaseAdapter
+BaseAdapter;
+ToolPool;
 }
 
 {
@@ -163,7 +164,7 @@ generate(prompt: str, **kwargs): str\l
 }"];
 
 // AgentState
-AgentState [label="{AgentState|task: str\lplan: str\lresearch_results: Annotated[list, operator.add]\lfinal_report: str\lstep: int\l|}"];
+AgentState [label="{AgentState|task: str\lplan: str\lresearch_results: Annotated[list, operator.add]\lfinal_report: str\lstep: int\lmax_steps: int\l|}"];
 
 AgentState -> TypedDict [arrowhead=empty, fontsize=9];
 
@@ -177,41 +178,50 @@ color=black;
 CrewAIAgent [label="{CrewAIAgent|
 adapter\l
 role: str\l
+protocol\l
+chain\l
+tools: Dict[str, BaseTool]\l
 reasoning_steps: List[ReasoningStep]\l
 |
-__init__(adapter, role: str)\l
+__init__(adapter, role: str, protocol=None)\l
+add_tool(name: str, func=None, description: str=None)\l
+build_research_workflow()\l
 execute_task(task: str, context: Dict = None): str\l
 }"];
 
 SmolAgentWrapper [label="{SmolAgentWrapper|
 adapter\l
-llm\l
-tools: List[FunctionTool]\l
-agent\l
+protocol\l
+chain\l
+tools: Dict[str, Tool]\l
 reasoning_steps: List[ReasoningStep]\l
 |
-__init__(adapter)\l
-add_tool(name: str, description: str, func=None)\l
+__init__(adapter, protocol=None)\l
+add_tool(name: str, func=None, description: str=None)\l
+build_research_workflow()\l
 run(task: str): str\l
 }"];
 
 LangChainAgent [label="{LangChainAgent|
 adapter\l
-tools: List[Tool]\l
-llm\l
+protocol\l
+chain\l
+tools: Dict[str, Tool]\l
 reasoning_steps: List[ReasoningStep]\l
 |
-__init__(adapter)\l
-add_tool(name: str, description: str, func=None)\l
+__init__(adapter, protocol=None)\l
+add_tool(name: str, func=None, description: str=None)\l
+build_research_workflow()\l
 run(task: str): str\l
 }"];
 
 LangGraphAgent [label="{LangGraphAgent|
 adapter\l
+protocol\l
 graph\l
 reasoning_steps: List[ReasoningStep]\l
 |
-__init__(adapter)\l
+__init__(adapter, protocol=None)\l
 build_workflow()\l
 run(task: str): str\l
 }"];
@@ -219,22 +229,30 @@ run(task: str): str\l
 LlamaIndexAgent [label="{LlamaIndexAgent|
 adapter\l
 llm\l
-tools: List[FunctionTool]\l
-agent\l
+protocol\l
+chain\l
+tools: Dict[str, FunctionTool]\l
 reasoning_steps: List[ReasoningStep]\l
 |
-__init__(adapter)\l
-add_tool(name: str, description: str, func=None)\l
+__init__(adapter, protocol=None)\l
+add_tool(name: str, func=None, description: str=None)\l
+build_research_workflow()\l
 run(task: str): str\l
 }"];
 
 SemanticKernelAgent [label="{SemanticKernelAgent|
 adapter\l
 kernel\l
+protocol\l
+chain\l
+inference_client\l
+tools: Dict[str, KernelFunction]\l
 reasoning_steps: List[ReasoningStep]\l
 |
-__init__(adapter)\l
+__init__(adapter, protocol=None)\l
+add_tool(name: str, func=None, description: str=None)\l
 add_semantic_function(name: str, prompt_template: str, description: str)\l
+build_research_workflow()\l
 run(task: str): str\l
 }"];
 }
@@ -278,17 +296,17 @@ get_aggregate_metrics(): Dict\l
 Mastif [label="{Mastif|
 results: List[TestResult]\l
 protocols: Dict[ProtocolType]\l
-standard_tools: List[Dict[str, str]]\l
+standard_tools: List[str]\l
 mind2web_results: Any\l
 mind2web_aggregate: Any\l
 |
 __init__()\l
 test_with_protocol(adapter: BaseAdapter, protocol_type: ProtocolType, task: str, context: Dict = None): TestResult\l
 test_with_crewai(adapter: BaseAdapter, role: str, task: str, context: Dict = None): TestResult\l
-test_with_smolagents(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
-test_with_langchain(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
+test_with_smolagents(adapter: BaseAdapter, task: str, tools: List[str] = None): TestResult\l
+test_with_langchain(adapter: BaseAdapter, task: str, tools: List[str] = None): TestResult\l
 test_with_langgraph(adapter: BaseAdapter, task: str): TestResult\l
-test_with_llamaindex(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None): TestResult\l
+test_with_llamaindex(adapter: BaseAdapter, task: str, tools: List[str] = None): TestResult\l
 test_with_semantic_kernel(adapter: BaseAdapter, task: str): TestResult\l
 run_comprehensive_test()\l
 export_results(filename: str = \"test_results.json\")\l
@@ -297,6 +315,7 @@ run_mind2web_evaluation(hf_token: Optional[str] = None)\l
 export_mind2web_results(filename: str)\l
 get_supported_protocols(): List[ProtocolType]\l
 get_supported_frameworks(): List[str]\l
+compute_token_metrics(model_name: str, results: List[TestResult])\l
 }"];
 
 // Relationships for Mastif
@@ -342,5 +361,37 @@ reset()\l
 }"];
 
 ConfigExpert -> ConfigExpert [arrowhead=odiamond, fontsize=9];
+
+// ToolDefinition and ToolPool
+ToolDefinition [label="{
+ToolDefinition|
+name: str\l
+description: str\l
+func: Callable\l
+|
+__init__(name: str, description: str, func: Callable)\l
+__repr__(): str\l
+}"];
+
+ToolPool [label="{
+ToolPool\n
+«singleton»|
+_instance\l
+_registry: Dict[str, ToolDefinition]\l
+|
+get_tool(name: str, framework: str): Any\l
+get_all_tools(framework: str): List\l
+available_tools: List[str]\l
+}"];
+
+ToolPool -> ToolDefinition [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9];
+ToolPool -> ToolPool [arrowhead=odiamond, fontsize=9];
+
+ToolPool -> CrewAIAgent [arrowhead=open, fontsize=9];
+ToolPool -> SmolAgentWrapper [arrowhead=open, fontsize=9];
+ToolPool -> LangChainAgent [arrowhead=open, fontsize=9];
+ToolPool -> LlamaIndexAgent [arrowhead=open, fontsize=9];
+ToolPool -> SemanticKernelAgent [arrowhead=open, fontsize=9];
+ToolPool -> Mastif [arrowhead=open, fontsize=9];
 
 }
