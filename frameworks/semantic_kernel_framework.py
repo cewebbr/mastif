@@ -120,6 +120,7 @@ Instructions:
 • Think step-by-step.
 • Create a detailed research plan for this task.
 • Use available tools where appropriate.
+• IMPORTANT: You must ONLY call tools by their exact registered names listed above. Do not invent or approximate tool names. Calling an unregistered tool will cause an error.
 • Do not skip steps.
 • Make intermediate decisions explicit.
 • If information is missing, state assumptions clearly.
@@ -186,6 +187,7 @@ Instructions:
 • Execute this step carefully.
 • Provide detailed findings.
 • Use available tools where appropriate.
+• IMPORTANT: You must ONLY call tools by their exact registered names listed above. Do not invent or approximate tool names. Calling an unregistered tool will cause an error.
 • Do not skip steps.
 • Make intermediate decisions explicit.
 • If information is missing, state assumptions clearly.
