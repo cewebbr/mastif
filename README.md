@@ -51,14 +51,36 @@ pip install -r requirements.txt
 # Install dependency for Mind2Web
 pip install datasets
 
-# Install dependencies
-pip install huggingface_hub transformers torch
-pip install openai
-pip install crewai smolagents
-pip install langchain langchain-community langgraph
-pip install llama-index
+# Install core
+pip install \
+  huggingface-hub \
+  openai \
+  pydantic \
+  pyyaml \
+  python-dotenv \
+  requests \
+  tiktoken \
+  transformers
+
+# Install agentic frameworks
+pip install langchain langchain-community langchain-core langgraph
+pip install crewai crewai-tools
+pip install smolagents
+pip install llama-index llama-index-core llama-index-llms-huggingface-api
 pip install semantic-kernel
-pip install transformers
+
+# Install tool pool dependencies
+pip install duckduckgo-search
+pip install playwright
+playwright install chromium
+pip install wikipedia
+pip install arxiv
+pip install RestrictedPython
+pip install beautifulsoup4
+pip install pypdf requests
+pip install biopython
+pip install youtube-transcript-api
+pip install sympy
 ```
 
 ## Usage
