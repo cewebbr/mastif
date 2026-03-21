@@ -53,6 +53,34 @@ class Mastif:
         }
         self.standard_tools = ToolPool.available_tools
        
+    ERROR_PATTERNS = [
+        "execution error:",
+        "inference error:",
+        "planning error:",
+        "research error:",
+        "synthesis error:",
+        "browser error:",
+        "api error:",
+        "http get error:",
+        "tool '",  # tool execution errors
+    ]
+
+    def _check_response_for_errors(self, response: str, framework: str) -> tuple:
+        """
+        Inspect an agent response for embedded inference or tool errors.
+
+        Returns (success: bool, error: str | None)
+        """
+        if not response:
+            return False, f"{framework} returned an empty response."
+        lower = response.lower()
+        for pattern in self.ERROR_PATTERNS:
+            if pattern in lower:
+                # Extract the first line as the error summary
+                first_line = response.strip().splitlines()[0][:200]
+                return False, first_line
+        return True, None
+
     def test_with_protocol(
         self,
         adapter: BaseAdapter,
@@ -183,6 +211,9 @@ Please respond according to this protocol structure and complete the task."""
             agent = CrewAIAgent(adapter, role, protocol=protocol_instance)
             response = agent.execute_task(task, context)
             latency = time.time() - start_time
+            success, error = self._check_response_for_errors(response, "CrewAI")
+            if not success:
+                print(f"    ⚠️  Inference/tool error detected: {error}")
             
             return TestResult(
                 model_name=adapter.model_name,
@@ -192,8 +223,9 @@ Please respond according to this protocol structure and complete the task."""
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
-                success=True,
-                metadata={"role": role, "protocol_used": protocol.value if protocol else "none"}
+                success=success,
+                metadata={"role": role, "protocol_used": protocol.value if protocol else "none"},
+                error=error
             )
         
         except Exception as e:
@@ -229,6 +261,9 @@ Please respond according to this protocol structure and complete the task."""
 
             response = agent.run(task)
             latency = time.time() - start_time
+            success, error = self._check_response_for_errors(response, "Smolagents")
+            if not success:
+                print(f"    ⚠️  Inference/tool error detected: {error}")
             
             return TestResult(
                 model_name=adapter.model_name,
@@ -238,8 +273,9 @@ Please respond according to this protocol structure and complete the task."""
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
-                success=True,
-                metadata={"tools_count": len(tools or []), "protocol_used": protocol.value if protocol else "none"}
+                success=success,
+                metadata={"tools_count": len(tools or []), "protocol_used": protocol.value if protocol else "none"},
+                error=error
             )
         
         except Exception as e:
@@ -275,6 +311,9 @@ Please respond according to this protocol structure and complete the task."""
 
             response = agent.run(task)
             latency = time.time() - start_time
+            success, error = self._check_response_for_errors(response, "LangChain")
+            if not success:
+                print(f"    ⚠️  Inference/tool error detected: {error}")
             
             return TestResult(
                 model_name=adapter.model_name,
@@ -284,8 +323,9 @@ Please respond according to this protocol structure and complete the task."""
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
-                success=True,
-                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none"}
+                success=success,
+                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none"},
+                error=error
             )
         
         except Exception as e:
@@ -316,6 +356,9 @@ Please respond according to this protocol structure and complete the task."""
             agent = LangGraphAgent(adapter, protocol=protocol_instance)
             response = agent.run(task)
             latency = time.time() - start_time
+            success, error = self._check_response_for_errors(response, "LangGraph")
+            if not success:
+                print(f"    ⚠️  Inference/tool error detected: {error}")
             
             return TestResult(
                 model_name=adapter.model_name,
@@ -325,8 +368,9 @@ Please respond according to this protocol structure and complete the task."""
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
-                success=True,
-                metadata={"workflow_type": "research_pipeline", "protocol_used": protocol.value if protocol else "none"  }
+                success=success,
+                metadata={"workflow_type": "research_pipeline", "protocol_used": protocol.value if protocol else "none"},
+                error=error
             )
         
         except Exception as e:
@@ -363,6 +407,9 @@ Please respond according to this protocol structure and complete the task."""
             
             response = agent.run(task)
             latency = time.time() - start_time
+            success, error = self._check_response_for_errors(response, "LlamaIndex")
+            if not success:
+                print(f"    ⚠️  Inference/tool error detected: {error}")
             
             return TestResult(
                 model_name=adapter.model_name,
@@ -372,8 +419,9 @@ Please respond according to this protocol structure and complete the task."""
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
-                success=True,
-                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none" }
+                success=success,
+                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none"},
+                error=error
             )
         
         except Exception as e:
@@ -404,6 +452,9 @@ Please respond according to this protocol structure and complete the task."""
             agent = SemanticKernelAgent(adapter, protocol=protocol_instance)
             response = agent.run(task)
             latency = time.time() - start_time
+            success, error = self._check_response_for_errors(response, "SemanticKernel")
+            if not success:
+                print(f"    ⚠️  Inference/tool error detected: {error}")
             
             return TestResult(
                 model_name=adapter.model_name,
@@ -413,8 +464,9 @@ Please respond according to this protocol structure and complete the task."""
                 response=response,
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
-                success=True,
-                metadata={"kernel_type": "huggingface", "protocol_used": protocol.value if protocol else "none" }
+                success=success,
+                metadata={"kernel_type": "huggingface", "protocol_used": protocol.value if protocol else "none"},
+                error=error
             )
         
         except Exception as e:
@@ -447,7 +499,7 @@ Please respond according to this protocol structure and complete the task."""
         framework_names = config.get("frameworks")
         prompt_template = config.get("prompt_template")
         inner_tasks = config.get("tasks")
-        raw_tools = config.get("tools", self.standard_tools)
+        raw_tools = config.get('tools', self.standard_tools)
         tools = [t["name"] if isinstance(t, dict) else t for t in raw_tools]
 
         # Format tasks with template
@@ -528,7 +580,8 @@ Please respond according to this protocol structure and complete the task."""
                             self.results.append(result)
                             
                             status = "✅️" if result.success else "❌"
-                            print(f"      {status} Latency: {result.latency:.2f}s, Steps: {len(result.reasoning_steps)}")
+                            error_msg = f" — {result.error}" if not result.success and result.error else ""
+                            print(f"      {status} Latency: {result.latency:.2f}s, Steps: {len(result.reasoning_steps)}{error_msg}")
                         except Exception as e:
                             print(f"      ❌ Error: {str(e)}")
                     
@@ -870,7 +923,10 @@ Please respond according to this protocol structure and complete the task."""
                                 result.reasoning_steps
                             )
                             
-                            print(f"    ✅️ Completed")
+                            status = "✅️ Completed" if result.success else f"⚠️  Completed with errors"
+                            print(f"    {status}")
+                            if not result.success and result.error:
+                                print(f"      ⚠️  Inference/tool error: {result.error}")
                             print(f"      Task Understanding: {eval_result['task_understanding']:.2%}")
                             print(f"      Task Deviation: {eval_result['task_deviation']:.2%}")
                             print(f"      Task Completion: {eval_result['task_completion']:.2%}")

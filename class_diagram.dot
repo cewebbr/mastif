@@ -299,8 +299,10 @@ protocols: Dict[ProtocolType]\l
 standard_tools: List[str]\l
 mind2web_results: Any\l
 mind2web_aggregate: Any\l
+ERROR_PATTERNS: List[str]\l
 |
 __init__()\l
+_check_response_for_errors(response: str, framework: str): tuple\l
 test_with_protocol(adapter: BaseAdapter, protocol_type: ProtocolType, task: str, context: Dict = None): TestResult\l
 test_with_crewai(adapter: BaseAdapter, role: str, task: str, context: Dict = None): TestResult\l
 test_with_smolagents(adapter: BaseAdapter, task: str, tools: List[str] = None): TestResult\l
