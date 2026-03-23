@@ -141,6 +141,9 @@ python main.py experiments/[your experiment file].yaml
 
 ## AI Attribution
 
-AIA Human-AI blend, Content edits, Human-initiated, Reviewed, Copilot, Gemini, and Sonet 4.5 v1.0
+AIA Human-AI blend, Content edits, Human-initiated, Reviewed, Copilot, ChatGPT 5.2, Gemini 3, Sonnet 4.5, and Sonnet 4.6 v1.0
 
-More info: https://aiattribution.github.io/create-attribution
+- Create an attribution: https://aiattribution.github.io/create-attribution
+- Interpret an attribution: https://aiattribution.github.io/interpret-attribution
+
+More info: https://aiattribution.github.io/
