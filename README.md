@@ -23,6 +23,10 @@ MASTIF (Multi-Agent System TestIng Framework) is a comprehensive benchmarking su
 
 MASTIF framework is designed for researchers, developers, and practitioners who want to systematically compare agentic AI stacks, understand their strengths and weaknesses, and drive improvements in agent reasoning and web automation.
 
+## Component Diagram
+
+![Component Diagram](component_diagram.png)
+
 ## Class Diagram
 
 ![Class Diagram](class_diagram.png)

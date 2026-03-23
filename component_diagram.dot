@@ -1,0 +1,179 @@
+digraph MASTIF_Packages {
+graph [
+    splines=ortho,
+    nodesep=1.0,
+    ranksep=1.4,
+    fontname="Helvetica",
+    label="",
+    labelloc="t",
+    labeljust="c",
+    fontsize=18
+];
+rankdir=TB;
+node [fontname="Helvetica", fontsize=12];
+edge [fontname="Helvetica", fontsize=10];
+
+// ─────────────────────────────────────────────
+// Rank: External APIs (bottom)
+// ─────────────────────────────────────────────
+
+{ rank=max;
+    HuggingFaceAPI;
+    OpenAIAPI;
+    Mind2WebDataset;
+}
+
+HuggingFaceAPI [
+    shape=component,
+    style="filled",
+    fillcolor="#e0e0e0",
+    label="HuggingFace\nInference API"
+];
+
+OpenAIAPI [
+    shape=component,
+    style="filled",
+    fillcolor="#e0e0e0",
+    label="OpenAI API"
+];
+
+Mind2WebDataset [
+    shape=component,
+    style="filled",
+    fillcolor="#e0e0e0",
+    label="Mind2Web\nDataset (HF)"
+];
+
+// ─────────────────────────────────────────────
+// Rank: Orchestrator (top)
+// ─────────────────────────────────────────────
+
+{ rank=min;
+    tester;
+}
+
+tester [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#4a90d9",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="tester"
+];
+
+// ─────────────────────────────────────────────
+// Rank: Core infrastructure (second row)
+// ─────────────────────────────────────────────
+
+{ rank=same;
+    config;
+    domain_model;
+    protocols;
+    tool_pool;
+}
+
+config [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#f0a500",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="config"
+];
+
+domain_model [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#5ba8a0",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="domain_model"
+];
+
+protocols [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#5b8cc8",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="protocols"
+];
+
+tool_pool [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#e0960a",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="tool_pool"
+];
+
+// ─────────────────────────────────────────────
+// Rank: Execution layer (third row)
+// ─────────────────────────────────────────────
+
+{ rank=same;
+    adapters;
+    frameworks;
+    benchmark;
+}
+
+adapters [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#7dbb7d",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="adapters"
+];
+
+frameworks [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#b05ab0",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="frameworks"
+];
+
+benchmark [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#a89a20",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="benchmark"
+];
+
+// ─────────────────────────────────────────────
+// Relationships
+// ─────────────────────────────────────────────
+
+tester -> adapters     [xlabel="uses"];
+tester -> protocols    [xlabel="uses"];
+tester -> frameworks   [xlabel="tests"];
+tester -> benchmark    [xlabel="evaluates"];
+tester -> tool_pool    [xlabel="reads"];
+tester -> domain_model [xlabel="produces"];
+tester -> config       [xlabel="reads"];
+
+adapters -> HuggingFaceAPI [xlabel="chat_completion()", style=bold];
+adapters -> OpenAIAPI      [xlabel="chat.completions.create()", style=bold];
+adapters -> config         [xlabel="reads"];
+
+frameworks -> adapters  [xlabel="generate()"];
+frameworks -> tool_pool [xlabel="get_tool()"];
+frameworks -> protocols [xlabel="wraps"];
+
+benchmark -> Mind2WebDataset [xlabel="load_dataset()", style=bold];
+benchmark -> adapters        [xlabel="judge"];
+
+}
