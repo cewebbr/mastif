@@ -700,7 +700,7 @@ class _ToolPool:
             name:      One of "web_search", "web_browser", "wikipedia", "arxiv",
                        "python_repl", "requests_get", "beautifulsoup_scraper",
                        "pdf_reader", "datetime", "json_parser", "pubmed",
-                       "youtube_transcript", "sympy".
+                       "youtube_transcript", "sympy", "web_interaction".
             framework: One of "langchain", "crewai", "smolagents", "llamaindex", "semantic_kernel".
 
         Returns:
@@ -729,7 +729,7 @@ class _ToolPool:
             List of all tool objects ready to be used by the specified framework.
             Includes: web_search, web_browser, wikipedia, arxiv, python_repl,
             requests_get, beautifulsoup_scraper, pdf_reader, datetime, json_parser,
-            pubmed, youtube_transcript, sympy.
+            pubmed, youtube_transcript, sympy, web_interaction.
         """
         return [self.get_tool(name, framework) for name in self._registry]
 
