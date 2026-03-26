@@ -955,7 +955,7 @@ Please respond according to this protocol structure and complete the task."""
         print(f"  Judge Model: {aggregate['judge_model']}")
         print(f"  Tasks Evaluated: {aggregate['total_tasks_evaluated']}")
         print(f"  Avg Task Understanding: {aggregate['avg_task_understanding']:.2%}")
-        print(f"  Avg Task Adherence: {aggregate['avg_task_adherence']:.2%} (higher is better)")
+        print(f"  Avg Task Adherence: {aggregate['avg_task_adherence']:.2%}")
         print(f"  Avg Task Completion: {aggregate['avg_task_completion']:.2%}")
         print(f"  Avg Overall Score: {aggregate['avg_overall_score']:.2%}")
         print(f"  Avg Reasoning Steps: {aggregate['avg_reasoning_steps']:.1f}")
@@ -965,7 +965,7 @@ Please respond according to this protocol structure and complete the task."""
             print(f"  {domain}:")
             print(f"    Tasks: {metrics['count']}")
             print(f"    Avg Understanding: {metrics['avg_understanding']:.2%}")
-            print(f"    Avg Task Adherence: {metrics['avg_adherence']:.2%} (higher is better)")
+            print(f"    Avg Task Adherence: {metrics['avg_adherence']:.2%}")
             print(f"    Avg Completion: {metrics['avg_completion']:.2%}")
         
         # Store Mind2Web specific results
