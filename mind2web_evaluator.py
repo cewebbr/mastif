@@ -244,29 +244,35 @@ Respond with ONLY a single number between 0.0 and 1.0, nothing else."""
     
     def _extract_score(self, response: str) -> float:
         """Extract numerical score from judge response"""
-        # Find number between 0.0 and 1.0
-        numbers = re.findall(r'\b[0-1]?\.\d+\b|\b[01]\b', response)
-        
+        # Strip markdown, punctuation and whitespace that may wrap the number
+        cleaned = re.sub(r'[`*_~#]', '', response).strip()
+
+        # Match any float or integer in [0, 1] — handles "0.7.", "0.70", "1", "0"
+        numbers = re.findall(r'\b(1\.0+|0\.\d+|[01])\b', cleaned)
+
         if numbers:
             try:
                 score = float(numbers[0])
                 return max(0.0, min(1.0, score))
             except ValueError:
                 pass
-        
-        # Fallback: keyword matching
-        response_lower = response.lower()
-        if any(word in response_lower for word in ["excellent", "perfect", "complete"]):
+
+        # Fallback: keyword matching — ordered from positive to negative
+        # to avoid "no" in "know" or "not bad" triggering too early
+        response_lower = cleaned.lower()
+        if any(w in response_lower for w in ["excellent", "perfect", "complete", "fully"]):
             return 0.9
-        elif any(word in response_lower for word in ["good", "adequate"]):
+        elif any(w in response_lower for w in ["good", "adequate", "mostly"]):
             return 0.7
-        elif any(word in response_lower for word in ["partial", "some"]):
+        elif any(w in response_lower for w in ["partial", "some", "moderate"]):
             return 0.5
-        elif any(word in response_lower for word in ["poor", "weak"]):
+        elif any(w in response_lower for w in ["poor", "weak", "little"]):
             return 0.3
-        elif any(word in response_lower for word in ["no", "none", "fail"]):
+        elif any(w in response_lower for w in ["none", "fail", "no understanding", "not complete"]):
             return 0.1
-        
+
+        # Log unexpected response to aid debugging
+        print(f"      Warning: Could not extract score from judge response: {repr(response[:200])}")
         return 0.5
     
     def get_aggregate_metrics(self) -> Dict:

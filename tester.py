@@ -941,7 +941,7 @@ Please respond according to this protocol structure and complete the task."""
                 for metric, value in metrics.items():
                     if metric == 'domain_metrics':
                         continue
-                    print(f"    {metric}: {value}")
+                    print(f"    {metric}: {value:.2f}")
 
         # Print aggregate metrics
         print("\n" + "="*70)
