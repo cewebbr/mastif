@@ -137,7 +137,7 @@ Instructions:
                 self.reasoning_steps.append(ReasoningStep(
                     step_number=len(self.reasoning_steps) + 1,
                     thought=f"Research step {state['step']-1} completed",
-                    observation=f"Findings: {findings[:100]}..."
+                    observation=f"Findings: {findings}"
                 ))
             except Exception as e:
                 state["research_results"] = [f"Research error: {str(e)}"]
