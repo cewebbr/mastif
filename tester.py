@@ -941,6 +941,8 @@ Please respond according to this protocol structure and complete the task."""
                 for metric, value in metrics.items():
                     if metric == 'domain_metrics':
                         continue
+                    if metric in ['avg_task_adherence', 'avg_task_understanding', 'avg_task_completion', 'avg_overall_score']:
+                        value = f"{value:.2%}"
                     print(f"    {metric}: {value}")
 
         # Print aggregate metrics
