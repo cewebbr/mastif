@@ -165,7 +165,7 @@ Task:
 {high_level_task}
 
 Agent Reasoning:
-{reasoning_steps_text[:1200]}
+{reasoning_steps_text}
 
 Score task_adherence from 0.0 to 1.0 using these anchors:
 
@@ -222,7 +222,7 @@ Respond with ONLY a single number between 0.0 and 1.0."""
     def _extract_score(self, response: str) -> float:
         """Extract numerical score from judge response"""
         # Debug log to help refine extraction if needed
-        # print(f"      Info: Raw judge response: {repr(response[:200])}")
+        # print(f"      Info: Raw judge response: {repr(response)}")
 
         # Strip markdown, punctuation and whitespace that may wrap the number
         cleaned = re.sub(r'[`*_~#]', '', response).strip()
@@ -250,7 +250,7 @@ Respond with ONLY a single number between 0.0 and 1.0."""
             return 0.1
 
         # Log unexpected response to aid debugging
-        print(f"      Warning: Could not extract score from judge response: {repr(response[:200])}")
+        print(f"      Warning: Could not extract score from judge response: {repr(response)}")
         return 0.5
     
     def get_aggregate_metrics(self) -> Dict:
