@@ -244,6 +244,9 @@ Respond with ONLY a single number between 0.0 and 1.0, nothing else."""
     
     def _extract_score(self, response: str) -> float:
         """Extract numerical score from judge response"""
+        # Debug log to help refine extraction if needed
+        # print(f"      Info: Raw judge response: {repr(response[:200])}")
+
         # Strip markdown, punctuation and whitespace that may wrap the number
         cleaned = re.sub(r'[`*_~#]', '', response).strip()
 
