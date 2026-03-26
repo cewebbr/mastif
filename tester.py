@@ -928,7 +928,7 @@ Please respond according to this protocol structure and complete the task."""
                             if not result.success and result.error:
                                 print(f"      ⚠️  Inference/tool error: {result.error}")
                             print(f"      Task Understanding: {eval_result['task_understanding']:.2%}")
-                            print(f"      Task Deviation: {eval_result['task_deviation']:.2%}")
+                            print(f"      Task Adherence: {eval_result['task_adherence']:.2%}")
                             print(f"      Task Completion: {eval_result['task_completion']:.2%}")
                             print(f"      Overall Score: {eval_result['overall_score']:.2%}")
                             print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
@@ -941,7 +941,7 @@ Please respond according to this protocol structure and complete the task."""
                 for metric, value in metrics.items():
                     if metric == 'domain_metrics':
                         continue
-                    print(f"    {metric}: {float(value):.2f}")
+                    print(f"    {metric}: {value}")
 
         # Print aggregate metrics
         print("\n" + "="*70)
@@ -953,7 +953,7 @@ Please respond according to this protocol structure and complete the task."""
         print(f"  Judge Model: {aggregate['judge_model']}")
         print(f"  Tasks Evaluated: {aggregate['total_tasks_evaluated']}")
         print(f"  Avg Task Understanding: {aggregate['avg_task_understanding']:.2%}")
-        print(f"  Avg Task Deviation: {aggregate['avg_task_deviation']:.2%} (lower is better)")
+        print(f"  Avg Task Adherence: {aggregate['avg_task_adherence']:.2%} (higher is better)")
         print(f"  Avg Task Completion: {aggregate['avg_task_completion']:.2%}")
         print(f"  Avg Overall Score: {aggregate['avg_overall_score']:.2%}")
         print(f"  Avg Reasoning Steps: {aggregate['avg_reasoning_steps']:.1f}")
@@ -963,7 +963,7 @@ Please respond according to this protocol structure and complete the task."""
             print(f"  {domain}:")
             print(f"    Tasks: {metrics['count']}")
             print(f"    Avg Understanding: {metrics['avg_understanding']:.2%}")
-            print(f"    Avg Task Deviation: {metrics['avg_deviation']:.2%} (lower is better)")
+            print(f"    Avg Task Adherence: {metrics['avg_adherence']:.2%} (higher is better)")
             print(f"    Avg Completion: {metrics['avg_completion']:.2%}")
         
         # Store Mind2Web specific results

@@ -15,7 +15,7 @@ MASTIF (Multi-Agent System TestIng Framework) is a comprehensive benchmarking su
 - **Protocol Flexibility:** Assesses agent performance under various prompting and reasoning protocols (e.g., MCP, A2A, ACP, standard).
 - **Mind2Web Benchmark Integration:** Runs large-scale, real-world web interaction tasks from the Mind2Web dataset, with automatic sampling and domain breakdowns.
 - **Token Consumption Metrics:** Tracks and reports reasoning tokens, output tokens, and total tokens spent for each test, framework, protocol, and model.
-- **Detailed Metrics Collection:** Captures reasoning steps, latency, task understanding, task deviation, task completion, and domain-specific performance.
+- **Detailed Metrics Collection:** Captures reasoning steps, latency, task understanding, task adherence, task completion, and domain-specific performance.
 - **Extensible Tool Use:** Evaluates agent tool-calling and web search capabilities.
 - **Flexible Configuration:** Supports switching between models, frameworks, and protocols via environment variables or code.
 - **Comprehensive Output:** Exports results in machine-readable (JSON) formats with detailed summaries and breakdowns. Files `out-standard.txt` and `out-mind2web.txt` show examples of human readable console output.
@@ -123,7 +123,7 @@ python main.py experiments/[your experiment file].yaml
 
 ### Metrics Included
 - Task Understanding: Agent's comprehension of the task
-- Task Deviation: Agent's adherence to the task in reasoning steps
+- Task Adherence: Agent's adherence to the task in reasoning steps
 - Task Completion: Agent's performance on fulfilling the task
 - Reasoning Steps: Number of intermediate reasoning steps
 - Domain-specific performance breakdowns

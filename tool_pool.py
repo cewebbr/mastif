@@ -18,6 +18,7 @@ Tools in the pool:
     - pubmed                : Biomedical paper search (via biopython)
     - youtube_transcript    : YouTube video transcript retrieval (via youtube-transcript-api)
     - sympy                 : Symbolic math and logic evaluation (via sympy)
+    - web_interaction       : Interactive browser tool for multi-step web interactions (via Playwright)
 
 Each framework requests a clone of the tool via get_tool(name, framework).
 The pool itself is a singleton — only one instance is ever created.
@@ -196,6 +197,7 @@ class _ToolPool:
         self._register_pubmed()
         self._register_youtube_transcript()
         self._register_sympy()
+        self._register_web_interaction()
 
     def _register_web_search(self):
         """DuckDuckGo web search — works natively with LangChain, CrewAI, smolagents."""
@@ -546,6 +548,144 @@ class _ToolPool:
                 "Useful for calculations, formula verification, and logic evaluation."
             ),
             func=_sympy,
+        )
+
+    def _register_web_interaction(self):
+        """Interactive browser tool."""
+        def _interact(input_str: str) -> str:
+            """
+            Expected input format (JSON string):
+
+            {
+                "url": "https://example.com",
+                "actions": [
+                    {"type": "navigate"},
+                    {"type": "click", "selector": "button.login"},
+                    {"type": "type", "selector": "input#username", "text": "myuser"},
+                    {"type": "type", "selector": "input#password", "text": "mypassword"},
+                    {"type": "press", "key": "Enter"},
+                    {"type": "wait", "ms": 2000},
+                    {"type": "select", "selector": "select#country", "value": "Brazil"},
+                    {"type": "hover", "selector": ".menu"},
+                    {"type": "scroll", "direction": "down", "amount": 1000},
+                    {"type": "extract", "selector": "body"},
+                    {"type": "extract_all", "selector": ".item"},
+                    {"type": "get_url"},
+                    {"type": "get_title"},
+                    {"type": "screenshot"}
+                ]
+            }
+            """
+            import json
+
+            try:
+                from playwright.sync_api import sync_playwright
+
+                data = json.loads(input_str)
+                url = data.get("url")
+                actions = data.get("actions", [])
+
+                if not url:
+                    return "Error: 'url' is required."
+
+                results = []
+
+                with sync_playwright() as p:
+                    browser = p.chromium.launch(headless=True)
+                    context = browser.new_context()
+                    page = context.new_page()
+
+                    page.goto(url, timeout=15000)
+
+                    for action in actions:
+                        action_type = action.get("type")
+
+                        try:
+                            if action_type == "navigate":
+                                continue
+
+                            elif action_type == "click":
+                                page.click(action["selector"], timeout=5000)
+
+                            elif action_type == "type":
+                                page.fill(action["selector"], action.get("text", ""), timeout=5000)
+
+                            elif action_type == "press":
+                                page.keyboard.press(action.get("key", "Enter"))
+
+                            elif action_type == "wait":
+                                page.wait_for_timeout(action.get("ms", 1000))
+
+                            elif action_type == "wait_for_selector":
+                                page.wait_for_selector(action["selector"], timeout=5000)
+
+                            elif action_type == "select":
+                                page.select_option(action["selector"], action.get("value"))
+
+                            elif action_type == "hover":
+                                page.hover(action["selector"])
+
+                            elif action_type == "scroll":
+                                direction = action.get("direction", "down")
+                                amount = action.get("amount", 1000)
+                                if direction == "down":
+                                    page.mouse.wheel(0, amount)
+                                else:
+                                    page.mouse.wheel(0, -amount)
+
+                            elif action_type == "go_back":
+                                page.go_back()
+
+                            elif action_type == "go_forward":
+                                page.go_forward()
+
+                            elif action_type == "extract":
+                                selector = action.get("selector", "body")
+                                text = page.inner_text(selector)
+                                results.append(text[:2000])
+
+                            elif action_type == "extract_all":
+                                selector = action["selector"]
+                                elements = page.query_selector_all(selector)
+                                texts = [el.inner_text() for el in elements[:20]]
+                                results.append("\n".join(texts))
+
+                            elif action_type == "get_url":
+                                results.append(page.url)
+
+                            elif action_type == "get_title":
+                                results.append(page.title())
+
+                            elif action_type == "get_html":
+                                results.append(page.content()[:4000])
+
+                            elif action_type == "screenshot":
+                                path = action.get("path", "/tmp/screenshot.png")
+                                page.screenshot(path=path)
+                                results.append(f"Screenshot saved to {path}")
+
+                            else:
+                                results.append(f"Unknown action: {action_type}")
+
+                        except Exception as step_error:
+                            results.append(f"[{action_type} error]: {str(step_error)}")
+
+                    browser.close()
+
+                return "\n\n".join(results) if results else "No output."
+
+            except Exception as e:
+                return f"Web interaction error: {str(e)}"
+
+        self._registry["web_interaction"] = ToolDefinition(
+            name="web_interaction",
+            description=(
+                "Interact with web pages using a headless browser with multi-step actions. "
+                "Supports navigation, clicking, typing, key presses, dropdown selection, scrolling, "
+                "waiting, extracting content, and retrieving page metadata. "
+                "Input must be a JSON string specifying a URL and a sequence of actions."
+            ),
+            func=_interact,
         )
 
     # ------------------------------------------------------------------
