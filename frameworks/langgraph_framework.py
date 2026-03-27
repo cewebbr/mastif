@@ -8,10 +8,13 @@ import json
 from typing import List, TypedDict, Annotated
 import operator
 from langgraph.graph import StateGraph, END
+from langchain_core.tools import Tool
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
 from config import ConfigExpert
+from typing import Callable, Optional
+from tool_pool import ToolPool
 
 class LangGraphAgent:
     """
@@ -34,7 +37,43 @@ class LangGraphAgent:
         self.protocol = protocol
         self.graph = None
         self.reasoning_steps: List[ReasoningStep] = []
-    
+
+    def add_tool(self, name: str, func: Optional[Callable] = None, description: Optional[str] = None):
+        """
+        Add a tool to the LangGraph agent.
+
+        For builtin tools available in the shared pool ("web_search", "web_browser",
+        "wikipedia", "web_interaction"), pass only the name — the tool is cloned from ToolPool.
+
+        For custom tools, provide both func and description.
+        """
+        if not hasattr(self, "tools"):
+            self.tools = {}
+
+        if name in ToolPool.available_tools:
+            tool = ToolPool.get_tool(name, framework="langchain")
+        else:
+            if func is None:
+                def _dummy(x):
+                    result = f"Tool '{name}' executed with input: {x}"
+                    self.reasoning_steps.append(ReasoningStep(
+                        step_number=len(self.reasoning_steps) + 1,
+                        thought=f"Executed tool: {name}",
+                        action=name,
+                        action_input=str(x),
+                        observation=result
+                    ))
+                    return result
+                func = _dummy
+
+            tool = Tool(
+                name=name,
+                func=func,
+                description=description or f"Custom tool: {name}"
+            )
+
+        self.tools[tool.name] = tool
+
     def build_workflow(self):
         """
         Build a multi-step workflow using LangGraph

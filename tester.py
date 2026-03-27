@@ -346,6 +346,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
+        tools: List[Dict[str, str]] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with LangGraph stateful workflow"""
@@ -354,6 +355,10 @@ Please respond according to this protocol structure and complete the task."""
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
             agent = LangGraphAgent(adapter, protocol=protocol_instance)
+
+            for tool_name in (tools or []):
+                agent.add_tool(tool_name)
+
             response = agent.run(task)
             latency = time.time() - start_time
             success, error = self._check_response_for_errors(response, "LangGraph")
@@ -510,7 +515,7 @@ Please respond according to this protocol structure and complete the task."""
             "CrewAI": (self.test_with_crewai, {"role": "Web Automation Specialist"}),
             "Smolagents": (self.test_with_smolagents, {"tools": tools}),
             "LangChain": (self.test_with_langchain, {"tools": tools}),
-            "LangGraph": (self.test_with_langgraph, {}),
+            "LangGraph": (self.test_with_langgraph, {"tools": tools}),
             "LlamaIndex": (self.test_with_llamaindex, {"tools": tools}),
             "SemanticKernel": (self.test_with_semantic_kernel, {})
         }
