@@ -68,21 +68,22 @@ frameworks:
 # -----------------------------------------------------------------------------
 # Tools
 # Tools available to all agents. Must match names registered in tool_pool.py.
-# Available builtin tools:
-#   web_search   — DuckDuckGo web search (no API key required)
-#   web_browser  — Playwright headless browser navigation
-#   wikipedia    — Wikipedia topic lookup
-#   arxiv        — Academic paper search on arXiv
-#   python_repl  — Sandboxed Python code execution
-#   requests_get — Simple HTTP GET requests
+# Available builtin and custom tools:
+#   web_search            — DuckDuckGo web search (no API key required)
+#   web_browser           — Playwright headless browser navigation
+#   wikipedia             — Wikipedia topic lookup
+#   arxiv                 — Academic paper search on arXiv
+#   python_repl           — Sandboxed Python code execution
+#   requests_get          — Simple HTTP GET requests
 #   beautifulsoup_scraper — Extract structured HTML content from a URL
-#   pdf_reader   — Extract text from PDF files or URLs
-#   datetime     — Get current UTC date and time
-#   json_parser  — Parse and query JSON strings
-#   pubmed       — Search biomedical literature on PubMed
-#   youtube_transcript — Retrieve YouTube video transcripts
-#   sympy         — Evaluate or simplify symbolic math expressions
-#   web_interaction — Custom tool for complex web interactions (e.g. Mind2Web tasks)
+#   pdf_reader            — Extract text from PDF files or URLs
+#   datetime              — Get current UTC date and time
+#   json_parser           — Parse and query JSON strings
+#   pubmed                — Search biomedical literature on PubMed
+#   youtube_transcript    — Retrieve YouTube video transcripts
+#   sympy                 — Evaluate or simplify symbolic math expressions
+#   web_interaction       — Custom tool for complex web interactions (e.g. Mind2Web tasks)
+#   keyboard_interaction  — Custom tool for keyboard-driven web interactions (e.g. Mind2Web tasks)
 # -----------------------------------------------------------------------------
 
 tools:

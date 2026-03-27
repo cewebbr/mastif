@@ -529,7 +529,9 @@ Please respond according to this protocol structure and complete the task."""
         print(f"Protocols: {len(protocols)}")
         print(f"Frameworks: {len(frameworks)}")
         print(f"Tasks: {len(test_tasks)}")
-        print(f"Total: {len(models) * len(protocols) * len(frameworks) * len(test_tasks)}")
+        print(f"Total executions: {len(models) * len(protocols) * len(frameworks) * len(test_tasks)}")
+        print(f"{'-'*70}")
+        print(f"Tools ({len(tools)}): {', '.join(tools)}")
         print(f"{'-'*70}")
         if( len(models) * len(protocols) * len(frameworks) * len(test_tasks) > config.get("requests_soft_limit", 1000) ):
             print("WARNING: This may incur a high number of API calls and associated costs.")
