@@ -19,6 +19,7 @@ Tools in the pool:
     - youtube_transcript    : YouTube video transcript retrieval (via youtube-transcript-api)
     - sympy                 : Symbolic math and logic evaluation (via sympy)
     - web_interaction       : Interactive browser tool for multi-step web interactions (via Playwright)
+    - keyboard_interaction  : Keyboard-driven browser interaction optimized for accessibility-style tasks (via Playwright)
 
 Each framework requests a clone of the tool via get_tool(name, framework).
 The pool itself is a singleton — only one instance is ever created.
@@ -198,6 +199,7 @@ class _ToolPool:
         self._register_youtube_transcript()
         self._register_sympy()
         self._register_web_interaction()
+        self._register_keyboard_interaction()
 
     def _register_web_search(self):
         """DuckDuckGo web search — works natively with LangChain, CrewAI, smolagents."""
@@ -684,6 +686,140 @@ class _ToolPool:
                 "Supports navigation, clicking, typing, key presses, dropdown selection, scrolling, "
                 "waiting, extracting content, and retrieving page metadata. "
                 "Input must be a JSON string specifying a URL and a sequence of actions."
+            ),
+            func=_interact,
+        )
+
+    def _register_keyboard_interaction(self):
+        """Keyboard-driven browser interaction — optimized for accessibility-style and Mind2Web tasks."""
+        def _interact(input_str: str) -> str:
+            """
+            Expected input format (JSON string):
+
+            {
+                "url": "https://example.com",
+                "actions": [
+                    {"type": "navigate"},
+                    {"type": "press", "key": "Tab", "count": 5},
+                    {"type": "press", "key": "Enter"},
+                    {"type": "type", "text": "search query"},
+                    {"type": "press", "key": "Enter"},
+                    {"type": "shortcut", "keys": ["Control", "L"]},
+                    {"type": "wait", "ms": 1000},
+                    {"type": "extract_focused"},
+                    {"type": "extract_active_element"},
+                    {"type": "get_focus_path"},
+                    {"type": "get_url"},
+                    {"type": "get_title"}
+                ]
+            }
+            """
+            import json
+
+            try:
+                from playwright.sync_api import sync_playwright
+
+                data = json.loads(input_str)
+                url = data.get("url")
+                actions = data.get("actions", [])
+
+                if not url:
+                    return "Error: 'url' is required."
+
+                results = []
+
+                with sync_playwright() as p:
+                    browser = p.chromium.launch(headless=True)
+                    context = browser.new_context()
+                    page = context.new_page()
+
+                    page.goto(url, timeout=15000)
+                    page.wait_for_load_state("domcontentloaded")
+
+                    for action in actions:
+                        action_type = action.get("type")
+
+                        try:
+                            if action_type == "navigate":
+                                continue
+
+                            elif action_type == "press":
+                                key = action.get("key", "Tab")
+                                count = action.get("count", 1)
+                                for _ in range(count):
+                                    page.keyboard.press(key)
+
+                            elif action_type == "type":
+                                text = action.get("text", "")
+                                page.keyboard.type(text, delay=20)
+
+                            elif action_type == "shortcut":
+                                keys = action.get("keys", [])
+                                combo = "+".join(keys)
+                                page.keyboard.press(combo)
+
+                            elif action_type == "wait":
+                                page.wait_for_timeout(action.get("ms", 1000))
+
+                            elif action_type == "extract_focused":
+                                el = page.evaluate_handle("document.activeElement")
+                                text = el.evaluate("(e) => e ? e.innerText || e.value || '' : ''")
+                                results.append(str(text)[:1000])
+
+                            elif action_type == "extract_active_element":
+                                html = page.evaluate(
+                                    "e => e ? e.outerHTML : ''",
+                                    page.evaluate_handle("document.activeElement")
+                                )
+                                results.append(str(html)[:2000])
+
+                            elif action_type == "get_focus_path":
+                                path = page.evaluate("""
+                                    () => {
+                                        let el = document.activeElement;
+                                        if (!el) return "";
+                                        let path = [];
+                                        while (el) {
+                                            let name = el.tagName.toLowerCase();
+                                            if (el.id) name += "#" + el.id;
+                                            if (el.className) name += "." + el.className.split(" ").join(".");
+                                            path.unshift(name);
+                                            el = el.parentElement;
+                                        }
+                                        return path.join(" > ");
+                                    }
+                                """)
+                                results.append(path)
+
+                            elif action_type == "get_url":
+                                results.append(page.url)
+
+                            elif action_type == "get_title":
+                                results.append(page.title())
+
+                            elif action_type == "extract_page_text":
+                                text = page.inner_text("body")
+                                results.append(text[:2000])
+
+                            else:
+                                results.append(f"Unknown action: {action_type}")
+
+                        except Exception as step_error:
+                            results.append(f"[{action_type} error]: {str(step_error)}")
+
+                    browser.close()
+
+                return "\n\n".join(results) if results else "No output."
+
+            except Exception as e:
+                return f"Web keyboard interaction error: {str(e)}"
+
+        self._registry["web_keyboard_interaction"] = ToolDefinition(
+            name="web_keyboard_interaction",
+            description=(
+                "Interact with web pages using keyboard-only navigation (Tab, Enter, shortcuts). "
+                "Designed for accessibility-style navigation and Mind2Web tasks where DOM selectors are unknown. "
+                "Supports key presses, typing, shortcuts, focus inspection, and content extraction from the active element."
             ),
             func=_interact,
         )
