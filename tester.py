@@ -806,9 +806,9 @@ Please respond according to this protocol structure and complete the task."""
             "CrewAI": (self.test_with_crewai, {"role": "Web Automation Specialist"}),
             "Smolagents": (self.test_with_smolagents, {"tools": tools}),
             "LangChain": (self.test_with_langchain, {"tools": tools}),
-            "LangGraph": (self.test_with_langgraph, {}),
+            "LangGraph": (self.test_with_langgraph, {"tools": tools}),
             "LlamaIndex": (self.test_with_llamaindex, {"tools": tools}),
-            "SemanticKernel": (self.test_with_semantic_kernel, {})
+            "SemanticKernel": (self.test_with_semantic_kernel, {"tools": tools})
         }
 
         frameworks = [(name, *framework_map[name]) for name in framework_names]
@@ -842,7 +842,9 @@ Please respond according to this protocol structure and complete the task."""
         print(f"Protocols: {len(protocols)}")
         print(f"Frameworks: {len(frameworks)}")
         print(f"Tasks: {len(tasks)}")
-        print(f"Total: {len(models) * len(protocols) * len(frameworks) * len(tasks)}")
+        print(f"Total executions: {len(models) * len(protocols) * len(frameworks) * len(tasks)}")
+        print(f"{'-'*70}")
+        print(f"Tools ({len(tools)}): {', '.join(tools)}")
         print(f"{'-'*70}")
         if( len(models) * len(protocols) * len(frameworks) * len(tasks) > config.get("requests_soft_limit", 1000) ):
             print("WARNING: This may incur a high number of API calls and associated costs.")
@@ -858,48 +860,28 @@ Please respond according to this protocol structure and complete the task."""
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
             
-            adapter = HuggingFaceAdapter(model_name, hf_token)
-            
-            # ===== Protocol Tests =====
-            print(f"\n{'-'*70}")
-            print("PROTOCOL TESTS")
-            print(f"{'-'*70}")
+            if model_name.startswith("gpt-"):
+                adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
+            else:
+                adapter = HuggingFaceAdapter(model_name, hf_token or os.getenv("HF_TOKEN"))
 
+            # ===== Protocol x Framework Tests =====
             for protocol in protocols:
-                protocol_results = []
-                for task in tasks:
-                    print(f"\n  Testing with {protocol.value} on task: {task['confirmed_task'][:40]}...")
-                    result = self.test_with_protocol(adapter, protocol, task['confirmed_task'])
-                    protocol_results.append(result)
-                    self.results.append(result)
-                    if result.success:
-                        status = "✅️ Success"
-                    else:
-                        status = f"❌ Failed: {result.error}"
-                    print(f"    {status} ({len(result.reasoning_steps)} reasoning steps)")
+                print(f"\n{'─'*70}")
+                print(f"Protocol: {protocol.value}")
+                print(f"{'─'*70}")
 
-                # Average metrics for this protocol
-                successes = [r for r in protocol_results if r.success]
-                avg_latency = sum(r.latency for r in protocol_results) / len(protocol_results)
-                avg_reasoning_steps = sum(len(r.reasoning_steps) for r in protocol_results) / len(protocol_results)
-                print(f"\n  Protocol {protocol.value} summary:")
-                print(f"    Success rate: {len(successes)}/{len(protocol_results)}")
-                print(f"    Avg latency: {avg_latency:.2f}s")
-                print(f"    Avg reasoning steps: {avg_reasoning_steps:.2f}")
-                print(f"    \n{'-'*35}")
-
-            # ===== Framework Tests =====
-            for framework_name, test_fn, extra_args in frameworks:
-                print(f"\n{'-'*70}")
-                print(f"Framework: {framework_name}")
-                print(f"{'-'*70}")
-                framework_results = []
-                for i, task in enumerate(tasks, 1):
-                    print(f"\n  Task {i}/{len(tasks)}: {task['website']} ({task['domain']})")
-                    print(f"  Goal: {task['confirmed_task'][:80]}...")
-                    
-                    # Format task as prompt
-                    task_prompt = f"""You are a web automation agent. Complete this task:
+                for framework_name, test_fn, extra_args in frameworks:
+                    print(f"\n{'-'*70}")
+                    print(f"  {framework_name} with {protocol.value}:")
+                    print(f"{'-'*70}")
+                    framework_results = []
+                    for i, task in enumerate(tasks, 1):
+                        print(f"\n  Task {i}/{len(tasks)}: {task['website']} ({task['domain']})")
+                        print(f"  Goal: {task['confirmed_task'][:80]}...")
+                        
+                        # Format task as prompt
+                        task_prompt = f"""You are a web automation agent. Complete this task:
 
     Website: {task['website']}
     Domain: {task['domain']}
@@ -911,46 +893,46 @@ Please respond according to this protocol structure and complete the task."""
 
     Your response:"""
 
-                    result = None
-                    try:
-                        args = [adapter, task_prompt]
-                        if framework_name == "CrewAI":
-                            args.insert(1, extra_args["role"])
-                        kwargs = {}
-                        if "tools" in extra_args:
-                            kwargs["tools"] = extra_args["tools"]
-                        result = test_fn(*args, **kwargs)
-                        if result:
-                            self.results.append(result)
-                            
-                            # Evaluate result
-                            eval_result = evaluator.evaluate_task(
-                                task,
-                                result.response,
-                                result.reasoning_steps
-                            )
-                            
-                            status = "✅️ Completed" if result.success else f"⚠️  Completed with errors"
-                            print(f"    {status}")
-                            if not result.success and result.error:
-                                print(f"      ⚠️  Inference/tool error: {result.error}")
-                            print(f"      Task Understanding: {eval_result['task_understanding']:.2%}")
-                            print(f"      Task Adherence: {eval_result['task_adherence']:.2%}")
-                            print(f"      Task Completion: {eval_result['task_completion']:.2%}")
-                            print(f"      Overall Score: {eval_result['overall_score']:.2%}")
-                            print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
-                    except Exception as e:
-                        print(f"    ❌ Error: {str(e)}")
+                        result = None
+                        try:
+                            args = [adapter, task_prompt]
+                            if framework_name == "CrewAI":
+                                args.insert(1, extra_args["role"])
+                            kwargs = {"protocol": protocol}
+                            if "tools" in extra_args:
+                                kwargs["tools"] = extra_args["tools"]
+                            result = test_fn(*args, **kwargs)
+                            if result:
+                                self.results.append(result)
+                                
+                                # Evaluate result
+                                eval_result = evaluator.evaluate_task(
+                                    task,
+                                    result.response,
+                                    result.reasoning_steps
+                                )
+                                
+                                status = "✅️ Completed" if result.success else f"⚠️  Completed with errors"
+                                print(f"    {status}")
+                                if not result.success and result.error:
+                                    print(f"      ⚠️  Inference/tool error: {result.error}")
+                                print(f"      Task Understanding: {eval_result['task_understanding']:.2%}")
+                                print(f"      Task Adherence: {eval_result['task_adherence']:.2%}")
+                                print(f"      Task Completion: {eval_result['task_completion']:.2%}")
+                                print(f"      Overall Score: {eval_result['overall_score']:.2%}")
+                                print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
+                        except Exception as e:
+                            print(f"    ❌ Error: {str(e)}")
 
-                # Summarize metrics for this framework
-                metrics = evaluator.get_aggregate_metrics()
-                print(f"\n  {framework_name} Mind2Web Summary:")
-                for metric, value in metrics.items():
-                    if metric == 'domain_metrics':
-                        continue
-                    if metric in ['avg_task_adherence', 'avg_task_understanding', 'avg_task_completion', 'avg_overall_score']:
-                        value = f"{value:.2%}"
-                    print(f"    {metric}: {value}")
+                    # Summarize metrics for this framework+protocol combination
+                    metrics = evaluator.get_aggregate_metrics()
+                    print(f"\n  {framework_name} + {protocol.value} Mind2Web Summary:")
+                    for metric, value in metrics.items():
+                        if metric == 'domain_metrics':
+                            continue
+                        if metric in ['avg_task_adherence', 'avg_task_understanding', 'avg_task_completion', 'avg_overall_score']:
+                            value = f"{value:.2%}"
+                        print(f"    {metric}: {value}")
 
         # Print aggregate metrics
         print("\n" + "="*70)
