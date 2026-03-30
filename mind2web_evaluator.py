@@ -54,27 +54,18 @@ class Mind2WebEvaluator:
         
         # Evaluate three dimensions
         try:
-            task_understanding = self._evaluate_task_understanding(
+            evaluation = self._evaluate_task(
                 high_level_task=high_level_task,
-                agent_response=agent_response
-            )
-            
-            task_adherence = self._evaluate_task_adherence(
-                high_level_task=high_level_task,
-                reasoning_steps_text=reasoning_text
-            )
-            
-            task_completion = self._evaluate_task_completion(
-                high_level_task=high_level_task,
-                final_response=agent_response,
+                agent_response=agent_response,
+                reasoning_steps_text=reasoning_text,
                 website=website,
                 domain=domain
             )
             
             overall_score = (
-                self._get_score(task_understanding)
-                + self._get_score(task_adherence)
-                + self._get_score(task_completion)
+                self._get_score(evaluation["task_understanding"])
+                + self._get_score(evaluation["task_adherence"])
+                + self._get_score(evaluation["task_completion"])
             ) / 3.0
             
             result = {
@@ -82,9 +73,9 @@ class Mind2WebEvaluator:
                 "website": website,
                 "domain": domain,
                 "high_level_task": high_level_task,
-                "task_understanding": task_understanding,
-                "task_adherence": task_adherence,
-                "task_completion": task_completion,
+                "task_understanding": evaluation["task_understanding"],
+                "task_adherence": evaluation["task_adherence"],
+                "task_completion": evaluation["task_completion"],
                 "overall_score": overall_score,
                 "reasoning_steps_count": len(reasoning_steps),
             }
@@ -116,91 +107,15 @@ class Mind2WebEvaluator:
                 reasoning_parts.append(f"[Observation] {step.observation}")
         return "\n".join(reasoning_parts)
     
-    def _evaluate_task_understanding(
+    def _evaluate_task(
         self,
         high_level_task: str,
-        agent_response: str
-    ) -> float:
-        prompt = f"""Evaluate whether the agent correctly understood the task.
-
-Task:
-{high_level_task}
-
-Agent Response:
-{agent_response}
-
-Score task_understanding from 0.0 to 1.0 using these anchors:
-
-1.0 = Explicitly captures all goals, constraints, and required outputs
-0.7 = Captures main goal but misses minor constraints or details
-0.5 = Understands general intent but misses key requirement(s)
-0.3 = Misinterprets important parts of the task
-0.0 = Completely incorrect or unrelated understanding
-
-Respond with ONLY a JSON object with keys `score` and `rationale`.
-`score` should be a number between 0.0 and 1.0.
-`rationale` should briefly explain the judgment."""
-
-        try:
-            response = self.judge_adapter.generate(prompt, max_tokens=150, temperature=0.0)
-            return self._extract_score_and_rationale(response)
-        except Exception as e:
-            print(f"      Warning: Task understanding evaluation failed: {e}")
-            return 0.5
-    
-    def _evaluate_task_adherence(
-        self,
-        high_level_task: str,
-        reasoning_steps_text: str
-    ) -> float:
-        """
-        Evaluate if reasoning steps deviate from the task
-        
-        Args:
-            high_level_task: The task description
-            reasoning_steps_text: Combined reasoning steps text
-            
-        Returns:
-            Adherence score (0.0 = completely off-track, 1.0 = fully adherent)
-        """
-        if not reasoning_steps_text or len(reasoning_steps_text.strip()) < 10:
-            return 1.0
-        
-        prompt = f"""Evaluate how well the agent's reasoning adheres to the task.
-
-Task:
-{high_level_task}
-
-Agent Reasoning:
-{reasoning_steps_text}
-
-Score task_adherence from 0.0 to 1.0 using these anchors:
-
-1.0 = Fully focused on task, all steps directly relevant
-0.7 = Mostly on-task, minor irrelevant or redundant steps
-0.5 = Mixed relevance, some important off-track reasoning
-0.3 = Frequently off-task or distracted reasoning
-0.0 = Completely unrelated reasoning
-
-Respond with ONLY a JSON object with keys `score` and `rationale`.
-`score` should be a number between 0.0 and 1.0.
-`rationale` should briefly explain the judgment."""
-
-        try:
-            response = self.judge_adapter.generate(prompt, max_tokens=150, temperature=0.0)
-            return self._extract_score_and_rationale(response)
-        except Exception as e:
-            print(f"      Warning: Task adherence evaluation failed: {e}")
-            return 0.5
-    
-    def _evaluate_task_completion(
-        self,
-        high_level_task: str,
-        final_response: str,
+        agent_response: str,
+        reasoning_steps_text: str,
         website: str,
         domain: str
-    ) -> float:
-        prompt = f"""Evaluate whether the agent's response would successfully complete the task.
+    ) -> Dict:
+        prompt = f"""Evaluate the agent's response and reasoning on the following Mind2Web task.
 
 Task:
 {high_level_task}
@@ -208,27 +123,114 @@ Task:
 Website: {website}
 Domain: {domain}
 
-Agent Final Response:
-{final_response}
+Agent Response:
+{agent_response}
 
-Score task_completion from 0.0 to 1.0 using these anchors:
+Agent Reasoning:
+{reasoning_steps_text or '(no reasoning provided)'}
 
+For each of the following dimensions, provide a score from 0.0 to 1.0 and a brief rationale:
+
+- task_understanding: how well the agent understood the task goals, constraints, and required output
+- task_adherence: how well the agent's reasoning stayed on-task and relevant
+- task_completion: whether the final response is sufficient to complete the task successfully
+
+Use these anchors:
+
+task_understanding:
+1.0 = Explicitly captures all goals, constraints, and required outputs
+0.7 = Captures main goal but misses minor constraints or details
+0.5 = Understands general intent but misses key requirement(s)
+0.3 = Misinterprets important parts of the task
+0.0 = Completely incorrect or unrelated understanding
+
+task_adherence:
+1.0 = Fully focused on task, all steps directly relevant
+0.7 = Mostly on-task, minor irrelevant or redundant steps
+0.5 = Mixed relevance, some important off-track reasoning
+0.3 = Frequently off-task or distracted reasoning
+0.0 = Completely unrelated reasoning
+
+task_completion:
 1.0 = Fully completes task with correct and actionable steps/results
 0.7 = Likely completes task but with minor gaps or inefficiencies
 0.5 = Partially completes task; important steps missing
 0.3 = Unlikely to complete task successfully
 0.0 = Does not complete task at all or is incorrect
 
-Respond with ONLY a JSON object with keys `score` and `rationale`.
-`score` should be a number between 0.0 and 1.0.
-`rationale` should briefly explain the judgment."""
+Respond with ONLY a JSON object with keys `task_understanding`, `task_adherence`, and `task_completion`.
+Each value must be an object with keys `score` and `rationale`.
+Example:
+{
+  "task_understanding": {"score": 0.8, "rationale": "..."},
+  "task_adherence": {"score": 0.7, "rationale": "..."},
+  "task_completion": {"score": 0.9, "rationale": "..."}
+}
+Do not include any extra text, markdown, or explanation outside the JSON object."""
 
         try:
-            response = self.judge_adapter.generate(prompt, max_tokens=150, temperature=0.0)
-            return self._extract_score_and_rationale(response)
+            response = self.judge_adapter.generate(prompt, max_tokens=350, temperature=0.0)
+            parsed = self._parse_json_object(response)
+            return self._normalize_evaluation_results(parsed, response)
         except Exception as e:
-            print(f"      Warning: Task completion evaluation failed: {e}")
-            return 0.5
+            print(f"      Warning: Task evaluation failed: {e}")
+            return self._default_evaluation_results(
+                "Judge evaluation failed."
+            )
+
+    def _normalize_evaluation_results(self, parsed: Optional[dict], raw_response: str) -> Dict:
+        if not isinstance(parsed, dict):
+            return self._default_evaluation_results(
+                "Could not parse judge JSON response."
+            )
+
+        evaluation = {}
+        for key in ["task_understanding", "task_adherence", "task_completion"]:
+            evaluation[key] = self._normalize_evaluation_entry(
+                parsed.get(key), key, raw_response
+            )
+
+        return evaluation
+
+    def _normalize_evaluation_entry(
+        self,
+        entry,
+        key: str,
+        raw_response: str
+    ) -> Dict:
+        if isinstance(entry, dict):
+            score = entry.get("score")
+            rationale = entry.get("rationale")
+
+            if isinstance(score, (int, float)):
+                score = float(score)
+            elif isinstance(score, str):
+                try:
+                    score = float(score)
+                except ValueError:
+                    score = self._extract_score(raw_response)
+            else:
+                score = self._extract_score(raw_response)
+
+            if not isinstance(rationale, str) or not rationale.strip():
+                rationale = raw_response.strip() or f"No rationale provided for {key}."
+
+            return {
+                "score": max(0.0, min(1.0, score)),
+                "rationale": rationale.strip()
+            }
+
+        return {
+            "score": 0.5,
+            "rationale": f"Missing or invalid `{key}` in judge response."
+        }
+
+    def _default_evaluation_results(self, message: str) -> Dict:
+        return {
+            "task_understanding": {"score": 0.5, "rationale": message},
+            "task_adherence": {"score": 0.5, "rationale": message},
+            "task_completion": {"score": 0.5, "rationale": message}
+        }
     
     def _extract_score(self, response: str) -> float:
         """Extract numerical score from judge response"""
