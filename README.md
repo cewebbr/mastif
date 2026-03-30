@@ -25,11 +25,11 @@ MASTIF framework is designed for researchers, developers, and practitioners who 
 
 ## Component Diagram
 
-![Component Diagram](component_diagram.png)
+![Component Diagram](images/component_diagram.png)
 
 ## Class Diagram
 
-![Class Diagram](class_diagram.png)
+![Class Diagram](images/class_diagram.png)
 
 ## Installation
 
