@@ -129,7 +129,7 @@ class Mastif:
                     step_number=2,
                     thought=f"Formatting message with {protocol_type.value}",
                     action="format_message",
-                    action_input=json.dumps(formatted_msg, indent=2)[:200]
+                    action_input=json.dumps(formatted_msg, indent=2)
                 ))
                 
                 # Simulate protocol-aware communication
@@ -144,7 +144,7 @@ Please respond according to this protocol structure and complete the task."""
                     step_number=3,
                     thought="Sending formatted message to model",
                     action="generate_with_protocol",
-                    action_input=protocol_prompt[:200]
+                    action_input=protocol_prompt
                 ))
                 
                 raw_response = adapter.generate(protocol_prompt)
@@ -878,7 +878,7 @@ Please respond according to this protocol structure and complete the task."""
                     framework_results = []
                     for i, task in enumerate(tasks, 1):
                         print(f"\n  Task {i}/{len(tasks)}: {task['website']} ({task['domain']})")
-                        print(f"  Goal: {task['confirmed_task'][:80]}...")
+                        print(f"  Goal: {task['confirmed_task'][:100]}...")
                         
                         # Format task as prompt
                         task_prompt = f"""You are a web automation agent. Complete this task:
