@@ -107,6 +107,8 @@ BaseProtocol\n
 |
 send_message(message: str, context: Dict = None): Dict\l
 receive_message(response: Dict): str\l
+measure_overhead(message: str, context: Dict = None): Dict\l
+generate_context(task: str, turn: int = 1, tools: list = None): Dict\l
 }"];
 
 BaseProtocol -> ABC [arrowhead=empty, fontsize=9];
@@ -302,14 +304,15 @@ mind2web_aggregate: Any\l
 ERROR_PATTERNS: List[str]\l
 |
 __init__()\l
+_get_protocol_metrics(protocol: ProtocolType, protocol_instance, task: str): Dict\l
 _check_response_for_errors(response: str, framework: str): tuple\l
 test_with_protocol(adapter: BaseAdapter, protocol_type: ProtocolType, task: str, context: Dict = None): TestResult\l
-test_with_crewai(adapter: BaseAdapter, role: str, task: str, context: Dict = None): TestResult\l
-test_with_smolagents(adapter: BaseAdapter, task: str, tools: List[str] = None): TestResult\l
-test_with_langchain(adapter: BaseAdapter, task: str, tools: List[str] = None): TestResult\l
-test_with_langgraph(adapter: BaseAdapter, task: str, tools: List[str] = None): TestResult\l
-test_with_llamaindex(adapter: BaseAdapter, task: str, tools: List[str] = None): TestResult\l
-test_with_semantic_kernel(adapter: BaseAdapter, task: str): TestResult\l
+test_with_crewai(adapter: BaseAdapter, role: str, task: str, context: Dict = None, protocol: ProtocolType = None): TestResult\l
+test_with_smolagents(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None, protocol: ProtocolType = None): TestResult\l
+test_with_langchain(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None, protocol: ProtocolType = None): TestResult\l
+test_with_langgraph(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None, protocol: ProtocolType = None): TestResult\l
+test_with_llamaindex(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None, protocol: ProtocolType = None): TestResult\l
+test_with_semantic_kernel(adapter: BaseAdapter, task: str, protocol: ProtocolType = None): TestResult\l
 run_comprehensive_test()\l
 export_results(filename: str = \"test_results.json\")\l
 print_summary()\l
