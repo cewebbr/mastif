@@ -6,30 +6,29 @@ MIND2WEB BENCHMARK MODE
 Loading Mind2Web dataset (split: train)...
 Attempting to load with streaming mode...
 Loading examples from stream...
-✅️ Loaded 5 tasks from Mind2Web (streaming mode)
-Using all 5 tasks
+✅️ Loaded 3 tasks from Mind2Web (streaming mode)
+Using all 3 tasks
 
 ======================================================================
 MIND2WEB BENCHMARK EVALUATION
 ======================================================================
 
 Dataset Statistics:
-  Total Tasks: 5
-  Unique Domains: 2
-  Unique Websites: 3
+  Total Tasks: 3
+  Unique Domains: 1
+  Unique Websites: 2
   Avg Actions per Task: 0.0
 
 Top Domains:
-  - Travel: 4 tasks
-  - Shopping: 1 tasks
+  - Travel: 3 tasks
 
 ----------------------------------------------------------------------
 You are about to run a Mind2Web test with the following configuration:
 Models: 1
-Protocols: 1
-Frameworks: 2
-Tasks: 5
-Total: 10
+Protocols: 3
+Frameworks: 1
+Tasks: 3
+Total: 9
 ----------------------------------------------------------------------
 
 ======================================================================
@@ -37,146 +36,157 @@ Testing Model: deepseek-ai/DeepSeek-V3.2
 ======================================================================
 
 ----------------------------------------------------------------------
-PROTOCOL TESTS
+PROTOCOL x FRAMEWORK COMBINATIONS
 ----------------------------------------------------------------------
 
-  Testing with standard on task: Check for pickup restaurant available in...
-    ✅️ Success (3 reasoning steps)
-
-  Testing with standard on task: Book a winery tour in Napa Valley in a w...
-    ✅️ Success (3 reasoning steps)
-
-  Testing with standard on task: Sign Allan Smith for email offers with t...
-    ✅️ Success (3 reasoning steps)
-
-  Testing with standard on task: Find a mini van at Brooklyn City from Ap...
-    ✅️ Success (3 reasoning steps)
-
-  Testing with standard on task: Find the highest rated dog collar under ...
-    ✅️ Success (3 reasoning steps)
-
-  Protocol standard summary:
-    Success rate: 5/5
-    Avg latency: 12.15s
-    Avg reasoning steps: 3.00
-    
------------------------------------
+──────────────────────────────────────────────────────────────────────
+Protocol: standard
+──────────────────────────────────────────────────────────────────────
 
 ----------------------------------------------------------------------
-Framework: CrewAI
+  CrewAI with standard:
 ----------------------------------------------------------------------
 
-  Task 1/5: exploretock (Travel)
+  Task 1/3: exploretock (Travel)
   Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just o...
     ✅️ Completed
       Task Understanding: 50.00%
-      Task Adherence: 50.00%
-      Task Completion: 70.00%
-      Overall Score: 56.67%
+         Rationale: The agent understands the general intent of the task, which is to check for restaurant pickup availability. However, it misses key requirements by not addressing the task directly due to the lack of web automation tools. The agent also misinterprets the location 'Boston, NY' as ambiguous, which is incorrect since Boston, NY is a valid location. Additionally, the agent does not attempt any alternative methods to fulfill the task without automation tools, such as suggesting manual checks or using available data sources. The response is overly focused on the limitations rather than finding a solution within the constraints.
+      Task Adherence: 70.00%
+         Rationale: The agent's reasoning is mostly focused on the task, with a clear understanding of the requirements and constraints. The agent identifies the need for web automation tools and addresses the location ambiguity. However, there are redundant steps in the research process, such as repeated observations about the lack of tools and hypothetical actions without actual execution capability. These elements slightly detract from the task adherence, but the core reasoning remains relevant to the task.
+      Task Completion: 0.00%
+         Rationale: The agent's response does not complete the task at all. It primarily focuses on explaining why the task cannot be completed due to the lack of web automation tools, rather than providing any actionable steps or results. The response includes a hypothetical plan if tools were available, but no actual attempt to check restaurant availability was made. Therefore, the task remains uncompleted.
+      Overall Score: 40.00%
       Reasoning Steps: 14
 
-  Task 2/5: exploretock (Travel)
+  Task 2/3: exploretock (Travel)
   Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine...
     ✅️ Completed
       Task Understanding: 70.00%
-      Task Adherence: 70.00%
-      Task Completion: 30.00%
+         Rationale: The agent captures the main goal of booking a winery tour in Napa Valley with Mediterranean cuisine and wine tasting for 4 guests on April 15 at 10 am in an outdoor setup. However, the response is based on a simulated workflow rather than an actual booking, and it assumes the existence of certain filters and options on the website without confirming them. Additionally, the agent did not complete the booking process, stopping at the payment confirmation stage. These factors indicate a partial understanding of the task, as the main goal is addressed but with some assumptions and incomplete execution.
+      Task Adherence: 50.00%
+         Rationale: The agent's reasoning is mixed in relevance to the task. While the agent identifies the necessary steps and tools required to book a winery tour, it is unable to execute the task due to the lack of tools. The agent provides a detailed analysis and manual instructions, which are somewhat relevant, but the reasoning is largely focused on the limitations and hypothetical scenarios rather than directly addressing the task. This results in a significant portion of the reasoning being off-track from the primary objective of booking the tour.
+      Task Completion: 50.00%
+         Rationale: The agent's response partially completes the task by simulating the booking process and identifying a suitable winery tour that meets the specified criteria. However, the task is not fully completed as the booking was only simulated and not actually executed. The response lacks real confirmation of the reservation, and no actual payment or booking confirmation was achieved. Additionally, the reliance on assumptions about the website's filtering capabilities and the absence of real interaction with the website limit the task's completion. Therefore, the task is only partially completed with important steps missing for a successful booking.
       Overall Score: 56.67%
       Reasoning Steps: 14
 
-  Task 3/5: enterprise (Travel)
+  Task 3/3: enterprise (Travel)
   Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip c...
     ✅️ Completed
       Task Understanding: 50.00%
-      Task Adherence: 30.00%
+         Rationale: The agent understands the general intent of the task, which is to sign Allan Smith up for email offers using the provided email and zip code. However, it misses key requirements by not executing the task due to tool limitations and does not provide a concrete solution. The agent also makes assumptions about the website and does not confirm the exact URL or form location, which are critical for task completion. The response is more focused on theoretical analysis and limitations rather than addressing the task directly.
+      Task Adherence: 50.00%
+         Rationale: The agent's reasoning is mixed in relevance to the task. While it identifies the task and provides a theoretical approach and manual instructions, it spends a significant amount of time discussing the lack of tools and theoretical planning without progressing towards task completion. The reasoning includes redundant steps and lacks focus on directly achieving the task, such as confirming the exact website or attempting any form of manual completion.
+      Task Completion: 0.00%
+         Rationale: The agent did not complete the task at all. The response indicates a complete inability to perform the required web automation due to tool unavailability. The agent only provided theoretical analysis and manual instructions, which do not constitute task completion. No actionable steps were executed to sign Allan Smith up for email offers, and the task was not completed in any form.
+      Overall Score: 33.33%
+      Reasoning Steps: 14
+
+  CrewAI + standard Summary:
+    Success: 3/3 (100.0%)
+    Avg Latency: 147.16s
+    Avg Reasoning Steps: 14.0
+
+──────────────────────────────────────────────────────────────────────
+Protocol: MCP
+──────────────────────────────────────────────────────────────────────
+
+----------------------------------------------------------------------
+  CrewAI with MCP:
+----------------------------------------------------------------------
+
+  Task 1/3: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just o...
+    ✅️ Completed
+      Task Understanding: 50.00%
+         Rationale: The agent understood the general intent of checking restaurant pickup availability but made a critical error in interpreting the location as Boston, Massachusetts instead of Boston, NY. This misinterpretation affects the task's accuracy. Additionally, the agent assumed a future date of March 18, 2025, without confirmation, which could lead to incorrect availability results. While the agent simulated the process well, these key misunderstandings impact the task's fulfillment.
+      Task Adherence: 70.00%
+         Rationale: The agent's reasoning is mostly focused on the task of checking for pickup restaurant availability in Boston, MA. The agent correctly interprets 'Boston, NY' as 'Boston, MA' and simulates the search process on the Tock platform. However, there are redundant steps and repeated explanations of the simulation process, which slightly detract from task adherence. The agent also assumes the year as 2025 without confirming, which could lead to inaccuracies. Overall, the reasoning is mostly relevant but contains minor irrelevant or redundant elements.
       Task Completion: 50.00%
+         Rationale: The agent's response partially completes the task by simulating the process of checking for pickup restaurant availability on exploretock.com. It provides a detailed explanation of the steps that would be taken and assumptions made, but it lacks real-time data and verification of actual availability for the specified date and time. The response is based on estimated probabilities and typical platform behavior rather than concrete results, which limits its effectiveness in fully completing the task.
+      Overall Score: 56.67%
+      Reasoning Steps: 14
+
+  Task 2/3: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine...
+    ✅️ Completed
+      Task Understanding: 70.00%
+         Rationale: The agent captures the main goal of booking a winery tour in Napa Valley with Mediterranean cuisine and an outdoor setup for 4 guests on April 15 at 10:00 AM. However, the agent's response is focused on the execution plan and tool requirements rather than confirming the actual booking. The agent also assumes the availability of specific filters and experiences on exploretock.com without verifying them. Additionally, the response does not confirm the completion of the booking, which is a key requirement of the task.
+      Task Adherence: 70.00%
+         Rationale: The agent's reasoning is mostly focused on the task of booking a winery tour with Mediterranean cuisine in Napa Valley. The steps outlined are relevant to the task, including identifying wineries, checking availability, and planning the booking process. However, there are some redundant steps and unnecessary details about the lack of tools and agent spawning, which do not directly contribute to achieving the task. These elements slightly detract from the overall task adherence.
+      Task Completion: 30.00%
+         Rationale: The agent's response outlines a detailed plan for booking a winery tour but does not actually complete the task. The execution is blocked due to the lack of web automation tools, and the response only provides a theoretical plan without any actionable results. Therefore, it is unlikely to complete the task successfully as no booking is made or confirmed.
+      Overall Score: 56.67%
+      Reasoning Steps: 14
+
+  Task 3/3: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip c...
+    ✅️ Completed
+      Task Understanding: 50.00%
+         Rationale: The agent understands the general intent of signing up Allan Smith for email offers using the provided email and zip code. However, it misinterprets the task by assuming the target website is Enterprise Rent-A-Car without explicit confirmation. The response also overcomplicates the task by involving multiple agents and phases, which are unnecessary for a simple email sign-up. Additionally, the agent fails to execute the task due to tool limitations, indicating a lack of understanding of the task's simplicity and directness.
+      Task Adherence: 50.00%
+         Rationale: The agent's reasoning includes a detailed plan for executing the task, but it is heavily focused on the limitations of the tools available and the need to spawn agents, which are not directly relevant to the task of signing up Allan Smith for email offers. The reasoning includes multiple steps of research and agent spawning that do not directly contribute to completing the task, indicating mixed relevance and some off-track reasoning.
+      Task Completion: 30.00%
+         Rationale: The agent's response outlines a detailed plan and strategy for completing the task using a multi-agent approach. However, it fails to execute the task due to the lack of necessary tools for web browsing, form interaction, and verification. The response does not achieve the actual sign-up for Allan Smith, as it remains in the planning and agent deployment phase without any real execution. The task is unlikely to be completed successfully without the required tools and direct action on the website.
       Overall Score: 43.33%
       Reasoning Steps: 14
 
-  Task 4/5: enterprise (Travel)
-  Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old r...
+  CrewAI + MCP Summary:
+    Success: 3/3 (100.0%)
+    Avg Latency: 161.46s
+    Avg Reasoning Steps: 14.0
+
+──────────────────────────────────────────────────────────────────────
+Protocol: ACP
+──────────────────────────────────────────────────────────────────────
+
+----------------------------------------------------------------------
+  CrewAI with ACP:
+----------------------------------------------------------------------
+
+  Task 1/3: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just o...
     ✅️ Completed
-      Task Understanding: 100.00%
+      Task Understanding: 70.00%
+         Rationale: The agent captures the main goal of checking for pickup restaurant availability but misinterprets the location as Boston, Massachusetts instead of Boston, NY. The agent also assumes the year as 2025 without confirmation. Despite these issues, the agent correctly identifies the platform limitations and outlines a detailed process for task execution, even though it cannot be completed due to the lack of web automation tools.
       Task Adherence: 70.00%
-      Task Completion: 0.00%
+         Rationale: The agent's reasoning is mostly focused on the task, with a detailed analysis of the requirements and constraints. However, there are some redundant steps and repeated observations about the lack of tools and agent-spawning capabilities, which do not directly contribute to solving the task. The agent also spends time on assumptions and alternative approaches that are not immediately actionable without the necessary tools, slightly detracting from task adherence.
+      Task Completion: 30.00%
+         Rationale: The agent's response does not complete the task as it fails to provide any actionable results or steps to check for restaurant pickup availability. The response highlights the lack of web automation tools and platform limitations but does not attempt any manual checking or provide a workaround. The geographical ambiguity is addressed, but no concrete steps are taken to resolve the task. The response is more of an analysis rather than an execution of the task, making it unlikely to successfully complete the task.
       Overall Score: 56.67%
       Reasoning Steps: 14
 
-  Task 5/5: kohls (Shopping)
-  Goal: Find the highest rated dog collar under 10 dollar....
-    ✅️ Completed
-      Task Understanding: 70.00%
-      Task Adherence: 50.00%
-      Task Completion: 30.00%
-      Overall Score: 50.00%
-      Reasoning Steps: 14
-
-  CrewAI Mind2Web Summary:
-    total_tasks_evaluated: 5
-    judge_model: gpt-4o
-    avg_task_understanding: 68.00%
-    avg_task_adherence: 54.00%
-    avg_task_completion: 36.00%
-    avg_overall_score: 52.67%
-    avg_reasoning_steps: 14.0
-
-----------------------------------------------------------------------
-Framework: LangGraph
-----------------------------------------------------------------------
-
-  Task 1/5: exploretock (Travel)
-  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just o...
-    ✅️ Completed
-      Task Understanding: 50.00%
-      Task Adherence: 70.00%
-      Task Completion: 70.00%
-      Overall Score: 63.33%
-      Reasoning Steps: 14
-
-  Task 2/5: exploretock (Travel)
+  Task 2/3: exploretock (Travel)
   Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine...
     ✅️ Completed
-      Task Understanding: 70.00%
-      Task Adherence: 70.00%
-      Task Completion: 70.00%
-      Overall Score: 70.00%
-      Reasoning Steps: 14
-
-  Task 3/5: enterprise (Travel)
-  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip c...
-    ✅️ Completed
       Task Understanding: 50.00%
-      Task Adherence: 50.00%
-      Task Completion: 50.00%
+         Rationale: The agent understands the general intent of booking a winery tour in Napa Valley with specific requirements, but misses key elements. The response does not confirm the availability of Mediterranean cuisine or an outdoor setup, which are critical constraints. Additionally, the agent's approach relies on assumptions and simulations rather than actual booking capabilities, which may not fulfill the task's requirements. The lack of web automation tools and the need for assumptions further hinder the task's execution accuracy.
+      Task Adherence: 70.00%
+         Rationale: The agent's reasoning is mostly focused on the task of booking a winery tour with specific criteria. The agent outlines a detailed plan to address the task constraints, including location, cuisine, and setup. However, there are some redundant steps and assumptions due to the lack of direct tool access, which slightly detracts from task adherence. The agent's approach to spawning specialized agents is logical but involves unnecessary complexity given the task's requirements. Overall, the reasoning is mostly on-task with minor irrelevant steps.
+      Task Completion: 30.00%
+         Rationale: The agent's response outlines a detailed plan for booking a winery tour but does not actually complete the task. The response identifies constraints and challenges, and proposes a multi-agent strategy, but lacks execution due to the absence of web automation tools and actual interaction with the website. The task is unlikely to be completed successfully as it relies on assumptions and simulations rather than real actions. Additionally, the response is incomplete, cutting off before detailing the verification and booking phases.
       Overall Score: 50.00%
       Reasoning Steps: 14
 
-  Task 4/5: enterprise (Travel)
-  Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old r...
-    ✅️ Completed
-      Task Understanding: 100.00%
-      Task Adherence: 70.00%
-      Task Completion: 100.00%
-      Overall Score: 90.00%
+  Task 3/3: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip c...
+    ⚠️  Inference/tool error detected: {
+    ⚠️  Completed with errors
+      ⚠️  Inference/tool error: {
+      Task Understanding: 50.00%
+         Rationale: The agent understands the general intent of the task, which is to sign up Allan Smith for email offers using the provided email and zip code. However, it incorrectly assumes the task is to be performed on the 'Enterprise Travel website,' which is not specified in the task. This misinterpretation of the target website is a key requirement that was missed, leading to a failure in executing the task. Additionally, the agent's response focuses on tool availability issues rather than addressing the task's specific requirements.
+      Task Adherence: 50.00%
+         Rationale: The agent's reasoning is mixed in relevance to the task. While the agent identifies the need for web automation tools to complete the task of signing Allan Smith up for email offers, it spends a significant amount of time on research steps and tool availability issues rather than directly addressing the task. The agent's reasoning is focused on identifying and reporting the lack of necessary tools, which is relevant, but it does not make progress towards completing the task itself. This results in a mixed adherence to the task, as the agent is unable to perform the required actions due to environmental constraints.
+      Task Completion: 0.00%
+         Rationale: The agent did not complete the task at all due to a lack of necessary web automation tools. The task was blocked at the initial steps, and no progress was made towards signing Allan Smith up for email offers. The agent's environment was not equipped to perform the required actions, resulting in a complete failure to execute the task.
+      Overall Score: 33.33%
       Reasoning Steps: 14
 
-  Task 5/5: kohls (Shopping)
-  Goal: Find the highest rated dog collar under 10 dollar....
-    ✅️ Completed
-      Task Understanding: 70.00%
-      Task Adherence: 70.00%
-      Task Completion: 70.00%
-      Overall Score: 70.00%
-      Reasoning Steps: 14
-
-  LangGraph Mind2Web Summary:
-    total_tasks_evaluated: 10
-    judge_model: gpt-4o
-    avg_task_understanding: 68.00%
-    avg_task_adherence: 60.00%
-    avg_task_completion: 54.00%
-    avg_overall_score: 60.67%
-    avg_reasoning_steps: 14.0
+  CrewAI + ACP Summary:
+    Success: 2/3 (66.7%)
+    Avg Latency: 140.17s
+    Avg Reasoning Steps: 14.0
 
 ======================================================================
 MIND2WEB EVALUATION SUMMARY
@@ -184,88 +194,92 @@ MIND2WEB EVALUATION SUMMARY
 
 Overall Performance:
   Judge Model: gpt-4o
-  Tasks Evaluated: 10
-  Avg Task Understanding: 68.00%
-  Avg Task Adherence: 60.00%
-  Avg Task Completion: 54.00%
-  Avg Overall Score: 60.67%
+  Tasks Evaluated: 9
+  Avg Task Understanding: 56.67%
+  Avg Task Adherence: 61.11%
+  Avg Task Completion: 24.44%
+  Avg Overall Score: 47.41%
   Avg Reasoning Steps: 14.0
 
 Performance by Domain:
   Travel:
-    Tasks: 8
-    Avg Understanding: 67.50%
-    Avg Task Adherence: 60.00%
-    Avg Completion: 55.00%
-  Shopping:
-    Tasks: 2
-    Avg Understanding: 70.00%
-    Avg Task Adherence: 60.00%
-    Avg Completion: 50.00%
+    Tasks: 9
+    Avg Understanding: 56.67%
+    Avg Task Adherence: 61.11%
+    Avg Completion: 24.44%
 
 ======================================================================
 TEST SUMMARY
 ======================================================================
 
 Overall Statistics:
-  Total Tests: 15
-  Successful: 15 (100.0%)
-  Failed: 0 (0.0%)
-  Total Reasoning Steps: 155
-  Avg Reasoning Steps per Test: 10.3
+  Total Tests: 9
+  Successful: 8 (88.9%)
+  Failed: 1 (11.1%)
+  Total Reasoning Steps: 126
+  Avg Reasoning Steps per Test: 14.0
 
 ----------------------------------------------------------------------
 Results by Framework:
 ----------------------------------------------------------------------
 
   CrewAI:
-    Success Rate: 5/5 (100.0%)
-    Avg Latency: 123.55s
+    Success Rate: 8/9 (88.9%)
+    Avg Latency: 154.29s
     Avg Reasoning Steps: 14.0
-
-  LangGraph:
-    Success Rate: 5/5 (100.0%)
-    Avg Latency: 147.16s
-    Avg Reasoning Steps: 14.0
-
-  direct:
-    Success Rate: 5/5 (100.0%)
-    Avg Latency: 12.15s
-    Avg Reasoning Steps: 3.0
 
 ----------------------------------------------------------------------
 Results by Protocol:
 ----------------------------------------------------------------------
 
+  ACP:
+    Success Rate:          2/3 (66.7%)
+    Avg Latency:           154.24s
+    Avg Total Overhead:    0.059ms
+    Avg Send Overhead:     0.011ms
+    Avg Receive Overhead:  0.048ms
+    Avg Message Size:      711 bytes
+
+  MCP:
+    Success Rate:          3/3 (100.0%)
+    Avg Latency:           161.46s
+    Avg Total Overhead:    0.035ms
+    Avg Send Overhead:     0.014ms
+    Avg Receive Overhead:  0.022ms
+    Avg Message Size:      1261 bytes
+
   standard:
-    Success Rate: 15/15 (100.0%)
-    Avg Latency: 94.29s
+    Success Rate:          3/3 (100.0%)
+    Avg Latency:           147.16s
+    Avg Total Overhead:    0.000ms
+    Avg Send Overhead:     0.000ms
+    Avg Receive Overhead:  0.000ms
+    Avg Message Size:      445 bytes
 
 ----------------------------------------------------------------------
 Results by Model:
 ----------------------------------------------------------------------
 
   deepseek-ai/DeepSeek-V3.2:
-    Success Rate: 15/15 (100.0%)
-    Avg Latency: 94.29s
-    Avg Reasoning Steps: 10.3
+    Success Rate: 8/9 (88.9%)
+    Avg Latency: 154.29s
+    Avg Reasoning Steps: 14.0
 
 ----------------------------------------------------------------------
 Token Usage by Model:
 ----------------------------------------------------------------------
 Model: deepseek-ai/DeepSeek-V3.2
-  Reasoning tokens: 26871
-  Output tokens: 11814
-  Total tokens: 38685
+  Reasoning tokens: 24573
+  Output tokens: 9216
+  Total tokens: 33789
 
 ======================================================================
-✅️ Mind2Web results exported to ./logs/mind2web-results-20260327_133736.json
+✅️ Mind2Web results exported to ./logs/mind2web-results-20260330_142546.json
 
-✅️ Results exported to ./logs/results-20260327_133736.json
+✅️ Results exported to ./logs/results-20260330_142546.json
 
 ======================================================================
 Mind2Web evaluation complete!
-Results: ./logs/mind2web-results-20260327_133736.json
-Full logs: ./logs/results-20260327_133736.json
+Results: ./logs/mind2web-results-20260330_142546.json
+Full logs: ./logs/results-20260330_142546.json
 ======================================================================
-
