@@ -161,11 +161,11 @@ task_completion:
 Respond with ONLY a JSON object with keys `task_understanding`, `task_adherence`, and `task_completion`.
 Each value must be an object with keys `score` and `rationale`.
 Example:
-{
-  "task_understanding": {"score": 0.8, "rationale": "..."},
-  "task_adherence": {"score": 0.7, "rationale": "..."},
-  "task_completion": {"score": 0.9, "rationale": "..."}
-}
+{{
+  "task_understanding": {{"score": 0.8, "rationale": "..."}},
+  "task_adherence": {{"score": 0.7, "rationale": "..."}},
+  "task_completion": {{"score": 0.9, "rationale": "..."}}
+}}
 Do not include any extra text, markdown, or explanation outside the JSON object."""
 
         try:
