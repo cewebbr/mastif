@@ -51,33 +51,31 @@ Protocol: standard
 
   Task 1/2: exploretock (Travel)
   Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest...
-    Warning: Judge evaluation failed: Invalid format specifier ' 0.8, "rationale": "..."' for object of type 'str'
     ✅️ Completed
-      Task Understanding: 50.00%
-       ↳ Rationale: Judge evaluation failed.
-      Task Adherence: 50.00%
-       ↳ Rationale: Judge evaluation failed.
-      Task Completion: 50.00%
-       ↳ Rationale: Judge evaluation failed.
-      Overall Score: 50.00%
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly identified the geographic error in the location 'Boston, NY' and assumed the user meant 'Boston, MA'. It also recognized the limitations of the Tock platform regarding pickup orders and outlined the necessary assumptions for proceeding.
+      Task Adherence: 90.00%
+       ↳ Rationale: The agent remained focused on the task throughout the response, detailing the steps it would take if it had the necessary tools. However, there were some minor redundancies in outlining the agent architecture and tool requirements.
+      Task Completion: 70.00%
+       ↳ Rationale: While the agent provided a comprehensive plan and outlined the steps needed to complete the task, it ultimately could not execute the search due to tool limitations. The response included actionable next steps but did not achieve the task's goal of checking for restaurant availability.
+      Overall Score: 86.67%
       Reasoning Steps: 14
 
   Task 2/2: exploretock (Travel)
   Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup....
-    Warning: Judge evaluation failed: Invalid format specifier ' 0.8, "rationale": "..."' for object of type 'str'
     ✅️ Completed
-      Task Understanding: 50.00%
-       ↳ Rationale: Judge evaluation failed.
-      Task Adherence: 50.00%
-       ↳ Rationale: Judge evaluation failed.
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent clearly articulated the task goals, constraints, and required outputs, including the specific need for a winery tour with Mediterranean cuisine, outdoor setup, and the exact date and time.
+      Task Adherence: 70.00%
+       ↳ Rationale: The agent remained mostly on-task, providing a detailed framework for manual research and booking, but included some redundant explanations about the limitations of not having tools.
       Task Completion: 50.00%
-       ↳ Rationale: Judge evaluation failed.
-      Overall Score: 50.00%
+       ↳ Rationale: The response outlined a comprehensive plan and steps for manual execution but ultimately did not complete the booking task due to the lack of web automation tools, leaving the task incomplete.
+      Overall Score: 73.33%
       Reasoning Steps: 14
 
   CrewAI + standard Summary:
     Success: 2/2 (100.0%)
-    Avg Latency: 151.60s
+    Avg Latency: 166.37s
     Avg Reasoning Steps: 14.0
 
 ──────────────────────────────────────────────────────────────────────
@@ -90,33 +88,31 @@ Protocol: MCP
 
   Task 1/2: exploretock (Travel)
   Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest...
-    Warning: Judge evaluation failed: Invalid format specifier ' 0.8, "rationale": "..."' for object of type 'str'
     ✅️ Completed
-      Task Understanding: 50.00%
-       ↳ Rationale: Judge evaluation failed.
-      Task Adherence: 50.00%
-       ↳ Rationale: Judge evaluation failed.
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent clearly identifies the task goals, including the need to check for pickup restaurant availability in Boston, NY on a specific date and time, while also recognizing the ambiguity in the location and making reasonable assumptions about the intended location.
+      Task Adherence: 90.00%
+       ↳ Rationale: The agent remains focused on the task throughout the response, providing a logical analysis and a structured plan. However, there are minor redundancies in the reasoning that could be streamlined.
       Task Completion: 50.00%
-       ↳ Rationale: Judge evaluation failed.
-      Overall Score: 50.00%
+       ↳ Rationale: The agent provides a thorough theoretical plan for executing the task but ultimately cannot complete it due to the lack of web access and automation tools, leaving the task only partially completed.
+      Overall Score: 80.00%
       Reasoning Steps: 14
 
   Task 2/2: exploretock (Travel)
   Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup....
-    Warning: Judge evaluation failed: Invalid format specifier ' 0.8, "rationale": "..."' for object of type 'str'
     ✅️ Completed
-      Task Understanding: 50.00%
-       ↳ Rationale: Judge evaluation failed.
-      Task Adherence: 50.00%
-       ↳ Rationale: Judge evaluation failed.
-      Task Completion: 50.00%
-       ↳ Rationale: Judge evaluation failed.
-      Overall Score: 50.00%
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent clearly identified the task goals, including the need for a winery tour in Napa Valley with Mediterranean cuisine, wine tasting for 4 guests, and an outdoor setup on a specific date and time.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning remained focused on the task throughout the execution report, detailing the steps needed to complete the booking process and addressing the lack of tools without deviating from the task.
+      Task Completion: 0.00%
+       ↳ Rationale: The task was not completed due to the absence of web automation tools, which prevented any interaction with the website or execution of the planned steps.
+      Overall Score: 66.67%
       Reasoning Steps: 14
 
   CrewAI + MCP Summary:
     Success: 2/2 (100.0%)
-    Avg Latency: 150.38s
+    Avg Latency: 120.97s
     Avg Reasoning Steps: 14.0
 
 ======================================================================
@@ -126,18 +122,18 @@ MIND2WEB EVALUATION SUMMARY
 Overall Performance:
   Judge Model: gpt-4o-mini
   Tasks Evaluated: 4
-  Avg Task Understanding: 50.00%
-  Avg Task Adherence: 50.00%
-  Avg Task Completion: 50.00%
-  Avg Overall Score: 50.00%
+  Avg Task Understanding: 100.00%
+  Avg Task Adherence: 87.50%
+  Avg Task Completion: 42.50%
+  Avg Overall Score: 76.67%
   Avg Reasoning Steps: 14.0
 
 Performance by Domain:
   Travel:
     Tasks: 4
-    Avg Understanding: 50.00%
-    Avg Task Adherence: 50.00%
-    Avg Completion: 50.00%
+    Avg Understanding: 100.00%
+    Avg Task Adherence: 87.50%
+    Avg Completion: 42.50%
 
 ======================================================================
 TEST SUMMARY
@@ -156,7 +152,7 @@ Results by Framework:
 
   CrewAI:
     Success Rate: 4/4 (100.0%)
-    Avg Latency: 150.99s
+    Avg Latency: 143.67s
     Avg Reasoning Steps: 14.0
 
 ----------------------------------------------------------------------
@@ -165,15 +161,15 @@ Results by Protocol:
 
   MCP:
     Success Rate:          2/2 (100.0%)
-    Avg Latency:           150.38s
-    Avg Total Overhead:    0.056ms
-    Avg Send Overhead:     0.027ms
-    Avg Receive Overhead:  0.029ms
+    Avg Latency:           120.97s
+    Avg Total Overhead:    0.049ms
+    Avg Send Overhead:     0.023ms
+    Avg Receive Overhead:  0.026ms
     Avg Message Size:      1272 bytes
 
   standard:
     Success Rate:          2/2 (100.0%)
-    Avg Latency:           151.60s
+    Avg Latency:           166.37s
     Avg Total Overhead:    0.000ms
     Avg Send Overhead:     0.000ms
     Avg Receive Overhead:  0.000ms
@@ -185,25 +181,24 @@ Results by Model:
 
   deepseek-ai/DeepSeek-V3.2:
     Success Rate: 4/4 (100.0%)
-    Avg Latency: 150.99s
+    Avg Latency: 143.67s
     Avg Reasoning Steps: 14.0
 
 ----------------------------------------------------------------------
 Token Usage by Model:
 ----------------------------------------------------------------------
 Model: deepseek-ai/DeepSeek-V3.2
-  Reasoning tokens: 11695
+  Reasoning tokens: 9969
   Output tokens: 4096
-  Total tokens: 15791
+  Total tokens: 14065
 
 ======================================================================
-✅️ Mind2Web results exported to ./logs/mind2web-results-20260330_162433.json
+✅️ Mind2Web results exported to ./logs/mind2web-results-20260330_170235.json
 
-✅️ Results exported to ./logs/results-20260330_162433.json
+✅️ Results exported to ./logs/results-20260330_170235.json
 
 ======================================================================
 Mind2Web evaluation complete!
-Results: ./logs/mind2web-results-20260330_162433.json
-Full logs: ./logs/results-20260330_162433.json
+Results: ./logs/mind2web-results-20260330_170235.json
+Full logs: ./logs/results-20260330_170235.json
 ======================================================================
-

@@ -953,7 +953,7 @@ Please respond according to this protocol structure and complete the task."""
 
                     for i, task in enumerate(tasks, 1):
                         print(f"\n  Task {i}/{len(tasks)}: {task['website']} ({task['domain']})")
-                        print(f"  Goal: {task['confirmed_task']}...")
+                        print(f"  Goal: {task['confirmed_task']}")
 
                         task_prompt = f"""You are a web automation agent. Complete this task:
 
