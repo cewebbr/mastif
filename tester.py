@@ -1004,9 +1004,21 @@ Please respond according to this protocol structure and complete the task."""
                             print(f"    {status}")
                             if not result.success and result.error:
                                 print(f"      ⚠️  Inference/tool error: {result.error}")
-                            print(f"      Task Understanding: {eval_result['task_understanding']:.2%}")
-                            print(f"      Task Adherence: {eval_result['task_adherence']:.2%}")
-                            print(f"      Task Completion: {eval_result['task_completion']:.2%}")
+                            understanding = eval_result['task_understanding']
+                            adherence = eval_result['task_adherence']
+                            completion = eval_result['task_completion']
+                            understanding_score = understanding['score'] if isinstance(understanding, dict) else float(understanding)
+                            adherence_score = adherence['score'] if isinstance(adherence, dict) else float(adherence)
+                            completion_score = completion['score'] if isinstance(completion, dict) else float(completion)
+                            understanding_rationale = understanding['rationale'] if isinstance(understanding, dict) else ""
+                            adherence_rationale = adherence['rationale'] if isinstance(adherence, dict) else ""
+                            completion_rationale = completion['rationale'] if isinstance(completion, dict) else ""
+                            print(f"      Task Understanding: {understanding_score:.2%}")
+                            print(f"         Rationale: {understanding_rationale}")
+                            print(f"      Task Adherence: {adherence_score:.2%}")
+                            print(f"         Rationale: {adherence_rationale}")
+                            print(f"      Task Completion: {completion_score:.2%}")
+                            print(f"         Rationale: {completion_rationale}")
                             print(f"      Overall Score: {eval_result['overall_score']:.2%}")
                             print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
                     except Exception as e:

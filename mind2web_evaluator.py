@@ -7,6 +7,7 @@ Handles evaluation of agent performance on Mind2Web tasks.
 from typing import Dict, List, Optional
 import re
 import os
+import json
 from config import ConfigExpert
 
 class Mind2WebEvaluator:
@@ -70,7 +71,11 @@ class Mind2WebEvaluator:
                 domain=domain
             )
             
-            overall_score = (task_understanding + task_adherence + task_completion) / 3.0
+            overall_score = (
+                self._get_score(task_understanding)
+                + self._get_score(task_adherence)
+                + self._get_score(task_completion)
+            ) / 3.0
             
             result = {
                 "task_id": task["task_id"],
@@ -91,9 +96,9 @@ class Mind2WebEvaluator:
                 "website": website,
                 "domain": domain,
                 "high_level_task": high_level_task,
-                "task_understanding": 0.5,
-                "task_adherence": 0.5,
-                "task_completion": 0.5,
+                "task_understanding": {"score": 0.5, "rationale": "Judge evaluation failed."},
+                "task_adherence": {"score": 0.5, "rationale": "Judge evaluation failed."},
+                "task_completion": {"score": 0.5, "rationale": "Judge evaluation failed."},
                 "overall_score": 0.5,
                 "reasoning_steps_count": len(reasoning_steps),
             }
@@ -132,11 +137,13 @@ Score task_understanding from 0.0 to 1.0 using these anchors:
 0.3 = Misinterprets important parts of the task
 0.0 = Completely incorrect or unrelated understanding
 
-Respond with ONLY a single number between 0.0 and 1.0."""
+Respond with ONLY a JSON object with keys `score` and `rationale`.
+`score` should be a number between 0.0 and 1.0.
+`rationale` should briefly explain the judgment."""
 
         try:
-            response = self.judge_adapter.generate(prompt, max_tokens=50, temperature=0.0)
-            return self._extract_score(response)
+            response = self.judge_adapter.generate(prompt, max_tokens=150, temperature=0.0)
+            return self._extract_score_and_rationale(response)
         except Exception as e:
             print(f"      Warning: Task understanding evaluation failed: {e}")
             return 0.5
@@ -175,11 +182,13 @@ Score task_adherence from 0.0 to 1.0 using these anchors:
 0.3 = Frequently off-task or distracted reasoning
 0.0 = Completely unrelated reasoning
 
-Respond with ONLY a single number between 0.0 and 1.0."""
+Respond with ONLY a JSON object with keys `score` and `rationale`.
+`score` should be a number between 0.0 and 1.0.
+`rationale` should briefly explain the judgment."""
 
         try:
-            response = self.judge_adapter.generate(prompt, max_tokens=50, temperature=0.0)
-            return self._extract_score(response)
+            response = self.judge_adapter.generate(prompt, max_tokens=150, temperature=0.0)
+            return self._extract_score_and_rationale(response)
         except Exception as e:
             print(f"      Warning: Task adherence evaluation failed: {e}")
             return 0.5
@@ -210,11 +219,13 @@ Score task_completion from 0.0 to 1.0 using these anchors:
 0.3 = Unlikely to complete task successfully
 0.0 = Does not complete task at all or is incorrect
 
-Respond with ONLY a single number between 0.0 and 1.0."""
+Respond with ONLY a JSON object with keys `score` and `rationale`.
+`score` should be a number between 0.0 and 1.0.
+`rationale` should briefly explain the judgment."""
 
         try:
-            response = self.judge_adapter.generate(prompt, max_tokens=50, temperature=0.0)
-            return self._extract_score(response)
+            response = self.judge_adapter.generate(prompt, max_tokens=150, temperature=0.0)
+            return self._extract_score_and_rationale(response)
         except Exception as e:
             print(f"      Warning: Task completion evaluation failed: {e}")
             return 0.5
@@ -252,7 +263,68 @@ Respond with ONLY a single number between 0.0 and 1.0."""
         # Log unexpected response to aid debugging
         print(f"      Warning: Could not extract score from judge response: {repr(response)}")
         return 0.5
-    
+
+    def _parse_json_object(self, response: str) -> Optional[dict]:
+        """Try to extract a JSON object from the judge response."""
+        if not response:
+            return None
+
+        cleaned = response.strip()
+        cleaned = re.sub(r'```(?:json)?\s*', '', cleaned, flags=re.IGNORECASE)
+        cleaned = cleaned.strip('`\n ')
+
+        # Try direct parse first
+        try:
+            parsed = json.loads(cleaned)
+            if isinstance(parsed, dict):
+                return parsed
+        except json.JSONDecodeError:
+            pass
+
+        # Fallback: find the first JSON object-like substring
+        start = cleaned.find('{')
+        end = cleaned.rfind('}')
+        if start != -1 and end != -1 and end > start:
+            candidate = cleaned[start:end+1]
+            try:
+                parsed = json.loads(candidate)
+                if isinstance(parsed, dict):
+                    return parsed
+            except json.JSONDecodeError:
+                pass
+
+        return None
+
+    def _extract_score_and_rationale(self, response: str) -> dict:
+        """Extract score and rationale from judge response."""
+        parsed = self._parse_json_object(response)
+        if isinstance(parsed, dict):
+            score = parsed.get('score')
+            rationale = parsed.get('rationale')
+            if isinstance(score, (int, float)):
+                score = max(0.0, min(1.0, float(score)))
+            else:
+                score = self._extract_score(response)
+            if not isinstance(rationale, str) or not rationale.strip():
+                rationale = response.strip()
+            return {
+                'score': score,
+                'rationale': rationale.strip()
+            }
+
+        return {
+            'score': self._extract_score(response),
+            'rationale': response.strip() or 'No rationale provided.'
+        }
+
+    def _get_score(self, value):
+        if isinstance(value, dict):
+            return float(value.get('score', 0.0))
+        try:
+            return float(value)
+        except Exception:
+            return 0.0
+
     def get_aggregate_metrics(self) -> Dict:
         """Calculate aggregate metrics across all evaluated tasks"""
         if not self.results:
@@ -260,9 +332,9 @@ Respond with ONLY a single number between 0.0 and 1.0."""
         
         total_tasks = len(self.results)
         
-        avg_understanding = sum(r["task_understanding"] for r in self.results) / total_tasks
-        avg_adherence = sum(r["task_adherence"] for r in self.results) / total_tasks
-        avg_completion = sum(r["task_completion"] for r in self.results) / total_tasks
+        avg_understanding = sum(self._get_score(r["task_understanding"]) for r in self.results) / total_tasks
+        avg_adherence = sum(self._get_score(r["task_adherence"]) for r in self.results) / total_tasks
+        avg_completion = sum(self._get_score(r["task_completion"]) for r in self.results) / total_tasks
         avg_overall_score = sum(r["overall_score"] for r in self.results) / total_tasks
         avg_reasoning_steps = sum(r["reasoning_steps_count"] for r in self.results) / total_tasks
         
@@ -278,9 +350,9 @@ Respond with ONLY a single number between 0.0 and 1.0."""
                     "total_completion": 0.0
                 }
             domain_metrics[domain]["count"] += 1
-            domain_metrics[domain]["total_understanding"] += result["task_understanding"]
-            domain_metrics[domain]["total_adherence"] += result["task_adherence"]
-            domain_metrics[domain]["total_completion"] += result["task_completion"]
+            domain_metrics[domain]["total_understanding"] += self._get_score(result["task_understanding"])
+            domain_metrics[domain]["total_adherence"] += self._get_score(result["task_adherence"])
+            domain_metrics[domain]["total_completion"] += self._get_score(result["task_completion"])
         
         # Calculate averages per domain
         for domain in domain_metrics:
