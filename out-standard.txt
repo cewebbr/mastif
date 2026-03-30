@@ -7,10 +7,12 @@ STANDARD TESTING MODE
 ----------------------------------------------------------------------
 You are about to run a test with the following configuration:
 Models: 1
-Protocols: 1
-Frameworks: 3
+Protocols: 2
+Frameworks: 2
 Tasks: 2
-Total: 6
+Total executions: 8
+----------------------------------------------------------------------
+Tools (15): web_search, web_browser, wikipedia, arxiv, python_repl, requests_get, beautifulsoup_scraper, pdf_reader, datetime, json_parser, pubmed, youtube_transcript, sympy, web_interaction, keyboard_interaction
 ----------------------------------------------------------------------
 
 ======================================================================
@@ -27,35 +29,50 @@ Protocol: standard
 
   LangGraph with standard:
     Task 1/2: You are an Accessibility Expert (WCAG Specialist) ...
-      ✅️ Latency: 153.15s, Steps: 14
+      ✅️ Latency: 90.37s, Steps: 14
     Task 2/2: You are an Accessibility Expert (WCAG Specialist) ...
-      ✅️ Latency: 140.88s, Steps: 14
+      ✅️ Latency: 143.14s, Steps: 14
 
   LangGraph + standard Summary:
     Success: 2/2 (100.0%)
-    Avg Latency: 147.02s
+    Avg Latency: 116.75s
     Avg Steps: 14.0
 
   CrewAI with standard:
     Task 1/2: You are an Accessibility Expert (WCAG Specialist) ...
-      ✅️ Latency: 74.36s, Steps: 14
+      ✅️ Latency: 89.87s, Steps: 14
     Task 2/2: You are an Accessibility Expert (WCAG Specialist) ...
-      ✅️ Latency: 62.00s, Steps: 14
+      ✅️ Latency: 65.64s, Steps: 14
 
   CrewAI + standard Summary:
     Success: 2/2 (100.0%)
-    Avg Latency: 68.18s
+    Avg Latency: 77.76s
     Avg Steps: 14.0
 
-  Smolagents with standard:
-    Task 1/2: You are an Accessibility Expert (WCAG Specialist) ...
-      ✅️ Latency: 103.73s, Steps: 14
-    Task 2/2: You are an Accessibility Expert (WCAG Specialist) ...
-      ✅️ Latency: 52.69s, Steps: 14
+──────────────────────────────────────────────────────────────────────
+Protocol: MCP
+──────────────────────────────────────────────────────────────────────
 
-  Smolagents + standard Summary:
+  LangGraph with MCP:
+    Task 1/2: You are an Accessibility Expert (WCAG Specialist) ...
+      ✅️ Latency: 136.29s, Steps: 14
+    Task 2/2: You are an Accessibility Expert (WCAG Specialist) ...
+      ✅️ Latency: 71.37s, Steps: 14
+
+  LangGraph + MCP Summary:
     Success: 2/2 (100.0%)
-    Avg Latency: 78.21s
+    Avg Latency: 103.83s
+    Avg Steps: 14.0
+
+  CrewAI with MCP:
+    Task 1/2: You are an Accessibility Expert (WCAG Specialist) ...
+      ✅️ Latency: 129.93s, Steps: 14
+    Task 2/2: You are an Accessibility Expert (WCAG Specialist) ...
+      ✅️ Latency: 116.03s, Steps: 14
+
+  CrewAI + MCP Summary:
+    Success: 2/2 (100.0%)
+    Avg Latency: 122.98s
     Avg Steps: 14.0
 
 ======================================================================
@@ -67,10 +84,10 @@ TEST SUMMARY
 ======================================================================
 
 Overall Statistics:
-  Total Tests: 6
-  Successful: 6 (100.0%)
+  Total Tests: 8
+  Successful: 8 (100.0%)
   Failed: 0 (0.0%)
-  Total Reasoning Steps: 84
+  Total Reasoning Steps: 112
   Avg Reasoning Steps per Test: 14.0
 
 ----------------------------------------------------------------------
@@ -78,50 +95,57 @@ Results by Framework:
 ----------------------------------------------------------------------
 
   CrewAI:
-    Success Rate: 2/2 (100.0%)
-    Avg Latency: 68.18s
+    Success Rate: 4/4 (100.0%)
+    Avg Latency: 100.37s
     Avg Reasoning Steps: 14.0
 
   LangGraph:
-    Success Rate: 2/2 (100.0%)
-    Avg Latency: 147.02s
-    Avg Reasoning Steps: 14.0
-
-  Smolagents:
-    Success Rate: 2/2 (100.0%)
-    Avg Latency: 78.21s
+    Success Rate: 4/4 (100.0%)
+    Avg Latency: 110.29s
     Avg Reasoning Steps: 14.0
 
 ----------------------------------------------------------------------
 Results by Protocol:
 ----------------------------------------------------------------------
 
+  MCP:
+    Success Rate:          4/4 (100.0%)
+    Avg Latency:           113.41s
+    Avg Total Overhead:    0.045ms
+    Avg Send Overhead:     0.024ms
+    Avg Receive Overhead:  0.022ms
+    Avg Message Size:      3751 bytes
+
   standard:
-    Success Rate: 6/6 (100.0%)
-    Avg Latency: 97.80s
+    Success Rate:          4/4 (100.0%)
+    Avg Latency:           97.26s
+    Avg Total Overhead:    0.000ms
+    Avg Send Overhead:     0.000ms
+    Avg Receive Overhead:  0.000ms
+    Avg Message Size:      2904 bytes
 
 ----------------------------------------------------------------------
 Results by Model:
 ----------------------------------------------------------------------
 
   deepseek-ai/DeepSeek-V3.2:
-    Success Rate: 6/6 (100.0%)
-    Avg Latency: 97.80s
+    Success Rate: 8/8 (100.0%)
+    Avg Latency: 105.33s
     Avg Reasoning Steps: 14.0
 
 ----------------------------------------------------------------------
 Token Usage by Model:
 ----------------------------------------------------------------------
 Model: deepseek-ai/DeepSeek-V3.2
-  Reasoning tokens: 14112
-  Output tokens: 5805
-  Total tokens: 19917
+  Reasoning tokens: 20049
+  Output tokens: 6803
+  Total tokens: 26852
 
 ======================================================================
 
-✅️ Results exported to ./logs/results-20260327_143432.json
+✅️ Results exported to ./logs/results-20260330_145240.json
 
 ======================================================================
-Testing complete! Check ./logs/results-20260327_143432.json for detailed results.
+Testing complete! Check ./logs/results-20260330_145240.json for detailed results.
 ======================================================================
 
