@@ -53,6 +53,29 @@ class Mastif:
         }
         self.standard_tools = ToolPool.available_tools
        
+    def _get_protocol_metrics(self, protocol: ProtocolType, protocol_instance, task: str) -> Dict:
+        """
+        Measure and return protocol overhead and message size metrics.
+        Returns zeroed metrics for STANDARD protocol.
+        """
+        if protocol_instance is None or protocol == ProtocolType.STANDARD:
+            return {
+                "send_overhead_ms":    0,
+                "receive_overhead_ms": 0,
+                "total_overhead_ms":   0,
+                "message_size_bytes":  len(task.encode("utf-8")),
+            }
+        rich_context = protocol_instance.generate_context(
+            task, tools=list(ToolPool.available_tools)
+        )
+        overhead = protocol_instance.measure_overhead(task, rich_context)
+        return {
+            "send_overhead_ms":    overhead["send_overhead_ms"],
+            "receive_overhead_ms": overhead["receive_overhead_ms"],
+            "total_overhead_ms":   overhead["total_overhead_ms"],
+            "message_size_bytes":  overhead["message_size_bytes"],
+        }
+
     ERROR_PATTERNS = [
         "execution error:",
         "inference error:",
@@ -120,11 +143,26 @@ class Mastif:
                     action_input=task
                 ))
                 response = adapter.generate(task)
+                protocol_metrics = {
+                    "send_overhead_ms": 0,
+                    "receive_overhead_ms": 0,
+                    "total_overhead_ms": 0,
+                    "message_size_bytes": len(task.encode("utf-8")),
+                }
             else:
                 # Use protocol wrapper
                 protocol = self.protocols[protocol_type]
-                formatted_msg = protocol.send_message(task, context or {})
+                rich_context = protocol.generate_context(task, tools=list(ToolPool.available_tools))
+                overhead = protocol.measure_overhead(task, rich_context)
+                formatted_msg = protocol.send_message(task, rich_context)
                 
+                protocol_metrics = {
+                    "send_overhead_ms":    overhead["send_overhead_ms"],
+                    "receive_overhead_ms": overhead["receive_overhead_ms"],
+                    "total_overhead_ms":   overhead["total_overhead_ms"],
+                    "message_size_bytes":  overhead["message_size_bytes"],
+                }
+
                 reasoning_steps.append(ReasoningStep(
                     step_number=2,
                     thought=f"Formatting message with {protocol_type.value}",
@@ -172,7 +210,11 @@ Please respond according to this protocol structure and complete the task."""
                 response=response,
                 reasoning_steps=reasoning_steps,
                 latency=latency,
-                success=True
+                success=True,
+                metadata={
+                    "protocol_used": protocol_type.value,
+                    **protocol_metrics,
+                }
             )
         
         except Exception as e:
@@ -208,6 +250,7 @@ Please respond according to this protocol structure and complete the task."""
         
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
+            protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
             agent = CrewAIAgent(adapter, role, protocol=protocol_instance)
             response = agent.execute_task(task, context)
             latency = time.time() - start_time
@@ -224,7 +267,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"role": role, "protocol_used": protocol.value if protocol else "none"},
+                metadata={"role": role, "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
                 error=error
             )
         
@@ -254,6 +297,7 @@ Please respond according to this protocol structure and complete the task."""
         
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
+            protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
             agent = SmolAgentWrapper(adapter, protocol=protocol_instance)
 
             for tool_name in (tools or []):
@@ -274,7 +318,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"tools_count": len(tools or []), "protocol_used": protocol.value if protocol else "none"},
+                metadata={"tools_count": len(tools or []), "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
                 error=error
             )
         
@@ -304,6 +348,7 @@ Please respond according to this protocol structure and complete the task."""
         
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
+            protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
             agent = LangChainAgent(adapter, protocol=protocol_instance)
 
             for tool_name in (tools or []):
@@ -324,7 +369,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none"},
+                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
                 error=error
             )
         
@@ -354,6 +399,7 @@ Please respond according to this protocol structure and complete the task."""
         
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
+            protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
             agent = LangGraphAgent(adapter, protocol=protocol_instance)
 
             for tool_name in (tools or []):
@@ -374,7 +420,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"workflow_type": "research_pipeline", "protocol_used": protocol.value if protocol else "none"},
+                metadata={"workflow_type": "research_pipeline", "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
                 error=error
             )
         
@@ -404,6 +450,7 @@ Please respond according to this protocol structure and complete the task."""
         
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
+            protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
             agent = LlamaIndexAgent(adapter, protocol=protocol_instance)
             
             # Add tools
@@ -425,7 +472,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none"},
+                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
                 error=error
             )
         
@@ -454,6 +501,7 @@ Please respond according to this protocol structure and complete the task."""
         
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
+            protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
             agent = SemanticKernelAgent(adapter, protocol=protocol_instance)
             response = agent.run(task)
             latency = time.time() - start_time
@@ -470,7 +518,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"kernel_type": "huggingface", "protocol_used": protocol.value if protocol else "none"},
+                metadata={"kernel_type": "huggingface", "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
                 error=error
             )
         
@@ -711,24 +759,46 @@ Please respond according to this protocol structure and complete the task."""
         print("-"*70)
         protocols = {}
         for r in self.results:
-            if r.protocol.value not in protocols:
-                protocols[r.protocol.value] = {
+            p = r.protocol.value
+            if p not in protocols:
+                protocols[p] = {
                     "success": 0,
                     "total": 0,
-                    "latency": []
+                    "latency": [],
+                    "total_overhead_ms": [],
+                    "send_overhead_ms": [],
+                    "receive_overhead_ms": [],
+                    "message_size_bytes": [],
                 }
-            protocols[r.protocol.value]["total"] += 1
+            protocols[p]["total"] += 1
             if r.success:
-                protocols[r.protocol.value]["success"] += 1
-                protocols[r.protocol.value]["latency"].append(r.latency)
-        
+                protocols[p]["success"] += 1
+                protocols[p]["latency"].append(r.latency)
+            if r.metadata:
+                if "total_overhead_ms" in r.metadata:
+                    protocols[p]["total_overhead_ms"].append(r.metadata["total_overhead_ms"])
+                if "send_overhead_ms" in r.metadata:
+                    protocols[p]["send_overhead_ms"].append(r.metadata["send_overhead_ms"])
+                if "receive_overhead_ms" in r.metadata:
+                    protocols[p]["receive_overhead_ms"].append(r.metadata["receive_overhead_ms"])
+                if "message_size_bytes" in r.metadata:
+                    protocols[p]["message_size_bytes"].append(r.metadata["message_size_bytes"])
+
         for proto, stats in sorted(protocols.items()):
-            success_rate = stats['success']/stats['total']*100
-            avg_latency = sum(stats['latency'])/len(stats['latency']) if stats['latency'] else 0
-            
+            success_rate = stats['success'] / stats['total'] * 100
+            avg_latency = sum(stats['latency']) / len(stats['latency']) if stats['latency'] else 0
+            avg_overhead = sum(stats['total_overhead_ms']) / len(stats['total_overhead_ms']) if stats['total_overhead_ms'] else 0
+            avg_send = sum(stats['send_overhead_ms']) / len(stats['send_overhead_ms']) if stats['send_overhead_ms'] else 0
+            avg_recv = sum(stats['receive_overhead_ms']) / len(stats['receive_overhead_ms']) if stats['receive_overhead_ms'] else 0
+            avg_size = sum(stats['message_size_bytes']) / len(stats['message_size_bytes']) if stats['message_size_bytes'] else 0
+
             print(f"\n  {proto}:")
-            print(f"    Success Rate: {stats['success']}/{stats['total']} ({success_rate:.1f}%)")
-            print(f"    Avg Latency: {avg_latency:.2f}s")
+            print(f"    Success Rate:          {stats['success']}/{stats['total']} ({success_rate:.1f}%)")
+            print(f"    Avg Latency:           {avg_latency:.2f}s")
+            print(f"    Avg Total Overhead:    {avg_overhead:.3f}ms")
+            print(f"    Avg Send Overhead:     {avg_send:.3f}ms")
+            print(f"    Avg Receive Overhead:  {avg_recv:.3f}ms")
+            print(f"    Avg Message Size:      {avg_size:.0f} bytes")
         
         # Results by model
         print("\n" + "-"*70)
@@ -806,9 +876,9 @@ Please respond according to this protocol structure and complete the task."""
             "CrewAI": (self.test_with_crewai, {"role": "Web Automation Specialist"}),
             "Smolagents": (self.test_with_smolagents, {"tools": tools}),
             "LangChain": (self.test_with_langchain, {"tools": tools}),
-            "LangGraph": (self.test_with_langgraph, {"tools": tools}),
+            "LangGraph": (self.test_with_langgraph, {}),
             "LlamaIndex": (self.test_with_llamaindex, {"tools": tools}),
-            "SemanticKernel": (self.test_with_semantic_kernel, {"tools": tools})
+            "SemanticKernel": (self.test_with_semantic_kernel, {})
         }
 
         frameworks = [(name, *framework_map[name]) for name in framework_names]
@@ -842,9 +912,7 @@ Please respond according to this protocol structure and complete the task."""
         print(f"Protocols: {len(protocols)}")
         print(f"Frameworks: {len(frameworks)}")
         print(f"Tasks: {len(tasks)}")
-        print(f"Total executions: {len(models) * len(protocols) * len(frameworks) * len(tasks)}")
-        print(f"{'-'*70}")
-        print(f"Tools ({len(tools)}): {', '.join(tools)}")
+        print(f"Total: {len(models) * len(protocols) * len(frameworks) * len(tasks)}")
         print(f"{'-'*70}")
         if( len(models) * len(protocols) * len(frameworks) * len(tasks) > config.get("requests_soft_limit", 1000) ):
             print("WARNING: This may incur a high number of API calls and associated costs.")
@@ -860,28 +928,48 @@ Please respond according to this protocol structure and complete the task."""
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
             
-            if model_name.startswith("gpt-"):
-                adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
-            else:
-                adapter = HuggingFaceAdapter(model_name, hf_token or os.getenv("HF_TOKEN"))
+            adapter = HuggingFaceAdapter(model_name, hf_token)
+            
+            # ===== Protocol Tests =====
+            print(f"\n{'-'*70}")
+            print("PROTOCOL TESTS")
+            print(f"{'-'*70}")
 
-            # ===== Protocol x Framework Tests =====
             for protocol in protocols:
-                print(f"\n{'─'*70}")
-                print(f"Protocol: {protocol.value}")
-                print(f"{'─'*70}")
+                protocol_results = []
+                for task in tasks:
+                    print(f"\n  Testing with {protocol.value} on task: {task['confirmed_task'][:40]}...")
+                    result = self.test_with_protocol(adapter, protocol, task['confirmed_task'])
+                    protocol_results.append(result)
+                    self.results.append(result)
+                    if result.success:
+                        status = "✅️ Success"
+                    else:
+                        status = f"❌ Failed: {result.error}"
+                    print(f"    {status} ({len(result.reasoning_steps)} reasoning steps)")
 
-                for framework_name, test_fn, extra_args in frameworks:
-                    print(f"\n{'-'*70}")
-                    print(f"  {framework_name} with {protocol.value}:")
-                    print(f"{'-'*70}")
-                    framework_results = []
-                    for i, task in enumerate(tasks, 1):
-                        print(f"\n  Task {i}/{len(tasks)}: {task['website']} ({task['domain']})")
-                        print(f"  Goal: {task['confirmed_task'][:100]}...")
-                        
-                        # Format task as prompt
-                        task_prompt = f"""You are a web automation agent. Complete this task:
+                # Average metrics for this protocol
+                successes = [r for r in protocol_results if r.success]
+                avg_latency = sum(r.latency for r in protocol_results) / len(protocol_results)
+                avg_reasoning_steps = sum(len(r.reasoning_steps) for r in protocol_results) / len(protocol_results)
+                print(f"\n  Protocol {protocol.value} summary:")
+                print(f"    Success rate: {len(successes)}/{len(protocol_results)}")
+                print(f"    Avg latency: {avg_latency:.2f}s")
+                print(f"    Avg reasoning steps: {avg_reasoning_steps:.2f}")
+                print(f"    \n{'-'*35}")
+
+            # ===== Framework Tests =====
+            for framework_name, test_fn, extra_args in frameworks:
+                print(f"\n{'-'*70}")
+                print(f"Framework: {framework_name}")
+                print(f"{'-'*70}")
+                framework_results = []
+                for i, task in enumerate(tasks, 1):
+                    print(f"\n  Task {i}/{len(tasks)}: {task['website']} ({task['domain']})")
+                    print(f"  Goal: {task['confirmed_task'][:80]}...")
+                    
+                    # Format task as prompt
+                    task_prompt = f"""You are a web automation agent. Complete this task:
 
     Website: {task['website']}
     Domain: {task['domain']}
@@ -893,46 +981,46 @@ Please respond according to this protocol structure and complete the task."""
 
     Your response:"""
 
-                        result = None
-                        try:
-                            args = [adapter, task_prompt]
-                            if framework_name == "CrewAI":
-                                args.insert(1, extra_args["role"])
-                            kwargs = {"protocol": protocol}
-                            if "tools" in extra_args:
-                                kwargs["tools"] = extra_args["tools"]
-                            result = test_fn(*args, **kwargs)
-                            if result:
-                                self.results.append(result)
-                                
-                                # Evaluate result
-                                eval_result = evaluator.evaluate_task(
-                                    task,
-                                    result.response,
-                                    result.reasoning_steps
-                                )
-                                
-                                status = "✅️ Completed" if result.success else f"⚠️  Completed with errors"
-                                print(f"    {status}")
-                                if not result.success and result.error:
-                                    print(f"      ⚠️  Inference/tool error: {result.error}")
-                                print(f"      Task Understanding: {eval_result['task_understanding']:.2%}")
-                                print(f"      Task Adherence: {eval_result['task_adherence']:.2%}")
-                                print(f"      Task Completion: {eval_result['task_completion']:.2%}")
-                                print(f"      Overall Score: {eval_result['overall_score']:.2%}")
-                                print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
-                        except Exception as e:
-                            print(f"    ❌ Error: {str(e)}")
+                    result = None
+                    try:
+                        args = [adapter, task_prompt]
+                        if framework_name == "CrewAI":
+                            args.insert(1, extra_args["role"])
+                        kwargs = {}
+                        if "tools" in extra_args:
+                            kwargs["tools"] = extra_args["tools"]
+                        result = test_fn(*args, **kwargs)
+                        if result:
+                            self.results.append(result)
+                            
+                            # Evaluate result
+                            eval_result = evaluator.evaluate_task(
+                                task,
+                                result.response,
+                                result.reasoning_steps
+                            )
+                            
+                            status = "✅️ Completed" if result.success else f"⚠️  Completed with errors"
+                            print(f"    {status}")
+                            if not result.success and result.error:
+                                print(f"      ⚠️  Inference/tool error: {result.error}")
+                            print(f"      Task Understanding: {eval_result['task_understanding']:.2%}")
+                            print(f"      Task Adherence: {eval_result['task_adherence']:.2%}")
+                            print(f"      Task Completion: {eval_result['task_completion']:.2%}")
+                            print(f"      Overall Score: {eval_result['overall_score']:.2%}")
+                            print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
+                    except Exception as e:
+                        print(f"    ❌ Error: {str(e)}")
 
-                    # Summarize metrics for this framework+protocol combination
-                    metrics = evaluator.get_aggregate_metrics()
-                    print(f"\n  {framework_name} + {protocol.value} Mind2Web Summary:")
-                    for metric, value in metrics.items():
-                        if metric == 'domain_metrics':
-                            continue
-                        if metric in ['avg_task_adherence', 'avg_task_understanding', 'avg_task_completion', 'avg_overall_score']:
-                            value = f"{value:.2%}"
-                        print(f"    {metric}: {value}")
+                # Summarize metrics for this framework
+                metrics = evaluator.get_aggregate_metrics()
+                print(f"\n  {framework_name} Mind2Web Summary:")
+                for metric, value in metrics.items():
+                    if metric == 'domain_metrics':
+                        continue
+                    if metric in ['avg_task_adherence', 'avg_task_understanding', 'avg_task_completion', 'avg_overall_score']:
+                        value = f"{value:.2%}"
+                    print(f"    {metric}: {value}")
 
         # Print aggregate metrics
         print("\n" + "="*70)

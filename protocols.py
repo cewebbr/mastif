@@ -3,8 +3,9 @@ Protocol implementations
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Optional
+from typing import Dict, Optional, Tuple
 import time
+import json
 
 
 class BaseProtocol(ABC):
@@ -23,6 +24,71 @@ class BaseProtocol(ABC):
     def receive_message(self, response: Dict) -> str:
         """Parse an incoming message and extract content"""
         pass
+
+    def measure_overhead(self, message: str, context: Dict = None) -> Dict:
+        """
+        Measure the protocol's serialization and parsing overhead.
+
+        Returns a dict with:
+            send_overhead_ms   : time to call send_message (ms)
+            receive_overhead_ms: time to call receive_message (ms)
+            total_overhead_ms  : combined overhead (ms)
+            message_size_bytes : byte size of the serialized outgoing payload
+        """
+        # Measure send overhead
+        t0 = time.perf_counter()
+        formatted = self.send_message(message, context or {})
+        send_ms = (time.perf_counter() - t0) * 1000
+
+        # Measure payload size
+        message_size = len(json.dumps(formatted).encode("utf-8"))
+
+        # Measure receive overhead using a minimal response shell
+        dummy_response = {"content": "x"}
+        t1 = time.perf_counter()
+        self.receive_message(dummy_response)
+        receive_ms = (time.perf_counter() - t1) * 1000
+
+        return {
+            "send_overhead_ms":    round(send_ms, 4),
+            "receive_overhead_ms": round(receive_ms, 4),
+            "total_overhead_ms":   round(send_ms + receive_ms, 4),
+            "message_size_bytes":  message_size,
+        }
+
+    def generate_context(self, task: str, turn: int = 1, tools: list = None) -> Dict:
+        """
+        Generate a realistic context dict for use with send_message.
+
+        Varies per call so protocols are exercised with non-trivial payloads
+        rather than always falling back to empty defaults.
+
+        Args:
+            task:  The task string (used to seed memory and intent).
+            turn:  Conversation turn number.
+            tools: List of tool name strings available to the agent.
+        """
+        tools = tools or []
+        return {
+            "conv_id":      f"conv-{abs(hash(task)) % 100000:05d}",
+            "turn":         turn,
+            "task_id":      f"task-{abs(hash(task + str(turn))) % 10000:04d}",
+            "msg_id":       f"msg-{abs(hash(task)) % 10000:04d}-{turn}",
+            "sender":       "orchestrator",
+            "receiver":     "worker",
+            "msg_type":     "task",
+            "priority":     "medium",
+            "tools":        tools,
+            "capabilities": ["reasoning", "tool_use"] + (["web_access"] if tools else []),
+            "state":        "active",
+            "collab_mode":  "cooperative",
+            "intent":       "task_execution",
+            "environment":  {"mode": "evaluation", "task_type": "web_automation"},
+            "memory": [
+                {"role": "system", "content": "You are a web automation agent."},
+                {"role": "user",   "content": task[:200]},
+            ],
+        }
 
 
 class MCPProtocol(BaseProtocol):
