@@ -1,0 +1,106 @@
+{
+  "benchmark": "Mind2Web",
+  "timestamp": "2026-03-31T09:37:47.787543",
+  "aggregate_metrics": {
+    "total_tasks_evaluated": 4,
+    "judge_model": "gpt-4o-mini",
+    "avg_task_understanding": 0.925,
+    "avg_task_adherence": 0.925,
+    "avg_task_completion": 0.675,
+    "avg_overall_score": 0.8416666666666667,
+    "avg_reasoning_steps": 14.0,
+    "domain_metrics": {
+      "Travel": {
+        "count": 4,
+        "total_understanding": 3.7,
+        "total_adherence": 3.7,
+        "total_completion": 2.7,
+        "avg_understanding": 0.925,
+        "avg_adherence": 0.925,
+        "avg_completion": 0.675
+      }
+    }
+  },
+  "task_results": [
+    {
+      "task_id": "7bda9645-0b5f-470a-8dd7-6af0bff4da68",
+      "website": "exploretock",
+      "domain": "Travel",
+      "high_level_task": "Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+      "task_understanding": {
+        "score": 1.0,
+        "rationale": "The agent correctly identified the ambiguity in the location 'Boston, NY' and clarified it to 'Boston, MA', capturing the main goal and constraints of the task."
+      },
+      "task_adherence": {
+        "score": 1.0,
+        "rationale": "The agent's reasoning remained focused on the task throughout the process, detailing the steps taken to check for restaurant availability and providing relevant findings."
+      },
+      "task_completion": {
+        "score": 1.0,
+        "rationale": "The final response provided sufficient information about restaurant availability, including specific examples and recommendations for next steps, effectively completing the task."
+      },
+      "overall_score": 1.0,
+      "reasoning_steps_count": 14
+    },
+    {
+      "task_id": "a6372f23-f462-4706-8455-5b350c46d83c",
+      "website": "exploretock",
+      "domain": "Travel",
+      "high_level_task": "Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+      "task_understanding": {
+        "score": 0.7,
+        "rationale": "The agent captured the main goal of booking a winery tour with specific criteria but did not fully address the requirement for Mediterranean cuisine, which was a key aspect of the task."
+      },
+      "task_adherence": {
+        "score": 0.7,
+        "rationale": "The agent mostly stayed on-task, focusing on researching wineries and checking availability, but there were some redundant steps and a lack of direct action towards booking."
+      },
+      "task_completion": {
+        "score": 0.5,
+        "rationale": "The response provided some options and availability checks but ultimately did not complete the booking or find a winery that explicitly met all criteria, particularly the Mediterranean cuisine requirement."
+      },
+      "overall_score": 0.6333333333333333,
+      "reasoning_steps_count": 14
+    },
+    {
+      "task_id": "7bda9645-0b5f-470a-8dd7-6af0bff4da68",
+      "website": "exploretock",
+      "domain": "Travel",
+      "high_level_task": "Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+      "task_understanding": {
+        "score": 1.0,
+        "rationale": "The agent clearly identified the primary objective of checking for restaurant pickup availability in Boston, NY on a specific date and time, and recognized the geographical ambiguity between Boston, MA and Boston, NY. It also acknowledged the need for external tools to complete the task."
+      },
+      "task_adherence": {
+        "score": 1.0,
+        "rationale": "The agent's reasoning remained focused on the task throughout the response, detailing the necessary steps and tools required for execution without deviating into unrelated topics."
+      },
+      "task_completion": {
+        "score": 0.5,
+        "rationale": "While the agent provided a comprehensive plan and analysis, it ultimately could not complete the task due to the lack of available tools, resulting in a partial completion of the task."
+      },
+      "overall_score": 0.8333333333333334,
+      "reasoning_steps_count": 14
+    },
+    {
+      "task_id": "a6372f23-f462-4706-8455-5b350c46d83c",
+      "website": "exploretock",
+      "domain": "Travel",
+      "high_level_task": "Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+      "task_understanding": {
+        "score": 1.0,
+        "rationale": "The agent clearly identifies the task goals, including booking a winery tour in Napa Valley with specific criteria such as Mediterranean cuisine, wine tasting, outdoor setup, and the date and time for 4 guests."
+      },
+      "task_adherence": {
+        "score": 1.0,
+        "rationale": "The agent's reasoning remains focused on the task throughout, detailing the steps necessary for research, booking, and verification without deviating from the task requirements."
+      },
+      "task_completion": {
+        "score": 0.7,
+        "rationale": "While the agent provides a comprehensive plan and acknowledges the lack of tools, the inability to execute the booking means the task is not fully completed, leaving it likely but not guaranteed to succeed."
+      },
+      "overall_score": 0.9,
+      "reasoning_steps_count": 14
+    }
+  ]
+}
