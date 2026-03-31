@@ -237,6 +237,15 @@ Please respond according to this protocol structure and complete the task."""
                 error=str(e)
             )
     
+    def _capture_tool_log(self) -> Dict:
+        """
+        Snapshot the ToolPool invocation log and reset it.
+        Returns the summary dict to be stored in TestResult.metadata.
+        """
+        summary = ToolPool.get_log_summary()
+        ToolPool.reset_log()
+        return summary
+
     def test_with_crewai(
         self,
         adapter: BaseAdapter, 
@@ -251,6 +260,7 @@ Please respond according to this protocol structure and complete the task."""
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
             protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
+            ToolPool.reset_log()
             agent = CrewAIAgent(adapter, role, protocol=protocol_instance)
             response = agent.execute_task(task, context)
             latency = time.time() - start_time
@@ -267,7 +277,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"role": role, "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
+                metadata={"role": role, "protocol_used": protocol.value if protocol else "none", **protocol_metrics, "tool_log": self._capture_tool_log()},
                 error=error
             )
         
@@ -298,6 +308,7 @@ Please respond according to this protocol structure and complete the task."""
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
             protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
+            ToolPool.reset_log()
             agent = SmolAgentWrapper(adapter, protocol=protocol_instance)
 
             for tool_name in (tools or []):
@@ -318,7 +329,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"tools_count": len(tools or []), "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
+                metadata={"tools_count": len(tools or []), "protocol_used": protocol.value if protocol else "none", **protocol_metrics, "tool_log": self._capture_tool_log()},
                 error=error
             )
         
@@ -349,6 +360,7 @@ Please respond according to this protocol structure and complete the task."""
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
             protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
+            ToolPool.reset_log()
             agent = LangChainAgent(adapter, protocol=protocol_instance)
 
             for tool_name in (tools or []):
@@ -369,7 +381,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
+                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none", **protocol_metrics, "tool_log": self._capture_tool_log()},
                 error=error
             )
         
@@ -400,6 +412,7 @@ Please respond according to this protocol structure and complete the task."""
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
             protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
+            ToolPool.reset_log()
             agent = LangGraphAgent(adapter, protocol=protocol_instance)
 
             for tool_name in (tools or []):
@@ -420,7 +433,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"workflow_type": "research_pipeline", "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
+                metadata={"workflow_type": "research_pipeline", "protocol_used": protocol.value if protocol else "none", **protocol_metrics, "tool_log": self._capture_tool_log()},
                 error=error
             )
         
@@ -451,6 +464,7 @@ Please respond according to this protocol structure and complete the task."""
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
             protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
+            ToolPool.reset_log()
             agent = LlamaIndexAgent(adapter, protocol=protocol_instance)
             
             # Add tools
@@ -472,7 +486,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
+                metadata={"tools_count": len(tools or []), "agent_type": "ReAct", "protocol_used": protocol.value if protocol else "none", **protocol_metrics, "tool_log": self._capture_tool_log()},
                 error=error
             )
         
@@ -502,6 +516,7 @@ Please respond according to this protocol structure and complete the task."""
         try:
             protocol_instance = self.protocols.get(protocol) if protocol else None
             protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
+            ToolPool.reset_log()
             agent = SemanticKernelAgent(adapter, protocol=protocol_instance)
             response = agent.run(task)
             latency = time.time() - start_time
@@ -518,7 +533,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"kernel_type": "huggingface", "protocol_used": protocol.value if protocol else "none", **protocol_metrics},
+                metadata={"kernel_type": "huggingface", "protocol_used": protocol.value if protocol else "none", **protocol_metrics, "tool_log": self._capture_tool_log()},
                 error=error
             )
         
@@ -694,7 +709,8 @@ Please respond according to this protocol structure and complete the task."""
                 "latency": r.latency,
                 "success": r.success,
                 "error": r.error,
-                "metadata": r.metadata
+                "metadata": r.metadata,
+                "tool_log": (r.metadata or {}).get("tool_log", {})
             })
         
         # Write to file with pretty formatting
@@ -841,7 +857,47 @@ Please respond according to this protocol structure and complete the task."""
             print(f"  Reasoning tokens: {reasoning}")
             print(f"  Output tokens: {output}")
             print(f"  Total tokens: {reasoning + output}")
-        
+
+        # Tool usage summary
+        print("\n" + "-"*70)
+        print("Tool Usage Across All Runs:")
+        print("-"*70)
+        tool_totals: Dict[str, Dict] = {}
+        for r in self.results:
+            log = (r.metadata or {}).get("tool_log", {})
+            for tool_name, stats in log.get("per_tool", {}).items():
+                if tool_name not in tool_totals:
+                    tool_totals[tool_name] = {"calls": 0, "failures": 0, "duration_ms": []}
+                tool_totals[tool_name]["calls"]    += stats["calls"]
+                tool_totals[tool_name]["failures"] += stats["failures"]
+                tool_totals[tool_name]["duration_ms"].append(stats["avg_duration_ms"])
+
+        if tool_totals:
+            for tool_name, stats in sorted(tool_totals.items(), key=lambda x: -x[1]["calls"]):
+                avg_dur = sum(stats["duration_ms"]) / len(stats["duration_ms"])
+                fail_rate = stats["failures"] / stats["calls"] * 100 if stats["calls"] else 0
+                print(f"\n  {tool_name}:")
+                print(f"    Total calls:    {stats['calls']}")
+                print(f"    Failures:       {stats['failures']} ({fail_rate:.1f}%)")
+                print(f"    Avg duration:   {avg_dur:.1f}ms")
+
+            # Per-framework tool breakdown
+            print("\n" + "-"*70)
+            print("Tool Usage by Framework:")
+            print("-"*70)
+            fw_tools: Dict[str, Dict[str, int]] = {}
+            for r in self.results:
+                fw = r.framework
+                log = (r.metadata or {}).get("tool_log", {})
+                for tool_name, stats in log.get("per_tool", {}).items():
+                    fw_tools.setdefault(fw, {})
+                    fw_tools[fw][tool_name] = fw_tools[fw].get(tool_name, 0) + stats["calls"]
+            for fw, tools in sorted(fw_tools.items()):
+                calls_str = ", ".join(f"{t} ({c}x)" for t, c in sorted(tools.items(), key=lambda x: -x[1]))
+                print(f"\n  {fw}: {calls_str}")
+        else:
+            print("  No tool invocations recorded.")
+
         print("\n" + "="*70)
 
     def run_mind2web_evaluation(

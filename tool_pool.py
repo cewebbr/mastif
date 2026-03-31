@@ -26,6 +26,7 @@ The pool itself is a singleton — only one instance is ever created.
 """
 
 import copy
+import time as _time
 from typing import Dict, Optional
 
 
@@ -46,7 +47,37 @@ class ToolDefinition:
     def __init__(self, name: str, description: str, func):
         self.name = name
         self.description = description
-        self.func = func
+        self._raw_func = func
+        self.func = self._make_instrumented(func)
+
+    def _make_instrumented(self, func):
+        """Wrap func to log every invocation to ToolPool.invocation_log."""
+        tool_name = self.name
+
+        def _instrumented(query):
+            t0 = _time.perf_counter()
+            try:
+                result = func(query)
+                duration_ms = round((_time.perf_counter() - t0) * 1000, 2)
+                success = True
+                error = None
+            except Exception as e:
+                duration_ms = round((_time.perf_counter() - t0) * 1000, 2)
+                result = f"Tool error: {str(e)}"
+                success = False
+                error = str(e)
+
+            ToolPool.invocation_log.append({
+                "tool":        tool_name,
+                "input":       str(query)[:300],
+                "output":      str(result)[:300],
+                "duration_ms": duration_ms,
+                "success":     success,
+                "error":       error,
+            })
+            return result
+
+        return _instrumented
 
     def __repr__(self):
         return f"ToolDefinition(name={self.name!r})"
@@ -171,12 +202,69 @@ class _ToolPool:
 
     _instance: Optional["_ToolPool"] = None
     _registry: Dict[str, ToolDefinition] = {}
+    invocation_log: list = []          # shared across all tool calls
 
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._build_pool()
         return cls._instance
+
+    def reset_log(self):
+        """Clear the invocation log. Call before each test run."""
+        _ToolPool.invocation_log.clear()
+
+    def get_log(self) -> list:
+        """Return a snapshot of the current invocation log."""
+        return list(_ToolPool.invocation_log)
+
+    def get_log_summary(self) -> Dict:
+        """
+        Return aggregated statistics from the current invocation log.
+
+        Returns a dict with:
+            total_calls      : total number of tool invocations
+            successful_calls : number of successful invocations
+            failed_calls     : number of failed invocations
+            tools_used       : list of distinct tool names called
+            per_tool         : dict of per-tool stats (calls, avg_duration_ms, failures)
+        """
+        log = _ToolPool.invocation_log
+        if not log:
+            return {
+                "total_calls": 0,
+                "successful_calls": 0,
+                "failed_calls": 0,
+                "tools_used": [],
+                "per_tool": {},
+            }
+
+        per_tool: Dict[str, Dict] = {}
+        for entry in log:
+            name = entry["tool"]
+            if name not in per_tool:
+                per_tool[name] = {"calls": 0, "duration_ms": [], "failures": 0}
+            per_tool[name]["calls"] += 1
+            per_tool[name]["duration_ms"].append(entry["duration_ms"])
+            if not entry["success"]:
+                per_tool[name]["failures"] += 1
+
+        per_tool_summary = {
+            name: {
+                "calls":          s["calls"],
+                "avg_duration_ms": round(sum(s["duration_ms"]) / len(s["duration_ms"]), 2),
+                "failures":       s["failures"],
+            }
+            for name, s in per_tool.items()
+        }
+
+        return {
+            "total_calls":      len(log),
+            "successful_calls": sum(1 for e in log if e["success"]),
+            "failed_calls":     sum(1 for e in log if not e["success"]),
+            "tools_used":       sorted(per_tool.keys()),
+            "per_tool":         per_tool_summary,
+        }
 
     # ------------------------------------------------------------------
     # Pool construction
