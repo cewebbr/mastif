@@ -109,6 +109,7 @@ class SemanticKernelAgent:
                 if state["tools"] else "None"
             )
             prompt = f"""You are an AI agent operating in the Semantic Kernel framework.
+You MUST use at least one tool to solve this task.
 
 Task:
 {state['task']}
@@ -184,6 +185,7 @@ Instructions:
                 if state["tools"] else "None"
             )
             prompt = f"""You are an AI agent operating in the Semantic Kernel framework.
+You MUST use at least one tool to solve this task.
 
 Task:
 {state['task']}
