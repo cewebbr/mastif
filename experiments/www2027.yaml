@@ -23,17 +23,17 @@ judge_model: "gpt-4o-mini"
 
 protocols:
   - "STANDARD"
-  - "MCP"
+  # - "MCP"
   # - "A2A"
   # - "ACP"
 
 frameworks:
   - "CrewAI"
-  # - "Smolagents"
-  # - "LangChain"
-  # - "LangGraph"
-  # - "LlamaIndex"
-  # - "SemanticKernel"
+  - "Smolagents"
+  - "LangChain"
+  - "LangGraph"
+  - "LlamaIndex"
+  - "SemanticKernel"
 
 # ====== Used only in MIND2WEB test mode ====== 
 mind2web_num_tasks: 2 # Set to 2350 to run all tasks from the benchmark
