@@ -106,6 +106,20 @@ Task:
 Available Tools:
 {tools_text}
 
+IMPORTANT:
+- If the task requires external information, you MUST use a tool.
+- Do NOT answer from memory if tools are available.
+- Always prefer tool usage over guessing.
+
+Use this format:
+
+Thought: ...
+Action: tool_name
+Action Input: ...
+Observation: ...
+... (repeat as needed)
+Final Answer: ...
+
 Instructions:
 • Think step-by-step.
 • Create a detailed research plan for this task.
@@ -164,6 +178,20 @@ Step:
 
 Available Tools:
 {tools_text}
+
+IMPORTANT:
+- If the task requires external information, you MUST use a tool.
+- Do NOT answer from memory if tools are available.
+- Always prefer tool usage over guessing.
+
+Use this format:
+
+Thought: ...
+Action: tool_name
+Action Input: ...
+Observation: ...
+... (repeat as needed)
+Final Answer: ...
 
 Instructions:
 • Execute this step carefully.
