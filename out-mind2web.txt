@@ -1,0 +1,210 @@
+📖 Loading configuration from: /Users/vsantana/Documents/projects/agentic web/code/mastif/experiments/www2027.yaml
+✅️ Configuration loaded successfully
+======================================================================
+MIND2WEB BENCHMARK MODE
+======================================================================
+Loading Mind2Web dataset (split: train)...
+Attempting to load with streaming mode...
+Loading examples from stream...
+✅️ Loaded 2 tasks from Mind2Web (streaming mode)
+Using all 2 tasks
+
+======================================================================
+MIND2WEB BENCHMARK EVALUATION
+======================================================================
+
+Dataset Statistics:
+  Total Tasks: 2
+  Unique Domains: 1
+  Unique Websites: 1
+  Avg Actions per Task: 0.0
+
+Top Domains:
+  - Travel: 2 tasks
+
+----------------------------------------------------------------------
+You are about to run a Mind2Web test with the following configuration:
+Models: 1
+Protocols: 2
+Frameworks: 1
+Tasks: 2
+Total executions: 4
+----------------------------------------------------------------------
+Tools (15): web_search, web_browser, wikipedia, arxiv, python_repl, requests_get, beautifulsoup_scraper, pdf_reader, datetime, json_parser, pubmed, youtube_transcript, sympy, web_interaction, keyboard_interaction
+----------------------------------------------------------------------
+
+======================================================================
+Testing Model: deepseek-ai/DeepSeek-V3.2
+======================================================================
+
+----------------------------------------------------------------------
+PROTOCOL x FRAMEWORK COMBINATIONS
+----------------------------------------------------------------------
+
+──────────────────────────────────────────────────────────────────────
+Protocol: standard
+──────────────────────────────────────────────────────────────────────
+
+----------------------------------------------------------------------
+  CrewAI with standard:
+----------------------------------------------------------------------
+
+  Task 1/2: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent correctly identified the main goal of checking for restaurant pickup availability in Boston, but it misinterpreted the location as 'Boston, NY' instead of recognizing it as a likely typo for 'Boston, MA' initially.
+      Task Adherence: 80.00%
+       ↳ Rationale: The agent's reasoning was mostly focused on the task, detailing the steps taken to find restaurant availability, but included some redundant explanations about the Tock platform that were not directly necessary for the task.
+      Task Completion: 90.00%
+       ↳ Rationale: The agent provided a comprehensive list of available restaurants with specific details about pickup times and order requirements, effectively completing the task with actionable results.
+      Overall Score: 80.00%
+      Reasoning Steps: 14
+
+  Task 2/2: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent clearly articulated the task goals, including the specific requirements for a winery tour in Napa Valley with Mediterranean cuisine, wine tasting for 4 guests, and an outdoor setup on April 15 at 10 AM.
+      Task Adherence: 90.00%
+       ↳ Rationale: The agent remained focused on the task throughout the response, providing detailed reasoning and steps relevant to the booking process, though some sections included repetitive explanations of limitations.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent provided a thorough analysis and simulated steps for the booking process but ultimately could not complete the task due to lack of access to web automation tools, leaving the task unfulfilled.
+      Overall Score: 80.00%
+      Reasoning Steps: 14
+
+  CrewAI + standard Summary:
+    Success: 2/2 (100.0%)
+    Avg Latency: 163.98s
+    Avg Reasoning Steps: 14.0
+
+──────────────────────────────────────────────────────────────────────
+Protocol: MCP
+──────────────────────────────────────────────────────────────────────
+
+----------------------------------------------------------------------
+  CrewAI with MCP:
+----------------------------------------------------------------------
+
+  Task 1/2: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent clearly identifies the task goals, including the need to check for pickup restaurant availability in Boston, NY on a specific date and time for one guest. It also addresses the ambiguity in the location and outlines a fallback plan.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning remains focused on the task throughout the response, detailing a step-by-step execution plan that is directly relevant to achieving the task goals.
+      Task Completion: 70.00%
+       ↳ Rationale: While the agent provides a comprehensive manual execution plan, it ultimately cannot complete the task due to the lack of web automation tools. The response is actionable but lacks the final execution of the search.
+      Overall Score: 90.00%
+      Reasoning Steps: 14
+
+  Task 2/2: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent clearly identifies the task goals, including booking a winery tour in Napa Valley with specific requirements such as Mediterranean cuisine, wine tasting for 4 guests, and an outdoor setup on April 15 at 10 AM.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning remains focused on the task throughout the response, detailing a step-by-step plan that directly addresses the requirements of the booking process.
+      Task Completion: 50.00%
+       ↳ Rationale: While the agent provides a comprehensive plan and identifies necessary steps, it ultimately concludes that execution is impossible due to tool constraints, leaving the task incomplete.
+      Overall Score: 83.33%
+      Reasoning Steps: 14
+
+  CrewAI + MCP Summary:
+    Success: 2/2 (100.0%)
+    Avg Latency: 142.29s
+    Avg Reasoning Steps: 14.0
+
+======================================================================
+MIND2WEB EVALUATION SUMMARY
+======================================================================
+
+Overall Performance:
+  Judge Model: gpt-4o-mini
+  Tasks Evaluated: 4
+  Avg Task Understanding: 92.50%
+  Avg Task Adherence: 92.50%
+  Avg Task Completion: 65.00%
+  Avg Overall Score: 83.33%
+  Avg Reasoning Steps: 14.0
+
+Performance by Domain:
+  Travel:
+    Tasks: 4
+    Avg Understanding: 92.50%
+    Avg Task Adherence: 92.50%
+    Avg Completion: 65.00%
+
+======================================================================
+TEST SUMMARY
+======================================================================
+
+Overall Statistics:
+  Total Tests: 4
+  Successful: 4 (100.0%)
+  Failed: 0 (0.0%)
+  Total Reasoning Steps: 56
+  Avg Reasoning Steps per Test: 14.0
+
+----------------------------------------------------------------------
+Results by Framework:
+----------------------------------------------------------------------
+
+  CrewAI:
+    Success Rate: 4/4 (100.0%)
+    Avg Latency: 153.14s
+    Avg Reasoning Steps: 14.0
+
+----------------------------------------------------------------------
+Results by Protocol:
+----------------------------------------------------------------------
+
+  MCP:
+    Success Rate:          2/2 (100.0%)
+    Avg Latency:           142.29s
+    Avg Total Overhead:    0.057ms
+    Avg Send Overhead:     0.025ms
+    Avg Receive Overhead:  0.032ms
+    Avg Message Size:      1272 bytes
+
+  standard:
+    Success Rate:          2/2 (100.0%)
+    Avg Latency:           163.98s
+    Avg Total Overhead:    0.000ms
+    Avg Send Overhead:     0.000ms
+    Avg Receive Overhead:  0.000ms
+    Avg Message Size:      455 bytes
+
+----------------------------------------------------------------------
+Results by Model:
+----------------------------------------------------------------------
+
+  deepseek-ai/DeepSeek-V3.2:
+    Success Rate: 4/4 (100.0%)
+    Avg Latency: 153.14s
+    Avg Reasoning Steps: 14.0
+
+----------------------------------------------------------------------
+Token Usage by Model:
+----------------------------------------------------------------------
+Model: deepseek-ai/DeepSeek-V3.2
+  Reasoning tokens: 11559
+  Output tokens: 3970
+  Total tokens: 15529
+
+----------------------------------------------------------------------
+Tool Usage Across All Runs:
+----------------------------------------------------------------------
+  No tool invocations recorded.
+
+======================================================================
+✅️ Mind2Web results exported to ./logs/mind2web-results-20260331_091250.json
+
+✅️ Results exported to ./logs/results-20260331_091250.json
+
+======================================================================
+Mind2Web evaluation complete!
+Results: ./logs/mind2web-results-20260331_091250.json
+Full logs: ./logs/results-20260331_091250.json
+======================================================================
+
