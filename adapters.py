@@ -73,7 +73,10 @@ class HuggingFaceAdapter(BaseAdapter):
             }
             if tools is not None:
                 request_kwargs["tools"] = tools
-                request_kwargs["tool_choice"] = kwargs.get("tool_choice", "auto")
+                tool_choice = kwargs.get("tool_choice", "auto")
+                if isinstance(tool_choice, str):
+                    tool_choice = {"type": tool_choice}
+                request_kwargs["tool_choice"] = tool_choice
 
             response = self.client.chat_completion(**request_kwargs)
             
@@ -178,7 +181,10 @@ class OpenAIAdapter(BaseAdapter):
             }
             if tools is not None:
                 request_kwargs["tools"] = tools
-                request_kwargs["tool_choice"] = kwargs.get("tool_choice", "auto")
+                tool_choice = kwargs.get("tool_choice", "auto")
+                if isinstance(tool_choice, str):
+                    tool_choice = {"type": tool_choice}
+                request_kwargs["tool_choice"] = tool_choice
 
             response = client.chat.completions.create(**request_kwargs)
             return response.choices[0].message.content.strip()
