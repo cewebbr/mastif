@@ -308,7 +308,7 @@ Instructions:
                     verbose=False
                 )
                 config = ConfigExpert.get_instance()
-                report = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024)
+                report = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
                 state["final_report"] = report
 
                 self.reasoning_steps.append(ReasoningStep(

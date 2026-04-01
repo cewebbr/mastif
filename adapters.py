@@ -164,7 +164,7 @@ class OpenAIAdapter(BaseAdapter):
                 messages=[{"role": "user", "content": prompt}],
                 max_tokens=kwargs.get("max_tokens", config.get("max_tokens", 1024)),
                 temperature=kwargs.get("temperature", config.get("temperature", 0.7)),
-                tools=kwargs.get("tools", [])  # Pass tools if provided in kwargs
+                tools=kwargs.get("tools", []),  # Pass tools if provided in kwargs
                 tool_choice=kwargs.get("tool_choice", "auto")  # Let the model decide which tool to use if any
             )
             return response.choices[0].message.content.strip()

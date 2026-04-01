@@ -629,7 +629,7 @@ Please respond according to this protocol structure and complete the task."""
                     combination_results = []
                     
                     for i, task in enumerate(test_tasks, 1):
-                        print(f"    Task {i}/{len(test_tasks)}: {task[:50]}...")
+                        print(f"    Task {i}/{len(test_tasks)}: {task}")
                         
                         # Build arguments for test function
                         args = [adapter, task]

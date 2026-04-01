@@ -94,7 +94,7 @@ tasks:
 # ============================================= 
 
 tools:
-  # Core web tools
+  # Core & utility tools
   - name: "web_search"
     description: >
       Use this tool when you need to find information that is not already known or may be outdated.
@@ -119,6 +119,11 @@ tools:
       Use this to extract structured information from HTML content of a webpage.
       Typically used after fetching a page via web_browser or requests_get.
       Do NOT use if you only need raw text.
+
+  - name: "datetime"
+    description: >
+      Use this when you need the current date or time.
+      Do NOT guess or fabricate current timestamps.
 
   # Knowledge tools
   - name: "wikipedia"
@@ -169,12 +174,6 @@ tools:
       Use this to retrieve the transcript of a YouTube video.
       Input should be a video URL.
       Do NOT use if you only need metadata or summaries.
-
-  # Utility
-  - name: "datetime"
-    description: >
-      Use this when you need the current date or time.
-      Do NOT guess or fabricate current timestamps.
 
   # Mind2Web-style tools
   - name: "web_interaction"
