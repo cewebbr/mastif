@@ -990,7 +990,7 @@ class _ToolPool:
 
         return {
             "name": name,
-            "type": "tool",
+            "type": "function",
             "description": description,
             "parameters": {
                 "type": "object",
