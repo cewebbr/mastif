@@ -61,14 +61,21 @@ class HuggingFaceAdapter(BaseAdapter):
             # Conversational models expect a list of message objects
             messages = [{"role": "user", "content": prompt}]
             config = ConfigExpert.get_instance()
-            response = self.client.chat_completion(
-                messages=messages,
-                model=self.model_name,
-                max_tokens=kwargs.get("max_tokens", config.get("max_tokens", 1024)),
-                temperature=kwargs.get("temperature", config.get("temperature", 0.7)),
-                tools=kwargs.get("tools", []),  # Pass tools if provided in kwargs
-                tool_choice=kwargs.get("tool_choice", "auto")  # Let the model decide which tool to use if any
-            )
+            tools = kwargs.get("tools")
+            if not isinstance(tools, list):
+                tools = None
+
+            request_kwargs = {
+                "messages": messages,
+                "model": self.model_name,
+                "max_tokens": kwargs.get("max_tokens", config.get("max_tokens", 1024)),
+                "temperature": kwargs.get("temperature", config.get("temperature", 0.7)),
+            }
+            if tools is not None:
+                request_kwargs["tools"] = tools
+                request_kwargs["tool_choice"] = kwargs.get("tool_choice", "auto")
+
+            response = self.client.chat_completion(**request_kwargs)
             
             # Check if response is the expected object or an error dict
             if hasattr(response, 'choices') and len(response.choices) > 0:
@@ -159,14 +166,21 @@ class OpenAIAdapter(BaseAdapter):
         try:
             client = openai.OpenAI(api_key=self.api_key)
             config = ConfigExpert.get_instance()
-            response = client.chat.completions.create(
-                model=self.model_name,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=kwargs.get("max_tokens", config.get("max_tokens", 1024)),
-                temperature=kwargs.get("temperature", config.get("temperature", 0.7)),
-                tools=kwargs.get("tools", []),  # Pass tools if provided in kwargs
-                tool_choice=kwargs.get("tool_choice", "auto")  # Let the model decide which tool to use if any
-            )
+            tools = kwargs.get("tools")
+            if not isinstance(tools, list):
+                tools = None
+
+            request_kwargs = {
+                "model": self.model_name,
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": kwargs.get("max_tokens", config.get("max_tokens", 1024)),
+                "temperature": kwargs.get("temperature", config.get("temperature", 0.7)),
+            }
+            if tools is not None:
+                request_kwargs["tools"] = tools
+                request_kwargs["tool_choice"] = kwargs.get("tool_choice", "auto")
+
+            response = client.chat.completions.create(**request_kwargs)
             return response.choices[0].message.content.strip()
         except Exception as e:
             return f"Error: {str(e)}"
