@@ -957,6 +957,47 @@ class _ToolPool:
         """
         return [self.get_tool(name, framework) for name in self._registry]
 
+    def get_tool_schema(self, name: str) -> dict:
+        """
+        Return an API-compatible tool schema for tool calling.
+        """
+        if name not in self._registry:
+            raise KeyError(f"Tool '{name}' not found in pool. Available: {list(self._registry)}")
+
+        tool_def = self._registry[name]
+        schema_map = {
+            "web_search": ("Search the web using DuckDuckGo.", {"query": {"type": "string", "description": "Search query string."}}),
+            "web_browser": ("Navigate a headless browser to a URL and return visible page text.", {"url": {"type": "string", "description": "URL of the page to browse."}}),
+            "wikipedia": ("Look up a topic on Wikipedia and return a short summary.", {"query": {"type": "string", "description": "Topic to search on Wikipedia."}}),
+            "arxiv": ("Search academic papers on arXiv.", {"query": {"type": "string", "description": "Search query for arXiv papers."}}),
+            "python_repl": ("Execute a snippet of Python code in a sandboxed environment.", {"code": {"type": "string", "description": "Python code to execute."}}),
+            "requests_get": ("Perform an HTTP GET request to a URL and return raw text.", {"url": {"type": "string", "description": "URL to fetch."}}),
+            "beautifulsoup_scraper": ("Extract structured HTML content from a URL.", {"url": {"type": "string", "description": "URL to scrape."}}),
+            "pdf_reader": ("Extract text from a PDF URL or local file path.", {"source": {"type": "string", "description": "PDF URL or local file path."}}),
+            "datetime": ("Return the current UTC date and time.", {"input": {"type": "string", "description": "Optional input value (ignored)."}}),
+            "json_parser": ("Parse or query a JSON string.", {"input": {"type": "string", "description": "JSON string or key::JSON payload."}}),
+            "pubmed": ("Search PubMed for biomedical literature.", {"query": {"type": "string", "description": "Search query for PubMed."}}),
+            "youtube_transcript": ("Retrieve a YouTube transcript from a URL or video ID.", {"input": {"type": "string", "description": "YouTube video URL or ID."}}),
+            "sympy": ("Evaluate or simplify a symbolic math expression.", {"expression": {"type": "string", "description": "Mathematical expression to evaluate."}}),
+            "web_interaction": ("Interact with a web page using structured browser actions.", {"input": {"type": "string", "description": "JSON string containing a URL and action sequence."}}),
+            "web_keyboard_interaction": ("Interact with a web page using keyboard-driven browser actions.", {"input": {"type": "string", "description": "JSON string containing a URL and keyboard action sequence."}}),
+        }
+
+        description, properties = schema_map.get(
+            name,
+            (tool_def.description, {"input": {"type": "string", "description": "Tool input string."}})
+        )
+
+        return {
+            "name": name,
+            "description": description,
+            "parameters": {
+                "type": "object",
+                "properties": properties,
+                "required": list(properties.keys()),
+            },
+        }
+
     @property
     def available_tools(self) -> list:
         """List of tool names currently registered in the pool."""

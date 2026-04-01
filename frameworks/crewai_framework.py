@@ -32,6 +32,27 @@ class CrewAIAgent:
         self.tools: Dict[str, BaseTool] = {}
         self.reasoning_steps: List[ReasoningStep] = []
 
+    def _get_tool_payload(self) -> list:
+        tool_payload = []
+        for tool in self.tools.values():
+            name = getattr(tool, "name", str(tool))
+            description = getattr(tool, "description", "Custom tool")
+            try:
+                tool_payload.append(ToolPool.get_tool_schema(name))
+            except KeyError:
+                tool_payload.append({
+                    "name": name,
+                    "description": description,
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "input": {"type": "string", "description": "Tool input text."}
+                        },
+                        "required": ["input"],
+                    },
+                })
+        return tool_payload
+
     def add_tool(self, name: str, func: Optional[Callable] = None, description: Optional[str] = None):
         if name in ToolPool.available_tools:
             tool = ToolPool.get_tool(name, framework="crewai")
@@ -164,7 +185,7 @@ Instructions:
                     verbose=False
                 )
                 config = ConfigExpert.get_instance()
-                plan = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
+                plan = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=self._get_tool_payload())
                 state["plan"] = plan
                 state["step"] = 1
 
@@ -252,7 +273,7 @@ Instructions:
                     verbose=False
                 )
                 config = ConfigExpert.get_instance()
-                findings = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
+                findings = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=self._get_tool_payload())
                 state["research_results"] = state.get("research_results", []) + [findings]
                 state["step"] += 1
 
