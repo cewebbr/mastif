@@ -28,6 +28,7 @@ requests_soft_limit: 1000 # Prompts for confirmation if total API calls exceed t
 # Any model ID listed here must be available on HuggingFace or OpenAI.
 # Prefix OpenAI models with "gpt-". All others are treated as HuggingFace models.
 # TIP: Test models independently with a small number of tasks before scaling up to larger benchmarks.
+# IMPORTANT: If tool use is expected in the tasks, make sure to use models that support it (e.g., DeepSeek, GPT-4o, etc.)
 # -----------------------------------------------------------------------------
 
 models:
@@ -87,36 +88,102 @@ frameworks:
 # -----------------------------------------------------------------------------
 
 tools:
+  # Core web tools
   - name: "web_search"
-    description: "Search the web using DuckDuckGo"
+    description: >
+      Use this tool when you need to find information that is not already known or may be outdated.
+      This includes current events, recent facts, or unknown topics.
+      Input should be a clear search query.
+      Do NOT use this for simple reasoning or when the answer is already known.
+
   - name: "web_browser"
-    description: "Navigate a headless browser to a URL and return page text"
-  - name: "wikipedia"
-    description: "Look up a topic on Wikipedia and return a short summary"
-  - name: "arxiv"
-    description: "Search academic papers on arXiv"
-  - name: "python_repl"
-    description: "Execute a snippet of Python code in a sandboxed environment"
+    description: >
+      Use this tool to open and read the content of a specific webpage when you already have a URL.
+      Useful after performing a search.
+      Do NOT use this for searching—use web_search first.
+
   - name: "requests_get"
-    description: "Perform an HTTP GET request to a URL and return the response text"
+    description: >
+      Use this to retrieve raw content from a specific URL (API, webpage, or endpoint).
+      Prefer this for structured or programmatic access.
+      Do NOT use for general browsing or search.
+
   - name: "beautifulsoup_scraper"
-    description: "Extract structured HTML content from a URL"
-  - name: "pdf_reader"
-    description: "Extract text content from a PDF file or URL"
-  - name: "datetime"
-    description: "Return the current UTC date and time"
-  - name: "json_parser"
-    description: "Parse and query a JSON string"
+    description: >
+      Use this to extract structured information from HTML content of a webpage.
+      Typically used after fetching a page via web_browser or requests_get.
+      Do NOT use if you only need raw text.
+
+  # Knowledge tools
+  - name: "wikipedia"
+    description: >
+      Use this for general knowledge lookups on well-known topics, people, or concepts.
+      Faster and more reliable than web_search for encyclopedic content.
+      Do NOT use for recent or niche information.
+
+  - name: "arxiv"
+    description: >
+      Use this to find academic papers in technical or scientific domains.
+      Input should be a research topic or keywords.
+      Do NOT use for general knowledge or non-academic queries.
+
   - name: "pubmed"
-    description: "Search biomedical literature on PubMed"
-  - name: "youtube_transcript"
-    description: "Retrieve the transcript of a YouTube video"
+    description: >
+      Use this for biomedical or clinical research queries.
+      Input should be medical terms or research questions.
+      Do NOT use for general health advice or non-scientific queries.
+
+  # Computation & parsing
+  - name: "python_repl"
+    description: >
+      Use this for calculations, data processing, or executing code.
+      Required for precise arithmetic, transformations, or simulations.
+      Do NOT use for simple math that can be done mentally.
+
   - name: "sympy"
-    description: "Evaluate or simplify a symbolic mathematical expression"
+    description: >
+      Use this for symbolic mathematics such as algebra, equation solving, or simplification.
+      Prefer this over python_repl for symbolic operations.
+
+  - name: "json_parser"
+    description: >
+      Use this to parse, extract, or query structured JSON data.
+      Input should be a JSON string and query instructions.
+      Do NOT use for plain text.
+
+  # Content extraction
+  - name: "pdf_reader"
+    description: >
+      Use this to extract text from PDF files or PDF URLs.
+      Required when the content is not directly readable as text.
+      Do NOT use for HTML pages.
+
+  - name: "youtube_transcript"
+    description: >
+      Use this to retrieve the transcript of a YouTube video.
+      Input should be a video URL.
+      Do NOT use if you only need metadata or summaries.
+
+  # Utility
+  - name: "datetime"
+    description: >
+      Use this when you need the current date or time.
+      Do NOT guess or fabricate current timestamps.
+
+  # Mind2Web-style tools
   - name: "web_interaction"
-    description: "Interact with web pages in a more flexible way, allowing for complex navigation and data extraction (custom tool to encompass Mind2Web-style tasks)"
+    description: >
+      Use this to interact with web pages in multi-step tasks.
+      Includes clicking elements, filling forms, navigating pages, and extracting results.
+      Required for tasks involving user workflows on websites.
+      Do NOT use for simple retrieval—use web_search or web_browser instead.
+
   - name: "keyboard_interaction"
-    description: "Keyboard-driven browser interaction optimized for accessibility-style tasks (custom tool to encompass Mind2Web-style tasks)"
+    description: >
+      Use this for keyboard-based navigation of web interfaces.
+      Includes tabbing between elements, pressing enter, typing text, and triggering shortcuts.
+      Prefer this when interaction must simulate accessibility or non-mouse workflows.
+      Do NOT use for static content extraction.
 
 # =============================================================================
 # STANDARD test mode settings

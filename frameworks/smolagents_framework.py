@@ -104,7 +104,12 @@ class SmolAgentWrapper:
                 if state["tools"] else "None"
             )
             prompt = f"""You are an AI agent operating in the Smolagents framework.
-You MUST use at least one tool to solve this task.
+You have access to tools.
+
+If a task requires external information, browsing, interaction, or computation,
+you should use the appropriate tool instead of answering directly.
+
+Do not guess when a tool is more appropriate.
 
 Task:
 {state['task']}
@@ -170,7 +175,12 @@ Instructions:
                 if state["tools"] else "None"
             )
             prompt = f"""You are an AI agent operating in the Smolagents framework.
-You MUST use at least one tool to solve this task.
+You have access to tools.
+
+If a task requires external information, browsing, interaction, or computation,
+you should use the appropriate tool instead of answering directly.
+
+Do not guess when a tool is more appropriate.
 
 Task:
 {state['task']}
