@@ -139,7 +139,7 @@ Instructions:
 
             try:
                 config = ConfigExpert.get_instance()
-                plan = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
+                plan = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=tools_text)
                 state["plan"] = plan
                 state["step"] = 1
 
@@ -218,7 +218,7 @@ Instructions:
 
             try:
                 config = ConfigExpert.get_instance()
-                findings = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
+                findings = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=tools_text)
                 state["research_results"] = state.get("research_results", []) + [findings]
                 state["step"] += 1
 

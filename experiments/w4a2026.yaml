@@ -2,7 +2,7 @@ experiment:
   name: "W4A 2026 - WCAG Accessibility Evaluation"
   description: "Accessibility Expert evaluating WCAG 2.2 violations"
 
-temperature: 0.7 # Model temperature setting
+temperature: 0.1 # Model temperature setting -> lower values for more deterministic outputs, important for evaluation tasks; tool calling is a deterministic act;
 max_tokens: 1024 # Max tokens per request
 max_steps: 3 # Max research iterations per agent workflow
 requests_soft_limit: 1000 # Requires user confirmation if exceeded
@@ -19,7 +19,7 @@ models:
 
 # ====== Used only in MIND2WEB test mode ====== 
 # judge_model: "gpt-4o"
-judge_model: "gpt-4o-mini"
+# judge_model: "gpt-4o-mini"
 # =============================================  
 
 protocols:
@@ -136,72 +136,72 @@ tools:
       Do NOT use if you only need raw text.
 
   # Knowledge tools
-  - name: "wikipedia"
-    description: >
-      Use this for general knowledge lookups on well-known topics, people, or concepts.
-      Faster and more reliable than web_search for encyclopedic content.
-      Do NOT use for recent or niche information.
+  # - name: "wikipedia"
+  #   description: >
+  #     Use this for general knowledge lookups on well-known topics, people, or concepts.
+  #     Faster and more reliable than web_search for encyclopedic content.
+  #     Do NOT use for recent or niche information.
 
-  - name: "arxiv"
-    description: >
-      Use this to find academic papers in technical or scientific domains.
-      Input should be a research topic or keywords.
-      Do NOT use for general knowledge or non-academic queries.
+  # - name: "arxiv"
+  #   description: >
+  #     Use this to find academic papers in technical or scientific domains.
+  #     Input should be a research topic or keywords.
+  #     Do NOT use for general knowledge or non-academic queries.
 
-  - name: "pubmed"
-    description: >
-      Use this for biomedical or clinical research queries.
-      Input should be medical terms or research questions.
-      Do NOT use for general health advice or non-scientific queries.
+  # - name: "pubmed"
+  #   description: >
+  #     Use this for biomedical or clinical research queries.
+  #     Input should be medical terms or research questions.
+  #     Do NOT use for general health advice or non-scientific queries.
 
-  # Computation & parsing
-  - name: "python_repl"
-    description: >
-      Use this for calculations, data processing, or executing code.
-      Required for precise arithmetic, transformations, or simulations.
-      Do NOT use for simple math that can be done mentally.
+  # # Computation & parsing
+  # - name: "python_repl"
+  #   description: >
+  #     Use this for calculations, data processing, or executing code.
+  #     Required for precise arithmetic, transformations, or simulations.
+  #     Do NOT use for simple math that can be done mentally.
 
-  - name: "sympy"
-    description: >
-      Use this for symbolic mathematics such as algebra, equation solving, or simplification.
-      Prefer this over python_repl for symbolic operations.
+  # - name: "sympy"
+  #   description: >
+  #     Use this for symbolic mathematics such as algebra, equation solving, or simplification.
+  #     Prefer this over python_repl for symbolic operations.
 
-  - name: "json_parser"
-    description: >
-      Use this to parse, extract, or query structured JSON data.
-      Input should be a JSON string and query instructions.
-      Do NOT use for plain text.
+  # - name: "json_parser"
+  #   description: >
+  #     Use this to parse, extract, or query structured JSON data.
+  #     Input should be a JSON string and query instructions.
+  #     Do NOT use for plain text.
 
-  # Content extraction
-  - name: "pdf_reader"
-    description: >
-      Use this to extract text from PDF files or PDF URLs.
-      Required when the content is not directly readable as text.
-      Do NOT use for HTML pages.
+  # # Content extraction
+  # - name: "pdf_reader"
+  #   description: >
+  #     Use this to extract text from PDF files or PDF URLs.
+  #     Required when the content is not directly readable as text.
+  #     Do NOT use for HTML pages.
 
-  - name: "youtube_transcript"
-    description: >
-      Use this to retrieve the transcript of a YouTube video.
-      Input should be a video URL.
-      Do NOT use if you only need metadata or summaries.
+  # - name: "youtube_transcript"
+  #   description: >
+  #     Use this to retrieve the transcript of a YouTube video.
+  #     Input should be a video URL.
+  #     Do NOT use if you only need metadata or summaries.
 
-  # Utility
-  - name: "datetime"
-    description: >
-      Use this when you need the current date or time.
-      Do NOT guess or fabricate current timestamps.
+  # # Utility
+  # - name: "datetime"
+  #   description: >
+  #     Use this when you need the current date or time.
+  #     Do NOT guess or fabricate current timestamps.
 
-  # Mind2Web-style tools
-  - name: "web_interaction"
-    description: >
-      Use this to interact with web pages in multi-step tasks.
-      Includes clicking elements, filling forms, navigating pages, and extracting results.
-      Required for tasks involving user workflows on websites.
-      Do NOT use for simple retrieval—use web_search or web_browser instead.
+  # # Mind2Web-style tools
+  # - name: "web_interaction"
+  #   description: >
+  #     Use this to interact with web pages in multi-step tasks.
+  #     Includes clicking elements, filling forms, navigating pages, and extracting results.
+  #     Required for tasks involving user workflows on websites.
+  #     Do NOT use for simple retrieval—use web_search or web_browser instead.
 
-  - name: "keyboard_interaction"
-    description: >
-      Use this for keyboard-based navigation of web interfaces.
-      Includes tabbing between elements, pressing enter, typing text, and triggering shortcuts.
-      Prefer this when interaction must simulate accessibility or non-mouse workflows.
-      Do NOT use for static content extraction.
+  # - name: "keyboard_interaction"
+  #   description: >
+  #     Use this for keyboard-based navigation of web interfaces.
+  #     Includes tabbing between elements, pressing enter, typing text, and triggering shortcuts.
+  #     Prefer this when interaction must simulate accessibility or non-mouse workflows.
+  #     Do NOT use for static content extraction.

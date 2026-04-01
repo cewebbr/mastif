@@ -144,7 +144,7 @@ Instructions:
 
             try:
                 planning_agent.tools = state["tools"]
-                plan = self.adapter.generate(prompt, max_tokens=1024)
+                plan = self.adapter.generate(prompt, max_tokens=1024, tools=tools_text)
                 state["plan"] = plan
                 state["step"] = 1
 
@@ -221,7 +221,7 @@ Instructions:
 
             try:
                 research_agent.tools = state["tools"]
-                findings = self.adapter.generate(prompt, max_tokens=1024)
+                findings = self.adapter.generate(prompt, max_tokens=1024, tools=tools_text)
                 state["research_results"] = state.get("research_results", []) + [findings]
                 state["step"] += 1
 
