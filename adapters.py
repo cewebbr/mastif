@@ -62,7 +62,7 @@ class HuggingFaceAdapter(BaseAdapter):
             messages = [{"role": "user", "content": prompt}]
             config = ConfigExpert.get_instance()
             tools = kwargs.get("tools")
-            if not isinstance(tools, list):
+            if not isinstance(tools, list) or len(tools) == 0:
                 tools = None
 
             request_kwargs = {
@@ -73,10 +73,10 @@ class HuggingFaceAdapter(BaseAdapter):
             }
             if tools is not None:
                 request_kwargs["tools"] = tools
-                tool_choice = kwargs.get("tool_choice", "auto")
-                if isinstance(tool_choice, str):
-                    tool_choice = {"type": tool_choice}
-                request_kwargs["tool_choice"] = tool_choice
+                if "tool_choice" in kwargs:
+                    request_kwargs["tool_choice"] = kwargs["tool_choice"]
+                if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                    print(f"🔧 HuggingFace tool request | model={self.model_name} | tools={tools} | tool_choice={request_kwargs.get('tool_choice')}")
 
             response = self.client.chat_completion(**request_kwargs)
             
@@ -170,7 +170,7 @@ class OpenAIAdapter(BaseAdapter):
             client = openai.OpenAI(api_key=self.api_key)
             config = ConfigExpert.get_instance()
             tools = kwargs.get("tools")
-            if not isinstance(tools, list):
+            if not isinstance(tools, list) or len(tools) == 0:
                 tools = None
 
             request_kwargs = {
@@ -181,10 +181,10 @@ class OpenAIAdapter(BaseAdapter):
             }
             if tools is not None:
                 request_kwargs["tools"] = tools
-                tool_choice = kwargs.get("tool_choice", "auto")
-                if isinstance(tool_choice, str):
-                    tool_choice = {"type": tool_choice}
-                request_kwargs["tool_choice"] = tool_choice
+                if "tool_choice" in kwargs:
+                    request_kwargs["tool_choice"] = kwargs["tool_choice"]
+                if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                    print(f"🔧 OpenAI tool request | model={self.model_name} | tools={tools} | tool_choice={request_kwargs.get('tool_choice')}")
 
             response = client.chat.completions.create(**request_kwargs)
             return response.choices[0].message.content.strip()

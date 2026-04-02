@@ -25,6 +25,7 @@ Each framework requests a clone of the tool via get_tool(name, framework).
 The pool itself is a singleton — only one instance is ever created.
 """
 
+import os
 import copy
 import time as _time
 from typing import Dict, Optional
@@ -75,6 +76,12 @@ class ToolDefinition:
                 "success":     success,
                 "error":       error,
             })
+            if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                summary = f"🔧 Tool call | {tool_name} | success={success} | duration={duration_ms}ms"
+                if error:
+                    summary += f" | error={error}"
+                summary += f" | input={str(query)[:120]!r}"
+                print(summary)
             return result
 
         return _instrumented

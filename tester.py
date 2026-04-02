@@ -252,7 +252,8 @@ Please respond according to this protocol structure and complete the task."""
         role: str,
         task: str,
         context: Dict = None,
-        protocol: ProtocolType = None
+        protocol: ProtocolType = None,
+        tools: List[str] = None
     ) -> TestResult:
         """Test with CrewAI framework"""
         start_time = time.time()
@@ -262,6 +263,10 @@ Please respond according to this protocol structure and complete the task."""
             protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
             ToolPool.reset_log()
             agent = CrewAIAgent(adapter, role, protocol=protocol_instance)
+            if tools is None:
+                tools = list(self.standard_tools)
+            for tool_name in (tools or []):
+                agent.add_tool(tool_name)
             response = agent.execute_task(task, context)
             latency = time.time() - start_time
             success, error = self._check_response_for_errors(response, "CrewAI")
@@ -575,7 +580,7 @@ Please respond according to this protocol structure and complete the task."""
         
         # Map framework names to functions
         framework_map = {
-            "CrewAI": (self.test_with_crewai, {"role": "Web Automation Specialist"}),
+            "CrewAI": (self.test_with_crewai, {"role": "Web Automation Specialist", "tools": tools}),
             "Smolagents": (self.test_with_smolagents, {"tools": tools}),
             "LangChain": (self.test_with_langchain, {"tools": tools}),
             "LangGraph": (self.test_with_langgraph, {"tools": tools}),
@@ -629,7 +634,7 @@ Please respond according to this protocol structure and complete the task."""
                     combination_results = []
                     
                     for i, task in enumerate(test_tasks, 1):
-                        print(f"    Task {i}/{len(test_tasks)}: {task[:100]}")
+                        print(f"    Task {i}/{len(test_tasks)}: {task[:100]}...")
                         
                         # Build arguments for test function
                         args = [adapter, task]
@@ -929,7 +934,7 @@ Please respond according to this protocol structure and complete the task."""
 
         # Map framework names to functions
         framework_map = {
-            "CrewAI": (self.test_with_crewai, {"role": "Web Automation Specialist"}),
+            "CrewAI": (self.test_with_crewai, {"role": "Web Automation Specialist", "tools": tools}),
             "Smolagents": (self.test_with_smolagents, {"tools": tools}),
             "LangChain": (self.test_with_langchain, {"tools": tools}),
             "LangGraph": (self.test_with_langgraph, {}),
