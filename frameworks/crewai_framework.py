@@ -14,40 +14,36 @@ sys.path.append('..')
 from domain_model import ReasoningStep
 from tool_pool import ToolPool
 from config import ConfigExpert
+from workflow import WorkflowController
+
 
 class CrewAIAgent:
 
     def __init__(self, adapter, role: str, protocol=None):
-        """
-        Initialize CrewAI agent with specific role
-        
-        Args:
-            adapter: HuggingFace model adapter
-            role: Agent's role/expertise (e.g., "Research Analyst")
-        """
         self.adapter = adapter
         self.role = role
         self.protocol = protocol
-        self.chain = None
         self.tools: Dict[str, BaseTool] = {}
         self.reasoning_steps: List[ReasoningStep] = []
+        self._workflow_controller = WorkflowController(
+            framework_name="CrewAI",
+            generate_fn=self.adapter.generate,
+            get_tool_payload_fn=self._get_tool_payload,
+        )
 
     def _get_tool_payload(self) -> list:
         tool_payload = []
         for tool in self.tools.values():
             name = getattr(tool, "name", str(tool))
-            description = getattr(tool, "description", "Custom tool")
             try:
                 tool_payload.append(ToolPool.get_tool_schema(name))
             except KeyError:
                 tool_payload.append({
                     "name": name,
-                    "description": description,
+                    "description": getattr(tool, "description", "Custom tool"),
                     "parameters": {
                         "type": "object",
-                        "properties": {
-                            "input": {"type": "string", "description": "Tool input text."}
-                        },
+                        "properties": {"input": {"type": "string", "description": "Tool input text."}},
                         "required": ["input"],
                     },
                 })
@@ -80,11 +76,7 @@ class CrewAIAgent:
 
             tool_attrs = {
                 "__module__": __name__,
-                "__annotations__": {
-                    "name": str,
-                    "description": str,
-                    "args_schema": type,
-                },
+                "__annotations__": {"name": str, "description": str, "args_schema": type},
                 "name": name,
                 "description": description or f"Custom tool: {name}",
                 "args_schema": _Input,
@@ -94,288 +86,32 @@ class CrewAIAgent:
 
         self.tools[tool.name] = tool
 
-    def build_workflow(self):
+    def _build_crewai_primitives(self):
+        """Instantiate CrewAI Agent/Task/Crew primitives for structural purposes."""
         tool_list = list(self.tools.values())
+        config = ConfigExpert.get_instance()
+        workflow_cfg = config.get("workflow", {})
+        nodes = workflow_cfg.get("nodes", [])
 
-        planner_agent = Agent(
-            role="Planner",
-            goal="Create a detailed research plan for the given task",
-            backstory=f"You are a {self.role} agent operating in the CrewAI framework, responsible for planning research.",
-            tools=tool_list,
-            allow_delegation=False,
-            verbose=False
-        )
-
-        researcher_agent = Agent(
-            role="Researcher",
-            goal="Execute research steps and gather detailed findings",
-            backstory=f"You are a {self.role} agent operating in the CrewAI framework, responsible for executing research.",
-            tools=tool_list,
-            allow_delegation=False,
-            verbose=False
-        )
-
-        synthesizer_agent = Agent(
-            role="Synthesizer",
-            goal="Synthesize research findings into a comprehensive final report",
-            backstory=f"You are a {self.role} agent operating in the CrewAI framework, responsible for synthesizing findings.",
-            tools=tool_list,
-            allow_delegation=False,
-            verbose=False
-        )
-
-        def planning_node(state: dict) -> dict:
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought="Creating research plan",
-                action="plan",
-                action_input=state['task']
-            ))
-
-            tools_text = (
-                "\n".join(f"- {t.name}: {t.description}" for t in state["tools"].values())
-                if state["tools"] else "None"
+        primitives = {}
+        role_map = {
+            "plan":     ("Planner",     "Create a detailed research plan for the given task"),
+            "research": ("Researcher",  "Execute research steps and gather detailed findings"),
+            "report":   ("Synthesizer", "Synthesize research findings into a comprehensive final report"),
+        }
+        for node in nodes:
+            node_name = node["name"]
+            agent_role, agent_goal = role_map.get(node_name, (node_name.capitalize(), f"Execute the {node_name} step"))
+            agent = Agent(
+                role=agent_role,
+                goal=agent_goal,
+                backstory=f"You are a {self.role} agent operating in the CrewAI framework, responsible for the {node_name} phase.",
+                tools=tool_list,
+                allow_delegation=False,
+                verbose=False
             )
-            prompt = f"""You are a {self.role} agent operating in the CrewAI framework.
-You have access to tools.
-
-If a task requires external information, browsing, interaction, or computation,
-you should use the appropriate tool instead of answering directly.
-
-Do not guess when a tool is more appropriate.
-
-Task:
-{state['task']}
-
-Available Tools:
-{tools_text}
-
-IMPORTANT:
-- If the task requires external information, you MUST use a tool.
-- Do NOT answer from memory if tools are available.
-- Always prefer tool usage over guessing.
-
-Use this format:
-
-Thought: ...
-Action: tool_name
-Action Input: ...
-Observation: ...
-... (repeat as needed)
-Final Answer: ...
-
-Instructions:
-• Think step-by-step.
-• Create a detailed research plan for this task.
-• Use available tools where appropriate.
-• IMPORTANT: You must ONLY call tools by their exact registered names listed above. Do not invent or approximate tool names. Calling an unregistered tool will cause an error.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                planning_task = Task(
-                    description=prompt,
-                    expected_output="A detailed research plan",
-                    agent=planner_agent
-                )
-                Crew(
-                    agents=[planner_agent],
-                    tasks=[planning_task],
-                    process=Process.sequential,
-                    verbose=False
-                )
-                config = ConfigExpert.get_instance()
-                plan = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=self._get_tool_payload())
-                plan = "" if plan is None else plan
-                state["plan"] = plan
-                state["step"] = 1
-
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Research plan created",
-                    observation=f"Plan generated with {len(plan)} characters"
-                ))
-            except Exception as e:
-                state["plan"] = f"Planning error: {str(e)}"
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in planning phase",
-                    observation=str(e)
-                ))
-            return state
-
-        def research_node(state: dict) -> dict:
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought=f"Executing research step {state['step']}",
-                action="research",
-                action_input=f"Step {state['step']} of plan"
-            ))
-
-            tools_text = (
-                "\n".join(f"- {t.name}: {t.description}" for t in state["tools"].values())
-                if state["tools"] else "None"
-            )
-            prompt = f"""You are a {self.role} agent operating in the CrewAI framework.
-You have access to tools.
-
-If a task requires external information, browsing, interaction, or computation,
-you should use the appropriate tool instead of answering directly.
-
-Do not guess when a tool is more appropriate.
-
-Task:
-{state['task']}
-
-Plan:
-{state['plan']}
-
-Step:
-{state['step']}
-
-Available Tools:
-{tools_text}
-
-IMPORTANT:
-- If the task requires external information, you MUST use a tool.
-- Do NOT answer from memory if tools are available.
-- Always prefer tool usage over guessing.
-
-Use this format:
-
-Thought: ...
-Action: tool_name
-Action Input: ...
-Observation: ...
-... (repeat as needed)
-Final Answer: ...
-
-Instructions:
-• Execute this step carefully.
-• Provide detailed findings.
-• Use available tools where appropriate.
-• IMPORTANT: You must ONLY call tools by their exact registered names listed above. Do not invent or approximate tool names. Calling an unregistered tool will cause an error.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                research_task = Task(
-                    description=prompt,
-                    expected_output="Detailed findings for this research step",
-                    agent=researcher_agent
-                )
-                Crew(
-                    agents=[researcher_agent],
-                    tasks=[research_task],
-                    process=Process.sequential,
-                    verbose=False
-                )
-                config = ConfigExpert.get_instance()
-                findings = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=self._get_tool_payload())
-                state["research_results"] = state.get("research_results", []) + [findings]
-                state["step"] += 1
-
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought=f"Research step {state['step']-1} completed",
-                    observation=f"Findings: {findings}"
-                ))
-            except Exception as e:
-                state["research_results"] = state.get("research_results", []) + [f"Research error: {str(e)}"]
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in research phase",
-                    observation=str(e)
-                ))
-            return state
-
-        def synthesis_node(state: dict) -> dict:
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought="Synthesizing research findings into final report",
-                action="synthesize",
-                action_input=f"{len(state['research_results'])} research findings"
-            ))
-
-            results_text = "\n\n".join(state["research_results"])
-            prompt = f"""You are a {self.role} agent operating in the CrewAI framework.
-
-Task:
-{state['task']}
-
-Findings:
-{results_text}
-
-Instructions:
-• Synthesize these findings into a comprehensive final report.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                synthesis_task = Task(
-                    description=prompt,
-                    expected_output="A comprehensive final report synthesizing all findings",
-                    agent=synthesizer_agent
-                )
-                Crew(
-                    agents=[synthesizer_agent],
-                    tasks=[synthesis_task],
-                    process=Process.sequential,
-                    verbose=False
-                )
-                config = ConfigExpert.get_instance()
-                report = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
-                report = "" if report is None else report
-                state["final_report"] = report
-
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Final report synthesized successfully",
-                    observation=f"Report generated with {len(report)} characters"
-                ))
-            except Exception as e:
-                state["final_report"] = f"Synthesis error: {str(e)}"
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in synthesis phase",
-                    observation=str(e)
-                ))
-            return state
-
-        def should_continue(state: dict) -> bool:
-            if state["step"] > state["max_steps"]:
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Research iterations complete, moving to synthesis",
-                    observation=f"Completed {state['step']-1} research steps"
-                ))
-                return False
-
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought=f"Continuing research (step {state['step']})",
-                observation="More research needed"
-            ))
-            return True
-
-        def workflow(state: dict) -> dict:
-            state = planning_node(state)
-            state = research_node(state)
-            while should_continue(state):
-                state = research_node(state)
-            state = synthesis_node(state)
-            return state
-
-        self.chain = workflow
+            primitives[node_name] = agent
+        return primitives
 
     def execute_task(self, task: str, context: Dict = None) -> str:
         if self.protocol:
@@ -389,28 +125,22 @@ Execute according to protocol."""
         self.reasoning_steps = []
 
         try:
-            if self.chain is None:
-                self.build_workflow()
+            # Instantiate CrewAI primitives for structural purposes
+            crewai_agents = self._build_crewai_primitives()
 
             self.reasoning_steps.append(ReasoningStep(
                 step_number=1,
                 thought="Initializing CrewAI workflow",
-                observation="Chain compiled successfully"
+                observation=f"CrewAI agents ready: {list(crewai_agents.keys())}"
             ))
 
-            config = ConfigExpert.get_instance()
-            initial_state = {
-                "task": task,
-                "plan": "",
-                "research_results": [],
-                "final_report": "",
-                "step": 0,
-                "tools": self.tools,
-                "max_steps": config.get("max_steps", 2)
-            }
-
-            result = self.chain(initial_state)
-            return result.get("final_report", "No report generated")
+            state = self._workflow_controller.run(
+                task=task,
+                tools=self.tools,
+                role=self.role,
+                reasoning_steps=self.reasoning_steps,
+            )
+            return state.get("final_report", "No report generated")
 
         except Exception as e:
             self.reasoning_steps.append(ReasoningStep(

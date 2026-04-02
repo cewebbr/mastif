@@ -15,11 +15,13 @@ sys.path.append('..')
 from domain_model import ReasoningStep
 from tool_pool import ToolPool
 from config import ConfigExpert
+from workflow import WorkflowController
+
 
 class SemanticKernelAgent:
     """
     Semantic Kernel Agent Integration
-    
+
     Semantic Kernel (by Microsoft) provides enterprise-grade AI orchestration
     with a focus on skills/plugins and memory management.
     """
@@ -27,14 +29,13 @@ class SemanticKernelAgent:
     def __init__(self, adapter, protocol=None):
         """
         Initialize Semantic Kernel agent
-        
+
         Args:
             adapter: HuggingFace model adapter
         """
         self.adapter = adapter
         self.kernel = sk.Kernel()
         self.protocol = protocol
-        self.chain = None
         self.tools: Dict[str, KernelFunction] = {}
         self.reasoning_steps: List[ReasoningStep] = []
 
@@ -44,9 +45,57 @@ class SemanticKernelAgent:
             token=adapter.api_key if hasattr(adapter, "api_key") else None
         )
 
+        # Register workflow nodes as semantic functions in the kernel
+        self._register_workflow_functions()
+
+        self._workflow_controller = WorkflowController(
+            framework_name="Semantic Kernel",
+            generate_fn=self._sk_generate,
+            get_tool_payload_fn=self._get_tool_payload,
+        )
+
+    def _sk_generate(self, prompt: str, **kwargs) -> str:
+        """Generate via InferenceClient chat_completion."""
+        return self.inference_client.chat_completion(
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=kwargs.get("max_tokens", 1024)
+        ).choices[0].message.content
+
+    def _register_workflow_functions(self):
+        """Register each configured workflow node as a named SK kernel function."""
+        config = ConfigExpert.get_instance()
+        workflow_cfg = config.get("workflow", {})
+        nodes = workflow_cfg.get("nodes", [])
+        for node in nodes:
+            self.kernel.add_function(
+                plugin_name="workflow",
+                function_name=node["name"],
+                prompt=f"Execute the {node['name']} step for the given task.",
+                description=f"Workflow node: {node['name']}",
+                prompt_execution_settings=PromptExecutionSettings(
+                    max_tokens=config.get("max_tokens", 1024)
+                )
+            )
+
+    def _get_tool_payload(self) -> list:
+        tool_payload = []
+        for name in self.tools:
+            try:
+                tool_payload.append(ToolPool.get_tool_schema(name))
+            except KeyError:
+                tool_payload.append({
+                    "name": name,
+                    "description": "Custom tool",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {"input": {"type": "string", "description": "Tool input text."}},
+                        "required": ["input"],
+                    },
+                })
+        return tool_payload
+
     def add_tool(self, name: str, func: Optional[Callable] = None, description: Optional[str] = None):
         if name in ToolPool.available_tools:
-            # Retrieve KernelFunction from the pool and register it on this kernel
             kernel_fn = ToolPool.get_tool(name, framework="semantic_kernel")
             self.kernel.add_plugin(
                 plugin=type(name, (), {name: staticmethod(kernel_fn)})(),
@@ -80,7 +129,7 @@ class SemanticKernelAgent:
     def add_semantic_function(self, name: str, prompt_template: str, description: str):
         """
         Add a semantic function (AI-powered) to the kernel
-        
+
         Args:
             name: Function name
             prompt_template: Prompt template with {{$input}} placeholder
@@ -94,262 +143,13 @@ class SemanticKernelAgent:
             "description": description
         }
 
-    def build_workflow(self):
-
-        def planning_node(state: dict) -> dict:
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought="Creating research plan",
-                action="plan",
-                action_input=state['task']
-            ))
-
-            tools_text = (
-                "\n".join(f"- {name}: {fn.description}" for name, fn in state["tools"].items())
-                if state["tools"] else "None"
-            )
-            prompt = f"""You are an AI agent operating in the Semantic Kernel framework.
-You have access to tools.
-
-If a task requires external information, browsing, interaction, or computation,
-you should use the appropriate tool instead of answering directly.
-
-Do not guess when a tool is more appropriate.
-
-Task:
-{state['task']}
-
-Available Tools:
-{tools_text}
-
-IMPORTANT:
-- If the task requires external information, you MUST use a tool.
-- Do NOT answer from memory if tools are available.
-- Always prefer tool usage over guessing.
-
-Use this format:
-
-Thought: ...
-Action: tool_name
-Action Input: ...
-Observation: ...
-... (repeat as needed)
-Final Answer: ...
-
-Instructions:
-• Think step-by-step.
-• Create a detailed research plan for this task.
-• Use available tools where appropriate.
-• IMPORTANT: You must ONLY call tools by their exact registered names listed above. Do not invent or approximate tool names. Calling an unregistered tool will cause an error.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                # Register prompt as a semantic function in the kernel
-                planning_fn = self.kernel.add_function(
-                    plugin_name="research_workflow",
-                    function_name="planning",
-                    prompt=prompt,
-                    description="Creates a detailed research plan for the given task.",
-                    prompt_execution_settings=PromptExecutionSettings(max_tokens=1024)
-                )
-
-                # Use InferenceClient for remote Hugging Face inference
-                plan = self.inference_client.chat_completion(messages=[{"role": "user", "content": prompt}], max_tokens=1024).choices[0].message.content
-                state["plan"] = plan
-                state["step"] = 1
-
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Research plan created",
-                    observation=f"Plan generated with {len(plan)} characters"
-                ))
-            except Exception as e:
-                state["plan"] = f"Planning error: {str(e)}"
-                state["step"] = 1
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in planning phase",
-                    observation=str(e)
-                ))
-            return state
-
-        def research_node(state: dict) -> dict:
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought=f"Executing research step {state['step']}",
-                action="research",
-                action_input=f"Step {state['step']} of plan"
-            ))
-
-            tools_text = (
-                "\n".join(f"- {name}: {fn.description}" for name, fn in state["tools"].items())
-                if state["tools"] else "None"
-            )
-            prompt = f"""You are an AI agent operating in the Semantic Kernel framework.
-You have access to tools.
-
-If a task requires external information, browsing, interaction, or computation,
-you should use the appropriate tool instead of answering directly.
-
-Do not guess when a tool is more appropriate.
-
-Task:
-{state['task']}
-
-Plan:
-{state['plan']}
-
-Step:
-{state['step']}
-
-Available Tools:
-{tools_text}
-
-IMPORTANT:
-- If the task requires external information, you MUST use a tool.
-- Do NOT answer from memory if tools are available.
-- Always prefer tool usage over guessing.
-
-Use this format:
-
-Thought: ...
-Action: tool_name
-Action Input: ...
-Observation: ...
-... (repeat as needed)
-Final Answer: ...
-
-Instructions:
-• Execute this step carefully.
-• Provide detailed findings.
-• Use available tools where appropriate.
-• IMPORTANT: You must ONLY call tools by their exact registered names listed above. Do not invent or approximate tool names. Calling an unregistered tool will cause an error.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                # Register prompt as a semantic function in the kernel
-                research_fn = self.kernel.add_function(
-                    plugin_name="research_workflow",
-                    function_name=f"research_step_{state['step']}",
-                    prompt=prompt,
-                    description=f"Executes research step {state['step']} of the plan.",
-                    prompt_execution_settings=PromptExecutionSettings(max_tokens=1024)
-                )
-
-                # Use InferenceClient for remote Hugging Face inference
-                findings = self.inference_client.chat_completion(messages=[{"role": "user", "content": prompt}], max_tokens=1024).choices[0].message.content
-                state["research_results"] = state.get("research_results", []) + [findings]
-                state["step"] += 1
-
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought=f"Research step {state['step']-1} completed",
-                    observation=f"Findings: {findings}"
-                ))
-            except Exception as e:
-                state["research_results"] = state.get("research_results", []) + [f"Research error: {str(e)}"]
-                state["step"] += 1
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in research phase",
-                    observation=str(e)
-                ))
-            return state
-
-        def synthesis_node(state: dict) -> dict:
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought="Synthesizing research findings into final report",
-                action="synthesize",
-                action_input=f"{len(state['research_results'])} research findings"
-            ))
-
-            results_text = "\n\n".join(state["research_results"])
-            prompt = f"""You are an AI agent operating in the Semantic Kernel framework.
-
-Task:
-{state['task']}
-
-Findings:
-{results_text}
-
-Instructions:
-• Synthesize these findings into a comprehensive final report.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                # Register prompt as a semantic function in the kernel
-                synthesis_fn = self.kernel.add_function(
-                    plugin_name="research_workflow",
-                    function_name="synthesis",
-                    prompt=prompt,
-                    description="Synthesizes all research findings into a comprehensive final report.",
-                    prompt_execution_settings=PromptExecutionSettings(max_tokens=1024)
-                )
-
-                # Use InferenceClient for remote Hugging Face inference
-                report = self.inference_client.chat_completion(messages=[{"role": "user", "content": prompt}], max_tokens=1024).choices[0].message.content
-                state["final_report"] = report
-
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Final report synthesized successfully",
-                    observation=f"Report generated with {len(report)} characters"
-                ))
-            except Exception as e:
-                state["final_report"] = f"Synthesis error: {str(e)}"
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in synthesis phase",
-                    observation=str(e)
-                ))
-            return state
-
-        def should_continue(state: dict) -> bool:
-            if state["step"] > state["max_steps"]:
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Research iterations complete, moving to synthesis",
-                    observation=f"Completed {state['step']-1} research steps"
-                ))
-                return False
-
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought=f"Continuing research (step {state['step']})",
-                observation="More research needed"
-            ))
-            return True
-
-        def workflow(state: dict) -> dict:
-            state = planning_node(state)
-            state = research_node(state)
-            while should_continue(state):
-                state = research_node(state)
-            state = synthesis_node(state)
-            return state
-
-        self.chain = workflow
-
     def run(self, task: str) -> str:
         """
         Execute task using Hugging Face InferenceClient
-        
+
         Args:
             task: Task to execute
-            
+
         Returns:
             Execution result
         """
@@ -365,28 +165,19 @@ Execute according to protocol."""
         self.reasoning_steps = []
 
         try:
-            if self.chain is None:
-                self.build_workflow()
-
             self.reasoning_steps.append(ReasoningStep(
                 step_number=1,
                 thought="Initializing Semantic Kernel workflow",
                 observation="Kernel configured with HuggingFace InferenceClient"
             ))
 
-            config = ConfigExpert.get_instance()
-            initial_state = {
-                "task": task,
-                "plan": "",
-                "research_results": [],
-                "final_report": "",
-                "step": 0,
-                "tools": self.tools,
-                "max_steps": config.get("max_steps", 2)
-            }
-
-            result = self.chain(initial_state)
-            return result.get("final_report", "No report generated")
+            state = self._workflow_controller.run(
+                task=task,
+                tools=self.tools,
+                role="an AI agent",
+                reasoning_steps=self.reasoning_steps,
+            )
+            return state.get("final_report", "No report generated")
 
         except Exception as e:
             self.reasoning_steps.append(ReasoningStep(

@@ -5,7 +5,7 @@ LangGraph provides graph-based agent orchestration with explicit state managemen
 """
 
 import json
-from typing import List, TypedDict, Annotated
+from typing import List, Dict, Callable, Optional, TypedDict, Annotated
 import operator
 from langgraph.graph import StateGraph, END
 from langchain_core.tools import Tool
@@ -13,64 +13,46 @@ import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
 from config import ConfigExpert
-from typing import Callable, Optional
 from tool_pool import ToolPool
+from workflow import WorkflowController
+
 
 class LangGraphAgent:
-    """
-    LangGraph Stateful Workflow Integration
-    
-    LangGraph provides graph-based agent orchestration with explicit
-    state management. Ideal for complex, multi-step workflows
-    with conditional branching.
-    """
-    
-    def __init__(self, adapter, protocol=None):
-        """
-        Initialize LangGraph agent
 
-        Args:
-            adapter: HuggingFace model adapter
-            protocol: Optional protocol object
-        """
+    def __init__(self, adapter, protocol=None):
         self.adapter = adapter
         self.protocol = protocol
-        self.graph = None
+        self.tools: Dict[str, Tool] = {}
         self.reasoning_steps: List[ReasoningStep] = []
+        self._workflow_controller = WorkflowController(
+            framework_name="LangGraph",
+            generate_fn=self.adapter.generate,
+            get_tool_payload_fn=self._get_tool_payload,
+        )
+        # LangGraph StateGraph compiled once alongside the controller
+        self._graph = self._build_langgraph()
 
     def _get_tool_payload(self) -> list:
         tool_payload = []
-        for tool in getattr(self, "tools", {}).values():
+        for tool in self.tools.values():
             name = getattr(tool, "name", str(tool))
-            description = getattr(tool, "description", "Custom tool")
             try:
                 tool_payload.append(ToolPool.get_tool_schema(name))
             except KeyError:
                 tool_payload.append({
                     "name": name,
-                    "description": description,
+                    "description": getattr(tool, "description", "Custom tool"),
                     "parameters": {
                         "type": "object",
-                        "properties": {
-                            "input": {"type": "string", "description": "Tool input text."}
-                        },
+                        "properties": {"input": {"type": "string", "description": "Tool input text."}},
                         "required": ["input"],
                     },
                 })
         return tool_payload
 
     def add_tool(self, name: str, func: Optional[Callable] = None, description: Optional[str] = None):
-        """
-        Add a tool to the LangGraph agent.
-
-        For builtin tools available in the shared pool ("web_search", "web_browser",
-        "wikipedia", "web_interaction"), pass only the name — the tool is cloned from ToolPool.
-
-        For custom tools, provide both func and description.
-        """
         if not hasattr(self, "tools"):
             self.tools = {}
-
         if name in ToolPool.available_tools:
             tool = ToolPool.get_tool(name, framework="langchain")
         else:
@@ -86,26 +68,19 @@ class LangGraphAgent:
                     ))
                     return result
                 func = _dummy
-
-            tool = Tool(
-                name=name,
-                func=func,
-                description=description or f"Custom tool: {name}"
-            )
-
+            tool = Tool(name=name, func=func, description=description or f"Custom tool: {name}")
         self.tools[tool.name] = tool
 
-    def build_workflow(self):
+    def _build_langgraph(self):
         """
-        Build a multi-step workflow using LangGraph
-        
-        The workflow consists of:
-        1. Planning: Create plan
-        2. Research: Execute steps (iterative)
-        3. Synthesis: Compile final report
+        Compile a LangGraph StateGraph as a structural primitive.
+        The graph mirrors the configured workflow nodes but delegates
+        actual generation to WorkflowController.
         """
-        
-        # Define state structure
+        config = ConfigExpert.get_instance()
+        workflow_cfg = config.get("workflow", {})
+        nodes = workflow_cfg.get("nodes", [])
+
         class AgentState(TypedDict):
             task: str
             plan: str
@@ -113,206 +88,43 @@ class LangGraphAgent:
             final_report: str
             step: int
             max_steps: int
-        
-        # Node 1: Planning
-        def planning_node(state: AgentState) -> AgentState:
-            """Create a research plan"""
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought="Creating research plan",
-                action="plan",
-                action_input=state['task']
-            ))
-            
-            prompt = f"""You are an AI agent operating in the LangGraph framework.
 
-Task:
-{state['task']}
+        def make_node(node_name):
+            def _node(state: AgentState) -> AgentState:
+                # Delegate to WorkflowController for actual execution
+                return state
+            _node.__name__ = node_name
+            return _node
 
-Instructions:
-• Think step-by-step.
-• Create a detailed research plan for this task.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-            
-            try:
-                config = ConfigExpert.get_instance()
-                plan = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=self._get_tool_payload())
-                plan = "" if plan is None else plan
-                state["plan"] = plan
-                state["step"] = 1
-                
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Research plan created",
-                    observation=f"Plan generated with {len(plan)} characters"
-                ))
-            except Exception as e:
-                state["plan"] = f"Planning error: {str(e)}"
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in planning phase",
-                    observation=str(e)
-                ))
-            return state
-        
-        # Node 2: Research
-        def research_node(state: AgentState) -> AgentState:
-            """Execute research step"""
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought=f"Executing research step {state['step']}",
-                action="research",
-                action_input=f"Step {state['step']} of plan"
-            ))
-            
-            prompt = f"""You are an AI agent operating in the LangGraph framework.
-
-Task:
-{state['task']}
-
-Plan:
-{state['plan']}
-
-Step:
-{state['step']}
-
-Instructions:
-• Execute this step carefully.
-• Provide detailed findings.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                config = ConfigExpert.get_instance()
-                findings = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=self._get_tool_payload())
-                # Safe-guard against None from adapter; ensure text-type results for join.
-                findings = "" if findings is None else findings
-                state["research_results"] = state.get("research_results", []) + [str(findings)]
-                state["step"] += 1
-                
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought=f"Research step {state['step']-1} completed",
-                    observation=f"Findings: {findings}"
-                ))
-            except Exception as e:
-                err_txt = f"Research error: {str(e)}"
-                state["research_results"] = state.get("research_results", []) + [err_txt]
-                state["step"] += 1
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in research phase",
-                    observation=str(e)
-                ))
-            return state
-        
-        # Node 3: Synthesis
-        def synthesis_node(state: AgentState) -> AgentState:
-            """Synthesize final report"""
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought="Synthesizing research findings into final report",
-                action="synthesize",
-                action_input=f"{len(state['research_results'])} research findings"
-            ))
-            
-            results_text = "\n\n".join(state["research_results"])
-            prompt = f"""
-You are an AI agent operating in the LangGraph framework.
-
-Task:
-{state['task']}
-
-Findings:
-{results_text}
-
-Instructions:
-• Synthesize these findings into a comprehensive final report.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                config = ConfigExpert.get_instance()
-                report = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
-                report = "" if report is None else report
-                state["final_report"] = report
-                
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Final report synthesized successfully",
-                    observation=f"Report generated with {len(report)} characters"
-                ))
-            except Exception as e:
-                state["final_report"] = f"Synthesis error: {str(e)}"
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in synthesis phase",
-                    observation=str(e)
-                ))
-            return state
-        
-        # Conditional edge function
         def should_continue(state: AgentState) -> str:
-            """Decide whether to continue research or synthesize"""
             if state["step"] > state["max_steps"]:
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Research iterations complete, moving to synthesis",
-                    observation=f"Completed {state['step']-1} research steps"
-                ))
-                return "synthesize"
-            
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought=f"Continuing research (step {state['step']})",
-                observation="More research needed"
-            ))
-            return "research"
-        
-        # Build the graph
+                return "exit"
+            return "loop"
+
         workflow = StateGraph(AgentState)
-        
-        # Add nodes
-        workflow.add_node("plan", planning_node)
-        workflow.add_node("research", research_node)
-        workflow.add_node("synthesize", synthesis_node)
-        
-        # Add edges
-        workflow.set_entry_point("plan")
-        workflow.add_edge("plan", "research")
-        workflow.add_conditional_edges(
-            "research",
-            should_continue,
-            {
-                "research": "research",
-                "synthesize": "synthesize"
-            }
-        )
-        workflow.add_edge("synthesize", END)
-        
-        self.graph = workflow.compile()
-    
+        node_names = [n["name"] for n in nodes]
+
+        for name in node_names:
+            workflow.add_node(name, make_node(name))
+
+        if node_names:
+            workflow.set_entry_point(node_names[0])
+            for i in range(len(node_names) - 1):
+                current = node_names[i]
+                next_node = node_names[i + 1]
+                loop_node = nodes[i].get("loop", False)
+                if loop_node:
+                    workflow.add_conditional_edges(
+                        current, should_continue,
+                        {"loop": current, "exit": next_node}
+                    )
+                else:
+                    workflow.add_edge(current, next_node)
+            workflow.add_edge(node_names[-1], END)
+
+        return workflow.compile()
+
     def run(self, task: str) -> str:
-        """
-        Execute the LangGraph workflow
-        
-        Args:
-            task: Research task to execute
-            
-        Returns:
-            Final research report
-        """
-        # Wrap task with protocol if provided
         if self.protocol:
             formatted_msg = self.protocol.send_message(task, {})
             task = f"""Protocol: {self.protocol.__class__.__name__}
@@ -322,30 +134,22 @@ Instructions:
 Execute according to protocol."""
 
         self.reasoning_steps = []
-        
+
         try:
-            if self.graph is None:
-                self.build_workflow()
-            
             self.reasoning_steps.append(ReasoningStep(
                 step_number=1,
                 thought="Initializing LangGraph workflow",
-                observation="Graph compiled successfully"
+                observation="StateGraph compiled successfully"
             ))
-            
-            config = ConfigExpert.get_instance()
-            initial_state = {
-                "task": task,
-                "plan": "",
-                "research_results": [],
-                "final_report": "",
-                "step": 0,
-                "max_steps": config.get("max_steps", 2)
-            }
-            
-            result = self.graph.invoke(initial_state)
-            return result.get("final_report", "No report generated")
-        
+
+            state = self._workflow_controller.run(
+                task=task,
+                tools=self.tools,
+                role="an AI agent",
+                reasoning_steps=self.reasoning_steps,
+            )
+            return state.get("final_report", "No report generated")
+
         except Exception as e:
             self.reasoning_steps.append(ReasoningStep(
                 step_number=len(self.reasoning_steps) + 1,

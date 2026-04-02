@@ -1,7 +1,7 @@
 """
 LangChain Agent Integration
-s
-This module defines a LangChainAgent class that integrates with the LangChain framework
+
+This module defines a LangChainAgent class that integrates with the LangChain framework.
 """
 
 import json
@@ -12,65 +12,41 @@ sys.path.append('..')
 from domain_model import ReasoningStep
 from tool_pool import ToolPool
 from config import ConfigExpert
+from workflow import WorkflowController
+
 
 class LangChainAgent:
-    """
-    LangChain Stateful Workflow Integration
-
-    LangChain provides chain-based agent orchestration with explicit
-    state management. Ideal for complex, multi-step workflows
-    with conditional branching.
-    """
 
     def __init__(self, adapter, protocol=None):
-        """
-        Initialize LangChain agent
-
-        Args:
-            adapter: HuggingFace model adapter
-            protocol: Optional protocol object
-        """
         self.adapter = adapter
         self.protocol = protocol
-        self.chain = None
         self.tools: Dict[str, Tool] = {}
         self.reasoning_steps: List[ReasoningStep] = []
+        self._workflow_controller = WorkflowController(
+            framework_name="LangChain",
+            generate_fn=self.adapter.generate,
+            get_tool_payload_fn=self._get_tool_payload,
+        )
 
     def _get_tool_payload(self) -> list:
         tool_payload = []
         for tool in self.tools.values():
             name = getattr(tool, "name", str(tool))
-            description = getattr(tool, "description", "Custom tool")
             try:
                 tool_payload.append(ToolPool.get_tool_schema(name))
             except KeyError:
                 tool_payload.append({
                     "name": name,
-                    "description": description,
+                    "description": getattr(tool, "description", "Custom tool"),
                     "parameters": {
                         "type": "object",
-                        "properties": {
-                            "input": {"type": "string", "description": "Tool input text."}
-                        },
+                        "properties": {"input": {"type": "string", "description": "Tool input text."}},
                         "required": ["input"],
                     },
                 })
         return tool_payload
 
     def add_tool(self, name: str, func: Optional[Callable] = None, description: Optional[str] = None):
-        """
-        Add a tool to the agent.
-
-        For builtin tools available in the shared pool ("web_search", "web_browser",
-        "wikipedia"), pass only the name — the tool is cloned from ToolPool.
-
-        For custom tools, provide both func and description.
-
-        Args:
-            name:        Tool name. Use a pool tool name or any custom name.
-            func:        Callable for custom tools. Ignored for pool tools.
-            description: Description for custom tools. Ignored for pool tools.
-        """
         if name in ToolPool.available_tools:
             tool = ToolPool.get_tool(name, framework="langchain")
         else:
@@ -86,265 +62,14 @@ class LangChainAgent:
                     ))
                     return result
                 func = _dummy
-
             tool = Tool(
                 name=name,
                 func=func,
                 description=description or f"Custom tool: {name}"
             )
-
         self.tools[tool.name] = tool
 
-    def build_workflow(self):
-        """
-        Build a multi-step workflow using LangChain
-
-        The workflow consists of:
-        1. Planning: Create research plan
-        2. Research: Execute research steps (iterative)
-        3. Synthesis: Compile final report
-        """
-
-        # Node 1: Planning
-        def planning_node(state: dict) -> dict:
-            """Create a research plan"""
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought="Creating research plan",
-                action="plan",
-                action_input=state['task']
-            ))
-
-            tools_text = (
-                "\n".join(f"- {t.name}: {t.description}" for t in state["tools"].values())
-                if state["tools"] else "None"
-            )
-            prompt = f"""You are an AI agent operating in the LangChain framework.
-You have access to tools.
-
-If a task requires external information, browsing, interaction, or computation,
-you should use the appropriate tool instead of answering directly.
-
-Do not guess when a tool is more appropriate.
-
-Task:
-{state['task']}
-
-Available Tools:
-{tools_text}
-
-IMPORTANT:
-- If the task requires external information, you MUST use a tool.
-- Do NOT answer from memory if tools are available.
-- Always prefer tool usage over guessing.
-
-Use this format:
-
-Thought: ...
-Action: tool_name
-Action Input: ...
-Observation: ...
-... (repeat as needed)
-Final Answer: ...
-
-Instructions:
-• Think step-by-step.
-• Create a detailed research plan for this task.
-• Use available tools where appropriate.
-• IMPORTANT: You must ONLY call tools by their exact registered names listed above. Do not invent or approximate tool names. Calling an unregistered tool will cause an error.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                config = ConfigExpert.get_instance()
-                plan = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=self._get_tool_payload())
-                plan = "" if plan is None else plan
-                state["plan"] = plan
-                state["step"] = 1
-
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Research plan created",
-                    observation=f"Plan generated with {len(plan)} characters"
-                ))
-            except Exception as e:
-                state["plan"] = f"Planning error: {str(e)}"
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in planning phase",
-                    observation=str(e)
-                ))
-            return state
-
-        # Node 2: Research
-        def research_node(state: dict) -> dict:
-            """Execute research step"""
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought=f"Executing research step {state['step']}",
-                action="research",
-                action_input=f"Step {state['step']} of plan"
-            ))
-
-            tools_text = (
-                "\n".join(f"- {t.name}: {t.description}" for t in state["tools"].values())
-                if state["tools"] else "None"
-            )
-            prompt = f"""You are an AI agent operating in the LangChain framework.
-You have access to tools.
-
-If a task requires external information, browsing, interaction, or computation,
-you should use the appropriate tool instead of answering directly.
-
-Do not guess when a tool is more appropriate.
-
-Task:
-{state['task']}
-
-Plan:
-{state['plan']}
-
-Step:
-{state['step']}
-
-Available Tools:
-{tools_text}
-
-IMPORTANT:
-- If the task requires external information, you MUST use a tool.
-- Do NOT answer from memory if tools are available.
-- Always prefer tool usage over guessing.
-
-Use this format:
-
-Thought: ...
-Action: tool_name
-Action Input: ...
-Observation: ...
-... (repeat as needed)
-Final Answer: ...
-
-Instructions:
-• Execute this step carefully.
-• Provide detailed findings.
-• Use available tools where appropriate.
-• IMPORTANT: You must ONLY call tools by their exact registered names listed above. Do not invent or approximate tool names. Calling an unregistered tool will cause an error.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                config = ConfigExpert.get_instance()
-                findings = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=self._get_tool_payload())
-                state["research_results"] = state.get("research_results", []) + [findings]
-                state["step"] += 1
-
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought=f"Research step {state['step']-1} completed",
-                    observation=f"Findings: {findings}"
-                ))
-            except Exception as e:
-                state["research_results"] = state.get("research_results", []) + [f"Research error: {str(e)}"]
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in research phase",
-                    observation=str(e)
-                ))
-            return state
-
-        # Node 3: Synthesis
-        def synthesis_node(state: dict) -> dict:
-            """Synthesize final report"""
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought="Synthesizing research findings into final report",
-                action="synthesize",
-                action_input=f"{len(state['research_results'])} research findings"
-            ))
-
-            results_text = "\n\n".join(state["research_results"])
-            prompt = f"""
-You are an AI agent operating in the LangChain framework.
-
-Task:
-{state['task']}
-
-Findings:
-{results_text}
-
-Instructions:
-• Synthesize these findings into a comprehensive final report.
-• Do not skip steps.
-• Make intermediate decisions explicit.
-• If information is missing, state assumptions clearly.
-• If the output format is not provided in the task, favor correctness and completeness over brevity.
-"""
-
-            try:
-                config = ConfigExpert.get_instance()
-                report = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
-                report = "" if report is None else report
-                state["final_report"] = report
-
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Final report synthesized successfully",
-                    observation=f"Report generated with {len(report)} characters"
-                ))
-            except Exception as e:
-                state["final_report"] = f"Synthesis error: {str(e)}"
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Error in synthesis phase",
-                    observation=str(e)
-                ))
-            return state
-
-        # Conditional function
-        def should_continue(state: dict) -> bool:
-            """Decide whether to continue research or synthesize"""
-            if state["step"] > state["max_steps"]:
-                self.reasoning_steps.append(ReasoningStep(
-                    step_number=len(self.reasoning_steps) + 1,
-                    thought="Research iterations complete, moving to synthesis",
-                    observation=f"Completed {state['step']-1} research steps"
-                ))
-                return False
-
-            self.reasoning_steps.append(ReasoningStep(
-                step_number=len(self.reasoning_steps) + 1,
-                thought=f"Continuing research (step {state['step']})",
-                observation="More research needed"
-            ))
-            return True
-
-        def workflow(state: dict) -> dict:
-            state = planning_node(state)
-            state = research_node(state)
-            while should_continue(state):
-                state = research_node(state)
-            state = synthesis_node(state)
-            return state
-
-        self.chain = workflow
-
     def run(self, task: str) -> str:
-        """
-        Execute the LangChain workflow
-
-        Args:
-            task: Research task to execute
-
-        Returns:
-            Final research report
-        """
-        # Wrap task with protocol if provided
         if self.protocol:
             formatted_msg = self.protocol.send_message(task, {})
             task = f"""Protocol: {self.protocol.__class__.__name__}
@@ -356,28 +81,19 @@ Execute according to protocol."""
         self.reasoning_steps = []
 
         try:
-            if self.chain is None:
-                self.build_workflow()
-
             self.reasoning_steps.append(ReasoningStep(
                 step_number=1,
                 thought="Initializing LangChain workflow",
-                observation="Chain compiled successfully"
+                observation="WorkflowController ready"
             ))
 
-            config = ConfigExpert.get_instance()
-            initial_state = {
-                "task": task,
-                "plan": "",
-                "research_results": [],
-                "final_report": "",
-                "step": 0,
-                "tools": self.tools,
-                "max_steps": config.get("max_steps", 2)
-            }
-
-            result = self.chain(initial_state)
-            return result.get("final_report", "No report generated")
+            state = self._workflow_controller.run(
+                task=task,
+                tools=self.tools,
+                role="an AI agent",
+                reasoning_steps=self.reasoning_steps,
+            )
+            return state.get("final_report", "No report generated")
 
         except Exception as e:
             self.reasoning_steps.append(ReasoningStep(
