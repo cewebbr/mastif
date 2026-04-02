@@ -191,7 +191,9 @@ Instructions:
             try:
                 config = ConfigExpert.get_instance()
                 findings = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=self._get_tool_payload())
-                state["research_results"] = [findings]
+                # Safe-guard against None from adapter; ensure text-type results for join.
+                findings = "" if findings is None else findings
+                state["research_results"] = state.get("research_results", []) + [str(findings)]
                 state["step"] += 1
                 
                 self.reasoning_steps.append(ReasoningStep(
@@ -200,7 +202,8 @@ Instructions:
                     observation=f"Findings: {findings}"
                 ))
             except Exception as e:
-                state["research_results"] = [f"Research error: {str(e)}"]
+                err_txt = f"Research error: {str(e)}"
+                state["research_results"] = state.get("research_results", []) + [err_txt]
                 state["step"] += 1
                 self.reasoning_steps.append(ReasoningStep(
                     step_number=len(self.reasoning_steps) + 1,
