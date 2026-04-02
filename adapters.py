@@ -108,12 +108,12 @@ class HuggingFaceAdapter(BaseAdapter):
             }
             if tools is not None:
                 request_kwargs["tools"] = tools
+                normalized_choice = None
                 if "tool_choice" in kwargs:
                     normalized_choice = self._normalize_tool_choice(kwargs["tool_choice"])
-                    if normalized_choice is not None:
-                        request_kwargs["tool_choice"] = normalized_choice
-                    elif os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                    if normalized_choice is None and os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
                         print(f"⚠️ HuggingFace adapter dropped invalid tool_choice: {kwargs['tool_choice']}")
+                request_kwargs["tool_choice"] = normalized_choice if normalized_choice is not None else "auto"
                 if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
                     print(f"🔧 HuggingFace tool request | model={self.model_name} | tools={tools} | tool_choice={request_kwargs.get('tool_choice')}")
 
@@ -254,12 +254,12 @@ class OpenAIAdapter(BaseAdapter):
             }
             if tools is not None:
                 request_kwargs["tools"] = tools
+                normalized_choice = None
                 if "tool_choice" in kwargs:
                     normalized_choice = self._normalize_tool_choice(kwargs["tool_choice"])
-                    if normalized_choice is not None:
-                        request_kwargs["tool_choice"] = normalized_choice
-                    elif os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                    if normalized_choice is None and os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
                         print(f"⚠️ OpenAI adapter dropped invalid tool_choice: {kwargs['tool_choice']}")
+                request_kwargs["tool_choice"] = normalized_choice if normalized_choice is not None else "auto"
                 if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
                     print(f"🔧 OpenAI tool request | model={self.model_name} | tools={tools} | tool_choice={request_kwargs.get('tool_choice')}")
 

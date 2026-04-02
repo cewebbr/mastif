@@ -1002,12 +1002,15 @@ class _ToolPool:
         )
 
         return {
-            "name": name,
-            "description": description,
-            "parameters": {
-                "type": "object",
-                "properties": properties,
-                "required": list(properties.keys()),
+            "type": "function",
+            "function": {
+                "name": name,
+                "description": description,
+                "parameters": {
+                    "type": "object",
+                    "properties": properties,
+                    "required": list(properties.keys()),
+                },
             },
         }
 
@@ -1046,24 +1049,11 @@ class _ToolPool:
         for name in names:
             if name not in self._registry:
                 continue
-            tool_def = self._registry[name]
-            schemas.append({
-                "type": "function",
-                "function": {
-                    "name": tool_def.name,
-                    "description": tool_def.description,
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "query": {
-                                "type": "string",
-                                "description": "Input query or argument for the tool."
-                            }
-                        },
-                        "required": ["query"]
-                    }
-                }
-            })
+            schema = self.get_tool_schema(name)
+            if isinstance(schema, dict) and schema.get("type") == "function":
+                schemas.append(schema)
+            elif isinstance(schema, dict) and "name" in schema and "parameters" in schema:
+                schemas.append({"type": "function", "function": schema})
         return schemas
 
 # Singleton instance — import this directly
