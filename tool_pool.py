@@ -120,6 +120,7 @@ def _to_crewai(tool_def: ToolDefinition):
         tool_def.name,
         (CrewBaseTool,),
         {
+            "__module__": __name__,
             "__annotations__": {
                 "name": str,
                 "description": str,

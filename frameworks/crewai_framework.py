@@ -79,6 +79,7 @@ class CrewAIAgent:
                 return func(query)
 
             tool_attrs = {
+                "__module__": __name__,
                 "__annotations__": {
                     "name": str,
                     "description": str,
