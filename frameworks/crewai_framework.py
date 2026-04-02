@@ -189,6 +189,7 @@ Instructions:
                 )
                 config = ConfigExpert.get_instance()
                 plan = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024), tools=self._get_tool_payload())
+                plan = "" if plan is None else plan
                 state["plan"] = plan
                 state["step"] = 1
 
@@ -333,6 +334,7 @@ Instructions:
                 )
                 config = ConfigExpert.get_instance()
                 report = self.adapter.generate(prompt, max_tokens=config.get("max_tokens", 1024))
+                report = "" if report is None else report
                 state["final_report"] = report
 
                 self.reasoning_steps.append(ReasoningStep(

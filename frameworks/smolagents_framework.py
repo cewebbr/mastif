@@ -166,6 +166,7 @@ Instructions:
             try:
                 planning_agent.tools = state["tools"]
                 plan = self.adapter.generate(prompt, max_tokens=1024, tools=self._get_tool_payload())
+                plan = "" if plan is None else plan
                 state["plan"] = plan
                 state["step"] = 1
 
@@ -288,6 +289,7 @@ Instructions:
             try:
                 synthesis_agent.tools = state["tools"]
                 report = self.adapter.generate(prompt, max_tokens=1024)
+                report = "" if report is None else report
                 state["final_report"] = report
 
                 self.reasoning_steps.append(ReasoningStep(
