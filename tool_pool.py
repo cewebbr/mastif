@@ -972,6 +972,7 @@ class _ToolPool:
             raise KeyError(f"Tool '{name}' not found in pool. Available: {list(self._registry)}")
 
         tool_def = self._registry[name]
+        # TODO: Build the schema_map based on the tools selected in the YAML file
         schema_map = {
             "web_search": ("Search the web using DuckDuckGo.", {"query": {"type": "string", "description": "Search query string."}}),
             "web_browser": ("Navigate a headless browser to a URL and return visible page text.", {"url": {"type": "string", "description": "URL of the page to browse."}}),
