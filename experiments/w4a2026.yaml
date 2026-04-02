@@ -228,12 +228,12 @@ workflow:
       loop: false
 
     - name: "research"
-      prompt_template: "prompts/research_react.txt"
+      prompt_template: "prompts/react-loop.txt"
       output_key: "research_results"
       loop: true
 
     - name: "synthesize"
-      prompt_template: "prompts/synthesize.txt"
+      prompt_template: "prompts/react-synthesize.txt"
       output_key: "final_report"
       loop: false
 
