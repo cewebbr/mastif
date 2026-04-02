@@ -146,3 +146,42 @@ tools:
       Includes tabbing between elements, pressing enter, typing text, and triggering shortcuts.
       Prefer this when interaction must simulate accessibility or non-mouse workflows.
       Do NOT use for static content extraction.
+
+# -----------------------------------------------------------------------------
+# Workflow
+# Defines the sequence of nodes each agent executes.
+# Each node references a prompt template file under the prompts/ folder.
+#
+# Node fields:
+#   name            : Unique node identifier
+#   prompt_template : Path to the prompt template file (relative to this config)
+#   output_key      : State dict key where the node's output is stored
+#   loop            : If true, the node repeats until step > max_steps
+#
+# entry_node : First node to execute
+# exit_node  : Last node; its output_key value is returned as the final answer
+# -----------------------------------------------------------------------------
+
+# TODO: Change the workflow to better reflect tasks from Mind2Web.
+# For Mind2Web tasks specifically, the workflow should mirror how a human uses a browser:
+# Navigate → Observe page → Identify target element → Interact → Observe result → Repeat or conclude
+
+workflow:
+  nodes:
+    - name: "plan"
+      prompt_template: "prompts/plan.txt"
+      output_key: "plan"
+      loop: false
+
+    - name: "research"
+      prompt_template: "prompts/research.txt"
+      output_key: "research_results"
+      loop: true
+
+    - name: "report"
+      prompt_template: "prompts/report.txt"
+      output_key: "final_report"
+      loop: false
+
+  entry_node: "plan"
+  exit_node: "report"
