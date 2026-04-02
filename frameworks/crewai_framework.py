@@ -84,8 +84,8 @@ class CrewAIAgent:
                     "description": str,
                     "args_schema": type,
                 },
-                "name": Field(default=name),
-                "description": Field(default=description or f"Custom tool: {name}"),
+                "name": name,
+                "description": description or f"Custom tool: {name}",
                 "args_schema": _Input,
                 "_run": _run,
             }
