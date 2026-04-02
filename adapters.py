@@ -11,6 +11,7 @@ from llama_index.core.llms import CustomLLM, CompletionResponse, LLMMetadata
 from llama_index.core.llms.callbacks import llm_completion_callback
 from abc import ABC, abstractmethod
 from config import ConfigExpert
+from tool_pool import ToolPool
 
 class BaseAdapter(ABC):
     """
@@ -81,6 +82,23 @@ class HuggingFaceAdapter(BaseAdapter):
             tools = kwargs.get("tools")
             if not isinstance(tools, list) or len(tools) == 0:
                 tools = None
+            else:
+                # Ensure every entry is a plain OpenAI-schema dict with "type": "function"
+                # If entries are framework tool objects or bare name strings, convert via ToolPool
+                normalised = []
+                for t in tools:
+                    if isinstance(t, dict) and t.get("type") == "function":
+                        normalised.append(t)          # already correct schema
+                    elif isinstance(t, str):
+                        schemas = ToolPool.get_openai_schemas([t])
+                        normalised.extend(schemas)
+                    else:
+                        # Framework tool object — try common name attributes
+                        name = getattr(t, "name", None) or getattr(t, "tool_name", None)
+                        if name:
+                            schemas = ToolPool.get_openai_schemas([name])
+                            normalised.extend(schemas)
+                tools = normalised if normalised else None
 
             request_kwargs = {
                 "messages": messages,
@@ -210,6 +228,23 @@ class OpenAIAdapter(BaseAdapter):
             tools = kwargs.get("tools")
             if not isinstance(tools, list) or len(tools) == 0:
                 tools = None
+            else:
+                # Ensure every entry is a plain OpenAI-schema dict with "type": "function"
+                # If entries are framework tool objects or bare name strings, convert via ToolPool
+                normalised = []
+                for t in tools:
+                    if isinstance(t, dict) and t.get("type") == "function":
+                        normalised.append(t)          # already correct schema
+                    elif isinstance(t, str):
+                        schemas = ToolPool.get_openai_schemas([t])
+                        normalised.extend(schemas)
+                    else:
+                        # Framework tool object — try common name attributes
+                        name = getattr(t, "name", None) or getattr(t, "tool_name", None)
+                        if name:
+                            schemas = ToolPool.get_openai_schemas([name])
+                            normalised.extend(schemas)
+                tools = normalised if normalised else None
 
             request_kwargs = {
                 "model": self.model_name,

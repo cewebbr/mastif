@@ -1016,6 +1016,55 @@ class _ToolPool:
         """List of tool names currently registered in the pool."""
         return list(self._registry.keys())
 
+    def get_openai_schemas(self, names: list = None) -> list:
+        """
+        Return tools as OpenAI-compatible function-calling schema dicts.
+        Compatible with both OpenAI API and HuggingFace chat_completion tools parameter.
+
+        Args:
+            names: List of tool names to include. Defaults to all registered tools.
+
+        Returns:
+            List of dicts in the format:
+            {
+                "type": "function",
+                "function": {
+                    "name": "...",
+                    "description": "...",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {"type": "string", "description": "Input query or argument."}
+                        },
+                        "required": ["query"]
+                    }
+                }
+            }
+        """
+        names = names or list(self._registry.keys())
+        schemas = []
+        for name in names:
+            if name not in self._registry:
+                continue
+            tool_def = self._registry[name]
+            schemas.append({
+                "type": "function",
+                "function": {
+                    "name": tool_def.name,
+                    "description": tool_def.description,
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "Input query or argument for the tool."
+                            }
+                        },
+                        "required": ["query"]
+                    }
+                }
+            })
+        return schemas
 
 # Singleton instance — import this directly
 ToolPool = _ToolPool()
