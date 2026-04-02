@@ -38,6 +38,23 @@ class HuggingFaceAdapter(BaseAdapter):
     across different frameworks. Handles API authentication, request formatting,
     and response parsing.
     """
+
+    @staticmethod
+    def _normalize_tool_choice(tool_choice):
+        if tool_choice is None:
+            return None
+        if isinstance(tool_choice, str):
+            normalized = tool_choice.strip().lower()
+            if normalized in ("auto", "none"):
+                return normalized
+            return tool_choice
+        if isinstance(tool_choice, dict):
+            t_type = tool_choice.get("type")
+            if t_type in ("auto", "none"):
+                return t_type
+            if t_type == "function" and isinstance(tool_choice.get("function"), dict):
+                return tool_choice
+        return None
     
     def __init__(self, model_name: str, api_key: Optional[str] = None):
         """
@@ -74,7 +91,11 @@ class HuggingFaceAdapter(BaseAdapter):
             if tools is not None:
                 request_kwargs["tools"] = tools
                 if "tool_choice" in kwargs:
-                    request_kwargs["tool_choice"] = kwargs["tool_choice"]
+                    normalized_choice = self._normalize_tool_choice(kwargs["tool_choice"])
+                    if normalized_choice is not None:
+                        request_kwargs["tool_choice"] = normalized_choice
+                    elif os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                        print(f"⚠️ HuggingFace adapter dropped invalid tool_choice: {kwargs['tool_choice']}")
                 if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
                     print(f"🔧 HuggingFace tool request | model={self.model_name} | tools={tools} | tool_choice={request_kwargs.get('tool_choice')}")
 
@@ -148,6 +169,23 @@ class OpenAIAdapter(BaseAdapter):
     across different frameworks. Handles API authentication, request formatting,
     and response parsing.
     """
+
+    @staticmethod
+    def _normalize_tool_choice(tool_choice):
+        if tool_choice is None:
+            return None
+        if isinstance(tool_choice, str):
+            normalized = tool_choice.strip().lower()
+            if normalized in ("auto", "none"):
+                return normalized
+            return tool_choice
+        if isinstance(tool_choice, dict):
+            t_type = tool_choice.get("type")
+            if t_type in ("auto", "none"):
+                return t_type
+            if t_type == "function" and isinstance(tool_choice.get("function"), dict):
+                return tool_choice
+        return None
     
     def __init__(self, model_name: Optional[str] = None, api_key: Optional[str] = None):
         """
@@ -182,7 +220,11 @@ class OpenAIAdapter(BaseAdapter):
             if tools is not None:
                 request_kwargs["tools"] = tools
                 if "tool_choice" in kwargs:
-                    request_kwargs["tool_choice"] = kwargs["tool_choice"]
+                    normalized_choice = self._normalize_tool_choice(kwargs["tool_choice"])
+                    if normalized_choice is not None:
+                        request_kwargs["tool_choice"] = normalized_choice
+                    elif os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                        print(f"⚠️ OpenAI adapter dropped invalid tool_choice: {kwargs['tool_choice']}")
                 if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
                     print(f"🔧 OpenAI tool request | model={self.model_name} | tools={tools} | tool_choice={request_kwargs.get('tool_choice')}")
 

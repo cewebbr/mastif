@@ -78,16 +78,14 @@ class CrewAIAgent:
             def _run(self_tool, query: str) -> str:
                 return func(query)
 
-            tool = type(
-                name,
-                (BaseTool,),
-                {
-                    "name": name,
-                    "description": description or f"Custom tool: {name}",
-                    "args_schema": _Input,
-                    "_run": _run,
-                },
-            )()
+            tool_attrs = {
+                "__annotations__": {"name": str, "description": str},
+                "name": name,
+                "description": description or f"Custom tool: {name}",
+                "args_schema": _Input,
+                "_run": _run,
+            }
+            tool = type(name, (BaseTool,), tool_attrs)()
 
         self.tools[tool.name] = tool
 
