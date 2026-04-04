@@ -706,10 +706,32 @@ Please respond according to this protocol structure and complete the task."""
                         print(f"    Tools used: {self._format_tool_usage(tool_usage)}")
                         print(f"    Avg Latency: {avg_latency:.2f}s")
                         print(f"    Avg Steps: {avg_steps:.1f}")
+                        
+                        # Save partial snapshot after each protocol-framework combination
+                        suffix = f"-{model_name.replace('/', '-')}-{protocol.value}-{framework_name.replace(' ', '-')}"
+                        self.save_partial_snapshot(suffix)
             
             print(f"\n{'='*70}")
             print(f"Model {model_name} Complete")
             print(f"{'='*70}")
+            
+            # Save partial snapshot after each model
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            partial_filename = f"./logs/partial-results-{model_name.replace('/', '-')}-{timestamp}.json"
+            self.export_results(partial_filename)
+            print(f"💾 Partial results saved: {partial_filename}")
+    
+    def save_partial_snapshot(self, suffix: str = ""):
+        """
+        Save current results to a partial snapshot file
+        
+        Args:
+            suffix: Optional suffix for the filename
+        """
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"./logs/partial-results-{timestamp}{suffix}.json"
+        self.export_results(filename)
+        print(f"💾 Partial snapshot saved: {filename}")
     
     def export_results(self, filename: str = "test_results.json"):
         """
@@ -1132,6 +1154,16 @@ Please respond according to this protocol structure and complete the task."""
                         print(f"    Success: {len(successes)}/{len(combination_results)} ({len(successes)/len(combination_results)*100:.1f}%)")
                         print(f"    Avg Latency: {avg_latency:.2f}s")
                         print(f"    Avg Reasoning Steps: {avg_reasoning_steps:.1f}")
+                        
+                        # Save partial snapshot after each protocol-framework combination
+                        suffix = f"-mind2web-{model_name.replace('/', '-')}-{protocol.value}-{framework_name.replace(' ', '-')}"
+                        self.save_partial_snapshot(suffix)
+
+            # Save partial snapshot after each model
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            partial_filename = f"./logs/partial-mind2web-{model_name.replace('/', '-')}-{timestamp}.json"
+            self.export_mind2web_results(partial_filename)
+            print(f"💾 Partial Mind2Web results saved: {partial_filename}")
 
         # Print aggregate metrics
         print("\n" + "="*70)
