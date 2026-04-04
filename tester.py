@@ -245,6 +245,40 @@ Please respond according to this protocol structure and complete the task."""
         summary = ToolPool.get_log_summary()
         ToolPool.reset_log()
         return summary
+    
+    def _aggregate_tool_usage(self, results: List[TestResult]) -> Dict[str, int]:
+        """
+        Aggregate tool usage counts from a list of test results.
+        
+        Args:
+            results: List of TestResult objects
+            
+        Returns:
+            Dict mapping tool names to total call counts
+        """
+        tool_usage = {}
+        for result in results:
+            tool_log = result.metadata.get("tool_log", {})
+            per_tool = tool_log.get("per_tool", {})
+            for tool_name, stats in per_tool.items():
+                calls = stats.get("calls", 0)
+                tool_usage[tool_name] = tool_usage.get(tool_name, 0) + calls
+        return tool_usage
+    
+    def _format_tool_usage(self, tool_usage: Dict[str, int]) -> str:
+        """
+        Format tool usage dict into a readable string.
+        
+        Args:
+            tool_usage: Dict mapping tool names to call counts
+            
+        Returns:
+            Formatted string like "web_search (5), web_browser (3)"
+        """
+        if not tool_usage:
+            return "None"
+        sorted_tools = sorted(tool_usage.items(), key=lambda x: -x[1])
+        return ", ".join(f"{name} ({count})" for name, count in sorted_tools)
 
     def test_with_crewai(
         self,
@@ -665,9 +699,11 @@ Please respond according to this protocol structure and complete the task."""
                         successes = [r for r in combination_results if r.success]
                         avg_latency = sum(r.latency for r in combination_results) / len(combination_results)
                         avg_steps = sum(len(r.reasoning_steps) for r in combination_results) / len(combination_results)
+                        tool_usage = self._aggregate_tool_usage(combination_results)
                         
                         print(f"\n  {framework_name} + {protocol.value} Summary:")
                         print(f"    Success: {len(successes)}/{len(combination_results)} ({len(successes)/len(combination_results)*100:.1f}%)")
+                        print(f"    Tools used: {self._format_tool_usage(tool_usage)}")
                         print(f"    Avg Latency: {avg_latency:.2f}s")
                         print(f"    Avg Steps: {avg_steps:.1f}")
             
@@ -737,6 +773,7 @@ Please respond according to this protocol structure and complete the task."""
         total = len(self.results)
         successful = sum(1 for r in self.results if r.success)
         total_reasoning_steps = sum(len(r.reasoning_steps) for r in self.results)
+        overall_tool_usage = self._aggregate_tool_usage(self.results)
         
         print(f"\nOverall Statistics:")
         print(f"  Total Tests: {total}")
@@ -744,6 +781,7 @@ Please respond according to this protocol structure and complete the task."""
         print(f"  Failed: {total - successful} ({(total-successful)/total*100:.1f}%)")
         print(f"  Total Reasoning Steps: {total_reasoning_steps}")
         print(f"  Avg Reasoning Steps per Test: {total_reasoning_steps/total:.1f}")
+        print(f"  Tools Used: {self._format_tool_usage(overall_tool_usage)}")
         
         # Group by framework
         print("\n" + "-"*70)
@@ -756,10 +794,12 @@ Please respond according to this protocol structure and complete the task."""
                     "success": 0,
                     "total": 0,
                     "latency": [],
-                    "reasoning_steps": []
+                    "reasoning_steps": [],
+                    "results": []
                 }
             frameworks[r.framework]["total"] += 1
             frameworks[r.framework]["reasoning_steps"].append(len(r.reasoning_steps))
+            frameworks[r.framework]["results"].append(r)
             if r.success:
                 frameworks[r.framework]["success"] += 1
                 frameworks[r.framework]["latency"].append(r.latency)
@@ -768,11 +808,13 @@ Please respond according to this protocol structure and complete the task."""
             success_rate = stats['success']/stats['total']*100
             avg_latency = sum(stats['latency'])/len(stats['latency']) if stats['latency'] else 0
             avg_steps = sum(stats['reasoning_steps'])/len(stats['reasoning_steps'])
+            fw_tool_usage = self._aggregate_tool_usage(stats['results'])
             
             print(f"\n  {fw}:")
             print(f"    Success Rate: {stats['success']}/{stats['total']} ({success_rate:.1f}%)")
             print(f"    Avg Latency: {avg_latency:.2f}s")
             print(f"    Avg Reasoning Steps: {avg_steps:.1f}")
+            print(f"    Tools Used: {self._format_tool_usage(fw_tool_usage)}")
         
         # Group by protocol
         print("\n" + "-"*70)
@@ -790,8 +832,10 @@ Please respond according to this protocol structure and complete the task."""
                     "send_overhead_ms": [],
                     "receive_overhead_ms": [],
                     "message_size_bytes": [],
+                    "results": []
                 }
             protocols[p]["total"] += 1
+            protocols[p]["results"].append(r)
             if r.success:
                 protocols[p]["success"] += 1
                 protocols[p]["latency"].append(r.latency)
@@ -812,6 +856,7 @@ Please respond according to this protocol structure and complete the task."""
             avg_send = sum(stats['send_overhead_ms']) / len(stats['send_overhead_ms']) if stats['send_overhead_ms'] else 0
             avg_recv = sum(stats['receive_overhead_ms']) / len(stats['receive_overhead_ms']) if stats['receive_overhead_ms'] else 0
             avg_size = sum(stats['message_size_bytes']) / len(stats['message_size_bytes']) if stats['message_size_bytes'] else 0
+            proto_tool_usage = self._aggregate_tool_usage(stats['results'])
 
             print(f"\n  {proto}:")
             print(f"    Success Rate:          {stats['success']}/{stats['total']} ({success_rate:.1f}%)")
@@ -820,6 +865,7 @@ Please respond according to this protocol structure and complete the task."""
             print(f"    Avg Send Overhead:     {avg_send:.3f}ms")
             print(f"    Avg Receive Overhead:  {avg_recv:.3f}ms")
             print(f"    Avg Message Size:      {avg_size:.0f} bytes")
+            print(f"    Tools Used:            {self._format_tool_usage(proto_tool_usage)}")
         
         # Results by model
         print("\n" + "-"*70)
@@ -832,10 +878,12 @@ Please respond according to this protocol structure and complete the task."""
                     "success": 0,
                     "total": 0,
                     "latency": [],
-                    "reasoning_steps": []
+                    "reasoning_steps": [],
+                    "results": []
                 }
             models[r.model_name]["total"] += 1
             models[r.model_name]["reasoning_steps"].append(len(r.reasoning_steps))
+            models[r.model_name]["results"].append(r)
             if r.success:
                 models[r.model_name]["success"] += 1
                 models[r.model_name]["latency"].append(r.latency)
@@ -844,11 +892,13 @@ Please respond according to this protocol structure and complete the task."""
             success_rate = stats['success']/stats['total']*100
             avg_lat = sum(stats['latency'])/len(stats['latency']) if stats['latency'] else 0
             avg_steps = sum(stats['reasoning_steps'])/len(stats['reasoning_steps'])
+            model_tool_usage = self._aggregate_tool_usage(stats['results'])
             
             print(f"\n  {model}:")
             print(f"    Success Rate: {stats['success']}/{stats['total']} ({success_rate:.1f}%)")
             print(f"    Avg Latency: {avg_lat:.2f}s")
             print(f"    Avg Reasoning Steps: {avg_steps:.1f}")
+            print(f"    Tools Used: {self._format_tool_usage(model_tool_usage)}")
         
         # Print token usage metrics
         print("\n" + "-"*70)
