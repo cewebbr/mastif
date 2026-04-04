@@ -11,11 +11,14 @@ comparison across frameworks remains fair.
 """
 
 import os
+import re
+import json
 from pathlib import Path
-from typing import Dict, List, Callable, Optional
+from typing import Dict, List, Callable, Optional, Tuple
 
 from domain_model import ReasoningStep
 from config import ConfigExpert
+from tool_pool import ToolPool
 
 
 # ---------------------------------------------------------------------------
@@ -56,6 +59,78 @@ def _render(template: str, variables: Dict) -> str:
     for key, value in variables.items():
         result = result.replace(f"{{{key}}}", str(value) if value is not None else "")
     return result
+
+
+# ---------------------------------------------------------------------------
+# ReAct Parser — parse and execute plain-text ReAct format responses
+# ---------------------------------------------------------------------------
+
+def _parse_react_actions(response: str) -> List[Tuple[str, str]]:
+    """
+    Parse plain-text ReAct format responses to extract (action, action_input) pairs.
+    
+    Looks for patterns like:
+        Action: tool_name
+        Action Input: {"key": "value"}
+    
+    Returns list of (action_name, action_input_json_string) tuples.
+    """
+    actions = []
+    # Match Action: tool_name followed by Action Input: {...}
+    pattern = r'Action:\s*(\w+)\s*\n\s*Action Input:\s*(.+?)(?=\n(?:Thought:|Observation:|Action:|Final Answer:|$))'
+    matches = re.finditer(pattern, response, re.DOTALL | re.IGNORECASE)
+    
+    for match in matches:
+        action_name = match.group(1).strip()
+        action_input_str = match.group(2).strip()
+        actions.append((action_name, action_input_str))
+    
+    return actions
+
+
+def _execute_react_actions(response: str, max_iterations: int = 3) -> str:
+    """
+    Execute tools found in ReAct-format response and append observations.
+    
+    If the response contains Action/Action Input pairs, execute them,
+    collect observations, and append them back to the response.
+    
+    Args:
+        response: The model's text response (may contain ReAct format)
+        max_iterations: Max tool execution rounds to prevent infinite loops
+    
+    Returns:
+        Enhanced response with tool execution results appended as Observations
+    """
+    for iteration in range(max_iterations):
+        actions = _parse_react_actions(response)
+        if not actions:
+            # No more Actions to execute
+            break
+        
+        # Execute each action
+        for action_name, action_input_str in actions:
+            try:
+                # Parse the action input (try JSON, fall back to string)
+                try:
+                    action_args = json.loads(action_input_str)
+                    if isinstance(action_args, dict):
+                        result = ToolPool.invoke(action_name, **action_args)
+                    else:
+                        result = ToolPool.invoke(action_name, action_args)
+                except json.JSONDecodeError:
+                    # Not JSON, pass as string
+                    result = ToolPool.invoke(action_name, action_input_str)
+                
+                # Append observation to response
+                observation_text = f"\nObservation: {result}"
+                response += observation_text
+                
+            except Exception as e:
+                error_msg = f"\nObservation: Tool execution error: {str(e)}"
+                response += error_msg
+    
+    return response
 
 
 # ---------------------------------------------------------------------------
@@ -234,6 +309,10 @@ class WorkflowController:
         try:
             output = self._generate(prompt, **kwargs)
             output = "" if output is None else output
+            
+            # Parse and execute tools if response contains ReAct format
+            if use_tools and ("Action:" in output or "Thought:" in output):
+                output = _execute_react_actions(output)
 
             # Update state based on output_key
             if node.output_key == "research_results":
