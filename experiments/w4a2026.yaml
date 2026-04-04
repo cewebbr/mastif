@@ -2,20 +2,22 @@ experiment:
   name: "W4A 2026 - WCAG Accessibility Evaluation"
   description: "Accessibility Expert evaluating WCAG 2.2 violations"
 
-temperature: 0.1 # Model temperature setting -> lower values for more deterministic outputs, important for evaluation tasks; tool calling is a deterministic act;
-max_tokens: 1024 # Max tokens per request
-max_steps: 3 # Max research iterations per agent workflow
+temperature: 0.7          # Model temperature setting -> lower values for more deterministic outputs, important for evaluation tasks; tool calling is a deterministic act;
+max_tokens: 1024          # Max tokens per request
+max_steps: 3              # Max research iterations per agent workflow
+max_tool_rounds: 5        # Max tool execution rounds per generate() call (default: 5)
 requests_soft_limit: 1000 # Requires user confirmation if exceeded
-test_mode: "standard"  # Options: "mind2web", "standard"
+test_mode: "standard"     # Options: "mind2web", "standard"
 
 # Any model ID listed here must be available on HuggingFace or OpenAI
 # IMPORTANT: If tool use is expected in the tasks, make sure to use models that support it (e.g., DeepSeek, GPT-4o, etc.)
 models:
   # - "gpt-4o"
-  # - "meta-llama/Llama-3.3-70B-Instruct"
+  - "meta-llama/Llama-3.3-70B-Instruct"
   - "meta-llama/Llama-4-Scout-17B-16E-Instruct"
   - "deepseek-ai/DeepSeek-V3.2"  
-  - "openai/gpt-oss-120b"
+  # - "openai/gpt-oss-120b"
+  # - mistralai/Mistral-Large-2407
 
 # ====== Used only in MIND2WEB test mode ====== 
 # judge_model: "gpt-4o"

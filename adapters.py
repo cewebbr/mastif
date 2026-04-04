@@ -74,61 +74,120 @@ class HuggingFaceAdapter(BaseAdapter):
         return self._model_name
 
     def generate(self, prompt: str, **kwargs) -> str:
-        """Generate conversational response from the model"""
+        """Generate conversational response from the model, executing tool calls if requested."""
         try:
-            # Conversational models expect a list of message objects
-            messages = [{"role": "user", "content": prompt}]
             config = ConfigExpert.get_instance()
             tools = kwargs.get("tools")
             if not isinstance(tools, list) or len(tools) == 0:
                 tools = None
             else:
-                # Ensure every entry is a plain OpenAI-schema dict with "type": "function"
-                # If entries are framework tool objects or bare name strings, convert via ToolPool
                 normalised = []
                 for t in tools:
                     if isinstance(t, dict) and t.get("type") == "function":
-                        normalised.append(t)          # already correct schema
+                        normalised.append(t)
                     elif isinstance(t, str):
                         schemas = ToolPool.get_openai_schemas([t])
                         normalised.extend(schemas)
                     else:
-                        # Framework tool object — try common name attributes
                         name = getattr(t, "name", None) or getattr(t, "tool_name", None)
                         if name:
                             schemas = ToolPool.get_openai_schemas([name])
                             normalised.extend(schemas)
                 tools = normalised if normalised else None
 
-            request_kwargs = {
-                "messages": messages,
-                "model": self.model_name,
-                "max_tokens": kwargs.get("max_tokens", config.get("max_tokens", 1024)),
-                "temperature": kwargs.get("temperature", config.get("temperature", 0.7)),
-            }
-            if tools is not None:
-                request_kwargs["tools"] = tools
-                normalized_choice = None
-                if "tool_choice" in kwargs:
-                    normalized_choice = self._normalize_tool_choice(kwargs["tool_choice"])
-                    if normalized_choice is None and os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
-                        print(f"⚠️ HuggingFace adapter dropped invalid tool_choice: {kwargs['tool_choice']}")
-                request_kwargs["tool_choice"] = normalized_choice if normalized_choice is not None else "auto"
-                if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
-                    print(f"🔧 HuggingFace tool request | model={self.model_name} | tools={tools} | tool_choice={request_kwargs.get('tool_choice')}")
+            messages = [{"role": "user", "content": prompt}]
+            max_tokens = kwargs.get("max_tokens", config.get("max_tokens", 1024))
+            temperature = kwargs.get("temperature", config.get("temperature", 0.7))
+            max_tool_rounds = config.get("max_tool_rounds", 5)
 
-            response = self.client.chat_completion(**request_kwargs)
-            
-            # Check if response is the expected object or an error dict
-            if hasattr(response, 'choices') and len(response.choices) > 0:
-                return response.choices[0].message.content
-            
-            # If Hugging Face returns an error dictionary
-            if isinstance(response, dict) and "error" in response:
-                return f"API Error: {response.get('error')} - {response.get('description', 'No description provided')}"
-            
-            return "Error: Unexpected response format."
-        
+            for round_num in range(max_tool_rounds):
+                request_kwargs = {
+                    "messages": messages,
+                    "model": self.model_name,
+                    "max_tokens": max_tokens,
+                    "temperature": temperature,
+                }
+                if tools is not None:
+                    request_kwargs["tools"] = tools
+                    normalized_choice = None
+                    if "tool_choice" in kwargs:
+                        normalized_choice = self._normalize_tool_choice(kwargs["tool_choice"])
+                        if normalized_choice is None and os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                            print(f"⚠️ HuggingFace adapter dropped invalid tool_choice: {kwargs['tool_choice']}")
+                    request_kwargs["tool_choice"] = normalized_choice if normalized_choice is not None else "auto"
+                    if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                        print(f"🔧 HuggingFace tool request round={round_num} | model={self.model_name} | tool_choice={request_kwargs.get('tool_choice')}")
+
+                response = self.client.chat_completion(**request_kwargs)
+
+                if isinstance(response, dict) and "error" in response:
+                    return f"API Error: {response.get('error')} - {response.get('description', 'No description provided')}"
+
+                if not (hasattr(response, 'choices') and len(response.choices) > 0):
+                    return "Error: Unexpected response format."
+
+                message = response.choices[0].message
+
+                # Model produced a text response — we're done
+                if message.content is not None:
+                    return message.content
+
+                # Model requested tool calls — execute them and continue the loop
+                tool_calls = getattr(message, "tool_calls", None)
+                if not tool_calls:
+                    return ""
+
+                # Append assistant message with tool_calls to conversation
+                messages.append({
+                    "role": "assistant",
+                    "content": None,
+                    "tool_calls": [
+                        {
+                            "id": tc.id,
+                            "type": "function",
+                            "function": {
+                                "name": tc.function.name,
+                                "arguments": tc.function.arguments,
+                            }
+                        }
+                        for tc in tool_calls
+                    ]
+                })
+
+                # Execute each tool call and append results
+                for tc in tool_calls:
+                    tool_name = tc.function.name
+                    try:
+                        import json as _json
+                        args = _json.loads(tc.function.arguments)
+                        query = args.get("query") or args.get("input") or str(args)
+                    except Exception:
+                        query = tc.function.arguments
+
+                    if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                        print(f"🛠️  Executing tool: {tool_name}({query!r})")
+
+                    try:
+                        tool_def = ToolPool._registry.get(tool_name)
+                        if tool_def:
+                            result = tool_def.func(query)
+                        else:
+                            result = f"Tool '{tool_name}' not found in pool."
+                    except Exception as e:
+                        result = f"Tool execution error: {str(e)}"
+
+                    if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                        print(f"📋 Tool result ({tool_name}): {str(result)[:200]}")
+
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tc.id,
+                        "content": str(result),
+                    })
+
+            # Exhausted max_tool_rounds without a text response
+            return "Error: Maximum tool execution rounds reached without a final text response."
+
         except Exception as e:
             return f"Inference Error: {str(e)}"
     
@@ -221,7 +280,7 @@ class OpenAIAdapter(BaseAdapter):
         return self._model_name
 
     def generate(self, prompt: str, **kwargs) -> str:
-        """Generate text completion from the model"""
+        """Generate text completion from the model, executing tool calls if requested."""
         try:
             client = openai.OpenAI(api_key=self.api_key)
             config = ConfigExpert.get_instance()
@@ -229,41 +288,102 @@ class OpenAIAdapter(BaseAdapter):
             if not isinstance(tools, list) or len(tools) == 0:
                 tools = None
             else:
-                # Ensure every entry is a plain OpenAI-schema dict with "type": "function"
-                # If entries are framework tool objects or bare name strings, convert via ToolPool
                 normalised = []
                 for t in tools:
                     if isinstance(t, dict) and t.get("type") == "function":
-                        normalised.append(t)          # already correct schema
+                        normalised.append(t)
                     elif isinstance(t, str):
                         schemas = ToolPool.get_openai_schemas([t])
                         normalised.extend(schemas)
                     else:
-                        # Framework tool object — try common name attributes
                         name = getattr(t, "name", None) or getattr(t, "tool_name", None)
                         if name:
                             schemas = ToolPool.get_openai_schemas([name])
                             normalised.extend(schemas)
                 tools = normalised if normalised else None
 
-            request_kwargs = {
-                "model": self.model_name,
-                "messages": [{"role": "user", "content": prompt}],
-                "max_tokens": kwargs.get("max_tokens", config.get("max_tokens", 1024)),
-                "temperature": kwargs.get("temperature", config.get("temperature", 0.7)),
-            }
-            if tools is not None:
-                request_kwargs["tools"] = tools
-                normalized_choice = None
-                if "tool_choice" in kwargs:
-                    normalized_choice = self._normalize_tool_choice(kwargs["tool_choice"])
-                    if normalized_choice is None and os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
-                        print(f"⚠️ OpenAI adapter dropped invalid tool_choice: {kwargs['tool_choice']}")
-                request_kwargs["tool_choice"] = normalized_choice if normalized_choice is not None else "auto"
-                if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
-                    print(f"🔧 OpenAI tool request | model={self.model_name} | tools={tools} | tool_choice={request_kwargs.get('tool_choice')}")
+            messages = [{"role": "user", "content": prompt}]
+            max_tokens = kwargs.get("max_tokens", config.get("max_tokens", 1024))
+            temperature = kwargs.get("temperature", config.get("temperature", 0.7))
+            max_tool_rounds = config.get("max_tool_rounds", 5)
 
-            response = client.chat.completions.create(**request_kwargs)
-            return response.choices[0].message.content.strip()
+            for round_num in range(max_tool_rounds):
+                request_kwargs = {
+                    "model": self.model_name,
+                    "messages": messages,
+                    "max_tokens": max_tokens,
+                    "temperature": temperature,
+                }
+                if tools is not None:
+                    request_kwargs["tools"] = tools
+                    normalized_choice = None
+                    if "tool_choice" in kwargs:
+                        normalized_choice = self._normalize_tool_choice(kwargs["tool_choice"])
+                        if normalized_choice is None and os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                            print(f"⚠️ OpenAI adapter dropped invalid tool_choice: {kwargs['tool_choice']}")
+                    request_kwargs["tool_choice"] = normalized_choice if normalized_choice is not None else "auto"
+                    if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                        print(f"🔧 OpenAI tool request round={round_num} | model={self.model_name} | tool_choice={request_kwargs.get('tool_choice')}")
+
+                response = client.chat.completions.create(**request_kwargs)
+                message = response.choices[0].message
+
+                # Model produced a text response — we're done
+                if message.content is not None:
+                    return message.content.strip()
+
+                # Model requested tool calls — execute them and continue the loop
+                tool_calls = getattr(message, "tool_calls", None)
+                if not tool_calls:
+                    return ""
+
+                messages.append({
+                    "role": "assistant",
+                    "content": None,
+                    "tool_calls": [
+                        {
+                            "id": tc.id,
+                            "type": "function",
+                            "function": {
+                                "name": tc.function.name,
+                                "arguments": tc.function.arguments,
+                            }
+                        }
+                        for tc in tool_calls
+                    ]
+                })
+
+                for tc in tool_calls:
+                    tool_name = tc.function.name
+                    try:
+                        import json as _json
+                        args = _json.loads(tc.function.arguments)
+                        query = args.get("query") or args.get("input") or str(args)
+                    except Exception:
+                        query = tc.function.arguments
+
+                    if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                        print(f"🛠️  Executing tool: {tool_name}({query!r})")
+
+                    try:
+                        tool_def = ToolPool._registry.get(tool_name)
+                        if tool_def:
+                            result = tool_def.func(query)
+                        else:
+                            result = f"Tool '{tool_name}' not found in pool."
+                    except Exception as e:
+                        result = f"Tool execution error: {str(e)}"
+
+                    if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
+                        print(f"📋 Tool result ({tool_name}): {str(result)[:200]}")
+
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": tc.id,
+                        "content": str(result),
+                    })
+
+            return "Error: Maximum tool execution rounds reached without a final text response."
+
         except Exception as e:
             return f"Error: {str(e)}"

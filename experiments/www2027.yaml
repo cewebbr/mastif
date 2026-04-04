@@ -5,6 +5,7 @@ experiment:
 temperature: 0.7 # Model temperature setting
 max_tokens: 1024 # Max tokens per request
 max_steps: 3 # Max research iterations per agent workflow
+max_tool_rounds: 5        # Max tool execution rounds per generate() call (default: 5)
 requests_soft_limit: 1000 # Requires user confirmation if exceeded
 test_mode: "mind2web"  # Options: "mind2web", "standard"
 
