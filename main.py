@@ -51,7 +51,7 @@ def main():
         return 1
 
     # Initialize tester
-    tester = Mastif()
+    tester = Mastif(config_path)
     
     if MODE == "mind2web":
         # Run Mind2Web evaluation
