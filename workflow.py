@@ -324,7 +324,7 @@ class WorkflowController:
             reasoning_steps.append(ReasoningStep(
                 step_number=len(reasoning_steps) + 1,
                 thought=f"Node '{node.name}' completed",
-                observation=f"Output: {output[:100]}..."
+                observation=f"Output: {output[:200]}..."
             ))
 
         except Exception as e:
