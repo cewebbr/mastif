@@ -28,8 +28,7 @@ from mind2web_loader import Mind2WebLoader
 from mind2web_evaluator import Mind2WebEvaluator
 from config import ConfigExpert
 from tool_pool import ToolPool
-from transformers import AutoTokenizer
-import tiktoken
+from experiment_logger import ExperimentLogger
 
 class Mastif:
     """
@@ -41,18 +40,47 @@ class Mastif:
     - Frameworks (CrewAI, Smolagents, LangChain, LangGraph, LlamaIndex, and Semantic Kernel)
     
     Collects detailed metrics including reasoning steps, latency, and success rates.
+    Delegates all logging, reporting, and partial log management to ExperimentLogger.
     """
     
-    def __init__(self):
-        """Initialize the testing framework"""
-        self.results: List[TestResult] = []
+    def __init__(self, yaml_path: str):
+        """
+        Initialize the testing framework.
+
+        Args:
+            yaml_path: Path to the YAML config file for this experiment.
+                       Used to name partial log files.
+        """
+        self.yaml_path = yaml_path
         self.protocols = {
             ProtocolType.MCP: MCPProtocol(),
             ProtocolType.A2A: A2AProtocol(),
             ProtocolType.ACP: ACPProtocol()
         }
         self.standard_tools = ToolPool.available_tools
+        self._logger: Optional[ExperimentLogger] = None
        
+    def _init_logger(self, metadata: dict) -> ExperimentLogger:
+        """
+        Create an ExperimentLogger, check for partial logs, and offer resume.
+        Returns the initialised logger.
+        """
+        logger = ExperimentLogger(self.yaml_path, metadata)
+        partial = logger.find_partial()
+        if partial:
+            total = (
+                len(metadata["models"]) *
+                len(metadata["protocols"]) *
+                len(metadata["frameworks"]) *
+                metadata["total_tasks"]
+            )
+            if ExperimentLogger.prompt_resume(partial, total):
+                logger.load_partial(partial)
+                print(f"✅️ Resuming from partial log — {len(partial.get('completed', []))} executions already done.\n")
+            else:
+                print("▶️  Starting fresh (partial log will be overwritten on first result).\n")
+        return logger
+
     def _get_protocol_metrics(self, protocol: ProtocolType, protocol_instance, task: str) -> Dict:
         """
         Measure and return protocol overhead and message size metrics.
@@ -238,47 +266,10 @@ Please respond according to this protocol structure and complete the task."""
             )
     
     def _capture_tool_log(self) -> Dict:
-        """
-        Snapshot the ToolPool invocation log and reset it.
-        Returns the summary dict to be stored in TestResult.metadata.
-        """
+        """Snapshot the ToolPool invocation log and reset it."""
         summary = ToolPool.get_log_summary()
         ToolPool.reset_log()
         return summary
-    
-    def _aggregate_tool_usage(self, results: List[TestResult]) -> Dict[str, int]:
-        """
-        Aggregate tool usage counts from a list of test results.
-        
-        Args:
-            results: List of TestResult objects
-            
-        Returns:
-            Dict mapping tool names to total call counts
-        """
-        tool_usage = {}
-        for result in results:
-            tool_log = result.metadata.get("tool_log", {})
-            per_tool = tool_log.get("per_tool", {})
-            for tool_name, stats in per_tool.items():
-                calls = stats.get("calls", 0)
-                tool_usage[tool_name] = tool_usage.get(tool_name, 0) + calls
-        return tool_usage
-    
-    def _format_tool_usage(self, tool_usage: Dict[str, int]) -> str:
-        """
-        Format tool usage dict into a readable string.
-        
-        Args:
-            tool_usage: Dict mapping tool names to call counts
-            
-        Returns:
-            Formatted string like "web_search (5), web_browser (3)"
-        """
-        if not tool_usage:
-            return "None"
-        sorted_tools = sorted(tool_usage.items(), key=lambda x: -x[1])
-        return ", ".join(f"{name} ({count})" for name, count in sorted_tools)
 
     def test_with_crewai(
         self,
@@ -594,9 +585,6 @@ Please respond according to this protocol structure and complete the task."""
         """
         Run comprehensive tests across all models, protocols, and frameworks.
         Tests all combinations of protocols x frameworks for each model.
-        
-        Args:
-            api_key: API token for the model (either HuggingFace or OpenAI)
         """
             
         # Extract experiment configuration
@@ -623,6 +611,19 @@ Please respond according to this protocol structure and complete the task."""
         }
 
         frameworks = [(name, *framework_map[name]) for name in framework_names]
+        total = len(models) * len(protocols) * len(frameworks) * len(test_tasks)
+
+        # Initialise logger — offers resume if partial log exists
+        metadata = {
+            "experiment_name": config.get("experiment.name", ""),
+            "test_mode":       "standard",
+            "models":          models,
+            "protocols":       [p.value for p in protocols],
+            "frameworks":      framework_names,
+            "tools":           tools,
+            "total_tasks":     len(test_tasks),
+        }
+        self._logger = self._init_logger(metadata)
         
         # Compute the number of tests and alert the user
         print(f"\n{'-'*70}")
@@ -631,11 +632,11 @@ Please respond according to this protocol structure and complete the task."""
         print(f"Protocols: {len(protocols)}")
         print(f"Frameworks: {len(frameworks)}")
         print(f"Tasks: {len(test_tasks)}")
-        print(f"Total executions: {len(models) * len(protocols) * len(frameworks) * len(test_tasks)}")
+        print(f"Total executions: {total}")
         print(f"{'-'*70}")
         print(f"Tools ({len(tools)}): {', '.join(tools)}")
         print(f"{'-'*70}")
-        if( len(models) * len(protocols) * len(frameworks) * len(test_tasks) > config.get("requests_soft_limit", 1000) ):
+        if total > config.get("requests_soft_limit", 1000):
             print("WARNING: This may incur a high number of API calls and associated costs.")
             response = input("\nDo you want to proceed? (yes/no): ").strip().lower()
             if response not in ['yes', 'y']:
@@ -667,18 +668,21 @@ Please respond according to this protocol structure and complete the task."""
                     print(f"\n  {framework_name} with {protocol.value}:")
                     combination_results = []
                     
-                    for i, task in enumerate(test_tasks, 1):
-                        print(f"    Task {i}/{len(test_tasks)}: {task[:100]}...")
+                    for i, task in enumerate(test_tasks):
+                        print(f"    Task {i+1}/{len(test_tasks)}: {task[:100]}...")
+
+                        # Skip if already completed in a resumed run
+                        if self._logger.is_completed(model_name, protocol.value, framework_name, i):
+                            print(f"      ⏭️  Skipped (already completed)")
+                            continue
                         
                         # Build arguments for test function
                         args = [adapter, task]
-                        kwargs = {"protocol": protocol}  # Add protocol to kwargs
+                        kwargs = {"protocol": protocol}
                         
-                        # Handle CrewAI's role parameter
                         if framework_name == "CrewAI":
                             args.insert(1, extra_args["role"])
                         
-                        # Add tools if framework needs them
                         if "tools" in extra_args:
                             kwargs["tools"] = extra_args["tools"]
                         
@@ -686,7 +690,7 @@ Please respond according to this protocol structure and complete the task."""
                         try:
                             result = test_fn(*args, **kwargs)
                             combination_results.append(result)
-                            self.results.append(result)
+                            self._logger.log_result(result, model_name, protocol.value, framework_name, i)
                             
                             status = "✅️" if result.success else "❌"
                             error_msg = f" — {result.error}" if not result.success and result.error else ""
@@ -699,284 +703,16 @@ Please respond according to this protocol structure and complete the task."""
                         successes = [r for r in combination_results if r.success]
                         avg_latency = sum(r.latency for r in combination_results) / len(combination_results)
                         avg_steps = sum(len(r.reasoning_steps) for r in combination_results) / len(combination_results)
-                        tool_usage = self._aggregate_tool_usage(combination_results)
                         
                         print(f"\n  {framework_name} + {protocol.value} Summary:")
                         print(f"    Success: {len(successes)}/{len(combination_results)} ({len(successes)/len(combination_results)*100:.1f}%)")
-                        print(f"    Tools used: {self._format_tool_usage(tool_usage)}")
                         print(f"    Avg Latency: {avg_latency:.2f}s")
                         print(f"    Avg Steps: {avg_steps:.1f}")
-                        
-                        # Save partial snapshot after each protocol-framework combination
-                        suffix = f"-{model_name.replace('/', '-')}-{protocol.value}-{framework_name.replace(' ', '-')}"
-                        self.save_partial_snapshot(suffix)
             
             print(f"\n{'='*70}")
             print(f"Model {model_name} Complete")
             print(f"{'='*70}")
-            
-            # Save partial snapshot after each model
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            partial_filename = f"./logs/partial-results-{model_name.replace('/', '-')}-{timestamp}.json"
-            self.export_results(partial_filename)
-            print(f"💾 Partial results saved: {partial_filename}")
     
-    def save_partial_snapshot(self, suffix: str = ""):
-        """
-        Save current results to a partial snapshot file
-        
-        Args:
-            suffix: Optional suffix for the filename
-        """
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"./logs/partial-results-{timestamp}{suffix}.json"
-        self.export_results(filename)
-        print(f"💾 Partial snapshot saved: {filename}")
-    
-    def export_results(self, filename: str = "test_results.json"):
-        """
-        Export test results to JSON file with detailed reasoning steps
-        
-        Args:
-            filename: Output filename (with path)
-        """
-        # Ensure logs directory exists
-        log_dir = Path(filename).parent
-        log_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Convert results to dictionary format
-        results_dict = []
-        for r in self.results:
-            # Convert reasoning steps to dict
-            reasoning_dict = [
-                {
-                    "step_number": step.step_number,
-                    "thought": step.thought,
-                    "action": step.action,
-                    "action_input": step.action_input,
-                    "observation": step.observation,
-                    "timestamp": step.timestamp
-                }
-                for step in r.reasoning_steps
-            ]
-            
-            results_dict.append({
-                "model_name": r.model_name,
-                "protocol": r.protocol.value,
-                "framework": r.framework,
-                "task": r.task,
-                "response": r.response,
-                # "response_preview": r.response[:200] + "..." if len(r.response) > 200 else r.response,
-                "reasoning_steps": reasoning_dict,
-                "reasoning_steps_count": len(reasoning_dict),
-                "latency": r.latency,
-                "success": r.success,
-                "error": r.error,
-                "metadata": r.metadata,
-                "tool_log": (r.metadata or {}).get("tool_log", {})
-            })
-        
-        # Write to file with pretty formatting
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump({
-                "test_run_timestamp": datetime.datetime.now().isoformat(),
-                "total_tests": len(results_dict),
-                "results": results_dict
-            }, f, indent=2, ensure_ascii=False)
-        
-        print(f"\n✅️ Results exported to {filename}")
-    
-    def print_summary(self):
-        """Print comprehensive summary of test results with detailed statistics"""
-        print("\n" + "="*70)
-        print("TEST SUMMARY")
-        print("="*70)
-        
-        total = len(self.results)
-        successful = sum(1 for r in self.results if r.success)
-        total_reasoning_steps = sum(len(r.reasoning_steps) for r in self.results)
-        overall_tool_usage = self._aggregate_tool_usage(self.results)
-        
-        print(f"\nOverall Statistics:")
-        print(f"  Total Tests: {total}")
-        print(f"  Successful: {successful} ({successful/total*100:.1f}%)")
-        print(f"  Failed: {total - successful} ({(total-successful)/total*100:.1f}%)")
-        print(f"  Total Reasoning Steps: {total_reasoning_steps}")
-        print(f"  Avg Reasoning Steps per Test: {total_reasoning_steps/total:.1f}")
-        print(f"  Tools Used: {self._format_tool_usage(overall_tool_usage)}")
-        
-        # Group by framework
-        print("\n" + "-"*70)
-        print("Results by Framework:")
-        print("-"*70)
-        frameworks = {}
-        for r in self.results:
-            if r.framework not in frameworks:
-                frameworks[r.framework] = {
-                    "success": 0,
-                    "total": 0,
-                    "latency": [],
-                    "reasoning_steps": [],
-                    "results": []
-                }
-            frameworks[r.framework]["total"] += 1
-            frameworks[r.framework]["reasoning_steps"].append(len(r.reasoning_steps))
-            frameworks[r.framework]["results"].append(r)
-            if r.success:
-                frameworks[r.framework]["success"] += 1
-                frameworks[r.framework]["latency"].append(r.latency)
-        
-        for fw, stats in sorted(frameworks.items()):
-            success_rate = stats['success']/stats['total']*100
-            avg_latency = sum(stats['latency'])/len(stats['latency']) if stats['latency'] else 0
-            avg_steps = sum(stats['reasoning_steps'])/len(stats['reasoning_steps'])
-            fw_tool_usage = self._aggregate_tool_usage(stats['results'])
-            
-            print(f"\n  {fw}:")
-            print(f"    Success Rate: {stats['success']}/{stats['total']} ({success_rate:.1f}%)")
-            print(f"    Avg Latency: {avg_latency:.2f}s")
-            print(f"    Avg Reasoning Steps: {avg_steps:.1f}")
-            print(f"    Tools Used: {self._format_tool_usage(fw_tool_usage)}")
-        
-        # Group by protocol
-        print("\n" + "-"*70)
-        print("Results by Protocol:")
-        print("-"*70)
-        protocols = {}
-        for r in self.results:
-            p = r.protocol.value
-            if p not in protocols:
-                protocols[p] = {
-                    "success": 0,
-                    "total": 0,
-                    "latency": [],
-                    "total_overhead_ms": [],
-                    "send_overhead_ms": [],
-                    "receive_overhead_ms": [],
-                    "message_size_bytes": [],
-                    "results": []
-                }
-            protocols[p]["total"] += 1
-            protocols[p]["results"].append(r)
-            if r.success:
-                protocols[p]["success"] += 1
-                protocols[p]["latency"].append(r.latency)
-            if r.metadata:
-                if "total_overhead_ms" in r.metadata:
-                    protocols[p]["total_overhead_ms"].append(r.metadata["total_overhead_ms"])
-                if "send_overhead_ms" in r.metadata:
-                    protocols[p]["send_overhead_ms"].append(r.metadata["send_overhead_ms"])
-                if "receive_overhead_ms" in r.metadata:
-                    protocols[p]["receive_overhead_ms"].append(r.metadata["receive_overhead_ms"])
-                if "message_size_bytes" in r.metadata:
-                    protocols[p]["message_size_bytes"].append(r.metadata["message_size_bytes"])
-
-        for proto, stats in sorted(protocols.items()):
-            success_rate = stats['success'] / stats['total'] * 100
-            avg_latency = sum(stats['latency']) / len(stats['latency']) if stats['latency'] else 0
-            avg_overhead = sum(stats['total_overhead_ms']) / len(stats['total_overhead_ms']) if stats['total_overhead_ms'] else 0
-            avg_send = sum(stats['send_overhead_ms']) / len(stats['send_overhead_ms']) if stats['send_overhead_ms'] else 0
-            avg_recv = sum(stats['receive_overhead_ms']) / len(stats['receive_overhead_ms']) if stats['receive_overhead_ms'] else 0
-            avg_size = sum(stats['message_size_bytes']) / len(stats['message_size_bytes']) if stats['message_size_bytes'] else 0
-            proto_tool_usage = self._aggregate_tool_usage(stats['results'])
-
-            print(f"\n  {proto}:")
-            print(f"    Success Rate:          {stats['success']}/{stats['total']} ({success_rate:.1f}%)")
-            print(f"    Avg Latency:           {avg_latency:.2f}s")
-            print(f"    Avg Total Overhead:    {avg_overhead:.3f}ms")
-            print(f"    Avg Send Overhead:     {avg_send:.3f}ms")
-            print(f"    Avg Receive Overhead:  {avg_recv:.3f}ms")
-            print(f"    Avg Message Size:      {avg_size:.0f} bytes")
-            print(f"    Tools Used:            {self._format_tool_usage(proto_tool_usage)}")
-        
-        # Results by model
-        print("\n" + "-"*70)
-        print("Results by Model:")
-        print("-"*70)
-        models = {}
-        for r in self.results:
-            if r.model_name not in models:
-                models[r.model_name] = {
-                    "success": 0,
-                    "total": 0,
-                    "latency": [],
-                    "reasoning_steps": [],
-                    "results": []
-                }
-            models[r.model_name]["total"] += 1
-            models[r.model_name]["reasoning_steps"].append(len(r.reasoning_steps))
-            models[r.model_name]["results"].append(r)
-            if r.success:
-                models[r.model_name]["success"] += 1
-                models[r.model_name]["latency"].append(r.latency)
-        
-        for model, stats in sorted(models.items()):
-            success_rate = stats['success']/stats['total']*100
-            avg_lat = sum(stats['latency'])/len(stats['latency']) if stats['latency'] else 0
-            avg_steps = sum(stats['reasoning_steps'])/len(stats['reasoning_steps'])
-            model_tool_usage = self._aggregate_tool_usage(stats['results'])
-            
-            print(f"\n  {model}:")
-            print(f"    Success Rate: {stats['success']}/{stats['total']} ({success_rate:.1f}%)")
-            print(f"    Avg Latency: {avg_lat:.2f}s")
-            print(f"    Avg Reasoning Steps: {avg_steps:.1f}")
-            print(f"    Tools Used: {self._format_tool_usage(model_tool_usage)}")
-        
-        # Print token usage metrics
-        print("\n" + "-"*70)
-        print("Token Usage by Model:")
-        print("-"*70)
-        # TODO: Break down tokens by framework and protocol as well
-        for model in set(r.model_name for r in self.results):
-            model_results = [r for r in self.results if r.model_name == model]
-            reasoning, output = self.compute_token_metrics(model, model_results)
-            print(f"Model: {model}")
-            print(f"  Reasoning tokens: {reasoning}")
-            print(f"  Output tokens: {output}")
-            print(f"  Total tokens: {reasoning + output}")
-
-        # Tool usage summary
-        print("\n" + "-"*70)
-        print("Tool Usage Across All Runs:")
-        print("-"*70)
-        tool_totals: Dict[str, Dict] = {}
-        for r in self.results:
-            log = (r.metadata or {}).get("tool_log", {})
-            for tool_name, stats in log.get("per_tool", {}).items():
-                if tool_name not in tool_totals:
-                    tool_totals[tool_name] = {"calls": 0, "failures": 0, "duration_ms": []}
-                tool_totals[tool_name]["calls"]    += stats["calls"]
-                tool_totals[tool_name]["failures"] += stats["failures"]
-                tool_totals[tool_name]["duration_ms"].append(stats["avg_duration_ms"])
-
-        if tool_totals:
-            for tool_name, stats in sorted(tool_totals.items(), key=lambda x: -x[1]["calls"]):
-                avg_dur = sum(stats["duration_ms"]) / len(stats["duration_ms"])
-                fail_rate = stats["failures"] / stats["calls"] * 100 if stats["calls"] else 0
-                print(f"\n  {tool_name}:")
-                print(f"    Total calls:    {stats['calls']}")
-                print(f"    Failures:       {stats['failures']} ({fail_rate:.1f}%)")
-                print(f"    Avg duration:   {avg_dur:.1f}ms")
-
-            # Per-framework tool breakdown
-            print("\n" + "-"*70)
-            print("Tool Usage by Framework:")
-            print("-"*70)
-            fw_tools: Dict[str, Dict[str, int]] = {}
-            for r in self.results:
-                fw = r.framework
-                log = (r.metadata or {}).get("tool_log", {})
-                for tool_name, stats in log.get("per_tool", {}).items():
-                    fw_tools.setdefault(fw, {})
-                    fw_tools[fw][tool_name] = fw_tools[fw].get(tool_name, 0) + stats["calls"]
-            for fw, tools in sorted(fw_tools.items()):
-                calls_str = ", ".join(f"{t} ({c}x)" for t, c in sorted(tools.items(), key=lambda x: -x[1]))
-                print(f"\n  {fw}: {calls_str}")
-        else:
-            print("  No tool invocations recorded.")
-
-        print("\n" + "="*70)
-
     def run_mind2web_evaluation(
         self,
         hf_token: Optional[str] = None
@@ -1009,16 +745,29 @@ Please respond according to this protocol structure and complete the task."""
             "CrewAI": (self.test_with_crewai, {"role": "Web Automation Specialist", "tools": tools}),
             "Smolagents": (self.test_with_smolagents, {"tools": tools}),
             "LangChain": (self.test_with_langchain, {"tools": tools}),
-            "LangGraph": (self.test_with_langgraph, {}),
+            "LangGraph": (self.test_with_langgraph, {"tools": tools}),
             "LlamaIndex": (self.test_with_llamaindex, {"tools": tools}),
-            "SemanticKernel": (self.test_with_semantic_kernel, {})
+            "SemanticKernel": (self.test_with_semantic_kernel, {"tools": tools})
         }
 
         frameworks = [(name, *framework_map[name]) for name in framework_names]
+        total = len(models) * len(protocols) * len(frameworks) * len(tasks)
 
         if not tasks:
             print("Failed to load Mind2Web tasks!")
             return
+
+        # Initialise logger — offers resume if partial log exists
+        metadata = {
+            "experiment_name": config.get("experiment.name", ""),
+            "test_mode":       "mind2web",
+            "models":          models,
+            "protocols":       [p.value for p in protocols],
+            "frameworks":      framework_names,
+            "tools":           tools,
+            "total_tasks":     len(tasks),
+        }
+        self._logger = self._init_logger(metadata)
         
         # Print statistics
         stats = loader.get_task_statistics()
@@ -1045,11 +794,11 @@ Please respond according to this protocol structure and complete the task."""
         print(f"Protocols: {len(protocols)}")
         print(f"Frameworks: {len(frameworks)}")
         print(f"Tasks: {len(tasks)}")
-        print(f"Total executions: {len(models) * len(protocols) * len(frameworks) * len(tasks)}")
+        print(f"Total executions: {total}")
         print(f"{'-'*70}")
         print(f"Tools ({len(tools)}): {', '.join(tools)}")
         print(f"{'-'*70}")
-        if( len(models) * len(protocols) * len(frameworks) * len(tasks) > config.get("requests_soft_limit", 1000) ):
+        if total > config.get("requests_soft_limit", 1000):
             print("WARNING: This may incur a high number of API calls and associated costs.")
             response = input("\nDo you want to proceed? (yes/no): ").strip().lower()
             if response not in ['yes', 'y']:
@@ -1084,9 +833,14 @@ Please respond according to this protocol structure and complete the task."""
                     print(f"{'-'*70}")
                     combination_results = []
 
-                    for i, task in enumerate(tasks, 1):
-                        print(f"\n  Task {i}/{len(tasks)}: {task['website']} ({task['domain']})")
+                    for i, task in enumerate(tasks):
+                        print(f"\n  Task {i+1}/{len(tasks)}: {task['website']} ({task['domain']})")
                         print(f"  Goal: {task['confirmed_task']}")
+
+                        # Skip if already completed in a resumed run
+                        if self._logger.is_completed(model_name, protocol.value, framework_name, i):
+                            print(f"    ⏭️  Skipped (already completed)")
+                            continue
 
                         task_prompt = f"""You are a web automation agent. Complete this task:
 
@@ -1111,7 +865,7 @@ Please respond according to this protocol structure and complete the task."""
 
                             result = test_fn(*args, **kwargs)
                             if result:
-                                self.results.append(result)
+                                self._logger.log_result(result, model_name, protocol.value, framework_name, i)
                                 combination_results.append(result)
 
                                 eval_result = evaluator.evaluate_task(
@@ -1154,16 +908,6 @@ Please respond according to this protocol structure and complete the task."""
                         print(f"    Success: {len(successes)}/{len(combination_results)} ({len(successes)/len(combination_results)*100:.1f}%)")
                         print(f"    Avg Latency: {avg_latency:.2f}s")
                         print(f"    Avg Reasoning Steps: {avg_reasoning_steps:.1f}")
-                        
-                        # Save partial snapshot after each protocol-framework combination
-                        suffix = f"-mind2web-{model_name.replace('/', '-')}-{protocol.value}-{framework_name.replace(' ', '-')}"
-                        self.save_partial_snapshot(suffix)
-
-            # Save partial snapshot after each model
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            partial_filename = f"./logs/partial-mind2web-{model_name.replace('/', '-')}-{timestamp}.json"
-            self.export_mind2web_results(partial_filename)
-            print(f"💾 Partial Mind2Web results saved: {partial_filename}")
 
         # Print aggregate metrics
         print("\n" + "="*70)
@@ -1193,38 +937,35 @@ Please respond according to this protocol structure and complete the task."""
         self.mind2web_aggregate = aggregate
         
     def export_mind2web_results(self, filename: str):
-        """
-        Export Mind2Web evaluation results
-        
-        Args:
-            filename: Output filename
-        """
+        """Export Mind2Web evaluation results via ExperimentLogger."""
         if not hasattr(self, 'mind2web_results'):
             print("No Mind2Web results to export")
             return
-        
-        from pathlib import Path
-        import json
-        import datetime
-        
-        # Ensure directory exists
-        log_dir = Path(filename).parent
-        log_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Prepare export data
-        export_data = {
-            "benchmark": "Mind2Web",
-            "timestamp": datetime.datetime.now().isoformat(),
-            "aggregate_metrics": self.mind2web_aggregate,
-            "task_results": self.mind2web_results
-        }
-        
-        # Write to file
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump(export_data, f, indent=2, ensure_ascii=False)
-        
-        print(f"✅️ Mind2Web results exported to {filename}")
-    
+        if self._logger:
+            self._logger.export_mind2web_results(filename, self.mind2web_aggregate, self.mind2web_results)
+
+    def export_results(self, filename: str = "logs/test_results.json"):
+        """Export all results to JSON via ExperimentLogger."""
+        if self._logger:
+            self._logger.export_results(filename)
+
+    def print_summary(self):
+        """Print comprehensive summary via ExperimentLogger."""
+        if self._logger:
+            self._logger.print_summary()
+
+    def close(self):
+        """
+        Finalise the experiment: export results, print summary, and remove
+        the partial log on clean completion.
+        """
+        if self._logger:
+            ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            yaml_stem = Path(self.yaml_path).stem
+            self._logger.export_results(f"logs/results-{yaml_stem}-{ts}.json")
+            self._logger.print_summary()
+            self._logger.close()
+
     def get_supported_protocols(self):
         return [ProtocolType.MCP, ProtocolType.A2A, ProtocolType.ACP, ProtocolType.STANDARD]
 
@@ -1237,40 +978,3 @@ Please respond according to this protocol structure and complete the task."""
             "LlamaIndex",
             "Semantic Kernel"
         ]
-    
-    def compute_token_metrics(self, model_name: str, results: List[TestResult]):
-        # Use tiktoken for OpenAI models
-        openai_models = ["gpt-4o", "gpt-4", "gpt-3.5-turbo"]
-        if any(model_name.startswith(m) for m in ["gpt-", "openai"]) or model_name in openai_models:
-            try:
-                encoding = tiktoken.encoding_for_model(model_name)
-            except Exception:
-                encoding = tiktoken.get_encoding("cl100k_base")  # fallback
-
-            total_reasoning_tokens = 0
-            total_output_tokens = 0
-
-            for result in results:
-                for step in result.reasoning_steps:
-                    total_reasoning_tokens += len(encoding.encode(step.thought or ""))
-                    total_reasoning_tokens += len(encoding.encode(step.action or "")) if step.action else 0
-                    total_reasoning_tokens += len(encoding.encode(step.action_input or "")) if step.action_input else 0
-                    total_reasoning_tokens += len(encoding.encode(step.observation or "")) if step.observation else 0
-                total_output_tokens += len(encoding.encode(result.response or ""))
-
-            return total_reasoning_tokens, total_output_tokens
-
-        # Hugging Face models
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-        total_reasoning_tokens = 0
-        total_output_tokens = 0
-
-        for result in results:
-            for step in result.reasoning_steps:
-                total_reasoning_tokens += len(tokenizer.encode(step.thought or ""))
-                total_reasoning_tokens += len(tokenizer.encode(step.action or "")) if step.action else 0
-                total_reasoning_tokens += len(tokenizer.encode(step.action_input or "")) if step.action_input else 0
-                total_reasoning_tokens += len(tokenizer.encode(step.observation or "")) if step.observation else 0
-            total_output_tokens += len(tokenizer.encode(result.response or ""))
-
-        return total_reasoning_tokens, total_output_tokens
