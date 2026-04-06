@@ -71,6 +71,7 @@ tester [
     domain_model;
     protocols;
     tool_pool;
+    workflow;
 }
 
 config [
@@ -111,6 +112,16 @@ tool_pool [
     fontname="Helvetica-Bold",
     fontsize=13,
     label="tool_pool"
+];
+
+workflow [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#8a5ba0",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="workflow"
 ];
 
 // ─────────────────────────────────────────────
@@ -164,6 +175,7 @@ tester -> benchmark    [xlabel="evaluates"];
 tester -> tool_pool    [xlabel="reads"];
 tester -> domain_model [xlabel="produces"];
 tester -> config       [xlabel="reads"];
+tester -> workflow     [xlabel="uses"];
 
 adapters -> HuggingFaceAPI [xlabel="chat_completion()", style=bold];
 adapters -> OpenAIAPI      [xlabel="chat.completions.create()", style=bold];
@@ -172,6 +184,11 @@ adapters -> config         [xlabel="reads"];
 frameworks -> adapters  [xlabel="generate()"];
 frameworks -> tool_pool [xlabel="get_tool()"];
 frameworks -> protocols [xlabel="wraps"];
+frameworks -> workflow  [xlabel="WorkflowController"];
+
+workflow -> config     [xlabel="reads"];
+workflow -> tool_pool  [xlabel="invoke() for ReAct"];
+workflow -> domain_model [xlabel="uses"];
 
 benchmark -> Mind2WebDataset [xlabel="load_dataset()", style=bold];
 benchmark -> adapters        [xlabel="judge"];

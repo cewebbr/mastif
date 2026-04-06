@@ -27,19 +27,48 @@ OpenAIAPI [shape=component]
 HuggingFaceAPI [shape=component]
 }
 
-// Add BaseAdapter abstract class
-BaseAdapter [label="{
-BaseAdapter\n
-«abstract»|
-model_name: str\l
-|
-generate(prompt: str, **kwargs): str\l
-}"];
-BaseAdapter -> ABC [arrowhead=empty, fontsize=9];
+// Add workflow components
+{
+rank=same;
+WorkflowController;
+NodeConfig;
+}
 
-// Adapters inherit from BaseAdapter
-HuggingFaceAdapter -> BaseAdapter [arrowhead=empty, fontsize=9];
-OpenAIAdapter -> BaseAdapter [arrowhead=empty, fontsize=9];
+WorkflowController [label="{
+WorkflowController\n
+«controller»|
+framework_name: str\l
+_generate: Callable\l
+_get_tool_payload: Callable\l
+max_steps: int\l
+max_tokens: int\l
+_nodes: Dict[str, NodeConfig]\l
+_entry_node: str\l
+_exit_node: str\l
+|
+__init__(framework_name: str, generate_fn: Callable, get_tool_payload_fn: Callable)\l
+run(task: str, role: str, tools: dict): str\l
+_execute_node(node: NodeConfig, state: dict, role: str, reasoning_steps: List): dict\l
+_build_tools_text(tools: dict): str\l
+_get_tool_payload(): list\l
+_parse_react_actions(response: str): List[Tuple[str, str]]\l
+_execute_react_actions(response: str, max_iterations: int = 3): str\l
+}"];
+
+NodeConfig [label="{
+NodeConfig|
+name: str\l
+prompt_template: str\l
+output_key: str\l
+loop: bool\l
+_template_text: Optional[str]\l
+|
+__init__(cfg: dict)\l
+template_text: str\l
+}"];
+
+WorkflowController -> NodeConfig [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9];
+WorkflowController -> ToolPool [arrowhead=open, fontsize=9, label="uses for ReAct"];
 
 Mind2WebEvaluator -> OpenAIAdapter [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
 Mind2WebEvaluator -> ConfigExpert [arrowhead=open, fontsize=9];
@@ -127,6 +156,18 @@ ACPProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
 }
 
 // HuggingFaceLLM and its adapter
+BaseAdapter [label="{
+BaseAdapter\n
+«abstract»|
+model_name: str\l
+|
+generate(prompt: str, **kwargs): str\l
+}"];
+BaseAdapter -> ABC [arrowhead=empty, fontsize=9];
+
+HuggingFaceAdapter -> BaseAdapter [arrowhead=empty, fontsize=9];
+OpenAIAdapter -> BaseAdapter [arrowhead=empty, fontsize=9];
+
 HuggingFaceAdapter [label="{
 HuggingFaceAdapter|
 model_name: str\l
@@ -314,6 +355,7 @@ test_with_langgraph(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]]
 test_with_llamaindex(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None, protocol: ProtocolType = None): TestResult\l
 test_with_semantic_kernel(adapter: BaseAdapter, task: str, protocol: ProtocolType = None): TestResult\l
 run_comprehensive_test()\l
+save_intermediate_snapshot(suffix: str = \"\")\l
 export_results(filename: str = \"test_results.json\")\l
 print_summary()\l
 run_mind2web_evaluation(hf_token: Optional[str] = None)\l
@@ -321,6 +363,9 @@ export_mind2web_results(filename: str)\l
 get_supported_protocols(): List[ProtocolType]\l
 get_supported_frameworks(): List[str]\l
 compute_token_metrics(model_name: str, results: List[TestResult])\l
+_capture_tool_log(): Dict\l
+_aggregate_tool_usage(results: List[TestResult]): Dict[str, int]\l
+_format_tool_usage(tool_usage: Dict[str, int]): str\l
 }"];
 
 // Relationships for Mastif
