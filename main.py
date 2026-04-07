@@ -95,6 +95,8 @@ def main():
         print(f"Testing complete! Check {filename} for detailed results.")
         print(f"{'='*70}\n")
     
+    Mastif.close() # TODO: Test cleanup of resources, file handles, etc.
+
     return 0
 
 if __name__ == "__main__":
