@@ -16,6 +16,7 @@ HuggingFaceLLM;
 AgentState;
 BaseAdapter;
 ToolPool;
+ExperimentLogger;
 }
 
 {
@@ -69,6 +70,14 @@ template_text: str\l
 
 WorkflowController -> NodeConfig [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9];
 WorkflowController -> ToolPool [arrowhead=open, fontsize=9, label="uses for ReAct"];
+
+// Frameworks use WorkflowController
+WorkflowController -> CrewAIAgent [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
+WorkflowController -> SmolAgentWrapper [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
+WorkflowController -> LangChainAgent [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
+WorkflowController -> LangGraphAgent [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
+WorkflowController -> LlamaIndexAgent [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
+WorkflowController -> SemanticKernelAgent [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
 
 Mind2WebEvaluator -> OpenAIAdapter [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9];
 Mind2WebEvaluator -> ConfigExpert [arrowhead=open, fontsize=9];
@@ -222,50 +231,56 @@ CrewAIAgent [label="{CrewAIAgent|
 adapter\l
 role: str\l
 protocol\l
-chain\l
 tools: Dict[str, BaseTool]\l
 reasoning_steps: List[ReasoningStep]\l
+_workflow_controller: WorkflowController\l
 |
 __init__(adapter, role: str, protocol=None)\l
 add_tool(name: str, func=None, description: str=None)\l
-build_research_workflow()\l
+_get_tool_payload(): list\l
+_build_crewai_primitives(): dict\l
 execute_task(task: str, context: Dict = None): str\l
 }"];
 
 SmolAgentWrapper [label="{SmolAgentWrapper|
 adapter\l
 protocol\l
-chain\l
 tools: Dict[str, Tool]\l
 reasoning_steps: List[ReasoningStep]\l
+_workflow_controller: WorkflowController\l
 |
 __init__(adapter, protocol=None)\l
 add_tool(name: str, func=None, description: str=None)\l
-build_research_workflow()\l
+_get_tool_payload(): list\l
+_build_smolagents_primitives(): dict\l
 run(task: str): str\l
 }"];
 
 LangChainAgent [label="{LangChainAgent|
 adapter\l
 protocol\l
-chain\l
 tools: Dict[str, Tool]\l
 reasoning_steps: List[ReasoningStep]\l
+_workflow_controller: WorkflowController\l
 |
 __init__(adapter, protocol=None)\l
 add_tool(name: str, func=None, description: str=None)\l
-build_research_workflow()\l
+_get_tool_payload(): list\l
 run(task: str): str\l
 }"];
 
 LangGraphAgent [label="{LangGraphAgent|
 adapter\l
 protocol\l
-graph\l
+tools: Dict[str, Tool]\l
 reasoning_steps: List[ReasoningStep]\l
+_workflow_controller: WorkflowController\l
+_graph\l
 |
 __init__(adapter, protocol=None)\l
-build_workflow()\l
+add_tool(name: str, func=None, description: str=None)\l
+_get_tool_payload(): list\l
+_build_langgraph(): StateGraph\l
 run(task: str): str\l
 }"];
 
@@ -273,13 +288,13 @@ LlamaIndexAgent [label="{LlamaIndexAgent|
 adapter\l
 llm\l
 protocol\l
-chain\l
 tools: Dict[str, FunctionTool]\l
 reasoning_steps: List[ReasoningStep]\l
+_workflow_controller: WorkflowController\l
 |
 __init__(adapter, protocol=None)\l
 add_tool(name: str, func=None, description: str=None)\l
-build_research_workflow()\l
+_get_tool_payload(): list\l
 run(task: str): str\l
 }"];
 
@@ -287,15 +302,17 @@ SemanticKernelAgent [label="{SemanticKernelAgent|
 adapter\l
 kernel\l
 protocol\l
-chain\l
 inference_client\l
 tools: Dict[str, KernelFunction]\l
 reasoning_steps: List[ReasoningStep]\l
+_workflow_controller: WorkflowController\l
 |
 __init__(adapter, protocol=None)\l
 add_tool(name: str, func=None, description: str=None)\l
 add_semantic_function(name: str, prompt_template: str, description: str)\l
-build_research_workflow()\l
+_get_tool_payload(): list\l
+_register_workflow_functions()\l
+_sk_generate(prompt: str, **kwargs): str\l
 run(task: str): str\l
 }"];
 }
@@ -337,35 +354,34 @@ get_aggregate_metrics(): Dict\l
 
 // Tester
 Mastif [label="{Mastif|
-results: List[TestResult]\l
+yaml_path: str\l
 protocols: Dict[ProtocolType]\l
 standard_tools: List[str]\l
 mind2web_results: Any\l
 mind2web_aggregate: Any\l
 ERROR_PATTERNS: List[str]\l
+_logger: Optional[ExperimentLogger]\l
 |
-__init__()\l
+__init__(yaml_path: str)\l
+_init_logger(metadata: dict): ExperimentLogger\l
 _get_protocol_metrics(protocol: ProtocolType, protocol_instance, task: str): Dict\l
 _check_response_for_errors(response: str, framework: str): tuple\l
+_capture_tool_log(): Dict\l
 test_with_protocol(adapter: BaseAdapter, protocol_type: ProtocolType, task: str, context: Dict = None): TestResult\l
 test_with_crewai(adapter: BaseAdapter, role: str, task: str, context: Dict = None, protocol: ProtocolType = None): TestResult\l
-test_with_smolagents(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None, protocol: ProtocolType = None): TestResult\l
-test_with_langchain(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None, protocol: ProtocolType = None): TestResult\l
-test_with_langgraph(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None, protocol: ProtocolType = None): TestResult\l
-test_with_llamaindex(adapter: BaseAdapter, task: str, tools: List[Dict[str, str]] = None, protocol: ProtocolType = None): TestResult\l
-test_with_semantic_kernel(adapter: BaseAdapter, task: str, protocol: ProtocolType = None): TestResult\l
+test_with_smolagents(adapter: BaseAdapter, task: str, tools: List[str] = None, protocol: ProtocolType = None): TestResult\l
+test_with_langchain(adapter: BaseAdapter, task: str, tools: List[str] = None, protocol: ProtocolType = None): TestResult\l
+test_with_langgraph(adapter: BaseAdapter, task: str, tools: List[str] = None, protocol: ProtocolType = None): TestResult\l
+test_with_llamaindex(adapter: BaseAdapter, task: str, tools: List[str] = None, protocol: ProtocolType = None): TestResult\l
+test_with_semantic_kernel(adapter: BaseAdapter, task: str, tools: List[str] = None, protocol: ProtocolType = None): TestResult\l
 run_comprehensive_test()\l
-save_intermediate_snapshot(suffix: str = \"\")\l
-export_results(filename: str = \"test_results.json\")\l
-print_summary()\l
 run_mind2web_evaluation(hf_token: Optional[str] = None)\l
+export_results(filename: str)\l
 export_mind2web_results(filename: str)\l
+print_summary()\l
+close()\l
 get_supported_protocols(): List[ProtocolType]\l
 get_supported_frameworks(): List[str]\l
-compute_token_metrics(model_name: str, results: List[TestResult])\l
-_capture_tool_log(): Dict\l
-_aggregate_tool_usage(results: List[TestResult]): Dict[str, int]\l
-_format_tool_usage(tool_usage: Dict[str, int]): str\l
 }"];
 
 // Relationships for Mastif
@@ -443,5 +459,41 @@ ToolPool -> LangChainAgent [arrowhead=open, fontsize=9];
 ToolPool -> LlamaIndexAgent [arrowhead=open, fontsize=9];
 ToolPool -> SemanticKernelAgent [arrowhead=open, fontsize=9];
 ToolPool -> Mastif [arrowhead=open, fontsize=9];
+
+// ExperimentLogger
+ExperimentLogger [label="{
+ExperimentLogger\n
+«information expert»|
+_yaml_stem: str\l
+_metadata: dict\l
+_results: List[TestResult]\l
+_completed: set\l
+_started_at: str\l
+_partial_path: Optional[Path]\l
+|
+__init__(yaml_path: str, experiment_metadata: dict)\l
+find_partial(): Optional[dict]\l
+load_partial(partial: dict)\l
+is_completed(model: str, protocol: str, framework: str, task_index: int): bool\l
+log_result(result: TestResult, model: str, protocol: str, framework: str, task_index: int)\l
+_flush_partial()\l
+close()\l
+prompt_resume(partial: dict, total: int): bool\l
+export_results(filename: str)\l
+export_mind2web_results(filename: str, aggregate: dict, task_results: list)\l
+print_summary()\l
+_print_by_framework(results: List[TestResult])\l
+_print_by_protocol(results: List[TestResult])\l
+_print_by_model(results: List[TestResult])\l
+_print_token_usage(results: List[TestResult])\l
+_print_tool_usage(results: List[TestResult])\l
+_aggregate_tool_usage(results: List[TestResult]): Dict[str, int]\l
+_format_tool_usage(usage: Dict[str, int]): str\l
+_compute_token_metrics(model_name: str, results: List[TestResult]): Tuple[int, int]\l
+results: list\l
+}"];
+
+Mastif -> ExperimentLogger [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9, label="owns"];
+ExperimentLogger -> TestResult [arrowhead=open, fontsize=9];
 
 }

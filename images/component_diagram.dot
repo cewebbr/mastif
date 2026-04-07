@@ -72,6 +72,7 @@ tester [
     protocols;
     tool_pool;
     workflow;
+    experiment_logger;
 }
 
 config [
@@ -124,6 +125,16 @@ workflow [
     label="workflow"
 ];
 
+experiment_logger [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#c0463a",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="experiment_logger"
+];
+
 // ─────────────────────────────────────────────
 // Rank: Execution layer (third row)
 // ─────────────────────────────────────────────
@@ -168,14 +179,15 @@ benchmark [
 // Relationships
 // ─────────────────────────────────────────────
 
-tester -> adapters     [xlabel="uses"];
-tester -> protocols    [xlabel="uses"];
-tester -> frameworks   [xlabel="tests"];
-tester -> benchmark    [xlabel="evaluates"];
-tester -> tool_pool    [xlabel="reads"];
-tester -> domain_model [xlabel="produces"];
-tester -> config       [xlabel="reads"];
-tester -> workflow     [xlabel="uses"];
+tester -> adapters          [xlabel="uses"];
+tester -> protocols         [xlabel="uses"];
+tester -> frameworks        [xlabel="tests"];
+tester -> benchmark         [xlabel="evaluates"];
+tester -> tool_pool         [xlabel="reads"];
+tester -> domain_model      [xlabel="produces"];
+tester -> config            [xlabel="reads"];
+tester -> workflow          [xlabel="uses"];
+tester -> experiment_logger [xlabel="delegates logging"];
 
 adapters -> HuggingFaceAPI [xlabel="chat_completion()", style=bold];
 adapters -> OpenAIAPI      [xlabel="chat.completions.create()", style=bold];
@@ -189,6 +201,9 @@ frameworks -> workflow  [xlabel="WorkflowController"];
 workflow -> config     [xlabel="reads"];
 workflow -> tool_pool  [xlabel="invoke() for ReAct"];
 workflow -> domain_model [xlabel="uses"];
+
+experiment_logger -> domain_model [xlabel="reads/writes"];
+experiment_logger -> config       [xlabel="reads (yaml_path)"];
 
 benchmark -> Mind2WebDataset [xlabel="load_dataset()", style=bold];
 benchmark -> adapters        [xlabel="judge"];
