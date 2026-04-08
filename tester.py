@@ -815,7 +815,7 @@ Please respond according to this protocol structure and complete the task."""
             if model_name.startswith("gpt-"):
                 adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
             else:
-                adapter = HuggingFaceAdapter(model_name, hf_token or os.getenv("HF_TOKEN"))
+                adapter = HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))
 
             # ===== Protocol x Framework Combinations =====
             print(f"\n{'-'*70}")
@@ -842,19 +842,13 @@ Please respond according to this protocol structure and complete the task."""
                             print(f"    ⏭️  Skipped (already completed)")
                             continue
 
-                        task_prompt = f"""You are a web automation agent. Complete this task:
-
-    Website: {task['website']}
-    Domain: {task['domain']}
-    Task: {task['confirmed_task']}
-
-    If needed, provide a step-by-step plan of actions needed to complete this task.
-    You can use external tools and spawn specialized agents as needed.
-    The maximum number of agents you can spawn is 3.
-
-    Your response:"""
+                        # Construct task context for Workflow (this string maps to {task} in plan-mind2web.txt)
+                        task_prompt = (f"Website: {task['website']}\n"
+                                    f"Domain: {task['domain']}\n"
+                                    f"Goal: {task['confirmed_task']}")
 
                         try:
+                            # Build arguments for test function
                             args = [adapter, task_prompt]
                             if framework_name == "CrewAI":
                                 args.insert(1, extra_args["role"])
