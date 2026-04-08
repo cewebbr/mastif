@@ -1,0 +1,722 @@
+{
+  "test_run_timestamp": "2026-04-08T10:52:24.890568",
+  "total_tests": 4,
+  "metadata": {
+    "experiment_name": "WWW 2027",
+    "test_mode": "mind2web",
+    "models": [
+      "deepseek-ai/DeepSeek-V3.2"
+    ],
+    "protocols": [
+      "standard"
+    ],
+    "frameworks": [
+      "CrewAI",
+      "LangGraph"
+    ],
+    "tools": [
+      "web_search",
+      "web_browser",
+      "requests_get",
+      "beautifulsoup_scraper",
+      "datetime",
+      "wikipedia",
+      "arxiv",
+      "pubmed",
+      "python_repl",
+      "sympy",
+      "json_parser",
+      "pdf_reader",
+      "youtube_transcript",
+      "web_interaction",
+      "keyboard_interaction"
+    ],
+    "total_tasks": 2
+  },
+  "results": [
+    {
+      "model_name": "deepseek-ai/DeepSeek-V3.2",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+      "response": "Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d7c-40fb3274403b21307141029e;60ae0022-b93a-4a77-8fc2-16bc20b4c1b4)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing CrewAI workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "CrewAI agents ready: ['plan', 'research', 'synthesize']",
+          "timestamp": 1775656303.150296
+        },
+        {
+          "step_number": 2,
+          "thought": "Executing node 'plan'",
+          "action": "plan",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656303.150313
+        },
+        {
+          "step_number": 3,
+          "thought": "Node 'plan' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: I need to check for pickup restaurant availability on exploretock.com for Boston, NY on March 18 at 5pm with one guest. Let me start by searching for the website and understanding how to use it.\n\n...",
+          "timestamp": 1775656307.339463
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656307.339502
+        },
+        {
+          "step_number": 5,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Thought: I need to start by searching for exploretock website to understand its structure and how to search for pickup restaurants. Let me use web_search first...",
+          "timestamp": 1775656311.2324128
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing loop node 'research' (step 1)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656311.2324648
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656311.232469
+        },
+        {
+          "step_number": 8,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Thought: I need to start by searching for exploretock.com to understand what it is and how to use it for restaurant pickup availability.\n\nAction: web_search\nAction Input: exploretock website...",
+          "timestamp": 1775656315.5311518
+        },
+        {
+          "step_number": 9,
+          "thought": "Continuing loop node 'research' (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656315.5311942
+        },
+        {
+          "step_number": 10,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656315.531199
+        },
+        {
+          "step_number": 11,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d7b-5d6a652e797e954316d44e35;6c780452-6e87-42a3-a5...",
+          "timestamp": 1775656315.685461
+        },
+        {
+          "step_number": 12,
+          "thought": "Continuing loop node 'research' (step 3)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656315.685496
+        },
+        {
+          "step_number": 13,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656315.6855009
+        },
+        {
+          "step_number": 14,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d7c-4d6590843c1f4a5741c52a21;6a28d721-64ef-4cce-9f...",
+          "timestamp": 1775656315.838846
+        },
+        {
+          "step_number": 15,
+          "thought": "Loop node 'research' complete",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 3 iteration(s)",
+          "timestamp": 1775656315.838878
+        },
+        {
+          "step_number": 16,
+          "thought": "Executing node 'synthesize'",
+          "action": "synthesize",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656315.838885
+        },
+        {
+          "step_number": 17,
+          "thought": "Node 'synthesize' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d7c-40fb3274403b21307141029e;60ae0022-b93a-4a77-8f...",
+          "timestamp": 1775656315.984339
+        }
+      ],
+      "reasoning_steps_count": 17,
+      "latency": 12.947402954101562,
+      "success": false,
+      "error": "Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d7c-40fb3274403b21307141029e;60ae0022-b93a-4a77-8f",
+      "metadata": {
+        "role": "Web Automation Specialist",
+        "protocol_used": "standard",
+        "send_overhead_ms": 0,
+        "receive_overhead_ms": 0,
+        "total_overhead_ms": 0,
+        "message_size_bytes": 130,
+        "tool_log": {
+          "total_calls": 0,
+          "successful_calls": 0,
+          "failed_calls": 0,
+          "tools_used": [],
+          "per_tool": {}
+        }
+      },
+      "tool_log": {
+        "total_calls": 0,
+        "successful_calls": 0,
+        "failed_calls": 0,
+        "tools_used": [],
+        "per_tool": {}
+      }
+    },
+    {
+      "model_name": "deepseek-ai/DeepSeek-V3.2",
+      "protocol": "standard",
+      "framework": "CrewAI",
+      "task": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+      "response": "Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d84-4c2906755f1c1bcd753d891a;d2d84212-00b5-4f88-9171-e27cc980a4ca)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing CrewAI workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "CrewAI agents ready: ['plan', 'research', 'synthesize']",
+          "timestamp": 1775656323.0510678
+        },
+        {
+          "step_number": 2,
+          "thought": "Executing node 'plan'",
+          "action": "plan",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656323.0510771
+        },
+        {
+          "step_number": 3,
+          "thought": "Node 'plan' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d83-5d9f5e6a6b859f7414b8226a;18818295-e772-4f3a-ab...",
+          "timestamp": 1775656323.2039309
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656323.203962
+        },
+        {
+          "step_number": 5,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d83-2d3c6dd315cdb44c1ab996da;1350dffc-87c8-48cf-83...",
+          "timestamp": 1775656323.361034
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing loop node 'research' (step 1)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656323.3610728
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656323.361078
+        },
+        {
+          "step_number": 8,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d83-5f430a991b9f8a4a002bdddc;73715834-cd4d-4280-8d...",
+          "timestamp": 1775656323.518806
+        },
+        {
+          "step_number": 9,
+          "thought": "Continuing loop node 'research' (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656323.518823
+        },
+        {
+          "step_number": 10,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656323.518827
+        },
+        {
+          "step_number": 11,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d83-68e4dd933b0b852f72e3101f;a0ef2d3d-76e4-4c0c-93...",
+          "timestamp": 1775656323.729676
+        },
+        {
+          "step_number": 12,
+          "thought": "Continuing loop node 'research' (step 3)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656323.7297091
+        },
+        {
+          "step_number": 13,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656323.729713
+        },
+        {
+          "step_number": 14,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d84-436a6ef9402b6b3609a7d367;3214af28-7e01-4ccf-98...",
+          "timestamp": 1775656323.884465
+        },
+        {
+          "step_number": 15,
+          "thought": "Loop node 'research' complete",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 3 iteration(s)",
+          "timestamp": 1775656323.884493
+        },
+        {
+          "step_number": 16,
+          "thought": "Executing node 'synthesize'",
+          "action": "synthesize",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656323.884498
+        },
+        {
+          "step_number": 17,
+          "thought": "Node 'synthesize' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d84-4c2906755f1c1bcd753d891a;d2d84212-00b5-4f88-91...",
+          "timestamp": 1775656324.0292459
+        }
+      ],
+      "reasoning_steps_count": 17,
+      "latency": 1.0291287899017334,
+      "success": false,
+      "error": "Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d84-4c2906755f1c1bcd753d891a;d2d84212-00b5-4f88-91",
+      "metadata": {
+        "role": "Web Automation Specialist",
+        "protocol_used": "standard",
+        "send_overhead_ms": 0,
+        "receive_overhead_ms": 0,
+        "total_overhead_ms": 0,
+        "message_size_bytes": 192,
+        "tool_log": {
+          "total_calls": 0,
+          "successful_calls": 0,
+          "failed_calls": 0,
+          "tools_used": [],
+          "per_tool": {}
+        }
+      },
+      "tool_log": {
+        "total_calls": 0,
+        "successful_calls": 0,
+        "failed_calls": 0,
+        "tools_used": [],
+        "per_tool": {}
+      }
+    },
+    {
+      "model_name": "deepseek-ai/DeepSeek-V3.2",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+      "response": "Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d8f-522b01e8453ef0685d08f5d7;2e1c2dfc-c110-488d-8451-77128c4a84e7)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "StateGraph compiled successfully",
+          "timestamp": 1775656326.8909838
+        },
+        {
+          "step_number": 2,
+          "thought": "Executing node 'plan'",
+          "action": "plan",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656326.890997
+        },
+        {
+          "step_number": 3,
+          "thought": "Node 'plan' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: I'll start by planning how to accomplish this task. I need to check for pickup restaurant availability in Boston, NY on March 18, 5pm with one guest on the exploretock website. First, I should search ...",
+          "timestamp": 1775656330.866577
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656330.866602
+        },
+        {
+          "step_number": 5,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Thought: I need to start by searching for the exploretock website to understand what it is and how to access it.\n\nAction: web_search\nAction Input: exploretock website\n\n\nObservation: Tool execution err...",
+          "timestamp": 1775656334.8843699
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing loop node 'research' (step 1)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656334.884402
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656334.884405
+        },
+        {
+          "step_number": 8,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d8f-7b9e8fa804dc626c2da0f438;fda6542f-ffb8-4fec-ad...",
+          "timestamp": 1775656335.030835
+        },
+        {
+          "step_number": 9,
+          "thought": "Continuing loop node 'research' (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656335.030863
+        },
+        {
+          "step_number": 10,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656335.030866
+        },
+        {
+          "step_number": 11,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d8f-14b7ca37499da2087e4cdce0;9476a9bb-6b44-4e31-98...",
+          "timestamp": 1775656335.184344
+        },
+        {
+          "step_number": 12,
+          "thought": "Continuing loop node 'research' (step 3)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656335.184385
+        },
+        {
+          "step_number": 13,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656335.184389
+        },
+        {
+          "step_number": 14,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d8f-68a30fbf75df3153552d2d7a;7771edc2-0c55-4fcd-a7...",
+          "timestamp": 1775656335.336403
+        },
+        {
+          "step_number": 15,
+          "thought": "Loop node 'research' complete",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 3 iteration(s)",
+          "timestamp": 1775656335.336446
+        },
+        {
+          "step_number": 16,
+          "thought": "Executing node 'synthesize'",
+          "action": "synthesize",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest",
+          "observation": null,
+          "timestamp": 1775656335.336451
+        },
+        {
+          "step_number": 17,
+          "thought": "Node 'synthesize' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d8f-522b01e8453ef0685d08f5d7;2e1c2dfc-c110-488d-84...",
+          "timestamp": 1775656335.482251
+        }
+      ],
+      "reasoning_steps_count": 17,
+      "latency": 8.601830959320068,
+      "success": false,
+      "error": "Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d8f-522b01e8453ef0685d08f5d7;2e1c2dfc-c110-488d-84",
+      "metadata": {
+        "workflow_type": "research_pipeline",
+        "protocol_used": "standard",
+        "send_overhead_ms": 0,
+        "receive_overhead_ms": 0,
+        "total_overhead_ms": 0,
+        "message_size_bytes": 130,
+        "tool_log": {
+          "total_calls": 0,
+          "successful_calls": 0,
+          "failed_calls": 0,
+          "tools_used": [],
+          "per_tool": {}
+        }
+      },
+      "tool_log": {
+        "total_calls": 0,
+        "successful_calls": 0,
+        "failed_calls": 0,
+        "tools_used": [],
+        "per_tool": {}
+      }
+    },
+    {
+      "model_name": "deepseek-ai/DeepSeek-V3.2",
+      "protocol": "standard",
+      "framework": "LangGraph",
+      "task": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+      "response": "Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d95-45c7f99d7efeaef5151e685a;b9549d8e-45d6-4e2a-a925-ab8f2ba01129)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers.",
+      "reasoning_steps": [
+        {
+          "step_number": 1,
+          "thought": "Initializing LangGraph workflow",
+          "action": null,
+          "action_input": null,
+          "observation": "StateGraph compiled successfully",
+          "timestamp": 1775656339.9077919
+        },
+        {
+          "step_number": 2,
+          "thought": "Executing node 'plan'",
+          "action": "plan",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656339.9078
+        },
+        {
+          "step_number": 3,
+          "thought": "Node 'plan' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d94-4c67aba1155b1d2b0371fc73;2ce6b59c-0f34-4c50-8d...",
+          "timestamp": 1775656340.0597591
+        },
+        {
+          "step_number": 4,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656340.059774
+        },
+        {
+          "step_number": 5,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d94-1fb515f3339f2dda1747cfff;3fefa306-8c09-4a63-92...",
+          "timestamp": 1775656340.2118368
+        },
+        {
+          "step_number": 6,
+          "thought": "Continuing loop node 'research' (step 1)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656340.2118778
+        },
+        {
+          "step_number": 7,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656340.211883
+        },
+        {
+          "step_number": 8,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d94-4dc259233d3c2cb54029648c;c4c347c7-2619-46b0-9e...",
+          "timestamp": 1775656340.367274
+        },
+        {
+          "step_number": 9,
+          "thought": "Continuing loop node 'research' (step 2)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656340.3673081
+        },
+        {
+          "step_number": 10,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656340.367311
+        },
+        {
+          "step_number": 11,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d94-3cef610a13d9c57508a4b231;526d0d95-df37-4abd-9d...",
+          "timestamp": 1775656340.619257
+        },
+        {
+          "step_number": 12,
+          "thought": "Continuing loop node 'research' (step 3)",
+          "action": null,
+          "action_input": null,
+          "observation": "More iterations needed",
+          "timestamp": 1775656340.619297
+        },
+        {
+          "step_number": 13,
+          "thought": "Executing node 'research'",
+          "action": "research",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656340.6193018
+        },
+        {
+          "step_number": 14,
+          "thought": "Node 'research' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d94-66e276bc433888b43ef9803a;fef1c0da-76b3-461d-91...",
+          "timestamp": 1775656340.772762
+        },
+        {
+          "step_number": 15,
+          "thought": "Loop node 'research' complete",
+          "action": null,
+          "action_input": null,
+          "observation": "Completed 3 iteration(s)",
+          "timestamp": 1775656340.772806
+        },
+        {
+          "step_number": 16,
+          "thought": "Executing node 'synthesize'",
+          "action": "synthesize",
+          "action_input": "Website: exploretock\nDomain: Travel\nGoal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.",
+          "observation": null,
+          "timestamp": 1775656340.772811
+        },
+        {
+          "step_number": 17,
+          "thought": "Node 'synthesize' completed",
+          "action": null,
+          "action_input": null,
+          "observation": "Output: Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d95-45c7f99d7efeaef5151e685a;b9549d8e-45d6-4e2a-a9...",
+          "timestamp": 1775656340.915426
+        }
+      ],
+      "reasoning_steps_count": 17,
+      "latency": 1.0112740993499756,
+      "success": false,
+      "error": "Inference Error: 402 Client Error: Payment Required for url: https://router.huggingface.co/novita/v3/openai/chat/completions (Request ID: Root=1-69d65d95-45c7f99d7efeaef5151e685a;b9549d8e-45d6-4e2a-a9",
+      "metadata": {
+        "workflow_type": "research_pipeline",
+        "protocol_used": "standard",
+        "send_overhead_ms": 0,
+        "receive_overhead_ms": 0,
+        "total_overhead_ms": 0,
+        "message_size_bytes": 192,
+        "tool_log": {
+          "total_calls": 0,
+          "successful_calls": 0,
+          "failed_calls": 0,
+          "tools_used": [],
+          "per_tool": {}
+        }
+      },
+      "tool_log": {
+        "total_calls": 0,
+        "successful_calls": 0,
+        "failed_calls": 0,
+        "tools_used": [],
+        "per_tool": {}
+      }
+    }
+  ]
+}
