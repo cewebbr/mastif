@@ -170,20 +170,25 @@ tools:
 
 workflow:
   nodes:
-    - name: "plan"
-      prompt_template: "prompts/plan-mind2web.txt"
-      output_key: "plan"
+    - name: "navigate"
+      prompt_template: "prompts/mind2web/navigate.txt"
+      output_key: "navigation_status"
       loop: false
 
-    - name: "research"
-      prompt_template: "prompts/react-loop.txt"
-      output_key: "research_results"
+    - name: "observe_and_identify"
+      prompt_template: "prompts/mind2web/observe.txt"
+      output_key: "observation_analysis"
       loop: true
 
-    - name: "synthesize"
-      prompt_template: "prompts/react-synthesize.txt"
+    - name: "interact"
+      prompt_template: "prompts/mind2web/interact.txt"
+      output_key: "research_results" # Accumulates history in workflow.py
+      loop: true
+
+    - name: "conclude"
+      prompt_template: "prompts/mind2web/conclude.txt"
       output_key: "final_report"
       loop: false
 
-  entry_node: "plan"
-  exit_node: "synthesize"
+  entry_node: "navigate"
+  exit_node: "conclude"
