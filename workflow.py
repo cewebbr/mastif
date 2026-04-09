@@ -197,6 +197,7 @@ class WorkflowController:
                 "No nodes defined under 'workflow.nodes' in the configuration file."
             )
 
+        # TODO: Support more complex workflow structures (hierarchies, branching, etc.)
         self._nodes: Dict[str, NodeConfig] = {
             n["name"]: NodeConfig(n) for n in raw_nodes
         }

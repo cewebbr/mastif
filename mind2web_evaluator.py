@@ -169,6 +169,7 @@ Example:
 Do not include any extra text, markdown, or explanation outside the JSON object."""
 
         try:
+            # TODO: Stop when judge model API responds 'payment required' or similar to avoid wasting tokens on retries
             response = self.judge_adapter.generate(prompt, max_tokens=350, temperature=0.0)
             parsed = self._parse_json_object(response)
             return self._normalize_evaluation_results(parsed, response)
