@@ -225,17 +225,17 @@ tools:
 workflow:
   nodes:
     - name: "plan"
-      prompt_template: "prompts/plan.txt"
+      prompt_template: "prompts/react/plan.txt"
       output_key: "plan"
       loop: false
 
     - name: "research"
-      prompt_template: "prompts/react-loop.txt"
+      prompt_template: "prompts/react/loop.txt"
       output_key: "research_results"
       loop: true
 
     - name: "synthesize"
-      prompt_template: "prompts/react-synthesize.txt"
+      prompt_template: "prompts/react/synthesize.txt"
       output_key: "final_report"
       loop: false
 
