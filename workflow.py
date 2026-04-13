@@ -217,25 +217,13 @@ class WorkflowController:
     ) -> dict:
         """
         Execute the configured workflow and return the final state dict.
-
-        Args:
-            task:           The task string passed to the agent.
-            tools:          The agent's registered tool objects (keyed by name).
-            role:           The agent's role description (used in prompt rendering).
-            reasoning_steps: The agent's shared reasoning_steps list — mutated in place.
-
-        Returns:
-            Final state dict. The value under the exit node's output_key is
-            the agent's final answer.
         """
+        # Initialize state with core variables
         state: dict = {
-            "task":             task,
-            "plan":             "",
-            "research_results": [],
-            "final_report":     "",
-            "step":             0,
-            "tools":            tools,
-            "max_steps":        self.max_steps,
+            "task":       task,
+            "step":       0,
+            "tools":      tools,
+            "max_steps":  self.max_steps,
         }
 
         # Walk nodes in declaration order
@@ -251,20 +239,10 @@ class WorkflowController:
                         observation="More iterations needed"
                     ))
                     state = self._execute_node(node, state, role, reasoning_steps)
-
-                reasoning_steps.append(ReasoningStep(
-                    step_number=len(reasoning_steps) + 1,
-                    thought=f"Loop node '{node.name}' complete",
-                    observation=f"Completed {state['step'] - 1} iteration(s)"
-                ))
             else:
                 state = self._execute_node(node, state, role, reasoning_steps)
 
         return state
-
-    # ------------------------------------------------------------------
-    # Internal execution
-    # ------------------------------------------------------------------
 
     def _execute_node(
         self,
@@ -273,7 +251,7 @@ class WorkflowController:
         role: str,
         reasoning_steps: List[ReasoningStep],
     ) -> dict:
-        """Render the node's prompt, call generate, and update state."""
+        """Render the node's prompt dynamically, call generate, and update state."""
 
         reasoning_steps.append(ReasoningStep(
             step_number=len(reasoning_steps) + 1,
@@ -284,24 +262,30 @@ class WorkflowController:
 
         tools_text = self._build_tools_text(state["tools"])
 
-        # Render research_results as joined text for the report node
-        research_results_text = "\n\n".join(
-            r for r in state.get("research_results", []) if r
-        )
-
+        # --- DYNAMIC VARIABLE INJECTION ---
+        # Start with base framework/agent variables
         variables = {
-            "framework":       self.framework_name,
-            "role":            role,
-            "task":            state["task"],
-            "plan":            state.get("plan", ""),
-            "step":            state.get("step", ""),
-            "tools_text":      tools_text,
-            "research_results": research_results_text,
+            "framework":  self.framework_name,
+            "role":       role,
+            "tools_text": tools_text,
         }
 
+        # Inject everything currently in the state dict.
+        # This makes any previous output_key (like 'navigation_status') 
+        # available to the current node's prompt template.
+        for key, value in state.items():
+            if key == "research_results" and isinstance(value, list):
+                # Special handling for history accumulation: join into a single string
+                variables[key] = "\n\n".join(str(r) for r in value if r)
+            elif key == "tools":
+                continue  # Skip raw tool objects
+            else:
+                variables[key] = value
+
+        # Render the template using the dynamic variable set
         prompt = _render(node.template_text, variables)
 
-        # Nodes that use tools get the tool payload; the report node does not
+        # Nodes that use tools get the tool payload; the exit node does not
         use_tools = bool(state["tools"]) and node.name != self._exit_node
         kwargs = {"max_tokens": self.max_tokens}
         if use_tools:
@@ -315,17 +299,19 @@ class WorkflowController:
             if use_tools and ("Action:" in output or "Thought:" in output):
                 output = _execute_react_actions(output)
 
-            # Update state based on output_key
+            # Update state based on the output_key defined in YAML
             if node.output_key == "research_results":
+                # List-based accumulation for history
                 state["research_results"] = state.get("research_results", []) + [output]
                 state["step"] = state.get("step", 0) + 1
             else:
+                # Standard assignment for single-step results
                 state[node.output_key] = output
 
             reasoning_steps.append(ReasoningStep(
                 step_number=len(reasoning_steps) + 1,
                 thought=f"Node '{node.name}' completed",
-                observation=f"Output: {output[:200]}..."
+                observation=f"Output stored in '{node.output_key}'"
             ))
 
         except Exception as e:
