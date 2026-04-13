@@ -93,7 +93,7 @@ Execute according to protocol."""
                 role="an AI agent",
                 reasoning_steps=self.reasoning_steps,
             )
-            exit_node_key = self._workflow_controller._controller._nodes[self._workflow_controller._controller._exit_node].output_key
+            exit_node_key = self._workflow_controller.final_output_key
             return state.get(exit_node_key, "No report generated")
 
         except Exception as e:

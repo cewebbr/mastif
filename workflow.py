@@ -341,3 +341,8 @@ class WorkflowController:
             desc = getattr(tool, "description", "No description available.")
             lines.append(f"- {name}: {desc}")
         return "\n".join(lines)
+
+    @property
+    def final_output_key(self) -> str:
+        """Returns the output_key of the configured exit node."""
+        return self._nodes[self._exit_node].output_key
