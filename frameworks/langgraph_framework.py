@@ -7,8 +7,6 @@ LangGraph provides graph-based agent orchestration with explicit state managemen
 import json
 from typing import List, Dict, Callable, Optional, TypedDict, Annotated
 import operator
-from langgraph.graph import StateGraph, END
-from langchain_core.tools import Tool
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
@@ -22,15 +20,13 @@ class LangGraphAgent:
     def __init__(self, adapter, protocol=None):
         self.adapter = adapter
         self.protocol = protocol
-        self.tools: Dict[str, Tool] = {}
+        self.tools: Dict[str, any] = {}
         self.reasoning_steps: List[ReasoningStep] = []
         self._workflow_controller = WorkflowController(
             framework_name="LangGraph",
             generate_fn=self.adapter.generate,
             get_tool_payload_fn=self._get_tool_payload,
         )
-        # LangGraph StateGraph compiled once alongside the controller
-        self._graph = self._build_langgraph()
 
     def _get_tool_payload(self) -> list:
         tool_payload = []
@@ -54,6 +50,8 @@ class LangGraphAgent:
         if not hasattr(self, "tools"):
             self.tools = {}
         if name in ToolPool.available_tools:
+            # Note: We use the ToolPool to get the framework-specific tool instance
+            from langchain_core.tools import Tool
             tool = ToolPool.get_tool(name, framework="langchain")
         else:
             if func is None:
@@ -68,61 +66,9 @@ class LangGraphAgent:
                     ))
                     return result
                 func = _dummy
+            from langchain_core.tools import Tool
             tool = Tool(name=name, func=func, description=description or f"Custom tool: {name}")
         self.tools[tool.name] = tool
-
-    def _build_langgraph(self):
-        """
-        Compile a LangGraph StateGraph as a structural primitive.
-        The graph mirrors the configured workflow nodes but delegates
-        actual generation to WorkflowController.
-        """
-        config = ConfigExpert.get_instance()
-        workflow_cfg = config.get("workflow", {})
-        nodes = workflow_cfg.get("nodes", [])
-
-        class AgentState(TypedDict):
-            task: str
-            plan: str
-            research_results: Annotated[list, operator.add]
-            final_report: str
-            step: int
-            max_steps: int
-
-        def make_node(node_name):
-            def _node(state: AgentState) -> AgentState:
-                # Delegate to WorkflowController for actual execution
-                return state
-            _node.__name__ = node_name
-            return _node
-
-        def should_continue(state: AgentState) -> str:
-            if state["step"] > state["max_steps"]:
-                return "exit"
-            return "loop"
-
-        workflow = StateGraph(AgentState)
-        node_names = [n["name"] for n in nodes]
-
-        for name in node_names:
-            workflow.add_node(name, make_node(name))
-
-        if node_names:
-            workflow.set_entry_point(node_names[0])
-            for i in range(len(node_names) - 1):
-                current = node_names[i]
-                next_node = node_names[i + 1]
-                loop_node = nodes[i].get("loop", False)
-                if loop_node:
-                    workflow.add_conditional_edges(
-                        current, should_continue,
-                        {"loop": current, "exit": next_node}
-                    )
-                else:
-                    workflow.add_edge(current, next_node)
-            workflow.add_edge(node_names[-1], END)
-
-        return workflow.compile()
 
     def run(self, task: str) -> str:
         if self.protocol:
@@ -139,7 +85,7 @@ Execute according to protocol."""
             self.reasoning_steps.append(ReasoningStep(
                 step_number=1,
                 thought="Initializing LangGraph workflow",
-                observation="StateGraph compiled successfully"
+                observation="Workflow controller ready"
             ))
 
             state = self._workflow_controller.run(
@@ -148,7 +94,16 @@ Execute according to protocol."""
                 role="an AI agent",
                 reasoning_steps=self.reasoning_steps,
             )
-            return state.get("final_report", "No report generated")
+            
+            # Retrieve the dynamic output key from the exit node
+            exit_node_key = self._workflow_controller._nodes[self._workflow_controller._exit_node].output_key
+            response = state.get(exit_node_key, "No report generated")
+
+            # Format list-based results (like interaction history) as a string
+            if isinstance(response, list):
+                response = "\n\n".join(str(r) for r in response)
+            
+            return response
 
         except Exception as e:
             self.reasoning_steps.append(ReasoningStep(

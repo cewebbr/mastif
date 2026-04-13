@@ -158,6 +158,7 @@ class NodeConfig:
 # WorkflowController
 # ---------------------------------------------------------------------------
 
+# TODO: Verify placeholders in prompt templates match the variables we inject in _execute_node
 class WorkflowController:
     """
     GRASP Controller for agentic workflow execution.

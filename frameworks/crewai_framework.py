@@ -140,7 +140,8 @@ Execute according to protocol."""
                 role=self.role,
                 reasoning_steps=self.reasoning_steps,
             )
-            return state.get("final_report", "No report generated")
+            exit_node_key = self._workflow_controller._controller._nodes[self._workflow_controller._controller._exit_node].output_key
+            return state.get(exit_node_key, "No report generated")
 
         except Exception as e:
             self.reasoning_steps.append(ReasoningStep(
