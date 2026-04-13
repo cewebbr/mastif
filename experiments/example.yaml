@@ -1,5 +1,5 @@
 # =============================================================================
-# MASTIF — Multi-Agent System Testing & Interoperability Framework
+# MASTIF — Multi-Agent System TestIng Framework
 # Example configuration file — copy and edit to create your own experiment.
 # =============================================================================
 
@@ -11,7 +11,7 @@ experiment:
 # Model settings
 # -----------------------------------------------------------------------------
 
-temperature: 0.7          # Sampling temperature (0.0 = deterministic, 1.0 = creative)
+temperature: 0.7          # Sampling temperature (0.0 = deterministic, 1.0 = creative; this influences tool use)
 max_tokens: 1024          # Max tokens generated per request
 max_steps: 3              # Max research iterations per agent workflow (default: 3)
 max_tool_rounds: 5        # Max tool execution rounds per generate() call (default: 5)
@@ -64,7 +64,7 @@ requests_soft_limit: 1000 # Prompts for confirmation if total API calls exceed t
 # Any model ID listed here must be available on HuggingFace or OpenAI.
 # Prefix OpenAI models with "gpt-". All others are treated as HuggingFace models.
 # TIP: Test models independently with a small number of tasks before scaling up to larger benchmarks.
-# IMPORTANT: If tool use is expected in the tasks, make sure to use models that support it (e.g., DeepSeek, GPT-4o, etc.)
+# IMPORTANT: If you want to study tool use, make sure to select models that support tool use by agents (e.g., DeepSeek, GPT-4o, etc.)
 # -----------------------------------------------------------------------------
 
 models:
@@ -92,6 +92,7 @@ protocols:
 # -----------------------------------------------------------------------------
 # Frameworks
 # Agentic frameworks to test. Each runs the same workflow independently.
+# Frameworks suported are listed bellow.
 # -----------------------------------------------------------------------------
 
 frameworks:
