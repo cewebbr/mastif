@@ -31,7 +31,7 @@ LOGS_DIR = Path("logs")
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _result_to_dict(r: TestResult) -> dict:
+def _result_to_dict(r: TestResult, task_index: int = -1) -> dict:
     reasoning_dict = [
         {
             "step_number": step.step_number,
@@ -47,6 +47,7 @@ def _result_to_dict(r: TestResult) -> dict:
         "model_name":            r.model_name,
         "protocol":              r.protocol.value,
         "framework":             r.framework,
+        "task_index":            task_index,
         "task":                  r.task,
         "response":              r.response,
         "reasoning_steps":       reasoning_dict,
@@ -115,15 +116,32 @@ class ExperimentLogger:
         Restore state from a partial log dict returned by find_partial().
         Rebuilds the completed set and results list so the test loops can skip
         already-finished combinations.
+
+        Entries whose result carried an error are intentionally excluded from
+        _completed so they are retried on the next run.
         """
         self._started_at = partial.get("started_at", self._started_at)
         self._partial_path = LOGS_DIR / f"partial-{self._yaml_stem}-{partial.get('timestamp_key', 'resumed')}.json"
+
+        # Build a quick lookup of results by (model, protocol, framework, task_index)
+        # so we can check whether a completed entry produced an error.
+        results_by_key = {}
+        for r in partial.get("results", []):
+            key = _completed_key(
+                r.get("model_name", ""), r.get("protocol", ""),
+                r.get("framework", ""), r.get("task_index", -1)
+            )
+            results_by_key[key] = r
 
         for entry in partial.get("completed", []):
             key = _completed_key(
                 entry["model"], entry["protocol"],
                 entry["framework"], entry["task_index"]
             )
+            # Re-run any entry whose result contained an error
+            result = results_by_key.get(key, {})
+            if result.get("error") or not result.get("success", True):
+                continue
             self._completed.add(key)
 
         # Restore TestResult objects as plain dicts — sufficient for export/summary
@@ -145,7 +163,7 @@ class ExperimentLogger:
         Append a result, mark the combination as completed, and flush to disk.
         Called after every single task execution.
         """
-        self._results.append(result)
+        self._results.append((result, task_index))
         self._completed.add(_completed_key(model, protocol, framework, task_index))
         self._flush_partial()
 
@@ -160,10 +178,14 @@ class ExperimentLogger:
             for k in self._completed
         ]
 
-        results_list = [
-            r if isinstance(r, dict) else _result_to_dict(r)
-            for r in self._results
-        ]
+        results_list = []
+        for entry in self._results:
+            if isinstance(entry, tuple):
+                r, idx = entry
+                results_list.append(r if isinstance(r, dict) else _result_to_dict(r, idx))
+            else:
+                # plain dict restored from a previous partial log
+                results_list.append(entry)
 
         payload = {
             "yaml_file":    f"{self._yaml_stem}.yaml",
@@ -215,6 +237,21 @@ class ExperimentLogger:
         answer = input("Resume from partial log? (yes/no): ").strip().lower()
         return answer in ("yes", "y")
 
+    def _unwrap_results(self) -> List[TestResult]:
+        """
+        Return only TestResult objects from _results, unwrapping (result, task_index)
+        tuples produced by log_result and skipping plain dicts from resumed partial logs.
+        """
+        out = []
+        for entry in self._results:
+            if isinstance(entry, tuple):
+                out.append(entry[0])
+            elif isinstance(entry, TestResult):
+                out.append(entry)
+            # plain dicts from resumed partial logs are skipped — they lack
+            # reasoning_steps objects and are only needed for JSON export
+        return out
+
     # ------------------------------------------------------------------
     # Final export
     # ------------------------------------------------------------------
@@ -224,10 +261,13 @@ class ExperimentLogger:
         path = Path(filename)
         path.parent.mkdir(parents=True, exist_ok=True)
 
-        results_list = [
-            r if isinstance(r, dict) else _result_to_dict(r)
-            for r in self._results
-        ]
+        results_list = []
+        for entry in self._results:
+            if isinstance(entry, tuple):
+                r, idx = entry
+                results_list.append(r if isinstance(r, dict) else _result_to_dict(r, idx))
+            else:
+                results_list.append(entry)
 
         with open(path, "w", encoding="utf-8") as f:
             json.dump(
@@ -267,7 +307,7 @@ class ExperimentLogger:
 
     def print_summary(self):
         """Print comprehensive summary of all logged results."""
-        results = [r for r in self._results if isinstance(r, TestResult)]
+        results = self._unwrap_results()
         if not results:
             print("No results to summarise.")
             return
@@ -482,7 +522,7 @@ class ExperimentLogger:
 
     @property
     def results(self) -> list:
-        return self._results
+        return self._unwrap_results()
 
     def append_result(self, result: TestResult):
         """Append without marking completed — used when restoring from partial."""

@@ -116,6 +116,30 @@ class Mastif:
         "tool '",  # tool execution errors
     ]
 
+    # Patterns that indicate an API payment/quota/billing hard stop.
+    # Any match aborts the entire experiment immediately.
+    PAYMENT_PATTERNS = [
+        "payment required",
+        "402",
+        "insufficient credits",
+        "exceeded your current quota",
+        "billing",
+        "subscription",
+        "upgrade your plan",
+        "rate limit exceeded",
+        "you have run out of",
+        "account is not active",
+        "payment_required",
+    ]
+
+    def _is_payment_error(self, text: str) -> bool:
+        """
+        Return True if the text contains a payment/quota/billing error
+        that makes further API calls futile.
+        """
+        lower = text.lower()
+        return any(p in lower for p in self.PAYMENT_PATTERNS)
+
     def _check_response_for_errors(self, response: str, framework: str) -> tuple:
         """
         Inspect an agent response for embedded inference or tool errors.
@@ -689,12 +713,23 @@ Please respond according to this protocol structure and complete the task."""
                         # Execute test
                         try:
                             result = test_fn(*args, **kwargs)
+
+                            # Payment/quota hard stop — abort before logging so
+                            # this combination is retried on the next resume.
+                            if self._is_payment_error(result.response or "") or \
+                               self._is_payment_error(result.error or ""):
+                                print(f"\n💳 Payment/quota error detected — halting experiment.")
+                                print(f"   Partial log preserved. Resume with the same YAML to continue.")
+                                raise SystemExit(1)
+
                             combination_results.append(result)
                             self._logger.log_result(result, model_name, protocol.value, framework_name, i)
                             
                             status = "✅️" if result.success else "❌"
                             error_msg = f" — {result.error}" if not result.success and result.error else ""
                             print(f"      {status} Latency: {result.latency:.2f}s, Steps: {len(result.reasoning_steps)}{error_msg}")
+                        except SystemExit:
+                            raise  # propagate halt immediately
                         except Exception as e:
                             print(f"      ❌ Error: {str(e)}")
                     
@@ -859,6 +894,14 @@ Please respond according to this protocol structure and complete the task."""
 
                             result = test_fn(*args, **kwargs)
                             if result:
+                                # Payment/quota hard stop — abort before logging so
+                                # this combination is retried on the next resume.
+                                if self._is_payment_error(result.response or "") or \
+                                   self._is_payment_error(result.error or ""):
+                                    print(f"\n💳 Payment/quota error detected — halting experiment.")
+                                    print(f"   Partial log preserved. Resume with the same YAML to continue.")
+                                    raise SystemExit(1)
+
                                 self._logger.log_result(result, model_name, protocol.value, framework_name, i)
                                 combination_results.append(result)
 
@@ -890,6 +933,8 @@ Please respond according to this protocol structure and complete the task."""
                                 print(f"       ↳ Rationale: {completion_rationale}")
                                 print(f"      Overall Score: {eval_result['overall_score']:.2%}")
                                 print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
+                        except SystemExit:
+                            raise  # propagate halt immediately
                         except Exception as e:
                             print(f"    ❌ Error: {str(e)}")
 
