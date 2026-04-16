@@ -305,7 +305,95 @@ class Mind2WebLoader:
             })
         
         return self.tasks
-    
+
+    def get_stratified_task_sample(self, num_tasks: Optional[int] = None, seed: int = 42) -> List[Dict]:
+        """
+        Get a stratified sample of tasks from the dataset based on:
+        - domain
+        - trajectory length (short / medium / long)
+
+        Args:
+            num_tasks: Number of tasks to sample
+            seed: Random seed for reproducibility
+
+        Returns:
+            List of task dictionaries
+        """
+        if self.dataset is None:
+            if not self.load_dataset():
+                return []
+
+        random.seed(seed)
+
+        # Prepare full task list
+        all_tasks = list(self.dataset)
+
+        # If no sampling requested, return all
+        if num_tasks is None or num_tasks >= len(all_tasks):
+            sampled_tasks = all_tasks
+            print(f"Using all {len(all_tasks)} tasks")
+        else:
+            # --- Build strata: (domain, trajectory_length_bucket) ---
+            strata = {}
+
+            for task in all_tasks:
+                domain = task.get("domain", "unknown")
+                actions = task.get("action_reprs", [])
+                length = len(actions)
+
+                # Define trajectory buckets
+                if length <= 4:
+                    bucket = "short"
+                elif length <= 7:
+                    bucket = "medium"
+                else:
+                    bucket = "long"
+
+                key = (domain, bucket)
+
+                if key not in strata:
+                    strata[key] = []
+                strata[key].append(task)
+
+            # --- Compute sampling per stratum (proportional allocation) ---
+            total_tasks = len(all_tasks)
+            sampled_tasks = []
+
+            for key, group in strata.items():
+                proportion = len(group) / total_tasks
+                n_samples = max(1, int(proportion * num_tasks))
+
+                # Sample within stratum
+                if len(group) <= n_samples:
+                    sampled_tasks.extend(group)
+                else:
+                    sampled_tasks.extend(random.sample(group, n_samples))
+
+            # --- Adjust to exact num_tasks (if over/under) ---
+            if len(sampled_tasks) > num_tasks:
+                sampled_tasks = random.sample(sampled_tasks, num_tasks)
+            elif len(sampled_tasks) < num_tasks:
+                remaining = [t for t in all_tasks if t not in sampled_tasks]
+                needed = num_tasks - len(sampled_tasks)
+                sampled_tasks.extend(random.sample(remaining, min(needed, len(remaining))))
+
+            print(f"Stratified sampled {len(sampled_tasks)} tasks from {len(all_tasks)} total tasks")
+
+        # --- Convert to simplified format ---
+        self.tasks = []
+        for task in sampled_tasks:
+            self.tasks.append({
+                "task_id": task.get("annotation_id", "unknown"),
+                "website": task.get("website", "unknown"),
+                "domain": task.get("domain", "unknown"),
+                "confirmed_task": task.get("confirmed_task", ""),
+                "action_reprs": task.get("action_reprs", []),
+                "pos_candidates": task.get("pos_candidates", []),
+                "raw_html": task.get("cleaned_html", ""),
+            })
+
+        return self.tasks
+
     def get_task_by_domain(self, domain: str) -> List[Dict]:
         """
         Filter tasks by domain

@@ -766,7 +766,9 @@ Please respond according to this protocol structure and complete the task."""
         loader = Mind2WebLoader(split="train")
         
         # Load and sample tasks
-        tasks = loader.get_task_sample(num_tasks=config.get("mind2web_num_tasks", 10))
+        # tasks = loader.get_task_sample(num_tasks=config.get("mind2web_num_tasks", 10))
+        # Load and sample stratified tasks
+        tasks = loader.get_stratified_task_sample(num_tasks=config.get("mind2web_num_tasks", 10))
         
         # Extract experiment configuration
         models = config.get("models")
