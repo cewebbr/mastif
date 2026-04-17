@@ -283,7 +283,8 @@ class Mind2WebLoader:
         
         # Sample if requested
         if num_tasks is not None and num_tasks < len(all_tasks):
-            random.seed(seed)
+            config = ConfigExpert.get_instance()
+            random.seed(config.get_instance().get("sampling_seed", seed))
             sampled_tasks = random.sample(all_tasks, num_tasks)
             print(f"Sampled {num_tasks} tasks from {len(all_tasks)} total tasks")
         else:
@@ -323,7 +324,8 @@ class Mind2WebLoader:
             if not self.load_dataset():
                 return []
 
-        random.seed(seed)
+        config = ConfigExpert.get_instance()
+        random.seed(config.get_instance().get("sampling_seed", seed))
 
         # Prepare full task list
         all_tasks = list(self.dataset)
