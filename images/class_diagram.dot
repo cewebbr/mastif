@@ -332,7 +332,8 @@ hf_token: str = None\l
 __init__(split: str = 'test', hf_token: str = None)\l
 load_dataset()\l
 _load_sample_data()\l
-get_task_sample(num_tasks: Optional[int] = None, seed: int = 42): List[Dict]
+get_task_sample(num_tasks: Optional[int] = None, seed: int = 42): List[Dict]\l
+get_stratified_task_sample(num_tasks: Optional[int] = None, seed: int = 42): List[Dict]\l
 get_task_by_domain(domain: str): List[Dict]\l
 get_available_domains(): List[str]\l
 get_task_statistics(): Dict\l
@@ -360,12 +361,14 @@ standard_tools: List[str]\l
 mind2web_results: Any\l
 mind2web_aggregate: Any\l
 ERROR_PATTERNS: List[str]\l
+PAYMENT_PATTERNS: List[str]\l
 _logger: Optional[ExperimentLogger]\l
 |
 __init__(yaml_path: str)\l
 _init_logger(metadata: dict): ExperimentLogger\l
 _get_protocol_metrics(protocol: ProtocolType, protocol_instance, task: str): Dict\l
 _check_response_for_errors(response: str, framework: str): tuple\l
+_is_payment_error(text: str): bool\l
 _capture_tool_log(): Dict\l
 test_with_protocol(adapter: BaseAdapter, protocol_type: ProtocolType, task: str, context: Dict = None): TestResult\l
 test_with_crewai(adapter: BaseAdapter, role: str, task: str, context: Dict = None, protocol: ProtocolType = None): TestResult\l
@@ -434,8 +437,10 @@ ToolDefinition|
 name: str\l
 description: str\l
 func: Callable\l
+_raw_func: Callable\l
 |
 __init__(name: str, description: str, func: Callable)\l
+_make_instrumented(func: Callable): Callable\l
 __repr__(): str\l
 }"];
 
@@ -444,9 +449,14 @@ ToolPool\n
 «singleton»|
 _instance\l
 _registry: Dict[str, ToolDefinition]\l
+invocation_log: list\l
 |
 get_tool(name: str, framework: str): Any\l
 get_all_tools(framework: str): List\l
+get_openai_schemas(names: list = None): list\l
+reset_log()\l
+get_log(): list\l
+get_log_summary(): Dict\l
 available_tools: List[str]\l
 }"];
 
@@ -466,7 +476,7 @@ ExperimentLogger\n
 «information expert»|
 _yaml_stem: str\l
 _metadata: dict\l
-_results: List[TestResult]\l
+_results: List[Tuple[TestResult, int] | dict]\l
 _completed: set\l
 _started_at: str\l
 _partial_path: Optional[Path]\l
@@ -477,6 +487,7 @@ load_partial(partial: dict)\l
 is_completed(model: str, protocol: str, framework: str, task_index: int): bool\l
 log_result(result: TestResult, model: str, protocol: str, framework: str, task_index: int)\l
 _flush_partial()\l
+_unwrap_results(): List[TestResult]\l
 close()\l
 prompt_resume(partial: dict, total: int): bool\l
 export_results(filename: str)\l
@@ -490,7 +501,7 @@ _print_tool_usage(results: List[TestResult])\l
 _aggregate_tool_usage(results: List[TestResult]): Dict[str, int]\l
 _format_tool_usage(usage: Dict[str, int]): str\l
 _compute_token_metrics(model_name: str, results: List[TestResult]): Tuple[int, int]\l
-results: list\l
+results: List[TestResult]\l
 }"];
 
 Mastif -> ExperimentLogger [arrowhead=none, arrowtail=odiamond, dir=back, fontsize=9, label="owns"];
