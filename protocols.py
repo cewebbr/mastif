@@ -43,6 +43,7 @@ class BaseProtocol(ABC):
             self.stats["valid_responses"] += 1
         
         # Approximation: 4 chars per token for the JSON wrapper overhead
+        # TODO: Perform a more accurate token count based on the actual payload size and protocol structure
         try:
             overhead_str = json.dumps(payload)
             self.stats["total_overhead_tokens"] += len(overhead_str) // 4
