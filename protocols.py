@@ -1,52 +1,74 @@
 """
-Protocol implementations
+Protocol implementations with encapsulated validation, injection, and telemetry.
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, Any
 import time
 import json
 
 
 class BaseProtocol(ABC):
     """
-    Abstract base class for agent communication protocols
-    
-    Protocols define how messages are structured and exchanged between agents.
+    Abstract base class for agent communication protocols with internal telemetry.
     """
     
+    def __init__(self):
+        # Internal state to track performance across all agent implementations
+        self.stats = {
+            "total_calls": 0,
+            "valid_responses": 0,
+            "total_overhead_tokens": 0
+        }
+    
+    @abstractmethod
+    def _get_protocol_instructions(self) -> str:
+        """Returns the specific string to inject into the prompt for this protocol."""
+        pass
+
     @abstractmethod
     def send_message(self, message: str, context: Dict = None) -> Dict:
-        """Format an outgoing message according to protocol specifications"""
+        """Format an outgoing message and inject prompt specifics."""
         pass
     
     @abstractmethod
-    def receive_message(self, response: Dict) -> str:
-        """Parse an incoming message and extract content"""
+    def receive_message(self, response: Any) -> str:
+        """Parse, validate compliance, and log overhead."""
         pass
 
-    def measure_overhead(self, message: str, context: Dict = None) -> Dict:
-        """
-        Measure the protocol's serialization and parsing overhead.
+    def _update_stats(self, payload: Any, is_valid: bool):
+        """Internal helper to log token overhead and compliance."""
+        self.stats["total_calls"] += 1
+        if is_valid:
+            self.stats["valid_responses"] += 1
+        
+        # Approximation: 4 chars per token for the JSON wrapper overhead
+        try:
+            overhead_str = json.dumps(payload)
+            self.stats["total_overhead_tokens"] += len(overhead_str) // 4
+        except Exception:
+            pass
 
-        Returns a dict with:
-            send_overhead_ms   : time to call send_message (ms)
-            receive_overhead_ms: time to call receive_message (ms)
-            total_overhead_ms  : combined overhead (ms)
-            message_size_bytes : byte size of the serialized outgoing payload
-        """
-        # Measure send overhead
+    def get_metrics(self) -> Dict:
+        """Retrieve telemetry for experiment analysis across the agent's run."""
+        compliance = (self.stats["valid_responses"] / self.stats["total_calls"] * 100) if self.stats["total_calls"] > 0 else 0
+        return {
+            "compliance_rate": f"{compliance:.2f}%",
+            "avg_overhead_tokens": self.stats["total_overhead_tokens"] / max(1, self.stats["total_calls"]),
+            "total_calls": self.stats["total_calls"]
+        }
+
+    def measure_overhead(self, message: str, context: Dict = None) -> Dict:
+        """Measure the protocol's serialization and parsing overhead (ms)."""
         t0 = time.perf_counter()
         formatted = self.send_message(message, context or {})
         send_ms = (time.perf_counter() - t0) * 1000
 
-        # Measure payload size
         message_size = len(json.dumps(formatted).encode("utf-8"))
 
-        # Measure receive overhead using a minimal response shell
-        dummy_response = {"content": "x"}
         t1 = time.perf_counter()
-        self.receive_message(dummy_response)
+        # Test validation logic with a valid structure
+        self.receive_message(formatted)
         receive_ms = (time.perf_counter() - t1) * 1000
 
         return {
@@ -57,17 +79,7 @@ class BaseProtocol(ABC):
         }
 
     def generate_context(self, task: str, turn: int = 1, tools: list = None) -> Dict:
-        """
-        Generate a realistic context dict for use with send_message.
-
-        Varies per call so protocols are exercised with non-trivial payloads
-        rather than always falling back to empty defaults.
-
-        Args:
-            task:  The task string (used to seed memory and intent).
-            turn:  Conversation turn number.
-            tools: List of tool name strings available to the agent.
-        """
+        """Generate a realistic context dict for use with send_message."""
         tools = tools or []
         return {
             "conv_id":      f"conv-{abs(hash(task)) % 100000:05d}",
@@ -77,13 +89,8 @@ class BaseProtocol(ABC):
             "sender":       "orchestrator",
             "receiver":     "worker",
             "msg_type":     "task",
-            "priority":     "medium",
             "tools":        tools,
             "capabilities": ["reasoning", "tool_use"] + (["web_access"] if tools else []),
-            "state":        "active",
-            "collab_mode":  "cooperative",
-            "intent":       "task_execution",
-            "environment":  {"mode": "evaluation", "task_type": "web_automation"},
             "memory": [
                 {"role": "system", "content": "You are a web automation agent."},
                 {"role": "user",   "content": task[:200]},
@@ -92,106 +99,123 @@ class BaseProtocol(ABC):
 
 
 class MCPProtocol(BaseProtocol):
-    """
-    Model Context Protocol (MCP) Implementation
+    """Model Context Protocol (MCP) Implementation"""
     
-    Provides structured context management for agent interactions,
-    including conversation history, available tools, and environment state.
-    """
-    
+    def _get_protocol_instructions(self) -> str:
+        return "\nFORMAT: Respond ONLY in valid MCP/1.0 JSON: {\"protocol\": \"MCP/1.0\", \"content\": \"your_response_here\"}"
+
     def send_message(self, message: str, context: Dict = None) -> Dict:
-        """Format message with MCP structure including full context"""
         context = context or {}
+        injected_msg = f"{message}\n{self._get_protocol_instructions()}"
         
         return {
             "protocol": "MCP/1.0",
-            "message": message,
+            "message": injected_msg,
             "context": {
                 "conversation_id": context.get("conv_id", "test-001"),
                 "turn": context.get("turn", 1),
-                "environment": context.get("environment", {}),
                 "tools_available": context.get("tools", []),
                 "memory": context.get("memory", [])
-            },
-            "metadata": {
-                "timestamp": time.time(),
-                "priority": "normal"
             }
         }
     
-    def receive_message(self, response: Dict) -> str:
-        """Extract content from MCP-formatted response"""
-        if isinstance(response, dict):
-            return response.get("content", str(response))
-        return str(response)
+    def receive_message(self, response: Any) -> str:
+        is_valid = False
+        content = str(response)
+        parsed_data = {}
+        
+        try:
+            if isinstance(response, str):
+                parsed_data = json.loads(response)
+            elif isinstance(response, dict):
+                parsed_data = response
+                
+            if parsed_data.get("protocol") == "MCP/1.0":
+                content = parsed_data.get("content", content)
+                is_valid = True
+        except Exception:
+            pass
+        
+        self._update_stats(parsed_data, is_valid)
+        return content
 
 
 class A2AProtocol(BaseProtocol):
-    """
-    Agent-to-Agent (A2A) Protocol Implementation
+    """Agent-to-Agent (A2A) Protocol Implementation"""
     
-    Facilitates direct communication between multiple agents in a system,
-    enabling coordination, task delegation, and collaborative problem-solving.
-    """
-    
+    def _get_protocol_instructions(self) -> str:
+        return "\nFORMAT: Respond ONLY in valid A2A JSON: {\"payload\": {\"content\": \"your_response_here\"}}"
+
     def send_message(self, message: str, context: Dict = None) -> Dict:
-        """Format message for agent-to-agent communication with routing info"""
         context = context or {}
+        injected_msg = f"{message}\n{self._get_protocol_instructions()}"
         
         return {
             "protocol": "A2A/1.0",
-            "sender_agent": context.get("sender", "orchestrator"),
-            "receiver_agent": context.get("receiver", "worker"),
-            "message_type": context.get("msg_type", "task"),
             "payload": {
-                "content": message,
-                "task_id": context.get("task_id", "task-001"),
-                "priority": context.get("priority", "medium")
-            },
-            "routing": {
-                "requires_response": True,
-                "timeout": 30
+                "content": injected_msg,
+                "task_id": context.get("task_id", "task-001")
             }
         }
     
-    def receive_message(self, response: Dict) -> str:
-        """Extract content from A2A-formatted response"""
-        if isinstance(response, dict):
-            payload = response.get("payload", {})
-            return payload.get("content", str(response))
-        return str(response)
+    def receive_message(self, response: Any) -> str:
+        is_valid = False
+        content = str(response)
+        parsed_data = {}
+        
+        try:
+            if isinstance(response, str):
+                parsed_data = json.loads(response)
+            elif isinstance(response, dict):
+                parsed_data = response
+                
+            if "payload" in parsed_data:
+                content = parsed_data["payload"].get("content", content)
+                is_valid = True
+        except Exception:
+            pass
+        
+        self._update_stats(parsed_data, is_valid)
+        return content
 
 
 class ACPProtocol(BaseProtocol):
-    """
-    Agent Communication Protocol (ACP) Implementation
+    """Agent Communication Protocol (ACP) Implementation"""
     
-    Provides a standardized messaging format for heterogeneous agent systems,
-    including intent recognition, capability negotiation, and collaboration modes.
-    """
-    
+    def _get_protocol_instructions(self) -> str:
+        return "\nFORMAT: Respond ONLY in valid ACP/2.0 JSON: {\"message\": {\"content\": \"your_response_here\"}}"
+
     def send_message(self, message: str, context: Dict = None) -> Dict:
-        """Format message with ACP structure including agent capabilities"""
         context = context or {}
+        injected_msg = f"{message}\n{self._get_protocol_instructions()}"
         
         return {
             "protocol_version": "ACP/2.0",
             "message": {
                 "id": context.get("msg_id", "msg-001"),
-                "type": "query",
-                "content": message,
-                "intent": context.get("intent", "information_seeking")
+                "content": injected_msg
             },
             "agent_context": {
-                "capabilities": context.get("capabilities", ["reasoning", "tool_use"]),
-                "state": context.get("state", "active"),
-                "collaboration_mode": context.get("collab_mode", "cooperative")
+                "capabilities": context.get("capabilities", ["reasoning", "tool_use"])
             }
         }
     
-    def receive_message(self, response: Dict) -> str:
-        """Extract content from ACP-formatted response"""
-        if isinstance(response, dict):
-            msg = response.get("message", {})
-            return msg.get("content", str(response))
-        return str(response)
+    def receive_message(self, response: Any) -> str:
+        is_valid = False
+        content = str(response)
+        parsed_data = {}
+        
+        try:
+            if isinstance(response, str):
+                parsed_data = json.loads(response)
+            elif isinstance(response, dict):
+                parsed_data = response
+                
+            if "message" in parsed_data:
+                content = parsed_data["message"].get("content", content)
+                is_valid = True
+        except Exception:
+            pass
+        
+        self._update_stats(parsed_data, is_valid)
+        return content
