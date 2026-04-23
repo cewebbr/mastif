@@ -142,20 +142,22 @@ color=black;
 BaseProtocol [label="{
 BaseProtocol\n
 «abstract»|
+stats: Dict\l
 |
 send_message(message: str, context: Dict = None): Dict\l
-receive_message(response: Dict): str\l
+receive_message(response: Any): str\l
 measure_overhead(message: str, context: Dict = None): Dict\l
 generate_context(task: str, turn: int = 1, tools: list = None): Dict\l
+get_metrics(): Dict\l
+_get_protocol_instructions(): str\l
+_update_stats(payload: Any, is_valid: bool)\l
 }"];
 
 BaseProtocol -> ABC [arrowhead=empty, fontsize=9];
 
-MCPProtocol [label="{MCPProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
-
-A2AProtocol [label="{A2AProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
-
-ACPProtocol [label="{ACPProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Dict): str\l}"];
+MCPProtocol [label="{MCPProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Any): str\l_get_protocol_instructions(): str\l}"];
+A2AProtocol [label="{A2AProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Any): str\l_get_protocol_instructions(): str\l}"];
+ACPProtocol [label="{ACPProtocol||send_message(message: str, context: Dict = None): Dict\lreceive_message(response: Any): str\l_get_protocol_instructions(): str\l}"];
 
 MCPProtocol -> BaseProtocol [arrowhead=empty, fontsize=9];
 
@@ -409,7 +411,7 @@ Mastif -> Mind2WebLoader [arrowhead=open, fontsize=9];
 Mastif -> Mind2WebEvaluator [arrowhead=open, fontsize=9];
 
 // Composition: LangGraphAgent contains AgentState
-LangGraphAgent -> AgentState [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9, minlen=1] ; 
+LangGraphAgent -> AgentState [arrowhead=none, arrowtail=diamond, dir=back, fontsize=9, minlen=1] ;
 
 ConfigExpert [label="{
 ConfigExpert\n
