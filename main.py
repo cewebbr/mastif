@@ -30,11 +30,16 @@ def main():
         print("Please set it with: export HF_TOKEN='your_token_here'")
         return 1
     
-    # Get OpenAI key
+    # Get judge key
     open_ai_key = os.getenv("OPENAI_API_KEY")
-    if not open_ai_key:
+    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+    if MODE == "mind2web" and not open_ai_key:
         print("ERROR: OPENAI_API_KEY environment variable not set!")
         print("Please set it with: export OPENAI_API_KEY='your_key_here'")
+        return 1
+    elif MODE == "mind2web" and not anthropic_key:
+        print("ERROR: ANTHROPIC_API_KEY environment variable not set!")
+        print("Please set it with: export ANTHROPIC_API_KEY='your_key_here'")
         return 1
 
     # Initialize tester
