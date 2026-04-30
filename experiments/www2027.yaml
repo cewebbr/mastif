@@ -9,7 +9,7 @@ max_tool_rounds: 3 # Max tool execution rounds per generate(); tool iterations i
 requests_soft_limit: 1000 # Requires user confirmation if exceeded
 test_mode: "mind2web"  # Options: "mind2web", "standard"
 
-# Any model ID listed here must be available on HuggingFace or OpenAI
+# Any model ID listed here must be available on HuggingFace, OpenAI, or Antrhropic.
 # IMPORTANT: If tool use is expected in the tasks, make sure to use models that support it (e.g., DeepSeek, GPT-4o, etc.)
 models: 
   # - "gpt-4o"
@@ -26,8 +26,10 @@ models:
   # Agent-focused more powerful models
   - "meta-llama/Llama-4-Scout-17B-16E-Instruct" # https://ai.meta.com/blog/llama-4-multimodal-intelligence/
   - "deepseek-ai/DeepSeek-V3.2" # https://arxiv.org/abs/2412.19437
+  # - "moonshotai/Kimi-K2.5"
 
 # ====== Used only in MIND2WEB test mode ====== 
+# Any model ID listed here must be available on HuggingFace, OpenAI, or Antrhropic.
 # judge_model: "gpt-4o"
 judge_model: "gpt-4o-mini"
 # ============================================= 
@@ -51,7 +53,7 @@ frameworks:
 
 # ====== Used only in MIND2WEB test mode ====== 
 mind2web_num_tasks: 300 # Set to 2350 to run all tasks from the benchmark
-sampling_seed: 42 # Seed for reproducible task sampling from the Mind2Web dataset
+sampling_seed: 2026 # Seed for reproducible task sampling from the Mind2Web dataset
 # ============================================= 
 
 # ====== Used only in STANDARD test mode ====== 

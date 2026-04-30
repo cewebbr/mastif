@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import List, Dict, Optional
 
 from domain_model import TestResult, ProtocolType, ReasoningStep
-from adapters import HuggingFaceAdapter, OpenAIAdapter, BaseAdapter
+from adapters import HuggingFaceAdapter, OpenAIAdapter, BaseAdapter, AnthropicAdapter
 from protocols import MCPProtocol, A2AProtocol, ACPProtocol
 from frameworks import (
     CrewAIAgent,
@@ -675,6 +675,8 @@ Please respond according to this protocol structure and complete the task."""
             
             if(model_name.startswith("gpt-")):
                 adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
+            elif(model_name.startswith("claude-")):
+                adapter = AnthropicAdapter(model_name, api_key=os.getenv("ANTHROPIC_API_KEY"))
             else:                
                 adapter = HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))
             
@@ -772,6 +774,7 @@ Please respond according to this protocol structure and complete the task."""
         
         # Extract experiment configuration
         models = config.get("models")
+        judge_model = config.get("mind2web_judge_model", "gpt-4")
         protocols = [ProtocolType[p] for p in config.get("protocols")]
         framework_names = config.get("frameworks")
         raw_tools = config.get('tools', self.standard_tools)
@@ -821,7 +824,13 @@ Please respond according to this protocol structure and complete the task."""
             print(f"  - {domain}: {count} tasks")
         
         # Initialize evaluator
-        judge_adapter = OpenAIAdapter()
+        if(judge_model.startswith("gpt-")):
+            judge_adapter = OpenAIAdapter(judge_model, api_key=os.getenv("OPENAI_API_KEY"))
+        elif(judge_model.startswith("claude-")):
+            judge_adapter = AnthropicAdapter(judge_model, api_key=os.getenv("ANTHROPIC_API_KEY"))
+        else:                
+            judge_adapter = HuggingFaceAdapter(judge_model, api_key=os.getenv("HF_TOKEN"))
+
         evaluator = Mind2WebEvaluator(judge_adapter=judge_adapter)
 
         # Compute the number of tests and alert the user
@@ -849,8 +858,10 @@ Please respond according to this protocol structure and complete the task."""
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
             
-            if model_name.startswith("gpt-"):
+            if(model_name.startswith("gpt-")):
                 adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
+            elif(model_name.startswith("claude-")):
+                adapter = AnthropicAdapter(model_name, api_key=os.getenv("ANTHROPIC_API_KEY"))
             else:
                 adapter = HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))
 

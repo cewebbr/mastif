@@ -12,6 +12,7 @@ from llama_index.core.llms.callbacks import llm_completion_callback
 from abc import ABC, abstractmethod
 from config import ConfigExpert
 from tool_pool import ToolPool
+import anthropic
 
 class BaseAdapter(ABC):
     """
@@ -387,3 +388,117 @@ class OpenAIAdapter(BaseAdapter):
 
         except Exception as e:
             return f"Error: {str(e)}"
+
+class AnthropicAdapter(BaseAdapter):
+    """
+    Unified adapter for Anthropic Claude models.
+    Handles API communication, tool calling, and response parsing for the Claude 3 family.
+    """
+
+    def __init__(self, model_name: Optional[str] = None, api_key: Optional[str] = None):
+        """
+        Initialize the Anthropic adapter.
+        
+        Args:
+            model_name: Anthropic model identifier (e.g., 'claude-3-5-sonnet-20240620')
+            api_key: Anthropic API key
+        """
+        self._model_name = model_name
+        self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+        self.client = anthropic.Anthropic(api_key=self.api_key)
+
+    @property
+    def model_name(self) -> str:
+        return self._model_name
+
+    def _map_tools_to_anthropic(self, tools: List) -> List[Dict[str, Any]]:
+        """Maps generic tool definitions or OpenAI schemas to Anthropic tool format."""
+        anthropic_tools = []
+        for t in tools:
+            # If it's already an OpenAI-style schema, convert it
+            if isinstance(t, dict) and "function" in t:
+                func = t["function"]
+                anthropic_tools.append({
+                    "name": func["name"],
+                    "description": func.get("description", ""),
+                    "input_schema": func.get("parameters", {"type": "object", "properties": {}})
+                })
+            # If it's a tool name string, fetch the schema from ToolPool
+            elif isinstance(t, str):
+                schemas = ToolPool.get_openai_schemas([t])
+                for s in schemas:
+                    func = s["function"]
+                    anthropic_tools.append({
+                        "name": func["name"],
+                        "description": func.get("description", ""),
+                        "input_schema": func.get("parameters", {"type": "object", "properties": {}})
+                    })
+        return anthropic_tools
+
+    def generate(self, prompt: str, **kwargs) -> str:
+        """Generate response using Anthropic's Messages API with support for tool loops."""
+        try:
+            config = ConfigExpert.get_instance()
+            raw_tools = kwargs.get("tools")
+            anthropic_tools = self._map_tools_to_anthropic(raw_tools) if raw_tools else []
+            
+            messages = [{"role": "user", "content": prompt}]
+            max_tokens = kwargs.get("max_tokens", config.get("max_tokens", 1024))
+            temperature = kwargs.get("temperature", config.get("temperature", 0.7))
+            max_tool_rounds = config.get("max_tool_rounds", 5)
+
+            for round_num in range(max_tool_rounds):
+                request_kwargs = {
+                    "model": self.model_name,
+                    "max_tokens": max_tokens,
+                    "messages": messages,
+                    "temperature": temperature,
+                }
+                if anthropic_tools:
+                    request_kwargs["tools"] = anthropic_tools
+
+                response = self.client.messages.create(**request_kwargs)
+                
+                # Check for tool use in the content blocks
+                tool_requests = [b for b in response.content if b.type == "tool_use"]
+                text_outputs = [b for b in response.content if b.type == "text"]
+
+                # If no tool use, return the text content
+                if not tool_requests:
+                    return text_outputs[0].text if text_outputs else ""
+
+                # Append assistant's tool-use blocks to the message history
+                messages.append({"role": "assistant", "content": response.content})
+
+                # Process tool outputs
+                for tool_call in tool_requests:
+                    tool_name = tool_call.name
+                    tool_input = tool_call.input
+                    
+                    # Handle varying input formats (query, input, or raw dict)
+                    query = tool_input.get("query") or tool_input.get("input") or str(tool_input)
+
+                    if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true"):
+                        print(f"🛠️ Anthropic executing: {tool_name}({query!r})")
+
+                    try:
+                        tool_def = ToolPool._registry.get(tool_name)
+                        result = tool_def.func(query) if tool_def else f"Tool '{tool_name}' not found."
+                    except Exception as e:
+                        result = f"Error: {str(e)}"
+
+                    messages.append({
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "tool_result",
+                                "tool_use_id": tool_call.id,
+                                "content": str(result),
+                            }
+                        ],
+                    })
+
+            return "Error: Maximum tool rounds reached."
+
+        except Exception as e:
+            return f"Anthropic Error: {str(e)}"
