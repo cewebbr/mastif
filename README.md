@@ -67,7 +67,8 @@ pip install \
   python-dotenv \
   requests \
   tiktoken \
-  transformers
+  transformers \
+  anthropic
 
 # Install agentic frameworks
 pip install langchain langchain-community langchain-core langgraph
