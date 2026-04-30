@@ -61,7 +61,7 @@ requests_soft_limit: 1000 # Prompts for confirmation if total API calls exceed t
 
 # -----------------------------------------------------------------------------
 # Models
-# Any model ID listed here must be available on HuggingFace or OpenAI.
+# Any model ID listed here must be available on HuggingFace, OpenAI (gpt-*), or Anthropic (claude-*).
 # Prefix OpenAI models with "gpt-". All others are treated as HuggingFace models.
 # TIP: Test models independently with a small number of tasks before scaling up to larger benchmarks.
 # IMPORTANT: If you want to study tool use, make sure to select models that support tool use by agents (e.g., DeepSeek, GPT-4o, etc.)
@@ -251,6 +251,7 @@ tasks:
 # =============================================================================
 # MIND2WEB test mode settings
 # Used when test_mode is "mind2web".
+# Judge model can be any model available on HuggingFace, OpenAI (gpt-*), or Anthropic (claude-*).
 # =============================================================================
 
 mind2web_num_tasks: 10      # Number of tasks to sample (max: 2350 for full benchmark)
