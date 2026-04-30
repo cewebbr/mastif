@@ -252,6 +252,8 @@ tasks:
 # MIND2WEB test mode settings
 # Used when test_mode is "mind2web".
 # Judge model can be any model available on HuggingFace, OpenAI (gpt-*), or Anthropic (claude-*).
+# Avoid using the same family for both testing and judging to prevent preference leakage.
+# Reference: https://arxiv.org/abs/2502.01534
 # =============================================================================
 
 mind2web_num_tasks: 10      # Number of tasks to sample (max: 2350 for full benchmark)

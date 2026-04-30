@@ -30,6 +30,8 @@ models:
 
 # ====== Used only in MIND2WEB test mode ====== 
 # Any model ID listed here must be available on HuggingFace, OpenAI, or Antrhropic.
+# Avoid using the same family for both testing and judging to prevent preference leakage.
+# Reference: https://arxiv.org/abs/2502.01534
 # judge_model: "gpt-4o"
 judge_model: "gpt-4o-mini"
 # ============================================= 
