@@ -3,7 +3,7 @@ HuggingFace and OpenAI model adapters for unified model access
 """
 
 import os
-from typing import Optional
+from typing import List, Optional
 from huggingface_hub import InferenceClient
 import openai
 from langchain_community.llms import HuggingFaceEndpoint
@@ -194,11 +194,12 @@ class HuggingFaceAdapter(BaseAdapter):
     
     def get_langchain_llm(self):
         """Create LangChain-compatible LLM instance"""
+        config = ConfigExpert.get_instance()
         return HuggingFaceEndpoint(
             repo_id=self.model_name,
             huggingfacehub_api_token=self.api_key,
-            temperature=0.7,
-            max_new_tokens=1024
+            temperature=config.get("temperature", 0.7),
+            max_new_tokens=config.get("max_tokens", 1024)
         )
     
     def get_llamaindex_llm(self):
