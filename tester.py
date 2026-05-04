@@ -9,6 +9,7 @@ import os
 import json
 import time
 import datetime
+import threading
 from pathlib import Path
 from typing import List, Dict, Optional
 
@@ -316,7 +317,26 @@ Please respond according to this protocol structure and complete the task."""
                 tools = list(self.standard_tools)
             for tool_name in (tools or []):
                 agent.add_tool(tool_name)
-            response = agent.execute_task(task, context)
+            
+            # Start heartbeat thread
+            heartbeat_event = threading.Event()
+            def heartbeat():
+                count = 0
+                while not heartbeat_event.is_set():
+                    heartbeat_event.wait(60)  # Wait 60 seconds
+                    if not heartbeat_event.is_set():
+                        count += 1
+                        print(f"      ⏳ Still running CrewAI test... ({count * 60}s elapsed)")
+            
+            heartbeat_thread = threading.Thread(target=heartbeat, daemon=True)
+            heartbeat_thread.start()
+            
+            try:
+                response = agent.execute_task(task, context)
+            finally:
+                heartbeat_event.set()
+                heartbeat_thread.join(timeout=1)
+            
             latency = time.time() - start_time
             success, error = self._check_response_for_errors(response, "CrewAI")
             if not success:
@@ -368,7 +388,25 @@ Please respond according to this protocol structure and complete the task."""
             for tool_name in (tools or []):
                 agent.add_tool(tool_name)
 
-            response = agent.run(task)
+            # Start heartbeat thread
+            heartbeat_event = threading.Event()
+            def heartbeat():
+                count = 0
+                while not heartbeat_event.is_set():
+                    heartbeat_event.wait(60)
+                    if not heartbeat_event.is_set():
+                        count += 1
+                        print(f"      ⏳ Still running Smolagents test... ({count * 60}s elapsed)")
+            
+            heartbeat_thread = threading.Thread(target=heartbeat, daemon=True)
+            heartbeat_thread.start()
+            
+            try:
+                response = agent.run(task)
+            finally:
+                heartbeat_event.set()
+                heartbeat_thread.join(timeout=1)
+            
             latency = time.time() - start_time
             success, error = self._check_response_for_errors(response, "Smolagents")
             if not success:
@@ -420,7 +458,25 @@ Please respond according to this protocol structure and complete the task."""
             for tool_name in (tools or []):
                 agent.add_tool(tool_name)
 
-            response = agent.run(task)
+            # Start heartbeat thread
+            heartbeat_event = threading.Event()
+            def heartbeat():
+                count = 0
+                while not heartbeat_event.is_set():
+                    heartbeat_event.wait(60)
+                    if not heartbeat_event.is_set():
+                        count += 1
+                        print(f"      ⏳ Still running LangChain test... ({count * 60}s elapsed)")
+            
+            heartbeat_thread = threading.Thread(target=heartbeat, daemon=True)
+            heartbeat_thread.start()
+            
+            try:
+                response = agent.run(task)
+            finally:
+                heartbeat_event.set()
+                heartbeat_thread.join(timeout=1)
+            
             latency = time.time() - start_time
             success, error = self._check_response_for_errors(response, "LangChain")
             if not success:
@@ -472,7 +528,25 @@ Please respond according to this protocol structure and complete the task."""
             for tool_name in (tools or []):
                 agent.add_tool(tool_name)
 
-            response = agent.run(task)
+            # Start heartbeat thread
+            heartbeat_event = threading.Event()
+            def heartbeat():
+                count = 0
+                while not heartbeat_event.is_set():
+                    heartbeat_event.wait(60)
+                    if not heartbeat_event.is_set():
+                        count += 1
+                        print(f"      ⏳ Still running LangGraph test... ({count * 60}s elapsed)")
+            
+            heartbeat_thread = threading.Thread(target=heartbeat, daemon=True)
+            heartbeat_thread.start()
+            
+            try:
+                response = agent.run(task)
+            finally:
+                heartbeat_event.set()
+                heartbeat_thread.join(timeout=1)
+            
             latency = time.time() - start_time
             success, error = self._check_response_for_errors(response, "LangGraph")
             if not success:
@@ -524,8 +598,26 @@ Please respond according to this protocol structure and complete the task."""
             # Add tools
             for tool_name in (tools or []):
                 agent.add_tool(tool_name)
+
+            # Start heartbeat thread
+            heartbeat_event = threading.Event()
+            def heartbeat():
+                count = 0
+                while not heartbeat_event.is_set():
+                    heartbeat_event.wait(60)
+                    if not heartbeat_event.is_set():
+                        count += 1
+                        print(f"      ⏳ Still running LlamaIndex test... ({count * 60}s elapsed)")
             
-            response = agent.run(task)
+            heartbeat_thread = threading.Thread(target=heartbeat, daemon=True)
+            heartbeat_thread.start()
+            
+            try:
+                response = agent.run(task)
+            finally:
+                heartbeat_event.set()
+                heartbeat_thread.join(timeout=1)
+            
             latency = time.time() - start_time
             success, error = self._check_response_for_errors(response, "LlamaIndex")
             if not success:
@@ -572,7 +664,26 @@ Please respond according to this protocol structure and complete the task."""
             protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
             ToolPool.reset_log()
             agent = SemanticKernelAgent(adapter, protocol=protocol_instance)
-            response = agent.run(task)
+
+            # Start heartbeat thread
+            heartbeat_event = threading.Event()
+            def heartbeat():
+                count = 0
+                while not heartbeat_event.is_set():
+                    heartbeat_event.wait(60)
+                    if not heartbeat_event.is_set():
+                        count += 1
+                        print(f"      ⏳ Still running Semantic Kernel test... ({count * 60}s elapsed)")
+            
+            heartbeat_thread = threading.Thread(target=heartbeat, daemon=True)
+            heartbeat_thread.start()
+            
+            try:
+                response = agent.run(task)
+            finally:
+                heartbeat_event.set()
+                heartbeat_thread.join(timeout=1)
+            
             latency = time.time() - start_time
             success, error = self._check_response_for_errors(response, "SemanticKernel")
             if not success:
