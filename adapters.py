@@ -3,7 +3,7 @@ HuggingFace and OpenAI model adapters for unified model access
 """
 
 import os
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from huggingface_hub import InferenceClient
 import openai
 from langchain_community.llms import HuggingFaceEndpoint
