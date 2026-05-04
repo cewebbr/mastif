@@ -8,6 +8,7 @@ import json
 from typing import List, Dict, Callable, Optional
 import semantic_kernel as sk
 from semantic_kernel.functions import KernelFunction
+from semantic_kernel.functions.kernel_function_decorator import kernel_function
 from semantic_kernel.connectors.ai.prompt_execution_settings import PromptExecutionSettings
 from huggingface_hub import InferenceClient
 import sys
@@ -116,7 +117,7 @@ class SemanticKernelAgent:
                     return result
                 func = _dummy
 
-            @sk.kernel_function(name=name, description=description or f"Custom tool: {name}")
+            @kernel_function(name=name, description=description or f"Custom tool: {name}")
             def _kernel_func(query: str) -> str:
                 return func(query)
 
