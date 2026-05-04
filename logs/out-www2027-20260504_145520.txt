@@ -449,43 +449,129 @@ Protocol: standard
 
   Task 1/10: exploretock (Travel)
   Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
-    ❌ Error: Mastif.test_with_semantic_kernel() got an unexpected keyword argument 'tools'
+      ⏳ Still running Semantic Kernel test... (60s elapsed)
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to check for a pickup restaurant in Boston, NY on a specific date and time. However, it did not explicitly mention the constraint of having just one guest.
+      Task Adherence: 50.00%
+       ↳ Rationale: The agent's reasoning was partially relevant to the task. It focused on the technical issues encountered while trying to navigate the website, which is relevant, but it did not directly address the task of finding a pickup restaurant.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not complete the task at all. It provided instructions for logging into the website, but it did not provide any information about pickup restaurants in Boston, NY on the specified date and time.
+      Overall Score: 40.00%
+      Reasoning Steps: 18
 
   Task 2/10: exploretock (Travel)
   Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
-    ❌ Error: Mastif.test_with_semantic_kernel() got an unexpected keyword argument 'tools'
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of booking a winery tour in Napa Valley but did not explicitly mention the constraints of the winery serving Mediterranean cuisine, the wine tasting for 4 guests, the date and time of the tour, and the outdoor setup.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. All steps were directly related to the task of booking a winery tour.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent provided a general direction to book a winery tour but did not provide specific steps to ensure the winery serves Mediterranean cuisine, the wine tasting is for 4 guests, the tour is on April 15 at 10 am, and the setup is outdoor. Therefore, important steps are missing for task completion.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
 
   Task 3/10: enterprise (Travel)
   Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip code 10001
-    ❌ Error: Mastif.test_with_semantic_kernel() got an unexpected keyword argument 'tools'
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of signing Allan Smith up for email offers, but did not mention or take into account the specific email address or zip code provided in the task.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, focusing on the goal of signing Allan Smith up for email offers.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent likely completed the task, as it confirmed that Allan Smith was signed up for email offers. However, it did not confirm that the specific email address and zip code provided were used, leaving some uncertainty about the task's completion.
+      Overall Score: 80.00%
+      Reasoning Steps: 18
 
   Task 4/10: enterprise (Travel)
   Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old renter.
-    ❌ Error: Mastif.test_with_semantic_kernel() got an unexpected keyword argument 'tools'
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find a mini van in Brooklyn City from April 5th to April 8th for a 22 year old renter.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to try to complete the task.
+      Task Completion: 30.00%
+       ↳ Rationale: The agent did not complete the task. It did not provide any information or confirmation about the mini van availability in Brooklyn City between the specified dates.
+      Overall Score: 76.67%
+      Reasoning Steps: 18
 
   Task 5/10: kohls (Shopping)
   Goal: Find the highest rated dog collar under 10 dollar.
-    ❌ Error: Mastif.test_with_semantic_kernel() got an unexpected keyword argument 'tools'
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find the highest rated dog collar under 10 dollars on the Kohls website. The agent's response indicates that it understood all the constraints and goals of the task.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to navigate the website, observe and identify the relevant information, interact with the website, and finally conclude with the required information.
+      Task Completion: 100.00%
+       ↳ Rationale: The agent successfully completed the task by providing the name, rating, and price of the highest rated dog collar under 10 dollars on the Kohls website.
+      Overall Score: 100.00%
+      Reasoning Steps: 18
 
   Task 6/10: united (Travel)
   Goal: Compare the fare types to book a 1-adult ticket from Springfiels, IL to Austin, TX for April 29th 2023
-    ❌ Error: Mastif.test_with_semantic_kernel() got an unexpected keyword argument 'tools'
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to compare fare types for a specific flight. However, it did not explicitly mention the details of the flight (from Springfield, IL to Austin, TX on April 29th, 2023).
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to navigate the website and perform the search.
+      Task Completion: 30.00%
+       ↳ Rationale: The agent did not complete the task successfully. It described the process of using the search function on the United Airlines website, but it did not provide any specific information about the fare types for the requested flight.
+      Overall Score: 66.67%
+      Reasoning Steps: 18
 
   Task 7/10: budget (Travel)
   Goal: Get an SUV with an additional driver and wifi for pick up in  any rental location near Washington regional airport on June 1, 11 am, and drop off at Washington international airport on June 2, 11 am, and pay for the booking instantly.
-    ❌ Error: Mastif.test_with_semantic_kernel() got an unexpected keyword argument 'tools'
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to find an SUV with an additional driver and Wi-Fi for pickup and drop off at specified locations and times. However, it did not explicitly mention the requirement to pay for the booking instantly.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to navigate the website and search for the desired SUV.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent's final response indicates that the task is not yet fully completed. It mentions that the interaction history is incomplete and the website has not yet been fully explored, suggesting that further steps are needed to confirm the booking.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
 
   Task 8/10: underarmour (Shopping)
   Goal: Find a men's UA outlet T-shirt of XL size and add to cart.
-    ❌ Error: Mastif.test_with_semantic_kernel() got an unexpected keyword argument 'tools'
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find a men's UA outlet T-shirt of XL size and add it to the cart. It identified the correct size and the action to be performed.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning was fully focused on the task. All steps were directly relevant to the task, and there were no irrelevant or redundant steps.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent likely completes the task but there is a minor gap. The agent mentioned that the T-shirt has been found and the size has been selected, but it did not explicitly mention that the item has been added to the cart.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
 
   Task 9/10: kohls (Shopping)
   Goal: Browse for wall art with a price range of $25 to $50.
-    ❌ Error: Mastif.test_with_semantic_kernel() got an unexpected keyword argument 'tools'
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of browsing for wall art within a specific price range on the Kohl's website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, focusing on identifying the correct elements on the website to filter the wall art by price.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided instructions on how to filter by price, but did not confirm that the price range of $25 to $50 was selected or that wall art within this price range was displayed. Therefore, the task is likely completed but with minor gaps.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
 
   Task 10/10: kohls (Shopping)
   Goal: Add the cheapest Women's Sweaters to my shopping cart.
-    ❌ Error: Mastif.test_with_semantic_kernel() got an unexpected keyword argument 'tools'
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to add the cheapest Women's Sweaters to the shopping cart on the Kohls website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It correctly identified the need to navigate to the Women's Sweaters category and search for the cheapest options.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent provided the correct steps to find the cheapest Women's Sweaters on the Kohls website, but it did not actually add any item to the shopping cart, which was the main goal of the task.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  SemanticKernel + standard Summary:
+    Success: 10/10 (100.0%)
+    Avg Latency: 34.16s
+    Avg Reasoning Steps: 18.0
 
 ──────────────────────────────────────────────────────────────────────
 Protocol: MCP
@@ -686,3 +772,1018 @@ Protocol: MCP
 
   Task 6/10: united (Travel)
   Goal: Compare the fare types to book a 1-adult ticket from Springfiels, IL to Austin, TX for April 29th 2023
+    ✅️ Completed
+      Task Understanding: 0.00%
+       ↳ Rationale: The agent did not understand the task at all. The task was to compare fare types for a specific flight, but the agent discussed MCPProtocol, which is not relevant to the task.
+      Task Adherence: 0.00%
+       ↳ Rationale: The agent's reasoning was completely off-task. It did not attempt to navigate the website or find the information required by the task.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not complete the task. It did not provide any information about fare types for the specified flight.
+      Overall Score: 0.00%
+      Reasoning Steps: 18
+
+  Task 7/10: budget (Travel)
+  Goal: Get an SUV with an additional driver and wifi for pick up in  any rental location near Washington regional airport on June 1, 11 am, and drop off at Washington international airport on June 2, 11 am, and pay for the booking instantly.
+    ✅️ Completed
+      Task Understanding: 50.00%
+       ↳ Rationale: The agent understood the general intent of the task, which is to book an SUV with specific features and conditions. However, it did not explicitly mention or address the specific requirements such as the additional driver, wifi, pick up and drop off locations and times, and instant payment.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant. It followed a logical sequence of steps to initiate the booking process on the website.
+      Task Completion: 30.00%
+       ↳ Rationale: The agent's final response is not sufficient to complete the task successfully. It only mentioned initiating the booking process without addressing the specific requirements of the task.
+      Overall Score: 60.00%
+      Reasoning Steps: 18
+
+  Task 8/10: underarmour (Shopping)
+  Goal: Find a men's UA outlet T-shirt of XL size and add to cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent understood the task perfectly, which was to find a men's UA outlet T-shirt of XL size and add it to the cart.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 100.00%
+       ↳ Rationale: The agent successfully completed the task by adding the specified item to the cart.
+      Overall Score: 100.00%
+      Reasoning Steps: 18
+
+  Task 9/10: kohls (Shopping)
+  Goal: Browse for wall art with a price range of $25 to $50.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which is to browse for wall art within a specific price range. However, it missed the detail that the price range filter is not typically applied through the search bar, but through a specific price filter option on the website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to navigate the website and identify the necessary elements to complete the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent provided a plan to complete the task, but the final response is not sufficient to complete the task successfully. The agent suggested to use the search bar to filter the items based on the price range, which is not the typical way to apply a price filter on a shopping website. Therefore, the task is only partially completed.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 10/10: kohls (Shopping)
+  Goal: Add the cheapest Women's Sweaters to my shopping cart.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of adding a Women's Sweater to the shopping cart but did not explicitly mention or show understanding of the constraint of the sweater being the cheapest.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with all steps directly related to the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent's final response is not sufficient to complete the task successfully. It does not provide evidence that the cheapest Women's Sweater was added to the cart, which was a key requirement of the task.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  LangChain + MCP Summary:
+    Success: 5/5 (100.0%)
+    Avg Latency: 31.31s
+    Avg Reasoning Steps: 18.0
+
+----------------------------------------------------------------------
+  LangGraph with MCP:
+----------------------------------------------------------------------
+
+  Task 1/10: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of checking for a pickup restaurant available in Boston, NY on March 18, 5pm with just one guest.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not provide any information about the availability of a pickup restaurant in Boston, NY on the specified date and time.
+      Overall Score: 66.67%
+      Reasoning Steps: 18
+
+  Task 2/10: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of booking a winery tour but did not explicitly mention the constraints such as the location (Napa Valley), the cuisine (Mediterranean), the number of guests (4), the date and time (April 15, 10 am), and the setup (outdoor).
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a systematic approach to navigate the website and identify the necessary information.
+      Task Completion: 30.00%
+       ↳ Rationale: The agent did not complete the task successfully. It only managed to open the booking form on the Exploretock homepage but did not provide any information about the specific winery tour that meets the user's requirements.
+      Overall Score: 66.67%
+      Reasoning Steps: 18
+
+  Task 3/10: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip code 10001
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to sign Allan Smith up for email offers using the provided email and zip code.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with no irrelevant or redundant steps.
+      Task Completion: 100.00%
+       ↳ Rationale: The agent successfully completed the task, as indicated by the final response stating that the email address and zip code were successfully entered into the website's email offer sign-up form.
+      Overall Score: 100.00%
+      Reasoning Steps: 18
+
+  Task 4/10: enterprise (Travel)
+  Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old renter.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find a mini van for rent in Brooklyn City from April 5th to April 8th for a 22 year old renter.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent's final response indicates that it has completed the task, but it does not provide specific details about the available mini vans. It only states that the page reloads with the search results.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 5/10: kohls (Shopping)
+  Goal: Find the highest rated dog collar under 10 dollar.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent understood the task goal, constraints, and required output correctly. The task was to find the highest rated dog collar under 10 dollars on the Kohls website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to navigate, observe, identify, interact, and conclude.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not provide any specific information about the highest rated dog collar under 10 dollars. The final response is not sufficient to complete the task successfully.
+      Overall Score: 66.67%
+      Reasoning Steps: 18
+
+  Task 6/10: united (Travel)
+  Goal: Compare the fare types to book a 1-adult ticket from Springfiels, IL to Austin, TX for April 29th 2023
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which is to compare fare types for a specific flight. However, it did not explicitly mention the details of the flight (from Springfield, IL to Austin, TX on April 29th, 2023).
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant. It followed a logical sequence of steps to navigate the website and interact with the search bar, which is the correct approach for this task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent provided a general approach to complete the task but did not provide specific steps or results. It did not actually compare the fare types for the specified flight.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 7/10: budget (Travel)
+  Goal: Get an SUV with an additional driver and wifi for pick up in  any rental location near Washington regional airport on June 1, 11 am, and drop off at Washington international airport on June 2, 11 am, and pay for the booking instantly.
+    ✅️ Completed
+      Task Understanding: 30.00%
+       ↳ Rationale: The agent understood the task was related to booking a car rental, but it did not correctly interpret the specific details of the task. The task required booking an SUV with an additional driver and wifi, for pick up near Washington regional airport and drop off at Washington international airport. However, the agent typed 'Cape Town' into the search field, which is not relevant to the task.
+      Task Adherence: 30.00%
+       ↳ Rationale: The agent's reasoning was not fully on-task. While it correctly identified the need to interact with the search field, the input it provided was not relevant to the task. The task required searching for a car rental in Washington, but the agent searched for 'Cape Town' instead.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not complete the task at all. It did not correctly input the required search parameters, and as a result, it would not have been able to find the correct car rental. Furthermore, it did not provide any steps towards booking the car rental, adding an additional driver, ensuring the car has wifi, or paying for the booking.
+      Overall Score: 20.00%
+      Reasoning Steps: 18
+
+  Task 8/10: underarmour (Shopping)
+  Goal: Find a men's UA outlet T-shirt of XL size and add to cart.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of finding a men's UA outlet T-shirt of XL size and adding it to the cart. However, it did not explicitly mention the size constraint in its final response.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to navigate, observe, identify, interact, and conclude.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent's final response is not sufficient to complete the task successfully. It did not provide a specific action or result related to finding a men's UA outlet T-shirt of XL size and adding it to the cart.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 9/10: kohls (Shopping)
+  Goal: Browse for wall art with a price range of $25 to $50.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent seems to understand the task of browsing for wall art, but it does not mention the price range constraint in its reasoning.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning is focused on the task, with all steps appearing to be directly relevant to browsing for wall art.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent does not provide a final answer or result, indicating that important steps are missing in the task completion.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 10/10: kohls (Shopping)
+  Goal: Add the cheapest Women's Sweaters to my shopping cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to add the cheapest Women's Sweaters to the shopping cart on the Kohls website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with all steps directly contributing to the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent partially completed the task. It navigated to the Women's Clothing page, but did not provide information on the specific Women's Sweaters available on the page and their prices, which is necessary to add the cheapest ones to the shopping cart.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  LangGraph + MCP Summary:
+    Success: 10/10 (100.0%)
+    Avg Latency: 27.58s
+    Avg Reasoning Steps: 18.0
+
+----------------------------------------------------------------------
+  SemanticKernel with MCP:
+----------------------------------------------------------------------
+
+  Task 1/10: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of finding a pickup restaurant in Boston, NY on a specific date and time for one guest.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning and steps were all relevant to the task. It navigated the website, observed and identified information, interacted with the website, and concluded with a final report.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent was unable to find the required information on the website, so the task was only partially completed.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 2/10: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to book a winery tour in Napa Valley. However, it did not explicitly mention the constraints such as the winery serving Mediterranean cuisine, the wine testing for 4 guests, the date and time of the tour, and the outdoor setup.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to navigate the website, observe and identify the necessary information, interact with the website, and conclude the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent's final response is not sufficient to complete the task successfully. It only mentioned clicking the 'Book This Tour' button but did not provide any information on how to ensure the tour meets the specific requirements of the task (Mediterranean cuisine, wine testing for 4 guests, date and time, outdoor setup).
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 3/10: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip code 10001
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of signing up Allan Smith for email offers on the specified website using the provided email address and zip code.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It navigated to the website, located the sign up form, and attempted to input the required information.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent was unable to complete the task due to an 'Access Denied' message on the website. While the agent attempted to complete the task correctly, the final goal of signing up Allan Smith for email offers was not met.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 4/10: enterprise (Travel)
+  Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old renter.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to find a mini van in Brooklyn City for a specific date range for a 22 year old renter. However, the agent incorrectly stated that Enterprise Travel does not provide mini van rentals, which is not accurate as Enterprise does offer a variety of vehicles for rent, including mini vans.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to try and complete the task, even though the information it provided was incorrect.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not complete the task at all. It incorrectly stated that Enterprise does not offer mini van rentals, which is not true. Therefore, the user would not be able to complete the task based on the agent's response.
+      Overall Score: 56.67%
+      Reasoning Steps: 18
+
+  Task 5/10: kohls (Shopping)
+  Goal: Find the highest rated dog collar under 10 dollar.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find the highest rated dog collar under $10 on the Kohls website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with all steps directly related to the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent provided a general direction on how to find the product but did not provide a specific product or its rating. Therefore, the task is only partially completed.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 6/10: united (Travel)
+  Goal: Compare the fare types to book a 1-adult ticket from Springfiels, IL to Austin, TX for April 29th 2023
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent understood the task correctly. It was supposed to compare the fare types for a 1-adult ticket from Springfield, IL to Austin, TX for April 29th 2023 on the United website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It attempted to navigate, observe, identify, interact, and conclude based on the task requirements.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent was unable to complete the task. It did not provide any information about the fare types for the specified journey.
+      Overall Score: 66.67%
+      Reasoning Steps: 18
+
+  Task 7/10: budget (Travel)
+  Goal: Get an SUV with an additional driver and wifi for pick up in  any rental location near Washington regional airport on June 1, 11 am, and drop off at Washington international airport on June 2, 11 am, and pay for the booking instantly.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to book an SUV with specific features and conditions. However, it failed to acknowledge the specified website (budget) for the task and instead mentioned Rentalcars.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent likely completed the task, but it did not use the specified website (budget) for the booking. Instead, it used Rentalcars. Therefore, while the task was completed, it was not done as per the exact instructions.
+      Overall Score: 80.00%
+      Reasoning Steps: 18
+
+  Task 8/10: underarmour (Shopping)
+  Goal: Find a men's UA outlet T-shirt of XL size and add to cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find a men's UA outlet T-shirt of XL size and add it to the cart on the Under Armour website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task, including navigating, observing, identifying, interacting, and concluding.
+      Task Completion: 100.00%
+       ↳ Rationale: The agent successfully completed the task. The final response indicates that the men's UA outlet T-shirt of XL size has been added to the cart.
+      Overall Score: 100.00%
+      Reasoning Steps: 18
+
+  Task 9/10: kohls (Shopping)
+  Goal: Browse for wall art with a price range of $25 to $50.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of browsing for wall art but did not mention the price range constraint in its response.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent claims the task goal has been met, but there is no evidence in the response that the agent actually browsed for wall art within the specified price range.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 10/10: kohls (Shopping)
+  Goal: Add the cheapest Women's Sweaters to my shopping cart.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to add the cheapest Women's Sweaters to the shopping cart. However, it did not explicitly mention how it identified the cheapest sweater, which is a minor detail of the task.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent likely completed the task, as it mentioned that the user clicked on the 'Add to Cart' button. However, it did not explicitly confirm that the cheapest Women's Sweaters were added to the cart, leaving a minor gap in the task completion.
+      Overall Score: 80.00%
+      Reasoning Steps: 18
+
+  SemanticKernel + MCP Summary:
+    Success: 10/10 (100.0%)
+    Avg Latency: 34.14s
+    Avg Reasoning Steps: 18.0
+
+──────────────────────────────────────────────────────────────────────
+Protocol: A2A
+──────────────────────────────────────────────────────────────────────
+
+----------------------------------------------------------------------
+  CrewAI with A2A:
+----------------------------------------------------------------------
+
+  Task 1/10: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of finding a pickup restaurant in Boston, NY on a specific date and time for one guest.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with no irrelevant or redundant steps.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent outlined the correct steps to complete the task, but did not provide the final information about the availability of the pickup restaurant.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 2/10: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to book a winery tour in Napa Valley. However, it missed the detail about the winery serving Mediterranean cuisine and the need for an outdoor setup.
+      Task Adherence: 50.00%
+       ↳ Rationale: The agent's reasoning was partially on-task. It identified the search bar element on the website, but it incorrectly typed 'London' instead of 'Napa Valley' or any other relevant search term. This indicates a deviation from the task.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not complete the task at all. It did not provide any actionable steps or results that would lead to the booking of a winery tour in Napa Valley that serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in an outdoor setup.
+      Overall Score: 40.00%
+      Reasoning Steps: 18
+
+  Task 3/10: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip code 10001
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to sign Allan Smith up for email offers using the provided email address and zip code.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with no irrelevant or redundant steps.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent only opened the 'Email Sign Up' form and prepared it for input, but did not actually input the required information or complete the sign-up process.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 4/10: enterprise (Travel)
+  Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old renter.
+    ✅️ Completed
+      Task Understanding: 0.00%
+       ↳ Rationale: The agent does not demonstrate any understanding of the task. The task is to find a mini van in Brooklyn City from April 5th to April 8th for a 22 year old renter, but the agent does not mention or address any of these details in its response.
+      Task Adherence: 0.00%
+       ↳ Rationale: The agent's reasoning does not adhere to the task at all. It does not mention or address the task of finding a mini van in Brooklyn City from April 5th to April 8th for a 22 year old renter.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent does not complete the task. It does not provide any information or take any actions related to finding a mini van in Brooklyn City from April 5th to April 8th for a 22 year old renter.
+      Overall Score: 0.00%
+      Reasoning Steps: 18
+
+  Task 5/10: kohls (Shopping)
+  Goal: Find the highest rated dog collar under 10 dollar.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent understood the task perfectly. It knew it had to find the highest rated dog collar under 10 dollars on the Kohls website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It navigated the website, observed and identified potential products, interacted with the website, and concluded with a final report.
+      Task Completion: 100.00%
+       ↳ Rationale: The agent completed the task successfully. Although it did not find a highest rated dog collar under 10 dollars, it provided the correct information based on the current availability on the website.
+      Overall Score: 100.00%
+      Reasoning Steps: 18
+
+  Task 6/10: united (Travel)
+  Goal: Compare the fare types to book a 1-adult ticket from Springfiels, IL to Austin, TX for April 29th 2023
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to compare fare types for a specific flight. However, it did not provide any details about the fare types, which was a key part of the task.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to navigate the website, observe and identify information, interact with the website, and conclude the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent did not provide any specific information about the fare types, which was a key requirement of the task. Therefore, the task was only partially completed.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 7/10: budget (Travel)
+  Goal: Get an SUV with an additional driver and wifi for pick up in  any rental location near Washington regional airport on June 1, 11 am, and drop off at Washington international airport on June 2, 11 am, and pay for the booking instantly.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to book an SUV with an additional driver and wifi from a rental location near Washington regional airport to Washington international airport.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent states that the booking has been made, but does not provide any confirmation details or reference number for the booking. This information would be necessary to ensure the task was fully completed.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 8/10: underarmour (Shopping)
+  Goal: Find a men's UA outlet T-shirt of XL size and add to cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent understood the task perfectly, which was to find a men's UA outlet T-shirt of XL size and add it to the cart.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to accomplish the task.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent states that the task has been accomplished, but it does not provide any specific details or evidence to confirm that the correct item was found and added to the cart. Therefore, it's not entirely clear if the task was fully completed.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 9/10: kohls (Shopping)
+  Goal: Browse for wall art with a price range of $25 to $50.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of browsing for wall art within a specific price range on the Kohl's website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with no irrelevant or redundant steps.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent did not provide a definitive answer or result, stating that it is difficult to confirm if any wall art within the specified price range was found. Therefore, the task was only partially completed.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 10/10: kohls (Shopping)
+  Goal: Add the cheapest Women's Sweaters to my shopping cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of adding the cheapest Women's Sweaters to the shopping cart.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with no irrelevant or redundant steps.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent states that the task has been completed, but does not provide specific details about the item added to the cart, such as its price or description. This makes it difficult to confirm whether the cheapest item was indeed selected.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  CrewAI + A2A Summary:
+    Success: 10/10 (100.0%)
+    Avg Latency: 24.39s
+    Avg Reasoning Steps: 18.0
+
+----------------------------------------------------------------------
+  LangChain with A2A:
+----------------------------------------------------------------------
+
+  Task 1/10: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to check for a pickup restaurant in Boston, NY on a specific date and time. However, it did not explicitly mention the constraint of having just one guest.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent claims to have completed the task, but it does not provide any specific information or results about the availability of a pickup restaurant. Therefore, it's unclear whether the task was actually completed successfully.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 2/10: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to book a winery tour in Napa Valley that serves Mediterranean cuisine with wine tasting for 4 guests on April 15, 10 am in an outdoor setup.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent did not provide a final booking confirmation or specific details about the winery, time, or date of the tour. It only mentioned that the Exploretock website could be used to book the tour, but did not provide actionable steps or results.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 3/10: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip code 10001
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of signing Allan Smith up for email offers, but it did not explicitly mention the use of the email address and zip code provided.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with all steps directly related to the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent's final response indicates that the task is in progress but not yet complete. The agent did not confirm that the email address and zip code were used in the sign-up process.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 4/10: enterprise (Travel)
+  Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old renter.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find a mini van for rent in Brooklyn City from April 5th to April 8th for a 22 year old renter.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to try and find the requested information.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent was unable to find the requested mini van rental for the specified dates and location. However, it did attempt to complete the task and provided a clear explanation of the outcome.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 5/10: kohls (Shopping)
+  Goal: Find the highest rated dog collar under 10 dollar.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent understood the task goal and constraints correctly. It knew it had to find the highest rated dog collar under 10 dollars on the Kohls website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It navigated to the website, identified the necessary elements, and interacted with them to find the required information.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent did not fully complete the task. It navigated to the website and interacted with the necessary elements, but it did not provide specific information about the highest rated dog collar under 10 dollars.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 6/10: united (Travel)
+  Goal: Compare the fare types to book a 1-adult ticket from Springfiels, IL to Austin, TX for April 29th 2023
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to compare fare types for a specific flight. However, it incorrectly mentioned the 'Expedia' website instead of 'United' as stated in the task.
+      Task Adherence: 70.00%
+       ↳ Rationale: The agent's reasoning was mostly on-task, but it incorrectly referred to the 'Expedia' website instead of 'United'. This is a minor deviation from the task.
+      Task Completion: 30.00%
+       ↳ Rationale: The agent did not complete the task successfully. It did not provide the comparison of fare types for the specified flight. Additionally, it incorrectly referred to the 'Expedia' website instead of 'United'.
+      Overall Score: 56.67%
+      Reasoning Steps: 18
+
+  Task 7/10: budget (Travel)
+  Goal: Get an SUV with an additional driver and wifi for pick up in  any rental location near Washington regional airport on June 1, 11 am, and drop off at Washington international airport on June 2, 11 am, and pay for the booking instantly.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to book an SUV with an additional driver and wifi, pick up at a location near Washington regional airport on June 1, 11 am, and drop off at Washington international airport on June 2, 11 am, and pay for the booking instantly.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent claims that the task has been completed, but it does not provide any specific details or evidence to support this claim. It does not provide any information about the booking, such as the cost, the make and model of the SUV, or the confirmation number. Therefore, it's unclear whether the task has actually been completed successfully.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 8/10: underarmour (Shopping)
+  Goal: Find a men's UA outlet T-shirt of XL size and add to cart.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of finding a men's UA outlet T-shirt of XL size and adding it to the cart. However, it did not explicitly mention the size or the outlet in its response.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent's final response is not sufficient to complete the task successfully. It did not specify the size or the outlet in its response, which are key details for the task.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 9/10: kohls (Shopping)
+  Goal: Browse for wall art with a price range of $25 to $50.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent understood the task perfectly. It knew it had to browse for wall art within a specific price range on the Kohls website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent states that it has successfully applied the price filter and browsed for wall art within the specified range. However, it does not provide any specific results or examples of the wall art it found, which would have been useful for fully completing the task.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 10/10: kohls (Shopping)
+  Goal: Add the cheapest Women's Sweaters to my shopping cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of adding the cheapest Women's Sweaters to the shopping cart on the Kohl's website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with no irrelevant or redundant steps.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent did not fully complete the task. It navigated to the Women's Clothing page and suggested the next steps, but it did not actually find and add the cheapest Women's Sweater to the shopping cart.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  LangChain + A2A Summary:
+    Success: 10/10 (100.0%)
+    Avg Latency: 24.53s
+    Avg Reasoning Steps: 18.0
+
+----------------------------------------------------------------------
+  LangGraph with A2A:
+----------------------------------------------------------------------
+
+  Task 1/10: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to check for a pickup restaurant in Boston, NY on a specific date and time for one guest.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It navigated to the website, interacted with the search box, and entered the required information.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent was able to perform the task but the final result was not successful. The page reloaded without any information about the pickup restaurant. However, the agent correctly reported this outcome.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 2/10: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to book a winery tour in Napa Valley that serves Mediterranean cuisine with wine tasting for 4 guests on April 15, 10 am in an outdoor setup.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent claims to have booked the tour, but there is no explicit confirmation or details about the booking. The agent's response lacks specific details about the winery, the Mediterranean cuisine, the outdoor setup, and the confirmation of the booking for the specified date and time.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 3/10: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip code 10001
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of signing Allan Smith up for email offers, but did not mention the zip code 10001 in its response.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent likely completed the task, but it's unclear whether the zip code was entered as it was not mentioned in the final response.
+      Overall Score: 80.00%
+      Reasoning Steps: 18
+
+  Task 4/10: enterprise (Travel)
+  Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old renter.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of finding a mini van in Brooklyn City from April 5th to April 8th for a 22 year old renter. However, it did not explicitly mention the constraints related to the age of the renter and the specific dates.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to try and achieve the task goal.
+      Task Completion: 30.00%
+       ↳ Rationale: The agent did not provide a final answer or actionable steps to complete the task. It only mentioned that the 'Find a mini van' button was clicked, but did not provide any information about the availability of the mini van in Brooklyn City for the specified dates and for a 22 year old renter.
+      Overall Score: 66.67%
+      Reasoning Steps: 18
+
+  Task 5/10: kohls (Shopping)
+  Goal: Find the highest rated dog collar under 10 dollar.
+    ✅️ Completed
+      Task Understanding: 50.00%
+       ↳ Rationale: The agent understood the task was to find a dog collar, but it did not correctly identify the product. The product it found was dog food, not a dog collar.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant. It followed a logical process of navigating, observing, identifying, interacting, and concluding.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not complete the task successfully. The product it found was not a dog collar, which was the specific item requested in the task.
+      Overall Score: 50.00%
+      Reasoning Steps: 18
+
+  Task 6/10: united (Travel)
+  Goal: Compare the fare types to book a 1-adult ticket from Springfiels, IL to Austin, TX for April 29th 2023
+    ✅️ Completed
+      Task Understanding: 50.00%
+       ↳ Rationale: The agent understood the general intent of the task, which is to compare fare types for a specific flight. However, it missed the key requirement of actually providing the comparison of the fare types.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant. It followed a logical sequence of steps to try to complete the task.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not complete the task at all. It did not provide the comparison of fare types for the specified flight.
+      Overall Score: 50.00%
+      Reasoning Steps: 18
+
+  Task 7/10: budget (Travel)
+  Goal: Get an SUV with an additional driver and wifi for pick up in  any rental location near Washington regional airport on June 1, 11 am, and drop off at Washington international airport on June 2, 11 am, and pay for the booking instantly.
+    ✅️ Completed
+      Task Understanding: 0.00%
+       ↳ Rationale: The agent does not provide any understanding of the task. It does not mention any of the task details such as getting an SUV, adding an additional driver, including wifi, or the pick up and drop off details.
+      Task Adherence: 0.00%
+       ↳ Rationale: The agent does not adhere to the task at all. It does not provide any steps or actions that are relevant to the task.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent does not complete the task. It does not provide any steps or actions that would lead to the completion of the task.
+      Overall Score: 0.00%
+      Reasoning Steps: 18
+
+  Task 8/10: underarmour (Shopping)
+  Goal: Find a men's UA outlet T-shirt of XL size and add to cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find a men's UA outlet T-shirt of XL size and add it to the cart.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with no irrelevant or redundant steps.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent was unable to confirm if the specific T-shirt was added to the cart or if the website has any outlet stores. Therefore, the task was only partially completed.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 9/10: kohls (Shopping)
+  Goal: Browse for wall art with a price range of $25 to $50.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent's reasoning shows that it understood the task of browsing for wall art within a specific price range.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on task, with all steps appearing to be directly relevant to the task of browsing for wall art within a specific price range.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not provide a final answer or result, making it impossible to determine whether the task was completed successfully.
+      Overall Score: 66.67%
+      Reasoning Steps: 18
+
+  Task 10/10: kohls (Shopping)
+  Goal: Add the cheapest Women's Sweaters to my shopping cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of adding the cheapest Women's Sweaters to the shopping cart on the Kohls website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with all steps directly contributing to the task.
+      Task Completion: 100.00%
+       ↳ Rationale: The agent successfully completed the task, as indicated by the interaction history and the final report stating that the 'Add to Cart' button was successfully clicked and the item was added to the cart.
+      Overall Score: 100.00%
+      Reasoning Steps: 18
+
+  LangGraph + A2A Summary:
+    Success: 10/10 (100.0%)
+    Avg Latency: 27.24s
+    Avg Reasoning Steps: 18.0
+
+----------------------------------------------------------------------
+  SemanticKernel with A2A:
+----------------------------------------------------------------------
+
+  Task 1/10: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to check for a pickup restaurant in Boston, NY on a specific date and time for one guest.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed the necessary steps to try and find the information requested.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent was unable to provide the information requested. It stated that additional information is required, but it's not clear what additional information is needed. The task was only partially completed.
+      Overall Score: 83.33%
+      Reasoning Steps: 18
+
+  Task 2/10: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
+    ✅️ Completed
+      Task Understanding: 0.00%
+       ↳ Rationale: The agent did not understand the task at all. The task was to book a winery tour, but the agent incorrectly stated that the task was related to the stock market and historical moving averages.
+      Task Adherence: 0.00%
+       ↳ Rationale: The agent's reasoning was completely unrelated to the task. The agent did not attempt to book a winery tour or navigate the Exploretock website.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not complete the task. The agent did not book a winery tour or provide any actionable steps or results.
+      Overall Score: 0.00%
+      Reasoning Steps: 18
+
+  Task 3/10: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip code 10001
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of signing Allan Smith up for email offers with the given email and zip code.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process, with no irrelevant or redundant steps.
+      Task Completion: 30.00%
+       ↳ Rationale: The agent did not complete the task successfully. It did not provide a clear action or result that would lead to Allan Smith being signed up for email offers.
+      Overall Score: 76.67%
+      Reasoning Steps: 18
+
+  Task 4/10: enterprise (Travel)
+  Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old renter.
+    ✅️ Completed
+      Task Understanding: 50.00%
+       ↳ Rationale: The agent understood the general intent of the task, which was to find a mini van for rent in Brooklyn City from April 5th to April 8th for a 22 year old renter. However, it incorrectly stated that the task did not provide enough information, specifically the type of vehicle and age of the renter, which were clearly stated in the task.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It attempted to navigate the website and observe and identify the necessary information, although it incorrectly concluded that there was not enough information provided in the task.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent did not complete the task at all. It incorrectly stated that there was not enough information provided in the task to complete it, despite the task clearly stating the type of vehicle and age of the renter.
+      Overall Score: 50.00%
+      Reasoning Steps: 18
+
+  Task 5/10: kohls (Shopping)
+  Goal: Find the highest rated dog collar under 10 dollar.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find the highest rated dog collar under 10 dollars on the Kohls website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It attempted to navigate the website and identify the required information.
+      Task Completion: 0.00%
+       ↳ Rationale: The agent was unable to complete the task due to an error while loading the Kohls website. Therefore, it could not provide the highest rated dog collar under 10 dollars.
+      Overall Score: 66.67%
+      Reasoning Steps: 18
+
+  Task 6/10: united (Travel)
+  Goal: Compare the fare types to book a 1-adult ticket from Springfiels, IL to Austin, TX for April 29th 2023
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which is to compare fare types for a specific flight. However, it did not provide specific details about the fare types or the process of comparing them.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to navigate the website and interact with the necessary elements.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent provided instructions on how to navigate to the fare comparison section of the website, but it did not provide the actual fare comparison, which was the main goal of the task.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 7/10: budget (Travel)
+  Goal: Get an SUV with an additional driver and wifi for pick up in  any rental location near Washington regional airport on June 1, 11 am, and drop off at Washington international airport on June 2, 11 am, and pay for the booking instantly.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to book an SUV with specific features. However, it missed the details about the additional driver and WiFi, and the need to pay for the booking instantly.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to navigate the website and select the rental location.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent partially completed the task. It selected the rental location and moved to the page to confirm the details of the rental car booking. However, it did not specify the SUV model, add the additional driver and WiFi, or pay for the booking instantly.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  Task 8/10: underarmour (Shopping)
+  Goal: Find a men's UA outlet T-shirt of XL size and add to cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find a men's UA outlet T-shirt of XL size and add it to the cart.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It followed a logical sequence of steps to complete the task.
+      Task Completion: 100.00%
+       ↳ Rationale: The agent successfully completed the task. It found the required product and added it to the cart on the Under Armour Shopping website.
+      Overall Score: 100.00%
+      Reasoning Steps: 18
+
+  Task 9/10: kohls (Shopping)
+  Goal: Browse for wall art with a price range of $25 to $50.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of the task, which was to browse for wall art within a specific price range on the Kohls website. However, it seems to have missed the detail that it should be searching for 'wall art' and not 'New York'.
+      Task Adherence: 70.00%
+       ↳ Rationale: The agent's reasoning was mostly on-task, but it made an irrelevant step by searching for 'New York' instead of 'wall art'.
+      Task Completion: 30.00%
+       ↳ Rationale: The agent did not complete the task successfully. It did not provide any actionable steps or results for browsing wall art within the specified price range.
+      Overall Score: 56.67%
+      Reasoning Steps: 18
+
+  Task 10/10: kohls (Shopping)
+  Goal: Add the cheapest Women's Sweaters to my shopping cart.
+    ✅️ Completed
+      Task Understanding: 70.00%
+       ↳ Rationale: The agent understood the main goal of adding a Women's Sweater to the shopping cart but did not explicitly mention or show understanding of the constraint of the sweater being the cheapest.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task throughout the process, with all steps being directly relevant to the task.
+      Task Completion: 50.00%
+       ↳ Rationale: The agent's final response indicates that a Women's Sweater has been added to the shopping cart, but it does not confirm whether the sweater added was the cheapest one, which was a key requirement of the task.
+      Overall Score: 73.33%
+      Reasoning Steps: 18
+
+  SemanticKernel + A2A Summary:
+    Success: 10/10 (100.0%)
+    Avg Latency: 28.08s
+    Avg Reasoning Steps: 18.0
+
+======================================================================
+Testing Model: Qwen/Qwen2.5-7B-Instruct
+======================================================================
+
+----------------------------------------------------------------------
+PROTOCOL x FRAMEWORK COMBINATIONS
+----------------------------------------------------------------------
+
+──────────────────────────────────────────────────────────────────────
+Protocol: standard
+──────────────────────────────────────────────────────────────────────
+
+----------------------------------------------------------------------
+  CrewAI with standard:
+----------------------------------------------------------------------
+
+  Task 1/10: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of searching for pickup restaurants in Boston, NY on a specific date and time for one guest. It correctly identified the steps needed to complete the task.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It outlined the steps needed to complete the task and provided a hypothetical response based on the task goal.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent outlined the steps needed to complete the task and provided a hypothetical response based on the task goal. However, it did not actually perform the search and provide the results, which is a minor gap in the task completion.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 2/10: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to book a winery tour in Napa Valley at a winery that serves Mediterranean cuisine, with wine tasting for 4 guests on April 15, 10 am in an outdoor setup.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the entire process. It provided a step-by-step guide on how to book the winery tour, including searching for the winery, selecting the appropriate winery, and booking the tour.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided a detailed plan on how to complete the task, including the steps to take on the website. However, the agent did not actually complete the task, as it asked for the actual current state (URL or HTML snippet) to execute the necessary actions to book the winery tour.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 3/10: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip code 10001
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to sign Allan Smith up for email offers on the Enterprise travel website using the provided email and zip code.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the entire process. It correctly identified the need to find the correct URL for the sign-up page and provided a detailed plan of action to complete the task.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided a detailed plan of action to complete the task, but it was unable to actually execute the steps due to a ratelimit issue. Therefore, the task was not fully completed.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 4/10: enterprise (Travel)
+  Goal: Find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old renter.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find a mini van at Brooklyn City from April 5th to April 8th for a 22 year old renter. The agent's action plan and reasoning reflect this understanding.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. The agent's steps were all directly related to the task of finding a mini van for the specified dates and for a 22 year old renter.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided a detailed plan to complete the task, but the task itself was not completed within the provided response. The agent outlined the steps to be taken, but did not actually perform these steps to confirm the availability of a mini van for the specified dates.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 5/10: kohls (Shopping)
+  Goal: Find the highest rated dog collar under 10 dollar.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to find the highest rated dog collar under $10 on Kohl's website. The agent's response shows that it understood the task's goals, constraints, and required outputs.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout. It outlined the steps it would take to complete the task, including navigating to the website, using the search bar, filtering the results, and identifying the highest rated dog collar under $10.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent outlined the steps to complete the task but did not provide the actual highest rated dog collar under $10. The agent's response is hypothetical and does not provide the final answer.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 6/10: united (Travel)
+  Goal: Compare the fare types to book a 1-adult ticket from Springfiels, IL to Austin, TX for April 29th 2023
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of comparing fare types for a 1-adult ticket from Springfield, IL to Austin, TX for April 29th, 2023 on the United Airlines website.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout, with all steps directly contributing to the task goal.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided a detailed plan for completing the task, but did not actually execute the steps or provide the final comparison of fare types. The task is likely to be completed successfully if the steps are followed, but the agent's response does not confirm this.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 7/10: budget (Travel)
+  Goal: Get an SUV with an additional driver and wifi for pick up in  any rental location near Washington regional airport on June 1, 11 am, and drop off at Washington international airport on June 2, 11 am, and pay for the booking instantly.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to book an SUV with an additional driver and wifi from a rental location near Washington regional airport to Washington international airport on the Budget website. The agent correctly identified all the necessary steps to complete the task.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the entire process. It provided a step-by-step guide on how to navigate the website, select the correct options, and complete the booking.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided a detailed plan on how to complete the task, but it did not actually execute the steps to complete the booking. Therefore, while the plan is likely to lead to task completion, it's not guaranteed without the actual execution.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 8/10: underarmour (Shopping)
+  Goal: Find a men's UA outlet T-shirt of XL size and add to cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of finding a men's UA outlet T-shirt of XL size and adding it to the cart. It identified the necessary steps to complete the task, including navigating to the correct URL, searching for T-shirts, finding the XL size, and adding it to the cart.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout. It focused on the necessary steps to complete the task, without any irrelevant or redundant steps.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided a detailed plan to complete the task, including the necessary steps and expected results. However, it did not explicitly confirm that the T-shirt was added to the cart, which is a minor gap in the task completion.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 9/10: kohls (Shopping)
+  Goal: Browse for wall art with a price range of $25 to $50.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to browse for wall art within a specific price range on the Kohls website. The agent's proposed steps align with the task's goals and constraints.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout. All steps proposed by the agent are directly related to the task.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided a detailed plan for completing the task, but due to a protocol error, it was unable to confirm the availability of wall art within the specified price range. Therefore, the task is likely completed but with minor gaps.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 10/10: kohls (Shopping)
+  Goal: Add the cheapest Women's Sweaters to my shopping cart.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to add the cheapest Women's Sweaters to the shopping cart on the Kohls website. The agent identified the goals, constraints, and required outputs accurately.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout. It provided a step-by-step plan to navigate the website, use the search functionality, and add the cheapest sweater to the cart.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided a detailed plan to complete the task, but it did not actually execute the steps to add the cheapest Women's Sweaters to the shopping cart. Therefore, the task is likely to be completed but with minor gaps.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  CrewAI + standard Summary:
+    Success: 7/7 (100.0%)
+    Avg Latency: 23.66s
+    Avg Reasoning Steps: 18.0
+
+----------------------------------------------------------------------
+  LangChain with standard:
+----------------------------------------------------------------------
+
+  Task 1/10: exploretock (Travel)
+  Goal: Check for pickup restaurant available in Boston, NY on March 18, 5pm with just one guest
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task of finding a pickup restaurant in Boston, NY for one guest at a specific date and time.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It provided an alternative approach when the provided URL did not work.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided a solution to perform a search on Google Maps, but it did not provide a direct answer to the task. The user would still need to manually review the search results and check the restaurant's availability.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 2/10: exploretock (Travel)
+  Goal: Book a winery tour in Napa Valley in a winery which serves Mediterranean cuisine with wine testing for 4 guests on April 15, 10 am in a outdoor setup.
+    ✅️ Completed
+      Task Understanding: 100.00%
+       ↳ Rationale: The agent correctly understood the task, which was to book a winery tour in Napa Valley at a winery that serves Mediterranean cuisine, with wine tasting for 4 guests on April 15, 10 am in an outdoor setup.
+      Task Adherence: 100.00%
+       ↳ Rationale: The agent's reasoning stayed on-task and relevant throughout the process. It correctly identified the steps needed to complete the task, including searching for the winery tour, filtering the results, and booking the tour.
+      Task Completion: 70.00%
+       ↳ Rationale: The agent provided the correct steps to complete the task, but it did not actually complete the task. It only navigated to the website and outlined the steps to be taken, but did not perform the search, filter the results, or book the tour.
+      Overall Score: 90.00%
+      Reasoning Steps: 18
+
+  Task 3/10: enterprise (Travel)
+  Goal: Sign Allan Smith for email offers with the email allan.smith@gmail.com and zip code 10001
+
+💳 Payment/quota error detected — halting experiment.
+   Partial log preserved. Resume with the same YAML to continue.
