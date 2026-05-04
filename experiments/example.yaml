@@ -15,6 +15,7 @@ temperature: 0.7          # Sampling temperature (0.0 = deterministic, 1.0 = cre
 max_tokens: 1024          # Max tokens generated per request
 max_steps: 3              # Max research iterations per agent workflow (default: 3)
 max_tool_rounds: 5        # Max tool execution rounds per generate() call (default: 5)
+timeout: 30               # Timeout in seconds for API calls to prevent silent hangs
 
 # -----------------------------------------------------------------------------
 # Workflow

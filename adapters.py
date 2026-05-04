@@ -13,6 +13,7 @@ from abc import ABC, abstractmethod
 from config import ConfigExpert
 from tool_pool import ToolPool
 import anthropic
+import signal
 
 class BaseAdapter(ABC):
     """
@@ -69,6 +70,25 @@ class HuggingFaceAdapter(BaseAdapter):
         self._model_name = model_name
         self.api_key = api_key or os.getenv("HF_TOKEN")
         self.client = InferenceClient(model=model_name, token=self.api_key)
+        config = ConfigExpert.get_instance()
+        self.timeout = config.get("timeout", 30)  # Default 30 seconds
+    
+    def _call_with_timeout(self, func, *args, **kwargs):
+        """Call a function with timeout using signal."""
+        def timeout_handler(signum, frame):
+            raise TimeoutError(f"API call timed out after {self.timeout} seconds")
+        
+        # Set up the signal handler
+        old_handler = signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(self.timeout)
+        
+        try:
+            result = func(*args, **kwargs)
+            return result
+        finally:
+            # Restore the old handler and cancel the alarm
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, old_handler)
     
     @property
     def model_name(self) -> str:
@@ -120,7 +140,7 @@ class HuggingFaceAdapter(BaseAdapter):
                     if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
                         print(f"🔧 HuggingFace tool request round={round_num} | model={self.model_name} | tool_choice={request_kwargs.get('tool_choice')}")
 
-                response = self.client.chat_completion(**request_kwargs)
+                response = self._call_with_timeout(self.client.chat_completion, **request_kwargs)
 
                 if isinstance(response, dict) and "error" in response:
                     return f"API Error: {response.get('error')} - {response.get('description', 'No description provided')}"
@@ -190,6 +210,8 @@ class HuggingFaceAdapter(BaseAdapter):
             # Exhausted max_tool_rounds without a text response
             return "Error: Maximum tool execution rounds reached without a final text response."
 
+        except TimeoutError as e:
+            return f"Timeout Error: {str(e)}"
         except Exception as e:
             return f"Inference Error: {str(e)}"
     
@@ -277,6 +299,8 @@ class OpenAIAdapter(BaseAdapter):
         """
         self._model_name = model_name or ConfigExpert.get_instance().get("judge_model", "gpt-4o-mini")
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
+        config = ConfigExpert.get_instance()
+        self.timeout = config.get("timeout", 30)  # Default 30 seconds
     
     @property
     def model_name(self) -> str:
@@ -285,7 +309,7 @@ class OpenAIAdapter(BaseAdapter):
     def generate(self, prompt: str, **kwargs) -> str:
         """Generate text completion from the model, executing tool calls if requested."""
         try:
-            client = openai.OpenAI(api_key=self.api_key)
+            client = openai.OpenAI(api_key=self.api_key, timeout=self.timeout)
             config = ConfigExpert.get_instance()
             tools = kwargs.get("tools")
             if not isinstance(tools, list) or len(tools) == 0:
@@ -407,7 +431,9 @@ class AnthropicAdapter(BaseAdapter):
         """
         self._model_name = model_name
         self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
-        self.client = anthropic.Anthropic(api_key=self.api_key)
+        config = ConfigExpert.get_instance()
+        self.timeout = config.get("timeout", 30)  # Default 30 seconds
+        self.client = anthropic.Anthropic(api_key=self.api_key, timeout=self.timeout)
 
     @property
     def model_name(self) -> str:

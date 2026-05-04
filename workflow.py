@@ -308,6 +308,9 @@ class WorkflowController:
             else:
                 # Standard assignment for single-step results
                 state[node.output_key] = output
+                # Increment step counter for loop nodes
+                if node.loop:
+                    state["step"] = state.get("step", 0) + 1
 
             reasoning_steps.append(ReasoningStep(
                 step_number=len(reasoning_steps) + 1,
@@ -322,6 +325,9 @@ class WorkflowController:
                 state["step"] = state.get("step", 0) + 1
             else:
                 state[node.output_key] = error_msg
+                # Increment step counter for loop nodes even on error
+                if node.loop:
+                    state["step"] = state.get("step", 0) + 1
 
             reasoning_steps.append(ReasoningStep(
                 step_number=len(reasoning_steps) + 1,
