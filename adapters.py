@@ -107,6 +107,7 @@ class HuggingFaceAdapter(BaseAdapter):
                     "model": self.model_name,
                     "max_tokens": max_tokens,
                     "temperature": temperature,
+                    "trust_remote_code": True
                 }
                 if tools is not None:
                     request_kwargs["tools"] = tools

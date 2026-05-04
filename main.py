@@ -62,14 +62,9 @@ def main():
         filename = f"./logs/mind2web-results-{timestamp}.json"
         tester.export_mind2web_results(filename)
         
-        # Also export standard results
-        standard_filename = f"./logs/results-{timestamp}.json"
-        tester.export_results(standard_filename)
-        
         print(f"\n{'='*70}")
         print(f"Mind2Web evaluation complete!")
         print(f"Results: {filename}")
-        print(f"Full logs: {standard_filename}")
         print(f"{'='*70}\n")
         
     else:
@@ -81,12 +76,8 @@ def main():
         tester.run_comprehensive_test()
         tester.print_summary()
         
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"./logs/results-{timestamp}.json"
-        tester.export_results(filename)
-        
         print(f"\n{'='*70}")
-        print(f"Testing complete! Check {filename} for detailed results.")
+        print(f"Testing complete! Check logs/ for detailed results.")
         print(f"{'='*70}\n")
     
     tester.close() # Cleanup of resources, file handles, etc.
