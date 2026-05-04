@@ -373,7 +373,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None,
+        tools: List[str] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with Smolagents framework"""
@@ -443,7 +443,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None,
+        tools: List[str] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with LangChain ReAct agent"""
@@ -513,7 +513,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None,
+        tools: List[str] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with LangGraph stateful workflow"""
@@ -583,7 +583,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None,
+        tools: List[str] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with LlamaIndex ReAct agent"""
@@ -654,6 +654,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
+        tools: List[str] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with Semantic Kernel"""
@@ -664,6 +665,9 @@ Please respond according to this protocol structure and complete the task."""
             protocol_metrics = self._get_protocol_metrics(protocol or ProtocolType.STANDARD, protocol_instance, task)
             ToolPool.reset_log()
             agent = SemanticKernelAgent(adapter, protocol=protocol_instance)
+
+            for tool_name in (tools or []):
+                agent.add_tool(tool_name)
 
             # Start heartbeat thread
             heartbeat_event = threading.Event()
@@ -698,7 +702,7 @@ Please respond according to this protocol structure and complete the task."""
                 reasoning_steps=agent.reasoning_steps,
                 latency=latency,
                 success=success,
-                metadata={"kernel_type": "huggingface", "protocol_used": protocol.value if protocol else "none", **protocol_metrics, "tool_log": self._capture_tool_log()},
+                metadata={"kernel_type": "huggingface", "tools_count": len(tools or []), "protocol_used": protocol.value if protocol else "none", **protocol_metrics, "tool_log": self._capture_tool_log()},
                 error=error
             )
         
@@ -742,7 +746,7 @@ Please respond according to this protocol structure and complete the task."""
             "LangChain": (self.test_with_langchain, {"tools": tools}),
             "LangGraph": (self.test_with_langgraph, {"tools": tools}),
             "LlamaIndex": (self.test_with_llamaindex, {"tools": tools}),
-            "SemanticKernel": (self.test_with_semantic_kernel, {})
+            "SemanticKernel": (self.test_with_semantic_kernel, {"tools": tools})
         }
 
         frameworks = [(name, *framework_map[name]) for name in framework_names]
