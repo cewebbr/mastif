@@ -26,21 +26,23 @@ def main():
     # Get HuggingFace token
     hf_token = os.getenv("HF_TOKEN")
     if not hf_token:
-        print("ERROR: HF_TOKEN environment variable not set!")
+        print("ERROR: HF_TOKEN environment variable not set.")
         print("Please set it with: export HF_TOKEN='your_token_here'")
         return 1
     
-    # Get judge key
+    # Get judge key from OpenAI or Anthropic if in Mind2Web mode
     open_ai_key = os.getenv("OPENAI_API_KEY")
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
-    if MODE == "mind2web" and not open_ai_key:
-        print("ERROR: OPENAI_API_KEY environment variable not set!")
-        print("Please set it with: export OPENAI_API_KEY='your_key_here'")
-        return 1
-    elif MODE == "mind2web" and not anthropic_key:
-        print("ERROR: ANTHROPIC_API_KEY environment variable not set!")
-        print("Please set it with: export ANTHROPIC_API_KEY='your_key_here'")
-        return 1
+    if MODE == "mind2web":
+        judge_model = config.get("judge_model")
+        if not open_ai_key and judge_model.startswith("gpt-"):
+            print("ERROR: OPENAI_API_KEY environment variable not set.")
+            print("Please set it with: export OPENAI_API_KEY='your_key_here'")
+            return 1
+        elif not anthropic_key and judge_model.startswith("claude-"):
+            print("ERROR: ANTHROPIC_API_KEY environment variable not set.")
+            print("Please set it with: export ANTHROPIC_API_KEY='your_key_here'")
+            return 1
 
     # Initialize tester
     tester = Mastif(config_path)
