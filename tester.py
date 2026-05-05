@@ -303,7 +303,7 @@ Please respond according to this protocol structure and complete the task."""
         task: str,
         context: Dict = None,
         protocol: ProtocolType = None,
-        tools: List[Dict[str, str]] = None
+        tools: List[str] = None
     ) -> TestResult:
         """Test with CrewAI framework"""
         start_time = time.time()
@@ -373,7 +373,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None,
+        tools: List[str] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with Smolagents framework"""
@@ -443,7 +443,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None,
+        tools: List[str] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with LangChain ReAct agent"""
@@ -513,7 +513,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None,
+        tools: List[str] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with LangGraph stateful workflow"""
@@ -583,7 +583,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None,
+        tools: List[str] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with LlamaIndex ReAct agent"""
@@ -654,7 +654,7 @@ Please respond according to this protocol structure and complete the task."""
         self,
         adapter: BaseAdapter,
         task: str,
-        tools: List[Dict[str, str]] = None,
+        tools: List[str] = None,
         protocol: ProtocolType = None
     ) -> TestResult:
         """Test with Semantic Kernel"""
