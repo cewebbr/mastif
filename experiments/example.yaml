@@ -123,6 +123,7 @@ frameworks:
 #   sympy                 — Evaluate or simplify symbolic math expressions
 #   web_interaction       — Custom tool for complex web interactions (e.g. Mind2Web tasks)
 #   keyboard_interaction  — Custom tool for keyboard-driven web interactions (e.g. Mind2Web tasks)
+#   searxng_search        — Metasearch tool that queries multiple engines simultaneously (via requests to a SearXNG instance)
 # -----------------------------------------------------------------------------
 
 tools:
@@ -221,6 +222,12 @@ tools:
       Includes tabbing between elements, pressing enter, typing text, and triggering shortcuts.
       Prefer this when interaction must simulate accessibility or non-mouse workflows.
       Do NOT use for static content extraction.
+
+  # - name: "searxng_search"
+  #   description: >
+  #     Use this to perform a metasearch (query fan-out) across multiple engines simultaneously.
+  #     Input should be a search query.
+  #     Do NOT use if you only need results from a single source or for non-search tasks.
 
 # =============================================================================
 # STANDARD test mode settings

@@ -20,6 +20,7 @@ Tools in the pool:
     - sympy                 : Symbolic math and logic evaluation (via sympy)
     - web_interaction       : Interactive browser tool for multi-step web interactions (via Playwright)
     - keyboard_interaction  : Keyboard-driven browser interaction optimized for accessibility-style tasks (via Playwright)
+    - searxng_search         : Metasearch tool that queries multiple engines simultaneously (via requests to a SearXNG instance)
 
 Each framework requests a clone of the tool via get_tool(name, framework).
 The pool itself is a singleton — only one instance is ever created.
@@ -301,6 +302,7 @@ class _ToolPool:
         self._register_sympy()
         self._register_web_interaction()
         self._register_keyboard_interaction()
+        self._register_searxng_search()
 
     def _register_web_search(self):
         """DuckDuckGo web search — works natively with LangChain, CrewAI, smolagents."""
@@ -925,6 +927,71 @@ class _ToolPool:
             func=_interact,
         )
 
+    # TODO: Test hosting SearXNG locally and creating an experiment for common queries performed in Brazil
+    def _register_searxng_search(self):
+        """SearXNG metasearch — aggregates results from 70+ engines."""
+        import requests
+        import json
+
+        def _searxng_search(query: str) -> str:
+            # Get the instance URL from environment or a default
+            base_url = os.getenv("SEARXNG_URL", "http://localhost:8080") # TODO: test hosting locally
+            
+            try:
+                # Requesting JSON format is key for your experiments
+                response = requests.get(
+                    f"{base_url}/search",
+                    params={
+                        "q": query,
+                        "format": "json",
+                        "engines": os.getenv("SEARXNG_ENGINES", "google,bing,duckduckgo,wikipedia"), # TODO: Document how to configure on YAML and retrieve via ConfigExpert
+                        "pageno": 1
+                    },
+                    timeout=15
+                )
+                response.raise_for_status()
+                data = response.json()
+                
+                results = data.get("results", [])
+                if not results:
+                    return "No results found via SearXNG."
+
+                # For your experiments: Log additional metadata into the invocation_log
+                # This allows you to track which engines actually responded.
+                engines_involved = list(set([e for r in results for e in r.get('engines', [])]))
+                
+                # Enrich the invocation_log entry with experiment-specific data
+                if _ToolPool.invocation_log:
+                    _ToolPool.invocation_log[-1]["metadata"] = {
+                        "engines_used": engines_involved,
+                        "result_count": len(results),
+                        "raw_traffic_bytes": len(response.content)
+                    }
+
+                # Return a structured string for the agent/experimenter to assess
+                output = []
+                for i, r in enumerate(results[:10]): # Top 10 results
+                    output.append(
+                        f"[{i+1}] Title: {r.get('title')}\n"
+                        f"    URL: {r.get('url')}\n"
+                        f"    Engines: {', '.join(r.get('engines', []))}\n"
+                        f"    Snippet: {r.get('content', '')[:200]}..."
+                    )
+                
+                return "\n\n".join(output)
+
+            except Exception as e:
+                return f"SearXNG error: {str(e)}"
+
+        self._registry["searxng_search"] = ToolDefinition(
+            name="searxng_search",
+            description=(
+                "Metasearch tool that queries multiple engines simultaneously. "
+                "Returns results with engine attribution for fan-out analysis."
+            ),
+            func=_searxng_search,
+        )
+
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
@@ -937,7 +1004,7 @@ class _ToolPool:
             name:      One of "web_search", "web_browser", "wikipedia", "arxiv",
                        "python_repl", "requests_get", "beautifulsoup_scraper",
                        "pdf_reader", "datetime", "json_parser", "pubmed",
-                       "youtube_transcript", "sympy", "web_interaction".
+                       "youtube_transcript", "sympy", "web_interaction", "keyboard_interaction"
             framework: One of "langchain", "crewai", "smolagents", "llamaindex", "semantic_kernel".
 
         Returns:
@@ -994,6 +1061,7 @@ class _ToolPool:
             "sympy": ("Evaluate or simplify a symbolic math expression.", {"expression": {"type": "string", "description": "Mathematical expression to evaluate."}}),
             "web_interaction": ("Interact with a web page using structured browser actions.", {"input": {"type": "string", "description": "JSON string containing a URL and action sequence."}}),
             "web_keyboard_interaction": ("Interact with a web page using keyboard-driven browser actions.", {"input": {"type": "string", "description": "JSON string containing a URL and keyboard action sequence."}}),
+            "searxng_search": ("Metasearch tool that queries multiple engines simultaneously.", {"query": {"type": "string", "description": "Search query for SearXNG."}})
         }
 
         description, properties = schema_map.get(
