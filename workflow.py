@@ -13,6 +13,7 @@ comparison across frameworks remains fair.
 import os
 import re
 import json
+import logging
 from pathlib import Path
 from typing import Dict, List, Callable, Optional, Tuple
 
@@ -158,7 +159,6 @@ class NodeConfig:
 # WorkflowController
 # ---------------------------------------------------------------------------
 
-# TODO: Verify placeholders in prompt templates match the variables we inject in _execute_node
 class WorkflowController:
     """
     GRASP Controller for agentic workflow execution.
@@ -170,6 +170,15 @@ class WorkflowController:
     Instantiate once per agent instance (in __init__) to ensure the
     configuration snapshot is identical across all frameworks throughout
     an experiment run.
+
+    Supported workflows include linear workflows and hierarchical workflows. 
+    For linear workflows, nodes execute sequentially with outputs keys feeding 
+    into the next node's prompt.
+    For hierarchical workflows, nodes store output on {research_results},
+    which accumulates a list of results that can be referenced in subsequent 
+    nodes, e.g., an orchestrator that assesses the results of previous nodes.
+    Looping behavior is supported via a loop flag on any node.
+    Looping is executed until the node's output_key (e.g. {step}) exceeds max_steps defined in the config.
     """
 
     def __init__(self, framework_name: str, generate_fn: Callable, get_tool_payload_fn: Callable):
@@ -198,12 +207,54 @@ class WorkflowController:
                 "No nodes defined under 'workflow.nodes' in the configuration file."
             )
 
-        # TODO: Support more complex workflow structures (hierarchies, branching, etc.)
         self._nodes: Dict[str, NodeConfig] = {
             n["name"]: NodeConfig(n) for n in raw_nodes
         }
         self._entry_node: str = workflow_cfg.get("entry_node", raw_nodes[0]["name"])
         self._exit_node: str  = workflow_cfg.get("exit_node",  raw_nodes[-1]["name"])
+
+        # Validate the workflow placeholders after nodes are loaded
+        self._validate_placeholders()
+
+    def _validate_placeholders(self):
+        """
+        Validates workflow continuity. 
+        Errors on missing inputs; warns on unused outputs intended for export.
+        """
+        # Keys always available to any prompt
+        # NOTE: Unlike standard keys that perform a simple assignment, {research_results} triggers list-based accumulation.  
+        # NOTE: When a node defines output_key: research_results, the controller appends the model's response to a list rather than overwriting the previous value.  
+        # NOTE: This makes it the primary tool for history tracking across multiple loop iterations or sequential research steps.
+        available_keys = {"framework", "role", "tools_text", "task", "step", "max_steps", "research_results"}
+        
+        # Track which keys are actually consumed by at least one prompt
+        consumed_keys = set()
+        node_list = list(self._nodes.values())
+        
+        # First Pass: Check for "Missing Input" Errors
+        for node in node_list:
+            placeholders = set(re.findall(r"\{(\w+)\}", node.template_text))
+            
+            for p in placeholders:
+                if p not in available_keys:
+                    # CRITICAL ERROR: Prompt needs a variable that doesn't exist yet
+                    raise ValueError(
+                        f"Workflow Blocker in node '{node.name}': The placeholder '{{{p}}}' "
+                        f"is required by the prompt but has not been defined by any previous node."
+                    )
+                consumed_keys.add(p)
+            
+            # Add this node's output to the available pool for subsequent nodes
+            available_keys.add(node.output_key)
+
+        # Second Pass: Check for "Unused Output" Warnings
+        for node in node_list:
+            # If an output_key is never used as a placeholder and isn't the final exit key
+            if node.output_key not in consumed_keys and node.name != self._exit_node:
+                logging.warning(
+                    f"Workflow Note: Node '{node.name}' defines output_key '{node.output_key}', "
+                    f"but it is never used in subsequent prompts. It will only exist in the final state export."
+                )
 
     # ------------------------------------------------------------------
     # Public API
