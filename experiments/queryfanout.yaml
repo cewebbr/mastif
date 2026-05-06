@@ -1,0 +1,88 @@
+experiment:
+  name: "Brazil 2026 - Search Fan-out & Traffic Analysis"
+  description: "Measuring traffic and result quality across different search indices for top Brazilian queries"
+
+# Global Configuration[cite: 5]
+temperature: 0.7          # Balanced for diverse search interpretation
+max_tokens: 2048          # Increased to handle cumulative research_results
+max_steps: 5              # Allows for multiple loops if needed
+max_tool_rounds: 5        
+timeout: 60               # Higher timeout for metasearch aggregation
+requests_soft_limit: 500
+test_mode: "standard"
+
+models:
+  - "moonshotai/Kimi-K2.5"
+  - "anthropic/claude-3.5-sonnet"
+
+protocols:
+  - "STANDARD"
+
+frameworks:
+  - "LangGraph"
+  - "CrewAI"
+
+# Base instruction for the fan-out task[cite: 5]
+prompt_template: |
+  You are a Search Quality Analyst. Your goal is to execute the following search task: 
+  {task}
+
+  Analyze the results for accuracy, relevance to the Brazilian context, and engine-level performance.
+  Provide your analysis based on the cumulative findings stored in the workflow.
+
+tasks:
+  - "Identify the primary intent and top information sources for: YouTube"
+  - "Identify the primary intent and top information sources for: WhatsApp Web"
+  - "Identify the primary intent and top information sources for: Clima"
+  - "Identify the primary intent and top information sources for: G1"
+  - "Identify the primary intent and top information sources for: Google Tradutor"
+  - "Identify the primary intent and top information sources for: Facebook"
+  - "Identify the primary intent and top information sources for: UOL"
+  - "Identify the primary intent and top information sources for: Hotmail"
+  - "Identify the primary intent and top information sources for: Gmail"
+  - "Identify the primary intent and top information sources for: Roblox"
+  - "Identify the primary intent and top information sources for: Shopee"
+  - "Identify the primary intent and top information sources for: Mercado Livre"
+  - "Identify the primary intent and top information sources for: Instagram"
+  - "Identify the primary intent and top information sources for: Loterias"
+  - "Identify the primary intent and top information sources for: Previsão do tempo"
+  - "Identify the primary intent and top information sources for: Tabela FIPE"
+  - "Identify the primary intent and top information sources for: ChatGPT"
+  - "Identify the primary intent and top information sources for: Canais Globo"
+  - "Identify the primary intent and top information sources for: Crefisa"
+  - "Identify the primary intent and top information sources for: Enem"
+
+tools:
+  - name: "web_search"
+    description: "Standard DuckDuckGo search for baseline web results."
+  
+  - name: "searxng_search"
+    description: "Metasearch tool aggregating results from 70+ engines. Use this for the fan-out branch."
+
+  - name: "web_browser"
+    description: "Headless browser to verify content quality of retrieved URLs."
+
+  - name: "datetime"
+    description: "Capturing search timestamps for latency analysis."
+
+# Hierarchical Workflow[cite: 5]
+# This structure ensures multiple nodes contribute to 'research_results' before synthesis.
+workflow:
+  nodes:
+    - name: "baseline_research"
+      prompt_template: "prompts/queryfanout/web_research.txt"
+      output_key: "research_results"  # Starts the cumulative list
+      loop: false
+
+    - name: "metasearch_fanout"
+      prompt_template: "prompts/queryfanout/metasearch.txt"
+      output_key: "research_results"  # Appends to the cumulative list
+      loop: false
+
+    - name: "orchestrator_synthesis"
+      prompt_template: "prompts/queryfanout/orchestrator.txt"
+      output_key: "final_synthesis"   # Consolidates all results for final export
+      loop: false
+
+  entry_node: "baseline_research"
+  exit_node: "orchestrator_synthesis"
