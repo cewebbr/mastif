@@ -927,7 +927,6 @@ class _ToolPool:
             func=_interact,
         )
 
-    # TODO: Test hosting SearXNG locally and creating an experiment for common queries performed in Brazil
     def _register_searxng_search(self):
         """SearXNG metasearch — aggregates results from 70+ engines."""
         import requests
