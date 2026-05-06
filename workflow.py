@@ -15,11 +15,13 @@ import re
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Callable, Optional, Tuple
+from typing import Dict, List, Callable, Optional, Tuple, Set
 
 from domain_model import ReasoningStep
 from config import ConfigExpert
 from tool_pool import ToolPool
+
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -181,6 +183,11 @@ class WorkflowController:
     Looping is executed until the node's output_key (e.g. {step}) exceeds max_steps defined in the config.
     """
 
+    # Class-level cache of already-validated config paths.
+    # Validation runs once per unique YAML file per process, not once per
+    # framework instantiation — since all frameworks share the same config.
+    _validated_configs: Set[str] = set()
+
     def __init__(self, framework_name: str, generate_fn: Callable, get_tool_payload_fn: Callable):
         """
         Args:
@@ -213,47 +220,86 @@ class WorkflowController:
         self._entry_node: str = workflow_cfg.get("entry_node", raw_nodes[0]["name"])
         self._exit_node: str  = workflow_cfg.get("exit_node",  raw_nodes[-1]["name"])
 
-        # Validate the workflow placeholders after nodes are loaded
-        self._validate_placeholders()
+        # Validate the workflow placeholders once per unique config file.
+        config_path = config.get_config_path() or ""
+        if config_path not in WorkflowController._validated_configs:
+            self._validate_placeholders()
+            WorkflowController._validated_configs.add(config_path)
 
     def _validate_placeholders(self):
         """
-        Validates workflow continuity. 
-        Errors on missing inputs; warns on unused outputs intended for export.
+        Validates workflow continuity at startup, before any API calls are made.
+
+        First pass  — hard errors: a placeholder required by a node's prompt
+                      is not yet available at the point that node executes.
+        Second pass — soft warnings: a node declares an output_key that no
+                      subsequent prompt ever consumes (dead state).
+
+        Raises:
+            ValueError:       If a required placeholder is missing.
+            FileNotFoundError: If a prompt template file cannot be found,
+                               re-raised with the node name for context.
         """
-        # Keys always available to any prompt
+        # Keys always available to any prompt (injected by _execute_node).
         # NOTE: Unlike standard keys that perform a simple assignment, {research_results} triggers list-based accumulation.  
         # NOTE: When a node defines output_key: research_results, the controller appends the model's response to a list rather than overwriting the previous value.  
         # NOTE: This makes it the primary tool for history tracking across multiple loop iterations or sequential research steps.
-        available_keys = {"framework", "role", "tools_text", "task", "step", "max_steps", "research_results"}
-        
-        # Track which keys are actually consumed by at least one prompt
-        consumed_keys = set()
+        available_keys: Set[str] = {
+            "framework", "role", "tools_text",
+            "task", "step", "max_steps", "research_results",
+        }
+
+        # Track which output_keys are actually consumed by at least one prompt.
+        consumed_keys: Set[str] = set()
         node_list = list(self._nodes.values())
-        
-        # First Pass: Check for "Missing Input" Errors
+
+        # ------------------------------------------------------------------
+        # Placeholder regex — requires identifier to start with a letter or
+        # underscore, eliminating false positives from numeric format specs
+        # like {0} or {1:.2f} that may appear in example output sections of
+        # prompt templates.
+        # ------------------------------------------------------------------
+        placeholder_re = re.compile(r"\{([a-zA-Z_]\w*)\}")
+
+        # ------------------------------------------------------------------
+        # First pass — missing input errors
+        # ------------------------------------------------------------------
         for node in node_list:
-            placeholders = set(re.findall(r"\{(\w+)\}", node.template_text))
-            
+            try:
+                template_text = node.template_text
+            except FileNotFoundError as e:
+                raise FileNotFoundError(
+                    f"Cannot validate node '{node.name}': prompt template not found. "
+                    f"Original error: {e}"
+                ) from e
+
+            placeholders = set(placeholder_re.findall(template_text))
+
             for p in placeholders:
                 if p not in available_keys:
-                    # CRITICAL ERROR: Prompt needs a variable that doesn't exist yet
                     raise ValueError(
-                        f"Workflow Blocker in node '{node.name}': The placeholder '{{{p}}}' "
-                        f"is required by the prompt but has not been defined by any previous node."
+                        f"Workflow configuration error in node '{node.name}': "
+                        f"placeholder '{{{p}}}' is required by "
+                        f"'{node.prompt_template}' but has not been produced "
+                        f"by any preceding node. "
+                        f"Available keys at this point: {sorted(available_keys)}."
                     )
                 consumed_keys.add(p)
-            
-            # Add this node's output to the available pool for subsequent nodes
+
+            # Make this node's output available to all subsequent nodes.
             available_keys.add(node.output_key)
 
-        # Second Pass: Check for "Unused Output" Warnings
+        # ------------------------------------------------------------------
+        # Second pass — unused output warnings
+        # ------------------------------------------------------------------
         for node in node_list:
-            # If an output_key is never used as a placeholder and isn't the final exit key
             if node.output_key not in consumed_keys and node.name != self._exit_node:
-                logging.warning(
-                    f"Workflow Note: Node '{node.name}' defines output_key '{node.output_key}', "
-                    f"but it is never used in subsequent prompts. It will only exist in the final state export."
+                logger.warning(
+                    "Workflow note: node '%s' declares output_key '%s' but it is "
+                    "never referenced as a placeholder in any subsequent prompt. "
+                    "The value will only appear in the final state export.",
+                    node.name,
+                    node.output_key,
                 )
 
     # ------------------------------------------------------------------
