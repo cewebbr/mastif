@@ -20,6 +20,7 @@ edge [fontname="Helvetica", fontsize=10];
 { rank=max;
     HuggingFaceAPI;
     OpenAIAPI;
+    AnthropicAPI;
     Mind2WebDataset;
 }
 
@@ -35,6 +36,13 @@ OpenAIAPI [
     style="filled",
     fillcolor="#e0e0e0",
     label="OpenAI API"
+];
+
+AnthropicAPI [
+    shape=component,
+    style="filled",
+    fillcolor="#e0e0e0",
+    label="Anthropic API"
 ];
 
 Mind2WebDataset [
@@ -191,6 +199,7 @@ tester -> experiment_logger [xlabel="delegates logging"];
 
 adapters -> HuggingFaceAPI [xlabel="chat_completion()", style=bold];
 adapters -> OpenAIAPI      [xlabel="chat.completions.create()", style=bold];
+adapters -> AnthropicAPI   [xlabel="messages.create()", style=bold];
 adapters -> config         [xlabel="reads"];
 
 frameworks -> adapters  [xlabel="generate()"];
