@@ -17,7 +17,7 @@ edge [fontname="Helvetica", fontsize=10];
 // Rank: External APIs (bottom)
 // ─────────────────────────────────────────────
 
-{ rank=max;
+{ rank=min;
     HuggingFaceAPI;
     OpenAIAPI;
     AnthropicAPI;
@@ -56,7 +56,7 @@ Mind2WebDataset [
 // Rank: Orchestrator (top)
 // ─────────────────────────────────────────────
 
-{ rank=min;
+{ rank=max;
     tester;
 }
 
@@ -197,9 +197,9 @@ tester -> config            [xlabel="reads"];
 tester -> workflow          [xlabel="uses"];
 tester -> experiment_logger [xlabel="delegates logging"];
 
-adapters -> HuggingFaceAPI [xlabel="chat_completion()", style=bold];
-adapters -> OpenAIAPI      [xlabel="chat.completions.create()", style=bold];
-adapters -> AnthropicAPI   [xlabel="messages.create()", style=bold];
+adapters -> HuggingFaceAPI [xlabel="chat_completion()"];
+adapters -> OpenAIAPI      [xlabel="chat.completions.create()"];
+adapters -> AnthropicAPI   [xlabel="messages.create()"];
 adapters -> config         [xlabel="reads"];
 
 frameworks -> adapters  [xlabel="generate()"];
@@ -214,7 +214,7 @@ workflow -> domain_model [xlabel="uses"];
 experiment_logger -> domain_model [xlabel="reads/writes"];
 experiment_logger -> config       [xlabel="reads (yaml_path)"];
 
-benchmark -> Mind2WebDataset [xlabel="load_dataset()", style=bold];
+benchmark -> Mind2WebDataset [xlabel="load_dataset()"];
 benchmark -> adapters        [xlabel="judge"];
 
 }
