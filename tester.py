@@ -835,7 +835,7 @@ Please respond according to this protocol structure and complete the task."""
                             # this combination is retried on the next resume.
                             if self._is_payment_error(result.response or "") or \
                                self._is_payment_error(result.error or ""):
-                                print(f"\n💳 Payment/quota error detected — halting experiment.")
+                                print(f"\n💳 Payment/quota error detected ({adapter.model_name}) — halting experiment.")
                                 print(f"   Partial log preserved. Resume with the same YAML to continue.")
                                 raise SystemExit(1)
 
@@ -1026,7 +1026,7 @@ Please respond according to this protocol structure and complete the task."""
                                 # this combination is retried on the next resume.
                                 if self._is_payment_error(result.response or "") or \
                                    self._is_payment_error(result.error or ""):
-                                    print(f"\n💳 Payment/quota error detected — halting experiment.")
+                                    print(f"\n💳 Payment/quota error detected ({adapter.model_name}) — halting experiment.")
                                     print(f"   Partial log preserved. Resume with the same YAML to continue.")
                                     raise SystemExit(1)
 
