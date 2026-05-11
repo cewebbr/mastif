@@ -232,7 +232,7 @@ class ExperimentLogger:
         print(f"\n{'─'*70}")
         print(f"⚠️  Partial log found for this experiment.")
         print(f"   Started at:  {started_at}")
-        print(f"   Completed:   {completed_count} / {total} executions")
+        print(f"   Completed:   {completed_count} / {total} executions ({completed_count/total*100:.2f}%)")
         print(f"{'─'*70}")
         answer = input("Resume from partial log? (yes/no): ").strip().lower()
         return answer in ("yes", "y")
