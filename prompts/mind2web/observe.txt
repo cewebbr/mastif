@@ -1,15 +1,23 @@
 Phase: OBSERVATION & IDENTIFICATION
 Task Goal: {task}
 
-Initial Navigation Context: {navigation_status}
+Current Navigation Status: {navigation_status}
 History of Previous Interactions: {research_results}
 
-Current State:
-Examine the current browser state/DOM provided by your tools.
+Available Tools:
+{tools_text}
 
-Your Goal:
-1. Identify the current page/view.
-2. Based on the Task Goal and History, determine the NEXT element you must interact with.
-3. Provide the specific element identifier (ID, XPath, or Name) and the required action (Click, Type, Select).
+Instructions:
+1. Use a browser tool to examine the current page state.
+2. Based on the Task Goal and interaction history, determine whether the task
+   is already complete. If so, write TASK_COMPLETE as your output.
+3. If not complete, identify the SINGLE next element to interact with.
+   Provide: element identifier (ID, XPath, or visible label), required action
+   (click / type / select), and any input value needed.
 
-Output: Provide the identification of the target element and the intended action. This will be stored as 'observation_analysis'.
+Output format:
+STATUS: [IN_PROGRESS or TASK_COMPLETE]
+ELEMENT: [identifier]
+ACTION: [click | type | select]
+VALUE: [input value if applicable, else none]
+REASON: [one sentence explaining why this is the next step]
