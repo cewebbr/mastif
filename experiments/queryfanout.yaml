@@ -12,14 +12,15 @@ requests_soft_limit: 500
 test_mode: "standard"
 
 models:
-  - "moonshotai/Kimi-K2.5"
-  - "anthropic/claude-3.5-sonnet"
+  - "mistralai/Mistral-7B-Instruct-v0.1"
+  # - "moonshotai/Kimi-K2.5"
+  # - "anthropic/claude-3.5-sonnet"
 
 protocols:
   - "STANDARD"
 
 frameworks:
-  - "LangGraph"
+  # - "LangGraph"
   - "CrewAI"
 
 # Base instruction for the fan-out task[cite: 5]
@@ -53,14 +54,14 @@ tasks: # https://trends.withgoogle.com/pt-br/year-in-search/2025/br/
   - "Identify the primary intent and top information sources for: Enem"
 
 tools:
-  - name: "web_search"
-    description: "Standard DuckDuckGo search for baseline web results."
+  # - name: "web_search"
+  #   description: "Standard DuckDuckGo search for baseline web results."
   
   - name: "searxng_search"
     description: "Metasearch tool aggregating results from 70+ engines. Use this for the fan-out branch."
 
-  - name: "web_browser"
-    description: "Headless browser to verify content quality of retrieved URLs."
+  # - name: "web_browser"
+  #   description: "Headless browser to verify content quality of retrieved URLs."
 
   - name: "datetime"
     description: "Capturing search timestamps for latency analysis."
