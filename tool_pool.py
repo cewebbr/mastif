@@ -942,8 +942,11 @@ class _ToolPool:
                     f"{base_url}/search",
                     params={
                         "q": query,
-                        "format": "json",
-                        "engines": os.getenv("SEARXNG_ENGINES", "google,bing,duckduckgo,wikipedia"), # TODO: Document how to configure on YAML and retrieve via ConfigExpert
+                        "format": "json", # Possible values configured: html, json, or csv
+                        # Top 10 considering country/platform diversity
+                        # List of engines: https://docs.searxng.org/user/configured_engines.html#configured-engines
+                        # Please note that these values are added as query string params
+                        "engines": os.getenv("SEARXNG_ENGINES", "google,bing,duckduckgo,brave,startpage,qwant,mojeek,wikipedia,reddit,github"),
                         "pageno": 1
                     },
                     timeout=15
