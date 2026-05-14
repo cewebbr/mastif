@@ -933,8 +933,8 @@ class _ToolPool:
         import json
 
         def _searxng_search(query: str) -> str:
-            # Get the instance URL from environment or a default
-            base_url = os.getenv("SEARXNG_URL", "http://localhost:8080") # TODO: test hosting locally
+            # Inform the instance URL from environment, private or public SearXNG instance
+            base_url = os.getenv("SEARXNG_URL", "http://skygpu.ceweb.br:8888")
             
             try:
                 # Requesting JSON format is key for your experiments
