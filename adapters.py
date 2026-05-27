@@ -4,6 +4,7 @@ HuggingFace and OpenAI model adapters for unified model access
 
 import os
 from typing import Any, Dict, List, Optional
+import requests
 from huggingface_hub import InferenceClient
 import openai
 from langchain_community.llms import HuggingFaceEndpoint
@@ -529,3 +530,83 @@ class AnthropicAdapter(BaseAdapter):
 
         except Exception as e:
             return f"Anthropic Error: {str(e)}"
+        
+class OllamaAdapter(BaseAdapter):
+    """
+    Adapter for Ollama‑style model identifiers (e.g. ``llama3:8b-instruct-q4_K_M``).
+
+    The adapter talks to your Ollama instance through its HTTP API
+    (`/api/generate`).  The server URL can be configured via the
+    ``OLLAMA_URL`` environment variable; otherwise it falls
+    back to the default ``http://127.0.0.1:11434``.
+    If using ssh tunneling to connect, the following command can be use to set it up on the background:
+    ssh -L 11434:127.0.0.1:11434 \
+        -o ServerAliveInterval=60 \
+        -o ServerAliveCountMax=10 \
+        -f -N user@server_address
+    """
+
+    def __init__(self, model_name: Optional[str] = None, api_url: Optional[str] = None):
+        """
+        Parameters
+        ----------
+        model_name : str, optional
+            Full Ollama model identifier (``name:tag``).  If omitted, the
+            value is fetched from the configuration under the key
+            ``judge_model``.
+        api_url : str, optional
+            Base URL of the Ollama server.  If omitted, the value is fetched
+            from the configuration under the key ``ollama_api_url``; if that
+            key is missing, ``http://127.0.0.1:11434`` is used.
+        """
+        config = ConfigExpert.get_instance()
+        self._model_name = model_name
+        self._api_url = api_url or os.getenv("OLLAMA_URL", "http://127.0.0.1:11434") # TODO: Add an error message in case the server/tunnel is not reachable.
+
+        # The Ollama API expects a POST to /api/generate with JSON payload.
+        # We keep the timeout in sync with the other adapters.
+        self.timeout = config.get("timeout", 30)
+
+    @property
+    def model_name(self) -> str:
+        return self._model_name
+
+    def generate(self, prompt: str, **kwargs) -> str:
+        """
+        Generate a completion from the Ollama model.
+
+        Parameters
+        ----------
+        prompt : str
+            The user prompt.
+        **kwargs
+            Optional arguments passed verbatim to the Ollama API payload
+            (e.g. ``temperature``, ``max_tokens``).  They are forwarded
+            unchanged, so you can use the same call signature that the
+            other adapters accept.
+
+        Returns
+        -------
+        str
+            The raw text produced by the model.
+        """
+        payload: Dict[str, Any] = {"model": self.model_name, "prompt": prompt, "stream": False}
+
+        # Forward any additional kwargs (temperature, max_tokens, ...).
+        for key in ("temperature", "max_tokens", "seed", "stream"):
+            if key in kwargs:
+                payload[key] = kwargs[key]
+
+        try:
+            resp = requests.post(
+                f"{self._api_url}/api/generate",
+                json=payload,
+                timeout=self.timeout,
+            )
+            resp.raise_for_status()
+        except requests.RequestException as exc:
+            raise RuntimeError(f"Ollama request failed: {exc}") from exc
+
+        data = resp.json()
+        # Ollama returns the text in the ``response`` field.
+        return data.get("response", "")

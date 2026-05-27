@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import List, Dict, Optional
 
 from domain_model import TestResult, ProtocolType, ReasoningStep
-from adapters import HuggingFaceAdapter, OpenAIAdapter, BaseAdapter, AnthropicAdapter
+from adapters import HuggingFaceAdapter, OpenAIAdapter, BaseAdapter, AnthropicAdapter, OllamaAdapter
 from protocols import MCPProtocol, A2AProtocol, ACPProtocol
 from frameworks import (
     CrewAIAgent,
@@ -792,6 +792,8 @@ Please respond according to this protocol structure and complete the task."""
                 adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
             elif(model_name.startswith("claude-")):
                 adapter = AnthropicAdapter(model_name, api_key=os.getenv("ANTHROPIC_API_KEY"))
+            elif(":" in model_name):
+                adapter = OllamaAdapter(model_name)
             else:                
                 adapter = HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))
             
