@@ -29,6 +29,7 @@ The pool itself is a singleton — only one instance is ever created.
 import os
 import copy
 import time as _time
+import random
 from typing import Dict, Optional
 
 
@@ -936,6 +937,15 @@ class _ToolPool:
             # Inform the instance URL from environment, private or public SearXNG instance
             base_url = os.getenv("SEARXNG_URL", "http://skygpu.ceweb.br:8888") # TODO: Add an error message in case folks are running this locally and no SEARXNG_URL is informed. In the error message, we need to show URLs that people can use for this service.
             
+            USER_AGENTS = [
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15",
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1", 
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/123.0.0.0 Safari/537.36"
+            ]
+
             try:
                 # Requesting JSON format is key for experiments
                 response = requests.get(
@@ -950,10 +960,10 @@ class _ToolPool:
                         "pageno": 1
                     },
                     headers={
-                        "User-Agent": os.getenv("SEARXNG_USER_AGENT", "Mozilla/5.0 (compatible; MASTIF/1.0; +https://github.com/cewebbr/mastif)"),
+                        "User-Agent": random.choice(USER_AGENTS),
                         "Accept": "application/json",
                         "Accept-Language": "en-US,en;q=0.9",
-                        "X-Forwarded-For": os.getenv("SEARXNG_FORWARDED_FOR", ""),
+                        "X-Forwarded-For": "200.160.1.98",
                         "Origin": base_url,
                         "Referer": f"{base_url}/",
                     },
