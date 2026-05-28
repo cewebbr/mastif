@@ -82,6 +82,13 @@ class Mastif:
                 print("▶️  Starting fresh (partial log will be overwritten on first result).\n")
         return logger
 
+    @staticmethod
+    def _parse_model_entry(entry) -> tuple[str, Optional[str]]:
+        """Parse a model entry from YAML — returns (model_id, tokenizer_id | None)."""
+        if isinstance(entry, dict):
+            return entry["id"], entry.get("tokenizer")
+        return entry, None  # plain string — backwards compatible    
+
     def _get_protocol_metrics(self, protocol: ProtocolType, protocol_instance, task: str) -> Dict:
         """
         Measure and return protocol overhead and message size metrics.
@@ -728,7 +735,8 @@ Please respond according to this protocol structure and complete the task."""
             
         # Extract experiment configuration
         config = ConfigExpert.get_instance()
-        models = config.get("models")
+        raw_models = config.get("models")
+        models = [self._parse_model_entry(m) for m in raw_models]  # List[(model_id, tokenizer)]
         protocols = [ProtocolType[p] for p in config.get("protocols")]
         framework_names = config.get("frameworks")
         prompt_template = config.get("prompt_template")
@@ -750,13 +758,13 @@ Please respond according to this protocol structure and complete the task."""
         }
 
         frameworks = [(name, *framework_map[name]) for name in framework_names]
-        total = len(models) * len(protocols) * len(frameworks) * len(test_tasks)
+        total = len(raw_models) * len(protocols) * len(frameworks) * len(test_tasks)
 
         # Initialise logger — offers resume if partial log exists
         metadata = {
             "experiment_name": config.get("experiment.name", ""),
             "test_mode":       "standard",
-            "models":          models,
+            "models":           [{"id": m[0], "tokenizer": m[1]} for m in models],
             "protocols":       [p.value for p in protocols],
             "frameworks":      framework_names,
             "tools":           tools,
@@ -783,7 +791,7 @@ Please respond according to this protocol structure and complete the task."""
                 return False        
             print("\n✅️ Starting test execution...\n")
 
-        for model_name in models:
+        for model_name, tokenizer_id in models:
             print(f"\n{'='*70}")
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
@@ -842,6 +850,7 @@ Please respond according to this protocol structure and complete the task."""
                                 raise SystemExit(1)
 
                             combination_results.append(result)
+                            result.metadata["tokenizer_id"] = tokenizer_id
                             self._logger.log_result(result, model_name, protocol.value, framework_name, i)
                             
                             status = "✅️" if result.success else "❌"
@@ -890,7 +899,8 @@ Please respond according to this protocol structure and complete the task."""
         tasks = loader.get_stratified_task_sample(num_tasks=config.get("mind2web_num_tasks", 10))
         
         # Extract experiment configuration
-        models = config.get("models")
+        raw_models = config.get("models")
+        models = [self._parse_model_entry(m) for m in raw_models]  # List[(model_id, tokenizer)]
         judge_model = config.get("mind2web_judge_model", "gpt-4")
         protocols = [ProtocolType[p] for p in config.get("protocols")]
         framework_names = config.get("frameworks")
@@ -908,7 +918,7 @@ Please respond according to this protocol structure and complete the task."""
         }
 
         frameworks = [(name, *framework_map[name]) for name in framework_names]
-        total = len(models) * len(protocols) * len(frameworks) * len(tasks)
+        total = len(raw_models) * len(protocols) * len(frameworks) * len(tasks)
 
         if not tasks:
             print("Failed to load Mind2Web tasks!")
@@ -918,7 +928,7 @@ Please respond according to this protocol structure and complete the task."""
         metadata = {
             "experiment_name": config.get("experiment.name", ""),
             "test_mode":       "mind2web",
-            "models":          models,
+            "models":           [{"id": m[0], "tokenizer": m[1]} for m in models],
             "protocols":       [p.value for p in protocols],
             "frameworks":      framework_names,
             "tools":           tools,
@@ -970,7 +980,7 @@ Please respond according to this protocol structure and complete the task."""
             print("\n✅️ Starting test execution...\n")
 
         # Run tests for each model
-        for model_name in models:
+        for model_name, tokenizer_id in models:
             print(f"\n{'='*70}")
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
@@ -1032,6 +1042,7 @@ Please respond according to this protocol structure and complete the task."""
                                     print(f"   Partial log preserved. Resume with the same YAML to continue.")
                                     raise SystemExit(1)
 
+                                result.metadata["tokenizer_id"] = tokenizer_id
                                 self._logger.log_result(result, model_name, protocol.value, framework_name, i)
                                 combination_results.append(result)
 

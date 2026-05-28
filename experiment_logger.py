@@ -495,15 +495,28 @@ class ExperimentLogger:
     # ------------------------------------------------------------------
 
     def _compute_token_metrics(self, model_name: str, results: List[TestResult]) -> Tuple[int, int]:
+        # Resolve tokenizer_id from result metadata if present (set for Ollama models)
+        tokenizer_id = None
+        if results:
+            tokenizer_id = (results[0].metadata or {}).get("tokenizer_id")
+
+        effective_model = tokenizer_id or model_name
+
         openai_prefixes = ["gpt-", "openai"]
-        if any(model_name.startswith(p) for p in openai_prefixes):
+        if any(effective_model.startswith(p) for p in openai_prefixes):
             try:
-                enc = tiktoken.encoding_for_model(model_name)
+                enc = tiktoken.encoding_for_model(effective_model)
             except Exception:
                 enc = tiktoken.get_encoding("cl100k_base")
             encode = enc.encode
+        elif ":" in effective_model:
+            # Unresolved Ollama model — no tokenizer declared in YAML, fall back
+            print(f"⚠️  No tokenizer declared for Ollama model '{model_name}'. "
+                f"Token counts will use cl100k_base approximation. "
+                f"Add 'tokenizer: <hf-repo-id>' to this model's entry in your YAML.")
+            encode = tiktoken.get_encoding("cl100k_base").encode
         else:
-            tokenizer = AutoTokenizer.from_pretrained(model_name)
+            tokenizer = AutoTokenizer.from_pretrained(effective_model)
             encode = tokenizer.encode
 
         reasoning_tokens = output_tokens = 0

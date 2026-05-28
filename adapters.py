@@ -561,7 +561,7 @@ class OllamaAdapter(BaseAdapter):
         """
         config = ConfigExpert.get_instance()
         self._model_name = model_name
-        self._api_url = api_url or os.getenv("OLLAMA_URL", "http://127.0.0.1:11434") # TODO: Add an error message in case the server/tunnel is not reachable.
+        self._api_url = api_url or os.getenv("OLLAMA_URL", "http://127.0.0.1:11434") # TODO: Add an error message in case the server/tunnel/ollama is not reachable.
 
         # The Ollama API expects a POST to /api/generate with JSON payload.
         # We keep the timeout in sync with the other adapters.
