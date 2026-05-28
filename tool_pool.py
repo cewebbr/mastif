@@ -949,6 +949,14 @@ class _ToolPool:
                         "engines": os.getenv("SEARXNG_ENGINES", "google,bing,duckduckgo,brave,startpage,qwant,mojeek,wikipedia,reddit,github"),
                         "pageno": 1
                     },
+                    headers={
+                        "User-Agent": os.getenv("SEARXNG_USER_AGENT", "Mozilla/5.0 (compatible; MASTIF/1.0; +https://github.com/cewebbr/mastif)"),
+                        "Accept": "application/json",
+                        "Accept-Language": "en-US,en;q=0.9",
+                        "X-Forwarded-For": os.getenv("SEARXNG_FORWARDED_FOR", ""),
+                        "Origin": base_url,
+                        "Referer": f"{base_url}/",
+                    },
                     timeout=15
                 )
                 response.raise_for_status()
