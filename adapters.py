@@ -533,38 +533,14 @@ class AnthropicAdapter(BaseAdapter):
         
 class OllamaAdapter(BaseAdapter):
     """
-    Adapter for Ollama‑style model identifiers (e.g. ``llama3:8b-instruct-q4_K_M``).
-
-    The adapter talks to your Ollama instance through its HTTP API
-    (`/api/generate`).  The server URL can be configured via the
-    ``OLLAMA_URL`` environment variable; otherwise it falls
-    back to the default ``http://127.0.0.1:11434``.
-    If using ssh tunneling to connect, the following command can be use to set it up on the background:
-    ssh -L 11434:127.0.0.1:11434 \
-        -o ServerAliveInterval=60 \
-        -o ServerAliveCountMax=10 \
-        -f -N user@server_address
+    Adapter for Ollama-style model identifiers with support for tool calling.
+    Uses the /api/chat endpoint to support structured tool definitions.
     """
 
     def __init__(self, model_name: Optional[str] = None, api_url: Optional[str] = None):
-        """
-        Parameters
-        ----------
-        model_name : str, optional
-            Full Ollama model identifier (``name:tag``).  If omitted, the
-            value is fetched from the configuration under the key
-            ``judge_model``.
-        api_url : str, optional
-            Base URL of the Ollama server.  If omitted, the value is fetched
-            from the configuration under the key ``ollama_api_url``; if that
-            key is missing, ``http://127.0.0.1:11434`` is used.
-        """
         config = ConfigExpert.get_instance()
         self._model_name = model_name
         self._api_url = api_url or os.getenv("OLLAMA_URL", "http://127.0.0.1:11434") # TODO: Add an error message in case the server/tunnel/ollama is not reachable.
-
-        # The Ollama API expects a POST to /api/generate with JSON payload.
-        # We keep the timeout in sync with the other adapters.
         self.timeout = config.get("timeout", 30)
 
     @property
@@ -572,41 +548,73 @@ class OllamaAdapter(BaseAdapter):
         return self._model_name
 
     def generate(self, prompt: str, **kwargs) -> str:
-        """
-        Generate a completion from the Ollama model.
+        """Generate completion from Ollama with tool execution support."""
+        config = ConfigExpert.get_instance()
+        tools = kwargs.get("tools")
+        
+        # 1. Normalize Tools
+        if not isinstance(tools, list) or len(tools) == 0:
+            tools = None
+        else:
+            normalised = []
+            for t in tools:
+                if isinstance(t, dict) and t.get("type") == "function":
+                    normalised.append(t)
+                elif isinstance(t, str):
+                    normalised.extend(ToolPool.get_openai_schemas([t]))
+            tools = normalised if normalised else None
 
-        Parameters
-        ----------
-        prompt : str
-            The user prompt.
-        **kwargs
-            Optional arguments passed verbatim to the Ollama API payload
-            (e.g. ``temperature``, ``max_tokens``).  They are forwarded
-            unchanged, so you can use the same call signature that the
-            other adapters accept.
+        messages = [{"role": "user", "content": prompt}]
+        max_tool_rounds = config.get("max_tool_rounds", 5)
 
-        Returns
-        -------
-        str
-            The raw text produced by the model.
-        """
-        payload: Dict[str, Any] = {"model": self.model_name, "prompt": prompt, "stream": False}
+        for round_num in range(max_tool_rounds):
+            payload = {
+                "model": self.model_name,
+                "messages": messages,
+                "stream": False,
+            }
+            if tools:
+                payload["tools"] = tools
 
-        # Forward any additional kwargs (temperature, max_tokens, ...).
-        for key in ("temperature", "max_tokens", "seed", "stream"):
-            if key in kwargs:
-                payload[key] = kwargs[key]
+            try:
+                # 2. Use /api/chat (Required for tool support)
+                resp = requests.post(
+                    f"{self._api_url}/api/chat",
+                    json=payload,
+                    timeout=self.timeout,
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                message = data.get("message", {})
+            except requests.RequestException as exc:
+                return f"Ollama request failed: {exc}"
 
-        try:
-            resp = requests.post(
-                f"{self._api_url}/api/generate",
-                json=payload,
-                timeout=self.timeout,
-            )
-            resp.raise_for_status()
-        except requests.RequestException as exc:
-            raise RuntimeError(f"Ollama request failed: {exc}") from exc
+            # 3. Handle Text Response
+            if message.get("content"):
+                return message["content"]
 
-        data = resp.json()
-        # Ollama returns the text in the ``response`` field.
-        return data.get("response", "")
+            # 4. Handle Tool Calls
+            tool_calls = message.get("tool_calls", [])
+            if not tool_calls:
+                return ""
+
+            messages.append(message) # Append assistant message with tool_calls
+
+            for tc in tool_calls:
+                func = tc.get("function", {})
+                tool_name = func.get("name")
+                args = func.get("arguments", {})
+                
+                # Execute tool
+                try:
+                    tool_def = ToolPool._registry.get(tool_name)
+                    result = tool_def.func(str(args)) if tool_def else f"Tool '{tool_name}' not found."
+                except Exception as e:
+                    result = f"Error: {str(e)}"
+
+                messages.append({
+                    "role": "tool",
+                    "content": str(result),
+                })
+
+        return "Error: Maximum tool rounds reached."

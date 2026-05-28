@@ -13,6 +13,7 @@ test_mode: "standard"
 
 models:
   - id: "qcwind/qwen2.5-7B-instruct-Q4_K_M:latest" # Ollama id -- Strong tool-use capabilities for effective fan-out research
+    tokenizer: "Qwen/Qwen2.5-7B-Instruct"
   # - id: "mistralai/Mistral-7B-Instruct-v0.1"
   # - id: "moonshotai/Kimi-K2.5"
   # - id: "anthropic/claude-3.5-sonnet"
@@ -21,8 +22,8 @@ protocols:
   - "STANDARD"
 
 frameworks:
-  # - "LangGraph"
   - "CrewAI"
+  - "LangGraph"
 
 # Base instruction for the fan-out task[cite: 5]
 prompt_template: |
