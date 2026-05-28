@@ -937,7 +937,7 @@ class _ToolPool:
             base_url = os.getenv("SEARXNG_URL", "http://skygpu.ceweb.br:8888") # TODO: Add an error message in case folks are running this locally and no SEARXNG_URL is informed. In the error message, we need to show URLs that people can use for this service.
             
             try:
-                # Requesting JSON format is key for your experiments
+                # Requesting JSON format is key for experiments
                 response = requests.get(
                     f"{base_url}/search",
                     params={
