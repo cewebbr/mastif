@@ -43,6 +43,7 @@ def _result_to_dict(r: TestResult, task_index: int = -1) -> dict:
         }
         for step in r.reasoning_steps
     ]
+    reasoning_tokens, output_tokens = ExperimentLogger._compute_token_metrics_static(r.model_name, [r])
     return {
         "model_name":            r.model_name,
         "protocol":              r.protocol.value,
@@ -57,6 +58,9 @@ def _result_to_dict(r: TestResult, task_index: int = -1) -> dict:
         "error":                 r.error,
         "metadata":              r.metadata,
         "tool_log":              (r.metadata or {}).get("tool_log", {}),
+        "reasoning_tokens":      reasoning_tokens,
+        "output_tokens":         output_tokens,
+        "total_tokens":          reasoning_tokens + output_tokens,
     }
 
 
@@ -495,6 +499,12 @@ class ExperimentLogger:
     # ------------------------------------------------------------------
 
     def _compute_token_metrics(self, model_name: str, results: List[TestResult]) -> Tuple[int, int]:
+        """Wrapper for instance calls."""
+        return self._compute_token_metrics_static(model_name, results)
+
+    @staticmethod
+    def _compute_token_metrics_static(model_name: str, results: List[TestResult]) -> Tuple[int, int]:
+        """Static version of token computation for use in JSON export."""
         # Resolve tokenizer_id from result metadata if present (set for Ollama models)
         tokenizer_id = None
         if results:
@@ -502,7 +512,7 @@ class ExperimentLogger:
 
         effective_model = tokenizer_id or model_name
 
-        openai_prefixes = ["gpt-", "openai"]
+        openai_prefixes = ["gpt-", "openai"] # TODO: Verify this for Anthropic models as well
         if any(effective_model.startswith(p) for p in openai_prefixes):
             try:
                 enc = tiktoken.encoding_for_model(effective_model)
