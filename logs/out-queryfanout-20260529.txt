@@ -1,0 +1,1100 @@
+📖 Loading configuration from: /Users/vsantana/Documents/projects/agentic web/code/mastif/experiments/queryfanout.yaml
+✅️ Configuration loaded successfully
+======================================================================
+STANDARD TESTING MODE
+======================================================================
+
+──────────────────────────────────────────────────────────────────────
+⚠️  Partial log found for this experiment.
+   Started at:  2026-05-29T10:19:37.696283
+   Completed:   24 / 240 executions (10.00%)
+──────────────────────────────────────────────────────────────────────
+Resume from partial log? (yes/no): n
+▶️  Starting fresh (partial log will be overwritten on first result).
+
+
+----------------------------------------------------------------------
+You are about to run a test with the following configuration:
+Models: 6
+Protocols: 1
+Frameworks: 2
+Tasks: 20
+Total executions: 240
+----------------------------------------------------------------------
+Tools (2): searxng_search, datetime
+----------------------------------------------------------------------
+
+======================================================================
+Testing Model: qcwind/qwen2.5-7B-instruct-Q4_K_M:latest
+======================================================================
+
+----------------------------------------------------------------------
+PROTOCOL x FRAMEWORK COMBINATIONS
+----------------------------------------------------------------------
+
+──────────────────────────────────────────────────────────────────────
+Protocol: standard
+──────────────────────────────────────────────────────────────────────
+
+  CrewAI with standard:
+    Task 1/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1026.03ms | input="{'query': 'YouTube'}"
+🔧 Tool call | searxng_search | success=True | duration=509.2ms | input="{'query': 'YouTube'}"
+🔧 Tool call | searxng_search | success=True | duration=607.76ms | input="{'query': 'YouTube'}"
+      ✅️ Latency: 27.80s, Steps: 7
+    Task 2/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1023.13ms | input="{'query': 'WhatsApp Web'}"
+🔧 Tool call | searxng_search | success=True | duration=498.6ms | input="{'query': 'WhatsApp Web'}"
+      ✅️ Latency: 21.93s, Steps: 7
+    Task 3/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1021.92ms | input="{'query': 'Clima'}"
+🔧 Tool call | searxng_search | success=True | duration=383.66ms | input="{'query': 'Clima'}"
+      ✅️ Latency: 16.61s, Steps: 7
+    Task 4/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=721.66ms | input="{'query': 'G1'}"
+🔧 Tool call | searxng_search | success=True | duration=357.48ms | input="{'query': 'G1'}"
+      ✅️ Latency: 17.48s, Steps: 7
+    Task 5/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=512.55ms | input="{'query': 'Google Tradutor'}"
+🔧 Tool call | searxng_search | success=True | duration=411.7ms | input="{'query': 'Google Tradutor'}"
+🔧 Tool call | datetime | success=True | duration=0.07ms | input="{'input': None}"
+      ✅️ Latency: 15.65s, Steps: 7
+    Task 6/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1023.12ms | input="{'query': 'Facebook'}"
+🔧 Tool call | searxng_search | success=True | duration=422.43ms | input="{'query': 'Facebook query'}"
+🔧 Tool call | searxng_search | success=True | duration=501.64ms | input="{'query': 'Facebook query'}"
+      ✅️ Latency: 20.36s, Steps: 7
+    Task 7/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=587.2ms | input="{'query': 'UOL'}"
+🔧 Tool call | searxng_search | success=True | duration=462.19ms | input="{'query': 'UOL'}"
+      ✅️ Latency: 20.89s, Steps: 7
+    Task 8/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=590.08ms | input="{'query': 'Hotmail'}"
+🔧 Tool call | searxng_search | success=True | duration=430.7ms | input="{'query': 'Hotmail Brazil'}"
+      ✅️ Latency: 15.66s, Steps: 7
+    Task 9/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1025.47ms | input="{'query': 'Gmail'}"
+🔧 Tool call | searxng_search | success=True | duration=615.27ms | input="{'query': 'Gmail'}"
+      ✅️ Latency: 18.13s, Steps: 7
+    Task 10/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=812.18ms | input="{'query': 'Roblox'}"
+🔧 Tool call | searxng_search | success=True | duration=737.06ms | input="{'query': 'Roblox query'}"
+      ✅️ Latency: 17.43s, Steps: 7
+    Task 11/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=554.25ms | input="{'query': 'Shopee'}"
+🔧 Tool call | searxng_search | success=True | duration=446.31ms | input="{'query': 'Shopee Brazil'}"
+🔧 Tool call | searxng_search | success=True | duration=419.15ms | input="{'query': 'Shopee Brazil'}"
+      ✅️ Latency: 13.45s, Steps: 7
+    Task 12/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=635.12ms | input="{'query': 'Mercado Livre'}"
+🔧 Tool call | searxng_search | success=True | duration=523.01ms | input="{'query': 'Mercado Livre'}"
+🔧 Tool call | searxng_search | success=True | duration=411.13ms | input="{'query': 'Mercado Livre'}"
+      ✅️ Latency: 17.63s, Steps: 7
+    Task 13/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1026.29ms | input="{'query': 'Instagram'}"
+🔧 Tool call | searxng_search | success=True | duration=320.62ms | input="{'query': 'Instagram'}"
+      ✅️ Latency: 14.80s, Steps: 7
+    Task 14/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=508.42ms | input="{'query': 'Loterias'}"
+🔧 Tool call | datetime | success=True | duration=0.18ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=544.03ms | input="{'query': 'Loterias'}"
+      ✅️ Latency: 18.65s, Steps: 7
+    Task 15/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=613.72ms | input="{'query': 'Previsão do tempo'}"
+🔧 Tool call | searxng_search | success=True | duration=560.12ms | input="{'query': 'Previsão do tempo Brasil'}"
+🔧 Tool call | searxng_search | success=True | duration=490.53ms | input="{'query': 'Previsão do tempo Brasil'}"
+      ✅️ Latency: 17.50s, Steps: 7
+    Task 16/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=443.34ms | input="{'query': 'Tabela FIPE'}"
+🔧 Tool call | searxng_search | success=True | duration=722.93ms | input="{'query': 'Tabela FIPE'}"
+      ✅️ Latency: 16.71s, Steps: 7
+    Task 17/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1088.01ms | input="{'query': 'ChatGPT'}"
+🔧 Tool call | searxng_search | success=True | duration=615.52ms | input="{'query': 'ChatGPT'}"
+🔧 Tool call | searxng_search | success=True | duration=490.41ms | input="{'query': 'ChatGPT'}"
+      ✅️ Latency: 18.18s, Steps: 7
+    Task 18/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=663.49ms | input="{'query': 'Canais Globo'}"
+🔧 Tool call | searxng_search | success=True | duration=412.2ms | input="{'query': 'Canais Globo'}"
+      ✅️ Latency: 20.44s, Steps: 7
+    Task 19/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=435.49ms | input="{'query': 'Crefisa'}"
+🔧 Tool call | searxng_search | success=True | duration=410.9ms | input="{'query': 'Crefisa'}"
+      ✅️ Latency: 13.61s, Steps: 7
+    Task 20/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=656.68ms | input="{'query': 'Enem'}"
+🔧 Tool call | searxng_search | success=True | duration=383.57ms | input="{'query': 'Enem'}"
+      ✅️ Latency: 14.42s, Steps: 7
+
+  CrewAI + standard Summary:
+    Success: 20/20 (100.0%)
+    Avg Latency: 17.87s
+    Avg Steps: 7.0
+
+  LangGraph with standard:
+    Task 1/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1047.0ms | input="{'query': 'YouTube'}"
+🔧 Tool call | searxng_search | success=True | duration=506.47ms | input="{'query': 'YouTube'}"
+      ✅️ Latency: 16.98s, Steps: 7
+    Task 2/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1026.93ms | input="{'query': 'WhatsApp Web'}"
+🔧 Tool call | datetime | success=True | duration=0.25ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=722.43ms | input="{'query': 'WhatsApp Web'}"
+      ✅️ Latency: 24.04s, Steps: 7
+    Task 3/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1011.74ms | input="{'query': 'Clima'}"
+🔧 Tool call | searxng_search | success=True | duration=476.71ms | input="{'query': 'Clima'}"
+      ✅️ Latency: 18.14s, Steps: 7
+    Task 4/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=851.52ms | input="{'query': 'G1'}"
+🔧 Tool call | datetime | success=True | duration=0.19ms | input="{'input': ''}"
+🔧 Tool call | datetime | success=True | duration=0.06ms | input="{'datetime': '2023-10-05T21:48:09Z'}"
+🔧 Tool call | searxng_search | success=True | duration=438.35ms | input="{'query': 'G1'}"
+      ✅️ Latency: 21.51s, Steps: 7
+    Task 5/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=537.99ms | input="{'query': 'Google Tradutor'}"
+🔧 Tool call | searxng_search | success=True | duration=536.38ms | input="{'query': 'Google Tradutor'}"
+      ✅️ Latency: 14.91s, Steps: 7
+    Task 6/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1026.7ms | input="{'query': 'Facebook'}"
+🔧 Tool call | datetime | success=True | duration=0.09ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=341.79ms | input="{'query': 'Facebook Brazil'}"
+🔧 Tool call | datetime | success=True | duration=0.15ms | input="{'input': None}"
+      ✅️ Latency: 19.30s, Steps: 7
+    Task 7/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1027.07ms | input="{'query': 'UOL'}"
+🔧 Tool call | datetime | success=True | duration=0.14ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=414.91ms | input="{'query': 'UOL'}"
+      ✅️ Latency: 15.99s, Steps: 7
+    Task 8/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=632.33ms | input="{'query': 'Hotmail'}"
+🔧 Tool call | searxng_search | success=True | duration=537.97ms | input="{'query': 'Hotmail'}"
+      ✅️ Latency: 13.58s, Steps: 7
+    Task 9/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1025.36ms | input="{'query': 'Gmail'}"
+🔧 Tool call | datetime | success=True | duration=0.15ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=629.79ms | input="{'query': 'Gmail'}"
+      ✅️ Latency: 22.48s, Steps: 7
+    Task 10/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=923.17ms | input="{'query': 'Roblox'}"
+🔧 Tool call | datetime | success=True | duration=0.1ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=619.91ms | input="{'query': 'Roblox'}"
+      ✅️ Latency: 20.79s, Steps: 7
+    Task 11/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=656.49ms | input="{'query': 'Shopee'}"
+🔧 Tool call | datetime | success=True | duration=0.09ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=534.36ms | input="{'query': 'Shopee'}"
+      ✅️ Latency: 28.97s, Steps: 7
+    Task 12/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=849.4ms | input="{'query': 'Mercado Livre'}"
+🔧 Tool call | datetime | success=True | duration=0.09ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=360.91ms | input="{'query': 'Mercado Livre'}"
+🔧 Tool call | searxng_search | success=True | duration=568.83ms | input="{'query': 'Mercado Livre'}"
+      ✅️ Latency: 16.81s, Steps: 7
+    Task 13/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1030.68ms | input="{'query': 'Instagram'}"
+🔧 Tool call | datetime | success=True | duration=0.19ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=580.15ms | input="{'query': 'Instagram'}"
+🔧 Tool call | searxng_search | success=True | duration=489.58ms | input="{'query': 'Instagram'}"
+      ✅️ Latency: 19.61s, Steps: 7
+    Task 14/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=927.53ms | input="{'query': 'Loterias'}"
+🔧 Tool call | datetime | success=True | duration=0.09ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=505.41ms | input="{'query': 'Loterias Brazil'}"
+🔧 Tool call | searxng_search | success=True | duration=476.74ms | input="{'query': 'Loterias Brazil'}"
+      ✅️ Latency: 14.94s, Steps: 7
+    Task 15/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=593.65ms | input="{'query': 'Previsão do tempo'}"
+🔧 Tool call | datetime | success=True | duration=0.18ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=444.77ms | input="{'query': 'Previsão do tempo'}"
+🔧 Tool call | searxng_search | success=True | duration=542.84ms | input="{'query': 'Previsão do tempo'}"
+      ✅️ Latency: 24.27s, Steps: 7
+    Task 16/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=777.83ms | input="{'query': 'Tabela FIPE'}"
+🔧 Tool call | datetime | success=True | duration=0.09ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=366.16ms | input="{'query': 'Tabela FIPE'}"
+      ✅️ Latency: 24.78s, Steps: 7
+    Task 17/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1023.95ms | input="{'query': 'ChatGPT'}"
+🔧 Tool call | datetime | success=True | duration=0.07ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=573.74ms | input="{'query': 'ChatGPT'}"
+      ✅️ Latency: 18.57s, Steps: 7
+    Task 18/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=549.19ms | input="{'query': 'Canais Globo'}"
+🔧 Tool call | datetime | success=True | duration=0.12ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=582.57ms | input="{'query': 'Canais Globo Brazil'}"
+      ✅️ Latency: 16.67s, Steps: 7
+    Task 19/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=444.12ms | input="{'query': 'Crefisa'}"
+🔧 Tool call | datetime | success=True | duration=0.08ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=594.01ms | input="{'query': 'Crefisa'}"
+      ✅️ Latency: 20.68s, Steps: 7
+    Task 20/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=857.16ms | input="{'query': 'Enem'}"
+🔧 Tool call | datetime | success=True | duration=0.18ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=527.66ms | input="{'query': 'Enem Brazilian education'}"
+🔧 Tool call | searxng_search | success=True | duration=396.76ms | input="{'query': 'Enem Brazilian education'}"
+      ✅️ Latency: 19.62s, Steps: 7
+
+  LangGraph + standard Summary:
+    Success: 20/20 (100.0%)
+    Avg Latency: 19.63s
+    Avg Steps: 7.0
+
+======================================================================
+Model qcwind/qwen2.5-7B-instruct-Q4_K_M:latest Complete
+======================================================================
+
+======================================================================
+Testing Model: mistral:7b
+======================================================================
+
+----------------------------------------------------------------------
+PROTOCOL x FRAMEWORK COMBINATIONS
+----------------------------------------------------------------------
+
+──────────────────────────────────────────────────────────────────────
+Protocol: standard
+──────────────────────────────────────────────────────────────────────
+
+  CrewAI with standard:
+    Task 1/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1024.69ms | input="{'query': 'YouTube'}"
+🔧 Tool call | datetime | success=True | duration=0.1ms | input='{}'
+tokenizer_config.json: 2.10kB [00:00, 888kB/s]
+tokenizer.model: 100%|████████████████████████████████████████████████████████████| 493k/493k [00:01<00:00, 478kB/s]
+tokenizer.json: 1.80MB [00:00, 21.1MB/s]
+special_tokens_map.json: 100%|█████████████████████████████████████████████████████| 414/414 [00:00<00:00, 3.18MB/s]
+      ✅️ Latency: 36.03s, Steps: 7
+    Task 2/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1025.77ms | input="{'query': 'WhatsApp Web'}"
+🔧 Tool call | searxng_search | success=True | duration=509.14ms | input="{'query': 'WhatsApp Web'}"
+      ✅️ Latency: 22.55s, Steps: 7
+    Task 3/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=762.63ms | input="{'query': 'Clima'}"
+🔧 Tool call | datetime | success=True | duration=0.18ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=925.43ms | input="{'query': 'Clima Brazil'}"
+      ✅️ Latency: 34.52s, Steps: 7
+    Task 4/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 9.62s, Steps: 7
+    Task 5/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=791.31ms | input="{'query': 'Google Tradutor'}"
+      ✅️ Latency: 16.50s, Steps: 7
+    Task 6/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 13.92s, Steps: 7
+    Task 7/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 11.41s, Steps: 7
+    Task 8/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 10.37s, Steps: 7
+    Task 9/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1127.64ms | input="{'query': 'Gmail'}"
+🔧 Tool call | datetime | success=True | duration=0.16ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=684.83ms | input="{'query': 'Gmail'}"
+      ✅️ Latency: 20.62s, Steps: 7
+    Task 10/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=740.59ms | input="{'query': 'Roblox'}"
+🔧 Tool call | datetime | success=True | duration=0.08ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=470.96ms | input="{'query': 'Roblox'}"
+      ✅️ Latency: 19.93s, Steps: 7
+    Task 11/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 12.09s, Steps: 7
+    Task 12/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=436.19ms | input="{'query': 'Mercado Livre'}"
+🔧 Tool call | datetime | success=True | duration=0.13ms | input='{}'
+🔧 Tool call | datetime | success=True | duration=0.02ms | input="{'intent': 'Transactional', 'language': 'Portuguese', 'timestamp': '', 'metadata': {'query': 'Mercado Livre'}, 'engine_n"
+🔧 Tool call | searxng_search | success=True | duration=388.36ms | input="{'query': 'Mercado Livre'}"
+      ✅️ Latency: 19.11s, Steps: 7
+    Task 13/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1079.57ms | input="{'query': 'Instagram'}"
+🔧 Tool call | datetime | success=True | duration=0.11ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=414.65ms | input="{'query': 'Instagram'}"
+      ✅️ Latency: 23.37s, Steps: 7
+    Task 14/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=410.34ms | input="{'query': 'Loterias'}"
+🔧 Tool call | searxng_search | success=True | duration=582.24ms | input="{'input': ''}"
+      ✅️ Latency: 24.88s, Steps: 7
+    Task 15/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 15.00s, Steps: 7
+    Task 16/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=625.71ms | input="{'query': 'Tabela FIPE'}"
+🔧 Tool call | datetime | success=True | duration=0.11ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=924.03ms | input="{'query': 'Tabela FIPE'}"
+      ✅️ Latency: 17.48s, Steps: 7
+    Task 17/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1025.64ms | input="{'query': 'ChatGPT'}"
+🔧 Tool call | datetime | success=True | duration=0.1ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=598.16ms | input="{'query': 'ChatGPT'}"
+      ✅️ Latency: 17.19s, Steps: 7
+    Task 18/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=662.58ms | input="{'query': 'Canais Globo'}"
+🔧 Tool call | datetime | success=True | duration=0.15ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=617.34ms | input="{'query': 'Canais Globo'}"
+      ✅️ Latency: 20.31s, Steps: 7
+    Task 19/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=433.22ms | input="{'query': 'Crefisa'}"
+🔧 Tool call | searxng_search | success=True | duration=410.8ms | input="{'query': 'Crefisa'}"
+🔧 Tool call | searxng_search | success=True | duration=616.49ms | input="{'query': 'Crefisa'}"
+      ✅️ Latency: 13.43s, Steps: 7
+    Task 20/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=718.67ms | input="{'query': 'Enem'}"
+🔧 Tool call | datetime | success=True | duration=0.14ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=490.28ms | input="{'query': 'Enem'}"
+      ✅️ Latency: 22.28s, Steps: 7
+
+  CrewAI + standard Summary:
+    Success: 20/20 (100.0%)
+    Avg Latency: 19.03s
+    Avg Steps: 7.0
+
+  LangGraph with standard:
+    Task 1/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=513.59ms | input="{'query': 'YouTube Brazil'}"
+      ✅️ Latency: 12.32s, Steps: 7
+    Task 2/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | datetime | success=True | duration=0.18ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=1025.05ms | input="{'query': 'WhatsApp Web'}"
+🔧 Tool call | searxng_search | success=True | duration=489.53ms | input="{'query': 'WhatsApp Web'}"
+      ✅️ Latency: 22.56s, Steps: 7
+    Task 3/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 11.26s, Steps: 7
+    Task 4/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=927.48ms | input="{'query': 'G1'}"
+      ✅️ Latency: 13.08s, Steps: 7
+    Task 5/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+'(ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: 7092f307-737f-41ed-a064-d6ced435555b)')' thrown while requesting HEAD https://huggingface.co/Qwen/Qwen2.5-7B-Instruct/resolve/main/tokenizer_config.json
+Retrying in 1s [Retry 1/5].
+      ✅️ Latency: 914.35s, Steps: 7
+    Task 6/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 0.00s, Steps: 7
+    Task 7/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 0.00s, Steps: 7
+    Task 8/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 0.00s, Steps: 7
+    Task 9/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 12.50s, Steps: 7
+    Task 10/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1065.44ms | input="{'query': 'Roblox'}"
+🔧 Tool call | datetime | success=True | duration=0.11ms | input='{}'
+      ✅️ Latency: 16.79s, Steps: 7
+    Task 11/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=780.78ms | input="{'query': 'Shopee'}"
+🔧 Tool call | searxng_search | success=True | duration=919.41ms | input="{'query': 'Shopee'}"
+      ✅️ Latency: 21.57s, Steps: 7
+    Task 12/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1084.99ms | input="{'query': 'Mercado Livre'}"
+🔧 Tool call | datetime | success=True | duration=0.1ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=822.29ms | input="{'query': 'Mercado Livre'}"
+🔧 Tool call | searxng_search | success=True | duration=521.19ms | input="{'input': '2023-05-15 14:00'}"
+      ✅️ Latency: 17.63s, Steps: 7
+    Task 13/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1069.42ms | input="{'query': 'Instagram'}"
+🔧 Tool call | datetime | success=True | duration=0.15ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=648.34ms | input="{'query': 'Instagram'}"
+      ✅️ Latency: 17.82s, Steps: 7
+    Task 14/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=649.02ms | input="{'query': 'Loterias'}"
+      ✅️ Latency: 12.66s, Steps: 7
+    Task 15/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 9.32s, Steps: 7
+    Task 16/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=581.54ms | input="{'query': 'Tabela FIPE'}"
+      ✅️ Latency: 12.66s, Steps: 7
+    Task 17/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1038.38ms | input="{'query': 'ChatGPT'}"
+      ✅️ Latency: 14.07s, Steps: 7
+    Task 18/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=729.46ms | input="{'query': 'Canais Globo'}"
+🔧 Tool call | searxng_search | success=True | duration=754.75ms | input="{'query': 'Canais Globo'}"
+🔧 Tool call | searxng_search | success=True | duration=544.23ms | input="{'source': 'Google', 'title': 'Canal Globo - Wikipedia, a enciclopédia livre', 'description': 'A página Canal Globo do W"
+      ✅️ Latency: 24.07s, Steps: 7
+    Task 19/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | datetime | success=True | duration=0.18ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=490.24ms | input="{'query': 'Crefisa'}"
+🔧 Tool call | searxng_search | success=True | duration=563.78ms | input="{'query': 'Crefisa'}"
+🔧 Tool call | searxng_search | success=True | duration=570.37ms | input="{'query': 'Crefisa'}"
+      ✅️ Latency: 14.84s, Steps: 7
+    Task 20/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1030.64ms | input="{'query': 'Enem'}"
+      ✅️ Latency: 15.36s, Steps: 7
+
+  LangGraph + standard Summary:
+    Success: 12/12 (100.0%)
+    Avg Latency: 15.77s
+    Avg Steps: 7.0
+
+======================================================================
+Model mistral:7b Complete
+======================================================================
+
+======================================================================
+Testing Model: granite4.1:3b
+======================================================================
+
+----------------------------------------------------------------------
+PROTOCOL x FRAMEWORK COMBINATIONS
+----------------------------------------------------------------------
+
+──────────────────────────────────────────────────────────────────────
+Protocol: standard
+──────────────────────────────────────────────────────────────────────
+
+  CrewAI with standard:
+    Task 1/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1105.65ms | input="{'query': 'YouTube'}"
+🔧 Tool call | datetime | success=True | duration=0.12ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=552.17ms | input="{'query': 'YouTube Brazilian users guide help page'}"
+tokenizer_config.json: 17.7kB [00:00, 8.29MB/s]
+vocab.json: 1.61MB [00:00, 14.4MB/s]
+merges.txt: 917kB [00:00, 7.80MB/s]
+tokenizer.json: 7.15MB [00:00, 26.4MB/s]
+special_tokens_map.json: 100%|█████████████████████████████████████████████████████| 579/579 [00:00<00:00, 3.11MB/s]
+chat_template.jinja: 6.10kB [00:00, 10.8MB/s]
+      ✅️ Latency: 24.50s, Steps: 7
+    Task 2/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1135.99ms | input="{'query': 'WhatsApp Web'}"
+🔧 Tool call | searxng_search | success=True | duration=490.92ms | input="{'query': 'WhatsApp Web'}"
+      ✅️ Latency: 22.97s, Steps: 7
+    Task 3/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=500.12ms | input="{'query': 'Clima Brazilian weather app'}"
+🔧 Tool call | datetime | success=True | duration=0.11ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=490.89ms | input='{\'query\': \'"Clima" site:br.clime.com OR "Clima" Brazil weather app\'}'
+🔧 Tool call | searxng_search | success=True | duration=520.34ms | input="{'query': 'Clima Brazil weather service'}"
+      ✅️ Latency: 16.80s, Steps: 7
+    Task 4/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=716.22ms | input="{'query': 'G1 Brazilian context primary intent information sources'}"
+🔧 Tool call | datetime | success=True | duration=0.11ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=514.19ms | input='{\'query\': \'"query"\'}'
+      ✅️ Latency: 22.68s, Steps: 7
+    Task 5/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=543.74ms | input="{'query': 'Google Tradutor'}"
+🔧 Tool call | searxng_search | success=True | duration=479.26ms | input="{'query': 'Google Translate Brazil market analysis 2023'}"
+🔧 Tool call | searxng_search | success=True | duration=457.03ms | input="{'query': 'Google Translate Brazil statistics 2024'}"
+      ✅️ Latency: 23.68s, Steps: 7
+    Task 6/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1082.67ms | input="{'query': 'Facebook'}"
+🔧 Tool call | searxng_search | success=True | duration=691.32ms | input="{'query': 'Facebook'}"
+      ✅️ Latency: 25.34s, Steps: 7
+    Task 7/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=762.32ms | input="{'query': 'UOL'}"
+🔧 Tool call | datetime | success=True | duration=0.14ms | input="{'query': ''}"
+🔧 Tool call | searxng_search | success=True | duration=341.71ms | input="{'query': 'Universidade de Lisboa'}"
+      ✅️ Latency: 25.46s, Steps: 7
+    Task 8/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=501.78ms | input="{'query': 'Hotmail'}"
+🔧 Tool call | datetime | success=True | duration=0.05ms | input="{'query': ''}"
+🔧 Tool call | searxng_search | success=True | duration=533.3ms | input="{'query': 'Hotmail'}"
+      ✅️ Latency: 22.97s, Steps: 7
+    Task 9/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1027.45ms | input="{'query': 'Gmail'}"
+🔧 Tool call | searxng_search | success=True | duration=650.77ms | input="{'query': 'Gmail'}"
+      ✅️ Latency: 25.53s, Steps: 7
+    Task 10/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=835.79ms | input="{'query': 'Roblox'}"
+🔧 Tool call | searxng_search | success=True | duration=416.58ms | input="{'query': 'Roblox'}"
+      ✅️ Latency: 19.03s, Steps: 7
+    Task 11/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=904.96ms | input="{'query': 'Shopee'}"
+🔧 Tool call | datetime | success=True | duration=0.11ms | input="{'query': ''}"
+🔧 Tool call | searxng_search | success=True | duration=694.65ms | input="{'query': 'Shopee Brazil'}"
+      ✅️ Latency: 23.53s, Steps: 7
+    Task 12/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=957.37ms | input="{'query': 'Mercado Livre'}"
+🔧 Tool call | datetime | success=True | duration=0.18ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=825.45ms | input="{'query': 'Mercado Livre overview'}"
+      ✅️ Latency: 22.55s, Steps: 7
+    Task 13/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1131.94ms | input="{'query': 'Instagram'}"
+🔧 Tool call | datetime | success=True | duration=0.09ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=927.85ms | input="{'query': 'Instagram'}"
+      ✅️ Latency: 22.50s, Steps: 7
+    Task 14/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=548.36ms | input="{'query': 'Loterias Brazil'}"
+🔧 Tool call | datetime | success=True | duration=0.06ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=610.3ms | input="{'query': 'Loterias Brazil lottery operators official government'}"
+      ✅️ Latency: 18.82s, Steps: 7
+    Task 15/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=465.02ms | input="{'query': 'Previsão do tempo'}"
+🔧 Tool call | datetime | success=True | duration=0.1ms | input="{'query': ''}"
+🔧 Tool call | searxng_search | success=True | duration=680.77ms | input="{'query': 'Previsão do tempo Brazil weather forecast'}"
+      ✅️ Latency: 22.34s, Steps: 7
+    Task 16/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=618.7ms | input="{'query': 'Tabela FIPE'}"
+🔧 Tool call | searxng_search | success=True | duration=520.68ms | input="{'query': 'Tabela FIPE site:fipe.org.br OR site:anatel.gov.br OR Transparency Portal'}"
+🔧 Tool call | searxng_search | success=True | duration=559.84ms | input="{'query': 'Ética de IA site:gov.br'}"
+      ✅️ Latency: 16.11s, Steps: 7
+    Task 17/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1026.09ms | input="{'query': 'ChatGPT'}"
+🔧 Tool call | datetime | success=True | duration=0.11ms | input="{'query': ''}"
+🔧 Tool call | searxng_search | success=True | duration=602.43ms | input="{'query': 'ChatGPT'}"
+      ✅️ Latency: 26.24s, Steps: 7
+    Task 18/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1027.36ms | input="{'query': 'Canais Globo'}"
+🔧 Tool call | searxng_search | success=True | duration=512.71ms | input='{\'query\': \'"Canais Globo"\'}'
+      ✅️ Latency: 27.29s, Steps: 7
+    Task 19/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=707.71ms | input="{'query': 'Crefisa'}"
+🔧 Tool call | searxng_search | success=True | duration=717.47ms | input="{'query': 'Crefisa'}"
+      ✅️ Latency: 21.63s, Steps: 7
+    Task 20/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=647.66ms | input="{'query': 'Enem'}"
+🔧 Tool call | datetime | success=True | duration=0.14ms | input="{'query': ''}"
+🔧 Tool call | searxng_search | success=True | duration=610.75ms | input='{\'query\': \'"Enem" Brazilian exam official policy\'}'
+      ✅️ Latency: 25.55s, Steps: 7
+
+  CrewAI + standard Summary:
+    Success: 20/20 (100.0%)
+    Avg Latency: 22.78s
+    Avg Steps: 7.0
+
+  LangGraph with standard:
+    Task 1/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1128.4ms | input="{'query': 'YouTube'}"
+🔧 Tool call | searxng_search | success=True | duration=774.34ms | input="{'query': 'YouTube overview official site'}"
+      ✅️ Latency: 18.78s, Steps: 7
+    Task 2/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1127.45ms | input="{'query': 'WhatsApp Web'}"
+🔧 Tool call | datetime | success=True | duration=0.1ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=545.85ms | input="{'query': 'WhatsApp Web tutorial setup login QR code guide'}"
+      ✅️ Latency: 24.51s, Steps: 7
+    Task 3/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1042.3ms | input="{'query': 'Clima'}"
+🔧 Tool call | searxng_search | success=True | duration=860.34ms | input="{'query': 'Clima weather Brazil'}"
+      ✅️ Latency: 21.69s, Steps: 7
+    Task 4/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=615.42ms | input="{'query': 'G1'}"
+🔧 Tool call | datetime | success=True | duration=0.05ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=607.81ms | input="{'query': 'G1'}"
+      ✅️ Latency: 19.91s, Steps: 7
+    Task 5/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=637.16ms | input="{'query': 'Google Tradutor'}"
+🔧 Tool call | searxng_search | success=True | duration=985.94ms | input='{\'query\': \'"Google Tradutor"\'}'
+      ✅️ Latency: 23.19s, Steps: 7
+    Task 6/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1028.16ms | input="{'query': 'Facebook'}"
+🔧 Tool call | searxng_search | success=True | duration=497.56ms | input="{'query': 'Facebook Brazil'}"
+      ✅️ Latency: 23.52s, Steps: 7
+    Task 7/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=461.58ms | input="{'query': 'UOL'}"
+🔧 Tool call | datetime | success=True | duration=0.08ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=585.27ms | input='{\'query\': \'"UOL" "Brazilian media company"\'}'
+      ✅️ Latency: 21.28s, Steps: 7
+    Task 8/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=647.43ms | input="{'query': 'Hotmail'}"
+🔧 Tool call | datetime | success=True | duration=0.04ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=516.23ms | input="{'query': 'Hotmail'}"
+      ✅️ Latency: 23.42s, Steps: 7
+    Task 9/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1125.68ms | input="{'query': 'Gmail'}"
+🔧 Tool call | searxng_search | success=True | duration=383.32ms | input="{'query': 'Gmail login website'}"
+🔧 Tool call | searxng_search | success=True | duration=555.52ms | input="{'query': 'Gmail official support website'}"
+      ✅️ Latency: 29.32s, Steps: 7
+    Task 10/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=816.63ms | input="{'query': 'Roblox'}"
+🔧 Tool call | datetime | success=True | duration=0.15ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=879.03ms | input="{'query': 'Roblox'}"
+      ✅️ Latency: 25.74s, Steps: 7
+    Task 11/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=525.71ms | input="{'query': 'Shopee'}"
+🔧 Tool call | datetime | success=True | duration=0.08ms | input="{'input': ''}"
+🔧 Tool call | searxng_search | success=True | duration=590.34ms | input="{'query': 'Shopee'}"
+      ✅️ Latency: 30.17s, Steps: 7
+    Task 12/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=513.97ms | input="{'query': 'Mercado Livre'}"
+🔧 Tool call | datetime | success=True | duration=0.07ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=616.2ms | input="{'query': 'Mercado Livre'}"
+      ✅️ Latency: 22.66s, Steps: 7
+    Task 13/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1026.3ms | input="{'query': 'Instagram'}"
+🔧 Tool call | datetime | success=True | duration=0.16ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=616.34ms | input="{'query': 'Instagram Brazilian market trends 2024'}"
+🔧 Tool call | searxng_search | success=True | duration=512.13ms | input="{'query': 'Instagram Brazil trends 2024 site:linkedin.com'}"
+🔧 Tool call | searxng_search | success=True | duration=406.68ms | input='{\'query\': \'"instagram brazilian market" 2024\'}'
+      ✅️ Latency: 29.43s, Steps: 7
+    Task 14/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1032.38ms | input="{'query': 'Loterias Brazil'}"
+🔧 Tool call | datetime | success=True | duration=0.25ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=562.96ms | input="{'query': 'Loterias Brazil'}"
+      ✅️ Latency: 16.65s, Steps: 7
+    Task 15/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1028.97ms | input="{'query': 'Previsão do tempo'}"
+🔧 Tool call | datetime | success=True | duration=0.14ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=1025.59ms | input="{'query': 'Previsão do tempo Brasil INMET Climatempo OpenWeather Brazil'}"
+      ✅️ Latency: 25.63s, Steps: 7
+    Task 16/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=743.97ms | input="{'query': 'Tabela FIPE'}"
+🔧 Tool call | datetime | success=True | duration=0.17ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=550.65ms | input='{\'query\': \'"Tabela FIPE"\'}'
+      ✅️ Latency: 23.83s, Steps: 7
+    Task 17/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1026.68ms | input="{'query': 'ChatGPT'}"
+🔧 Tool call | searxng_search | success=True | duration=484.34ms | input="{'query': 'ChatGPT'}"
+      ✅️ Latency: 23.68s, Steps: 7
+    Task 18/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=661.76ms | input="{'query': 'Canais Globo'}"
+🔧 Tool call | datetime | success=True | duration=0.22ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=359.49ms | input="{'query': 'Canais Globo'}"
+      ✅️ Latency: 19.67s, Steps: 7
+    Task 19/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=489.07ms | input="{'query': 'Crefisa'}"
+🔧 Tool call | datetime | success=True | duration=0.11ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=420.44ms | input="{'query': 'Crefisa'}"
+      ✅️ Latency: 15.72s, Steps: 7
+    Task 20/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 Tool call | searxng_search | success=True | duration=1029.33ms | input="{'query': 'Enem'}"
+🔧 Tool call | datetime | success=True | duration=0.23ms | input='{}'
+🔧 Tool call | searxng_search | success=True | duration=1010.94ms | input="{'query': 'Enem'}"
+🔧 Tool call | datetime | success=True | duration=0.14ms | input="{'input': ''}"
+      ✅️ Latency: 26.94s, Steps: 7
+
+  LangGraph + standard Summary:
+    Success: 20/20 (100.0%)
+    Avg Latency: 23.29s
+    Avg Steps: 7.0
+
+======================================================================
+Model granite4.1:3b Complete
+======================================================================
+
+======================================================================
+Testing Model: gpt-oss:latest
+======================================================================
+
+----------------------------------------------------------------------
+PROTOCOL x FRAMEWORK COMBINATIONS
+----------------------------------------------------------------------
+
+──────────────────────────────────────────────────────────────────────
+Protocol: standard
+──────────────────────────────────────────────────────────────────────
+
+  CrewAI with standard:
+    Task 1/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 2.58s, Steps: 7
+    Task 2/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 2.19s, Steps: 7
+    Task 3/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 1.68s, Steps: 7
+    Task 4/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 1.29s, Steps: 7
+    Task 5/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 1.12s, Steps: 7
+    Task 6/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.60s, Steps: 7
+    Task 7/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.83s, Steps: 7
+    Task 8/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 1.82s, Steps: 7
+    Task 9/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.84s, Steps: 7
+    Task 10/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.63s, Steps: 7
+    Task 11/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.95s, Steps: 7
+    Task 12/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.68s, Steps: 7
+    Task 13/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.98s, Steps: 7
+    Task 14/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.73s, Steps: 7
+    Task 15/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.87s, Steps: 7
+    Task 16/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.65s, Steps: 7
+    Task 17/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.91s, Steps: 7
+    Task 18/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.62s, Steps: 7
+    Task 19/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.92s, Steps: 7
+    Task 20/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.77s, Steps: 7
+
+  CrewAI + standard Summary:
+    Success: 20/20 (100.0%)
+    Avg Latency: 1.08s
+    Avg Steps: 7.0
+
+  LangGraph with standard:
+    Task 1/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.91s, Steps: 7
+    Task 2/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.77s, Steps: 7
+    Task 3/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.79s, Steps: 7
+    Task 4/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.69s, Steps: 7
+    Task 5/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 1.02s, Steps: 7
+    Task 6/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.81s, Steps: 7
+    Task 7/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.87s, Steps: 7
+    Task 8/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.91s, Steps: 7
+    Task 9/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.91s, Steps: 7
+    Task 10/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.59s, Steps: 7
+    Task 11/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 1.08s, Steps: 7
+    Task 12/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 1.09s, Steps: 7
+    Task 13/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.89s, Steps: 7
+    Task 14/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 1.10s, Steps: 7
+    Task 15/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 1.12s, Steps: 7
+    Task 16/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.62s, Steps: 7
+    Task 17/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.78s, Steps: 7
+    Task 18/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.79s, Steps: 7
+    Task 19/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.79s, Steps: 7
+    Task 20/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+🔧 OpenAI tool request round=0 | model=gpt-oss:latest | tool_choice=auto
+      ✅️ Latency: 0.87s, Steps: 7
+
+  LangGraph + standard Summary:
+    Success: 20/20 (100.0%)
+    Avg Latency: 0.87s
+    Avg Steps: 7.0
+
+======================================================================
+Model gpt-oss:latest Complete
+======================================================================
+
+======================================================================
+Testing Model: deepseek-r1:latest
+======================================================================
+
+----------------------------------------------------------------------
+PROTOCOL x FRAMEWORK COMBINATIONS
+----------------------------------------------------------------------
+
+──────────────────────────────────────────────────────────────────────
+Protocol: standard
+──────────────────────────────────────────────────────────────────────
+
+  CrewAI with standard:
+    Task 1/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+tokenizer_config.json: 3.59kB [00:00, 3.09MB/s]
+tokenizer.json: 7.85MB [00:00, 15.2MB/s]
+      ✅️ Latency: 18.09s, Steps: 7
+    Task 2/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 16.14s, Steps: 7
+    Task 3/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 17.12s, Steps: 7
+    Task 4/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 15.00s, Steps: 7
+    Task 5/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 16.04s, Steps: 7
+    Task 6/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 14.35s, Steps: 7
+    Task 7/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 8.42s, Steps: 7
+    Task 8/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 15.75s, Steps: 7
+    Task 9/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 19.33s, Steps: 7
+    Task 10/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 14.30s, Steps: 7
+    Task 11/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 20.73s, Steps: 7
+    Task 12/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 16.60s, Steps: 7
+    Task 13/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 17.70s, Steps: 7
+    Task 14/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 19.18s, Steps: 7
+    Task 15/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 16.34s, Steps: 7
+    Task 16/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 17.48s, Steps: 7
+    Task 17/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 19.88s, Steps: 7
+    Task 18/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 17.54s, Steps: 7
+    Task 19/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 17.39s, Steps: 7
+    Task 20/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 20.89s, Steps: 7
+
+  CrewAI + standard Summary:
+    Success: 20/20 (100.0%)
+    Avg Latency: 16.91s
+    Avg Steps: 7.0
+
+  LangGraph with standard:
+    Task 1/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 11.60s, Steps: 7
+    Task 2/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 17.01s, Steps: 7
+    Task 3/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...
+      ✅️ Latency: 20.05s, Steps: 7
+    Task 4/20: You are a Search Quality Analyst. Your goal is to execute the following search task: 
+Identify the p...

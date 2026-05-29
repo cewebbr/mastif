@@ -1,5 +1,5 @@
 experiment:
-  name: "Brazil 2026 - Search Fan-out & Traffic Analysis"
+  name: "Brazil 2025 - Query Fan-out & Traffic Analysis"
   description: "Measuring traffic and result quality across different search indices for top Brazilian queries"
 
 # Global Configuration
@@ -67,14 +67,14 @@ tasks: # https://trends.withgoogle.com/pt-br/year-in-search/2025/br/
   - "Enem"
 
 tools:
-  # - name: "web_search"
-  #   description: "Standard DuckDuckGo search for baseline web results."
+  - name: "web_search"
+    description: "Standard DuckDuckGo search for baseline web results."
   
   - name: "searxng_search"
     description: "Metasearch tool aggregating results from 70+ engines. Use this for the fan-out branch."
 
-  # - name: "web_browser"
-  #   description: "Headless browser to verify content quality of retrieved URLs."
+  - name: "web_browser"
+    description: "Headless browser to verify content quality of retrieved URLs."
 
   - name: "datetime"
     description: "Capturing search timestamps for latency analysis."
