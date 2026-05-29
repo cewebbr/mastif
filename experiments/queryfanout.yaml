@@ -2,7 +2,7 @@ experiment:
   name: "Brazil 2026 - Search Fan-out & Traffic Analysis"
   description: "Measuring traffic and result quality across different search indices for top Brazilian queries"
 
-# Global Configuration[cite: 5]
+# Global Configuration
 temperature: 0.7          # Balanced for diverse search interpretation
 max_tokens: 2048          # Increased to handle cumulative research_results
 max_steps: 5              # Allows for multiple loops if needed
@@ -12,9 +12,20 @@ requests_soft_limit: 500
 test_mode: "standard"
 
 models:
+  # Baseline
   - id: "qcwind/qwen2.5-7B-instruct-Q4_K_M:latest" # Ollama id -- Strong tool-use capabilities for effective fan-out research
     tokenizer: "Qwen/Qwen2.5-7B-Instruct"
-  # - id: "mistralai/Mistral-7B-Instruct-v0.1"
+  - id: "mistral:7b"
+    tokenizer: "mistralai/Mistral-7B-Instruct-v0.1"
+  - id: "granite4.1:3b"
+    tokenizer: "ibm-granite/granite-4.1-3b"
+  # Larger stamodels for deeper synthesis and analysis
+  - id: "gpt-oss:latest"
+    tokenizer: "openai/gpt-oss-20b"
+  - id: "deepseek-r1:latest"
+    tokenizer: "deepseek-ai/DeepSeek-R1"
+  - id: "gemma4:latest"
+    tokenizer: "google/gemma-4-E4B"
   # - id: "moonshotai/Kimi-K2.5"
   # - id: "anthropic/claude-3.5-sonnet"
 
@@ -25,35 +36,35 @@ frameworks:
   - "CrewAI"
   - "LangGraph"
 
-# Base instruction for the fan-out task[cite: 5]
+# Base instruction for the fan-out task
 prompt_template: |
   You are a Search Quality Analyst. Your goal is to execute the following search task: 
-  {task}
+  Identify the primary intent and top information sources for: {task}
 
   Analyze the results for accuracy, relevance to the Brazilian context, and engine-level performance.
-  Provide your analysis based on the cumulative findings stored in the workflow.
+  Provide your analysis based on the cumulative findings stored in the workflow, including information sources, language of the content, timestamps, and any relevant metrics.
 
 tasks: # https://trends.withgoogle.com/pt-br/year-in-search/2025/br/
-  - "Identify the primary intent and top information sources for: YouTube"
-  - "Identify the primary intent and top information sources for: WhatsApp Web"
-  - "Identify the primary intent and top information sources for: Clima"
-  - "Identify the primary intent and top information sources for: G1"
-  - "Identify the primary intent and top information sources for: Google Tradutor"
-  - "Identify the primary intent and top information sources for: Facebook"
-  - "Identify the primary intent and top information sources for: UOL"
-  - "Identify the primary intent and top information sources for: Hotmail"
-  - "Identify the primary intent and top information sources for: Gmail"
-  - "Identify the primary intent and top information sources for: Roblox"
-  - "Identify the primary intent and top information sources for: Shopee"
-  - "Identify the primary intent and top information sources for: Mercado Livre"
-  - "Identify the primary intent and top information sources for: Instagram"
-  - "Identify the primary intent and top information sources for: Loterias"
-  - "Identify the primary intent and top information sources for: Previsão do tempo"
-  - "Identify the primary intent and top information sources for: Tabela FIPE"
-  - "Identify the primary intent and top information sources for: ChatGPT"
-  - "Identify the primary intent and top information sources for: Canais Globo"
-  - "Identify the primary intent and top information sources for: Crefisa"
-  - "Identify the primary intent and top information sources for: Enem"
+  - "YouTube"
+  - "WhatsApp Web"
+  - "Clima"
+  - "G1"
+  - "Google Tradutor"
+  - "Facebook"
+  - "UOL"
+  - "Hotmail"
+  - "Gmail"
+  - "Roblox"
+  - "Shopee"
+  - "Mercado Livre"
+  - "Instagram"
+  - "Loterias"
+  - "Previsão do tempo"
+  - "Tabela FIPE"
+  - "ChatGPT"
+  - "Canais Globo"
+  - "Crefisa"
+  - "Enem"
 
 tools:
   # - name: "web_search"
@@ -68,7 +79,7 @@ tools:
   - name: "datetime"
     description: "Capturing search timestamps for latency analysis."
 
-# Hierarchical Workflow[cite: 5]
+# Hierarchical Workflow
 # This structure ensures multiple nodes contribute to 'research_results' before synthesis.
 workflow:
   nodes:
