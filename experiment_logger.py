@@ -526,8 +526,17 @@ class ExperimentLogger:
                 f"Add 'tokenizer: <hf-repo-id>' to this model's entry in your YAML.")
             encode = tiktoken.get_encoding("cl100k_base").encode
         else:
-            tokenizer = AutoTokenizer.from_pretrained(effective_model)
-            encode = tokenizer.encode
+            try:
+                tokenizer = AutoTokenizer.from_pretrained(effective_model)
+                encode = tokenizer.encode
+            except Exception as e:
+                try:
+                    tokenizer = AutoTokenizer.from_pretrained(effective_model, use_fast=False)
+                    encode = tokenizer.encode
+                except Exception as fallback_error:
+                    print(f"⚠️  Tokenizer load failed for model '{effective_model}': {fallback_error}")
+                    print("   Falling back to cl100k_base approximation for token metrics.")
+                    encode = tiktoken.get_encoding("cl100k_base").encode
 
         reasoning_tokens = output_tokens = 0
         for r in results:
