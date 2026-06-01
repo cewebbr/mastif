@@ -503,40 +503,96 @@ class ExperimentLogger:
         return self._compute_token_metrics_static(model_name, results)
 
     @staticmethod
+    def _infer_tokenizer_provider(model_name: str) -> str:
+        """
+        Infer tokenizer provider from model name pattern.
+        
+        Returns one of: 'openai', 'anthropic', 'ollama', 'huggingface', 'unknown'
+        """
+        lower = model_name.lower()
+        
+        if any(lower.startswith(p) for p in ["gpt-", "text-", "openai"]):
+            return "openai"
+        if lower.startswith("claude-"):
+            return "anthropic"
+        if ":" in model_name and "/" not in model_name:
+            return "ollama"
+        if "/" in model_name:
+            return "huggingface"
+        return "unknown"
+
+    @staticmethod
     def _compute_token_metrics_static(model_name: str, results: List[TestResult]) -> Tuple[int, int]:
-        """Static version of token computation for use in JSON export."""
-        # Resolve tokenizer_id from result metadata if present (set for Ollama models)
+        """
+        Static version of token computation for use in JSON export.
+        
+        Three-tier tokenizer strategy:
+        1. User-provided tokenizer_id from YAML metadata
+        2. Inferred tokenizer based on model name pattern
+        3. Fallback to cl100k_base approximation
+        """
+        encode = None
         tokenizer_id = None
+        
+        # ====== TIER 1: User-provided tokenizer from YAML ======
         if results:
             tokenizer_id = (results[0].metadata or {}).get("tokenizer_id")
-
-        effective_model = tokenizer_id or model_name
-
-        openai_prefixes = ["gpt-", "openai"] # TODO: Verify this for Anthropic models as well
-        if any(effective_model.startswith(p) for p in openai_prefixes):
-            try:
-                enc = tiktoken.encoding_for_model(effective_model)
-            except Exception:
-                enc = tiktoken.get_encoding("cl100k_base")
-            encode = enc.encode
-        elif ":" in effective_model:
-            # Unresolved Ollama model — no tokenizer declared in YAML, fall back
-            print(f"⚠️  No tokenizer declared for Ollama model '{model_name}'. "
-                f"Token counts will use cl100k_base approximation. "
-                f"Add 'tokenizer: <hf-repo-id>' to this model's entry in your YAML.")
-            encode = tiktoken.get_encoding("cl100k_base").encode
-        else:
-            try:
-                tokenizer = AutoTokenizer.from_pretrained(effective_model)
-                encode = tokenizer.encode
-            except Exception as e:
+            
+            if tokenizer_id:
                 try:
-                    tokenizer = AutoTokenizer.from_pretrained(effective_model, use_fast=False)
+                    tokenizer = AutoTokenizer.from_pretrained(tokenizer_id)
                     encode = tokenizer.encode
-                except Exception as fallback_error:
-                    print(f"⚠️  Tokenizer load failed for model '{effective_model}': {fallback_error}")
-                    print("   Falling back to cl100k_base approximation for token metrics.")
-                    encode = tiktoken.get_encoding("cl100k_base").encode
+                    # Success with user-provided tokenizer
+                except Exception as e:
+                    # User-provided tokenizer failed, move to tier 2
+                    print(f"⚠️  User-provided tokenizer '{tokenizer_id}' failed to load: {type(e).__name__}")
+                    tokenizer_id = None  # Clear it so we don't try again
+        
+        # ====== TIER 2: Infer and load based on model name ======
+        if encode is None:
+            provider = ExperimentLogger._infer_tokenizer_provider(model_name)
+            
+            if provider == "openai":
+                try:
+                    enc = tiktoken.encoding_for_model(model_name)
+                    encode = enc.encode
+                except Exception:
+                    enc = tiktoken.get_encoding("cl100k_base")
+                    encode = enc.encode
+            
+            elif provider == "anthropic":
+                encode = tiktoken.get_encoding("cl100k_base").encode
+            
+            elif provider == "ollama":
+                print(f"⚠️  No tokenizer declared for Ollama model '{model_name}'. "
+                      f"Add 'tokenizer: <hf-repo-id>' to this model's entry in your YAML.")
+                encode = tiktoken.get_encoding("cl100k_base").encode
+            
+            elif provider == "huggingface":
+                try:
+                    tokenizer = AutoTokenizer.from_pretrained(model_name)
+                    encode = tokenizer.encode
+                except Exception as e:
+                    try:
+                        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+                        encode = tokenizer.encode
+                    except Exception:
+                        # Inferred tokenizer load failed, move to tier 3
+                        print(f"⚠️  Could not load inferred tokenizer for '{model_name}'.")
+                        encode = None
+            
+            elif provider == "unknown":
+                # Try as HuggingFace format anyway
+                try:
+                    tokenizer = AutoTokenizer.from_pretrained(model_name)
+                    encode = tokenizer.encode
+                except Exception:
+                    encode = None
+        
+        # ====== TIER 3: Fallback to cl100k_base ======
+        if encode is None:
+            print(f"⚠️  Falling back to cl100k_base approximation for token metrics.")
+            encode = tiktoken.get_encoding("cl100k_base").encode
 
         reasoning_tokens = output_tokens = 0
         for r in results:
