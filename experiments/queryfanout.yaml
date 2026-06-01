@@ -25,7 +25,7 @@ models:
   - id: "deepseek-r1:latest"
     tokenizer: "deepseek-ai/DeepSeek-R1"
   - id: "gemma4:latest"
-    tokenizer: "google/gemma-4-E4B"
+    tokenizer: "google/gemma-4-31B-it" # google/gemma-4-31B-it
   # - id: "moonshotai/Kimi-K2.5"
   # - id: "anthropic/claude-3.5-sonnet"
 
@@ -67,14 +67,14 @@ tasks: # https://trends.withgoogle.com/pt-br/year-in-search/2025/br/
   - "Enem"
 
 tools:
-  - name: "web_search"
-    description: "Standard DuckDuckGo search for baseline web results."
+  # - name: "web_search"
+  #   description: "Standard DuckDuckGo search for baseline web results."
   
   - name: "searxng_search"
     description: "Metasearch tool aggregating results from 70+ engines. Use this for the fan-out branch."
 
-  - name: "web_browser"
-    description: "Headless browser to verify content quality of retrieved URLs."
+  # - name: "web_browser"
+  #   description: "Headless browser to verify content quality of retrieved URLs."
 
   - name: "datetime"
     description: "Capturing search timestamps for latency analysis."

@@ -10,6 +10,7 @@ import json
 import time
 import datetime
 import threading
+import traceback
 from pathlib import Path
 from typing import List, Dict, Optional
 
@@ -128,16 +129,16 @@ class Mastif:
     # Any match aborts the entire experiment immediately.
     PAYMENT_PATTERNS = [
         "payment required",
-        "402",
-        "insufficient credits",
-        "exceeded your current quota",
-        "billing",
-        "subscription",
-        "upgrade your plan",
-        "rate limit exceeded",
-        "you have run out of",
-        "account is not active",
-        "payment_required",
+        # "402",
+        # "insufficient credits",
+        # "exceeded your current quota",
+        # "billing",
+        # "subscription",
+        # "upgrade your plan",
+        # "rate limit exceeded",
+        # "you have run out of",
+        # "account is not active",
+        # "payment_required",
     ]
 
     def _is_payment_error(self, text: str) -> bool:
@@ -861,6 +862,11 @@ Please respond according to this protocol structure and complete the task."""
                             raise  # propagate halt immediately
                         except Exception as e:
                             print(f"      ❌ Error: {str(e)}")
+                            print("      Exception type:", type(e).__name__)
+                            print("      Traceback:")
+                            for line in traceback.format_exception(type(e), e, e.__traceback__):
+                                for subline in line.rstrip().splitlines():
+                                    print(f"        {subline}")
                     
                     # Summary for this protocol-framework combination
                     if combination_results:
@@ -1079,7 +1085,13 @@ Please respond according to this protocol structure and complete the task."""
                         except SystemExit:
                             raise  # propagate halt immediately
                         except Exception as e:
-                            print(f"    ❌ Error: {str(e)}")
+                            print(f"      ❌ Error: {str(e)}")
+                            print("      Exception type:", type(e).__name__)
+                            print("      Traceback:")
+                            for line in traceback.format_exception(type(e), e, e.__traceback__):
+                                for subline in line.rstrip().splitlines():
+                                    print(f"        {subline}")
+                            
 
                     if combination_results:
                         successes = [r for r in combination_results if r.success]
