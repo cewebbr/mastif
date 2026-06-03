@@ -543,7 +543,7 @@ class ExperimentLogger:
             
             if tokenizer_id:
                 try:
-                    tokenizer = AutoTokenizer.from_pretrained(tokenizer_id, trust_remote_code=True)
+                    tokenizer = AutoTokenizer.from_pretrained(tokenizer_id)
                     encode = tokenizer.encode
                     # Success with user-provided tokenizer
                 except Exception as e:
@@ -573,11 +573,11 @@ class ExperimentLogger:
             
             elif provider == "huggingface":
                 try:
-                    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+                    tokenizer = AutoTokenizer.from_pretrained(model_name)
                     encode = tokenizer.encode
                 except Exception as e:
                     try:
-                        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
+                        tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
                         encode = tokenizer.encode
                     except Exception:
                         # Inferred tokenizer load failed, move to tier 3
@@ -590,7 +590,7 @@ class ExperimentLogger:
             elif provider == "unknown":
                 # Try as HuggingFace format anyway
                 try:
-                    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+                    tokenizer = AutoTokenizer.from_pretrained(model_name)
                     encode = tokenizer.encode
                 except Exception:
                     encode = None
