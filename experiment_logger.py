@@ -26,6 +26,9 @@ import tiktoken
 
 LOGS_DIR = Path("logs")
 
+# Keep track of one-time warnings (so they aren't spammed repeatedly)
+_WARNINGS_SHOWN = set()
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -578,7 +581,10 @@ class ExperimentLogger:
                         encode = tokenizer.encode
                     except Exception:
                         # Inferred tokenizer load failed, move to tier 3
-                        print(f"⚠️  Could not load inferred tokenizer for '{model_name}'.")
+                        warn_key = "could_not_load_inferred_tokenizer"
+                        if warn_key not in _WARNINGS_SHOWN:
+                            print(f"⚠️  Could not load inferred tokenizer for '{model_name}'.")
+                            _WARNINGS_SHOWN.add(warn_key)
                         encode = None
             
             elif provider == "unknown":
@@ -591,7 +597,12 @@ class ExperimentLogger:
         
         # ====== TIER 3: Fallback to cl100k_base ======
         if encode is None:
-            print(f"⚠️  Falling back to cl100k_base approximation for token metrics.")
+            # Print this fallback warning only once per process run to avoid
+            # spamming the logs when computing metrics repeatedly.
+            warn_key = "fallback_cl100k_base"
+            if warn_key not in _WARNINGS_SHOWN:
+                print(f"⚠️  Falling back to cl100k_base approximation for token metrics.")
+                _WARNINGS_SHOWN.add(warn_key)
             encode = tiktoken.get_encoding("cl100k_base").encode
 
         reasoning_tokens = output_tokens = 0
