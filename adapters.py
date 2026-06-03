@@ -565,6 +565,8 @@ class OllamaAdapter(BaseAdapter):
             tools = normalised if normalised else None
 
         messages = [{"role": "user", "content": prompt}]
+        max_tokens = kwargs.get("max_tokens", config.get("max_tokens", 1024))
+        temperature = kwargs.get("temperature", config.get("temperature", 0.7))
         max_tool_rounds = config.get("max_tool_rounds", 5)
 
         for round_num in range(max_tool_rounds):
@@ -572,6 +574,8 @@ class OllamaAdapter(BaseAdapter):
                 "model": self.model_name,
                 "messages": messages,
                 "stream": False,
+                "max_tokens": max_tokens,
+                "temperature": temperature,
             }
             if tools:
                 payload["tools"] = tools
