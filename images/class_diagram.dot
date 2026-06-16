@@ -17,6 +17,7 @@ HuggingFaceLLM;
 OpenAIAPI [shape=component]
 HuggingFaceAPI [shape=component]
 AnthropicAPI [shape=component]
+OllamaAPI [shape=component]
 }
 
 {
@@ -30,7 +31,7 @@ ToolPool;
 AgentState;
 WorkflowController;
 NodeConfig;
-ToolDefinition
+ToolDefinition;
 }
 
 WorkflowController [label="{
@@ -229,6 +230,24 @@ __init__(model_name: Optional[str], api_key: Optional[str] = None)\l
 generate(prompt: str, **kwargs): str\l
 }"];
 
+// OllamaAdapter adapter
+OllamaAdapter [label="{
+OllamaAdapter|
+model_name: str\l
+api_url: str\l
+timeout: int\l
+supports_tools: bool\l
+max_tokens: int\l
+temperature: float\l
+|
+__init__(model_name: Optional[str] = None, api_url: Optional[str] = None)\l
+generate(prompt: str, **kwargs): str  # accepts max_tokens, temperature, tools\l
+}"];
+
+OllamaAdapter -> BaseAdapter [arrowhead=empty, fontsize=9];
+OllamaAdapter -> OllamaAPI [arrowhead=open, fontsize=9];
+OllamaAdapter -> ConfigExpert [arrowhead=open, fontsize=9];
+
 // AgentState
 AgentState [label="{AgentState|task: str\lplan: str\lresearch_results: Annotated[list, operator.add]\lfinal_report: str\lstep: int\lmax_steps: int\l|}"];
 
@@ -398,6 +417,8 @@ export_mind2web_results(filename: str)\l
 print_summary()\l
 close()\l
 get_supported_protocols(): List[ProtocolType]\l
+
+Mastif -> OllamaAdapter [arrowhead=open, fontsize=9];
 get_supported_frameworks(): List[str]\l
 }"];
 

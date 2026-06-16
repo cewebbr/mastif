@@ -21,6 +21,7 @@ edge [fontname="Helvetica", fontsize=10];
     HuggingFaceAPI;
     OpenAIAPI;
     AnthropicAPI;
+    OllamaAPI;
     Mind2WebDataset;
 }
 
@@ -43,6 +44,13 @@ AnthropicAPI [
     style="filled",
     fillcolor="#e0e0e0",
     label="Anthropic API"
+];
+
+OllamaAPI [
+    shape=component,
+    style="filled",
+    fillcolor="#e0e0e0",
+    label="Ollama\nServer (/api/chat)"
 ];
 
 Mind2WebDataset [
@@ -140,7 +148,7 @@ experiment_logger [
     fontcolor=white,
     fontname="Helvetica-Bold",
     fontsize=13,
-    label="experiment_logger"
+    label="experiment_logger\n(tokenizer fallback, warnings dedup)"
 ];
 
 // ─────────────────────────────────────────────
@@ -200,6 +208,7 @@ tester -> experiment_logger [xlabel="delegates logging"];
 adapters -> HuggingFaceAPI [xlabel="chat_completion()"];
 adapters -> OpenAIAPI      [xlabel="chat.completions.create()"];
 adapters -> AnthropicAPI   [xlabel="messages.create()"];
+adapters -> OllamaAPI     [xlabel="/api/chat"];
 adapters -> config         [xlabel="reads"];
 
 frameworks -> adapters  [xlabel="generate()"];
