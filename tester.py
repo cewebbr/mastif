@@ -1054,15 +1054,16 @@ Please respond according to this protocol structure and complete the task."""
                                     print(f"   Partial log preserved. Resume with the same YAML to continue.")
                                     raise SystemExit(1)
 
-                                result.metadata["tokenizer_id"] = tokenizer_id
-                                self._logger.log_result(result, model_name, protocol.value, framework_name, i)
-                                combination_results.append(result)
-
                                 eval_result = evaluator.evaluate_task(
                                     task,
                                     result.response,
                                     result.reasoning_steps
                                 )
+
+                                result.metadata["tokenizer_id"] = tokenizer_id
+                                result.metadata["mind2web_evaluation"] = eval_result
+                                self._logger.log_result(result, model_name, protocol.value, framework_name, i)
+                                combination_results.append(result)
 
                                 status = "✅️ Completed" if result.success else f"⚠️  Completed with errors"
                                 print(f"    {status}")
