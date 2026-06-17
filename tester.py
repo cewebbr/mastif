@@ -958,14 +958,14 @@ Please respond according to this protocol structure and complete the task."""
             print(f"  - {domain}: {count} tasks")
         
         # Initialize evaluator
-            if(model_name.startswith("gpt-")):
-                adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
-            elif(model_name.startswith("claude-")):
-                adapter = AnthropicAdapter(model_name, api_key=os.getenv("ANTHROPIC_API_KEY"))
-            elif(":" in model_name):
-                adapter = OllamaAdapter(model_name)
-            else:                
-                adapter = HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))
+        if(judge_model.startswith("gpt-")):
+            judge_adapter = OpenAIAdapter(judge_model, api_key=os.getenv("OPENAI_API_KEY"))
+        elif(judge_model.startswith("claude-")):
+            judge_adapter = AnthropicAdapter(judge_model, api_key=os.getenv("ANTHROPIC_API_KEY"))
+        elif(":" in judge_model):
+            judge_adapter = OllamaAdapter(judge_model)
+        else:                
+            judge_adapter = HuggingFaceAdapter(judge_model, api_key=os.getenv("HF_TOKEN"))
 
         evaluator = Mind2WebEvaluator(judge_adapter=judge_adapter)
 
@@ -998,7 +998,9 @@ Please respond according to this protocol structure and complete the task."""
                 adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
             elif(model_name.startswith("claude-")):
                 adapter = AnthropicAdapter(model_name, api_key=os.getenv("ANTHROPIC_API_KEY"))
-            else:
+            elif(":" in model_name):
+                adapter = OllamaAdapter(model_name)
+            else:                
                 adapter = HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))
 
             # ===== Protocol x Framework Combinations =====
