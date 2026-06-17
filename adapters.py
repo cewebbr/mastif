@@ -540,7 +540,7 @@ class OllamaAdapter(BaseAdapter):
     def __init__(self, model_name: Optional[str] = None, api_url: Optional[str] = None):
         config = ConfigExpert.get_instance()
         self._model_name = model_name
-        self._api_url = api_url or os.getenv("OLLAMA_URL", "http://127.0.0.1:11434") # TODO: Add an error message in case the server/tunnel/ollama is not reachable.
+        self._api_url = api_url or os.getenv("OLLAMA_URL", "http://127.0.0.1:11434")
         self.timeout = config.get("timeout", 30)
 
     @property
@@ -590,6 +590,16 @@ class OllamaAdapter(BaseAdapter):
                 resp.raise_for_status()
                 data = resp.json()
                 message = data.get("message", {})
+            except requests.ConnectionError:
+                return (
+                    f"Ollama server is not reachable at {self._api_url}. "
+                    f"Check whether the Ollama service or tunnel is running."
+                )
+            except requests.Timeout:
+                return (
+                    f"Ollama request timed out after {self.timeout} seconds. "
+                    f"Check whether the Ollama server or tunnel is reachable."
+                )
             except requests.RequestException as exc:
                 return f"Ollama request failed: {exc}"
 
