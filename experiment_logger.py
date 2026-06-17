@@ -61,6 +61,7 @@ def _result_to_dict(r: TestResult, task_index: int = -1) -> dict:
         "error":                 r.error,
         "metadata":              r.metadata,
         "tool_log":              (r.metadata or {}).get("tool_log", {}),
+        "mind2web_evaluation":    (r.metadata or {}).get("mind2web_evaluation"),
         "reasoning_tokens":      reasoning_tokens,
         "output_tokens":         output_tokens,
         "total_tokens":          reasoning_tokens + output_tokens,
