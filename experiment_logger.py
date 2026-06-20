@@ -29,6 +29,10 @@ LOGS_DIR = Path("logs")
 # Keep track of one-time warnings (so they aren't spammed repeatedly)
 _WARNINGS_SHOWN = set()
 
+RETRYABLE_RESPONSE_PATTERNS = [
+    "ollama server is not reachable at",
+]
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -124,8 +128,8 @@ class ExperimentLogger:
         Rebuilds the completed set and results list so the test loops can skip
         already-finished combinations.
 
-        Entries whose result carried an error are intentionally excluded from
-        _completed so they are retried on the next run.
+        Entries whose result carried an error or a retryable Ollama reachability
+        response are intentionally excluded so they are retried on the next run.
         """
         self._started_at = partial.get("started_at", self._started_at)
         self._partial_path = LOGS_DIR / f"partial-{self._yaml_stem}-{partial.get('timestamp_key', 'resumed')}.json"
@@ -133,7 +137,12 @@ class ExperimentLogger:
         # Build a quick lookup of results by (model, protocol, framework, task_index)
         # so we can check whether a completed entry produced an error.
         results_by_key = {}
+        retained_results = []
         for r in partial.get("results", []):
+            response = str(r.get("response", "")).lower()
+            if any(pattern in response for pattern in RETRYABLE_RESPONSE_PATTERNS):
+                continue
+            retained_results.append(r)
             key = _completed_key(
                 r.get("model_name", ""), r.get("protocol", ""),
                 r.get("framework", ""), r.get("task_index", -1)
@@ -152,7 +161,7 @@ class ExperimentLogger:
             self._completed.add(key)
 
         # Restore TestResult objects as plain dicts — sufficient for export/summary
-        self._results = partial.get("results", [])
+        self._results = retained_results
 
     def is_completed(self, model: str, protocol: str, framework: str, task_index: int) -> bool:
         """Return True if this combination was already completed in a resumed run."""

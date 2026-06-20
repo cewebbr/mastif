@@ -122,6 +122,7 @@ class Mastif:
         "browser error:",
         "api error:",
         "http get error:",
+        "ollama server is not reachable at",
         "tool '",  # tool execution errors
     ]
 
@@ -256,12 +257,20 @@ Please respond according to this protocol structure and complete the task."""
                 ))
             
             latency = time.time() - start_time
+            success, error = self._check_response_for_errors(response, protocol_type.value)
             
             reasoning_steps.append(ReasoningStep(
                 step_number=len(reasoning_steps) + 1,
                 thought="Protocol test completed successfully",
                 observation=f"Total latency: {latency:.2f}s"
             ))
+
+            if not success:
+                reasoning_steps.append(ReasoningStep(
+                    step_number=len(reasoning_steps) + 1,
+                    thought="Protocol test completed with errors",
+                    observation=f"Error: {error}"
+                ))
             
             return TestResult(
                 model_name=adapter.model_name,
@@ -271,11 +280,12 @@ Please respond according to this protocol structure and complete the task."""
                 response=response,
                 reasoning_steps=reasoning_steps,
                 latency=latency,
-                success=True,
+                success=success,
                 metadata={
                     "protocol_used": protocol_type.value,
                     **protocol_metrics,
-                }
+                },
+                error=error,
             )
         
         except Exception as e:
