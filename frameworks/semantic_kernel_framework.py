@@ -11,6 +11,7 @@ from semantic_kernel.functions import KernelFunction
 from semantic_kernel.functions.kernel_function_decorator import kernel_function
 from semantic_kernel.connectors.ai.prompt_execution_settings import PromptExecutionSettings
 from huggingface_hub import InferenceClient
+from adapters import HuggingFaceAdapter
 import sys
 sys.path.append('..')
 from domain_model import ReasoningStep
@@ -32,7 +33,7 @@ class SemanticKernelAgent:
         Initialize Semantic Kernel agent
 
         Args:
-            adapter: HuggingFace model adapter
+            adapter: Model adapter (HuggingFaceAdapter, OllamaAdapter, etc.)
         """
         self.adapter = adapter
         self.kernel = sk.Kernel()
@@ -40,11 +41,20 @@ class SemanticKernelAgent:
         self.tools: Dict[str, KernelFunction] = {}
         self.reasoning_steps: List[ReasoningStep] = []
 
-        # Use InferenceClient for remote Hugging Face inference
-        self.inference_client = InferenceClient(
-            model=adapter.model_name,
-            token=adapter.api_key if hasattr(adapter, "api_key") else None
-        )
+
+        # Prefer using the provided adapter for generation. Only construct a
+        # Hugging Face InferenceClient when the adapter is explicitly a
+        # HuggingFaceAdapter; otherwise route generation through
+        # `adapter.generate()` which supports Ollama and other adapters.
+        if isinstance(adapter, HuggingFaceAdapter):
+            self.inference_client = InferenceClient(
+                model=adapter.model_name,
+                token=adapter.api_key if hasattr(adapter, "api_key") else None
+            )
+            self._use_adapter_generate = False
+        else:
+            self.inference_client = None
+            self._use_adapter_generate = True
 
         # Register workflow nodes as semantic functions in the kernel
         self._register_workflow_functions()
@@ -57,6 +67,13 @@ class SemanticKernelAgent:
 
     def _sk_generate(self, prompt: str, **kwargs) -> str:
         """Generate via InferenceClient chat_completion."""
+        # If this agent was constructed with a non-HuggingFace adapter (e.g.
+        # OllamaAdapter), delegate generation to the adapter's `generate`
+        # method which already implements tool loops and compatibility.
+        if self._use_adapter_generate:
+            return self.adapter.generate(prompt, **kwargs)
+
+        # Otherwise use the HuggingFace InferenceClient as before.
         return self.inference_client.chat_completion(
             messages=[{"role": "user", "content": prompt}],
             max_tokens=kwargs.get("max_tokens", 1024)
