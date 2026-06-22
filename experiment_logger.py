@@ -31,6 +31,7 @@ _WARNINGS_SHOWN = set()
 
 RETRYABLE_RESPONSE_PATTERNS = [
     "ollama server is not reachable at",
+    "repo id must use alphanumeric chars",
 ]
 
 

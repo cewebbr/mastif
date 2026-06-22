@@ -123,6 +123,7 @@ class Mastif:
         "api error:",
         "http get error:",
         "ollama server is not reachable at",
+        "repo id must use alphanumeric chars",
         "tool '",  # tool execution errors
     ]
 
