@@ -2,7 +2,7 @@
 Main entry point for the Agentic Stack Testing Framework
 
 Usage:
-    python main.py
+    python main.py [yaml_config_path]
 """
 
 import os
