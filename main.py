@@ -15,6 +15,7 @@ from config import ConfigExpert
 def main():
     """Main execution function with Mind2Web support and graceful Ctrl+C handling."""
     tester = None
+    should_close = True
 
     try:
         if len(sys.argv) > 1:
@@ -76,10 +77,11 @@ def main():
 
         return 0
     except KeyboardInterrupt:
+        should_close = False
         print("\nInterrupted by user (Ctrl+C).", file=sys.stderr)
         return 130
     finally:
-        if tester is not None:
+        if tester is not None and should_close:
             try:
                 tester.close()
             except Exception:
