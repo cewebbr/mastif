@@ -36,6 +36,14 @@ MASTIF framework is designed for researchers, developers, and practitioners who 
 
 ## Installation
 
+### Convert a Result Log to CSV
+
+```bash
+python main.py csv logs/results-[suffix].json
+```
+
+The CSV is written beside the JSON log with the same filename and a `.csv` extension.
+
 ### 1. Create and Activate a Virtual Environment
 
 ```bash

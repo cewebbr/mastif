@@ -15,6 +15,7 @@ Instantiated once per experiment run by Mastif. Handles:
 """
 
 import json
+import csv
 import datetime
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
@@ -317,6 +318,65 @@ class ExperimentLogger:
                 ensure_ascii=False,
             )
         print(f"✅️ Mind2Web results exported to {filename}")
+
+    @staticmethod
+    def export_results_csv(filename: str, csv_filename: Optional[str] = None) -> Path:
+        """Convert a result JSON log to one CSV row per task execution."""
+        input_path = Path(filename)
+        output_path = Path(csv_filename) if csv_filename else input_path.with_suffix(".csv")
+        with open(input_path, encoding="utf-8") as f:
+            payload = json.load(f)
+
+        fieldnames = [
+            "model", "protocol", "framework", "task_id", "website", "domain",
+            "reasoning_steps", "reasoning_tokens", "output_tokens", "total_tokens",
+            "latency", "success", "send_overhead", "receive_overhead",
+            "total_overhead", "message_size_bytes", "tool_calls", "successful_calls",
+            "failed_calls", "per_tool", "task_understanding", "task_adherence",
+            "task_completion", "overall_score",
+        ]
+        rows = payload.get("results") or payload.get("task_results") or []
+
+        def score(value):
+            return value.get("score", "") if isinstance(value, dict) else value
+
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, "w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=";")
+            writer.writeheader()
+            for row in rows:
+                metadata = row.get("metadata") or {}
+                tool_log = row.get("tool_log") or metadata.get("tool_log") or {}
+                evaluation = row.get("mind2web_evaluation") or metadata.get("mind2web_evaluation") or {}
+                writer.writerow({
+                    "model": row.get("model_name", ""),
+                    "protocol": row.get("protocol", ""),
+                    "framework": row.get("framework", ""),
+                    "task_id": evaluation.get("task_id", ""),
+                    "website": evaluation.get("website", ""),
+                    "domain": evaluation.get("domain", ""),
+                    "reasoning_steps": row.get("reasoning_steps_count", ""),
+                    "reasoning_tokens": row.get("reasoning_tokens", ""),
+                    "output_tokens": row.get("output_tokens", ""),
+                    "total_tokens": row.get("total_tokens", ""),
+                    "latency": row.get("latency", ""),
+                    "success": row.get("success", ""),
+                    "send_overhead": metadata.get("send_overhead_ms", row.get("send_overhead", "")),
+                    "receive_overhead": metadata.get("receive_overhead_ms", row.get("receive_overhead", "")),
+                    "total_overhead": metadata.get("total_overhead_ms", row.get("total_overhead", "")),
+                    "message_size_bytes": metadata.get("message_size_bytes", row.get("message_size_bytes", "")),
+                    "tool_calls": tool_log.get("total_calls", ""),
+                    "successful_calls": tool_log.get("successful_calls", ""),
+                    "failed_calls": tool_log.get("failed_calls", ""),
+                    "per_tool": json.dumps(tool_log.get("per_tool") or {}, ensure_ascii=False, sort_keys=True),
+                    "task_understanding": score(evaluation.get("task_understanding", "")),
+                    "task_adherence": score(evaluation.get("task_adherence", "")),
+                    "task_completion": score(evaluation.get("task_completion", "")),
+                    "overall_score": score(evaluation.get("overall_score", "")),
+                })
+
+        print(f"✅️ CSV results exported to {output_path}")
+        return output_path
 
     # ------------------------------------------------------------------
     # CLI summary
