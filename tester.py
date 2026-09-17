@@ -873,6 +873,8 @@ Please respond according to this protocol structure and complete the task."""
                             print(f"      {status} Latency: {result.latency:.2f}s, Steps: {len(result.reasoning_steps)}{error_msg}")
                         except SystemExit:
                             raise  # propagate halt immediately
+                        except JudgeUnavailableError:
+                            raise
                         except Exception as e:
                             print(f"      ❌ Error: {str(e)}")
                             print("      Exception type:", type(e).__name__)
@@ -908,7 +910,7 @@ Please respond according to this protocol structure and complete the task."""
             if any(pattern in message.lower() for pattern in judge_failure_patterns):
                 print(f"\n🛑 Judge unavailable: {message}")
                 print("   Partial log preserved. Resume with the same YAML when the judge is available.")
-                raise SystemExit(1)
+                raise JudgeUnavailableError(message)
     
     def run_mind2web_evaluation(
         self,
@@ -935,7 +937,7 @@ Please respond according to this protocol structure and complete the task."""
         # Extract experiment configuration
         raw_models = config.get("models")
         models = [self._parse_model_entry(m) for m in raw_models]  # List[(model_id, tokenizer)]
-        judge_model = config.get("mind2web_judge_model", "gpt-4")
+        judge_model = config.get("mind2web_judge_model") or config.get("judge_model", "gpt-4o-mini")
         protocols = [ProtocolType[p] for p in config.get("protocols")]
         framework_names = config.get("frameworks")
         raw_tools = config.get('tools', self.standard_tools)
@@ -1090,7 +1092,7 @@ Please respond according to this protocol structure and complete the task."""
                                 except JudgeUnavailableError as e:
                                     print(f"\n🛑 Judge unavailable: {e}")
                                     print("   Partial log preserved. Resume with the same YAML when the judge is available.")
-                                    raise SystemExit(1) from e
+                                    raise
 
                                 result.metadata["tokenizer_id"] = tokenizer_id
                                 result.metadata["mind2web_evaluation"] = eval_result
@@ -1121,6 +1123,8 @@ Please respond according to this protocol structure and complete the task."""
                                 print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
                         except SystemExit:
                             raise  # propagate halt immediately
+                        except JudgeUnavailableError:
+                            raise
                         except Exception as e:
                             print(f"      ❌ Error: {str(e)}")
                             print("      Exception type:", type(e).__name__)

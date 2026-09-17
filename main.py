@@ -10,8 +10,10 @@ import sys
 import datetime
 
 from tester import Mastif
+from mind2web_evaluator import JudgeUnavailableError
 from config import ConfigExpert
 from experiment_logger import ExperimentLogger
+from preflight import PreflightChecker, PreflightError
 
 def main():
     """Main execution function with Mind2Web support and graceful Ctrl+C handling."""
@@ -31,24 +33,7 @@ def main():
         config = ConfigExpert.get_instance(config_path)
         mode = config.get("test_mode", "standard")
 
-        hf_token = os.getenv("HF_TOKEN")
-        if not hf_token:
-            print("ERROR: HF_TOKEN environment variable not set.")
-            print("Please set it with: export HF_TOKEN='your_token_here'")
-            return 1
-
-        if mode == "mind2web":
-            open_ai_key = os.getenv("OPENAI_API_KEY")
-            anthropic_key = os.getenv("ANTHROPIC_API_KEY")
-            judge_model = config.get("judge_model")
-            if not open_ai_key and judge_model.startswith("gpt-"):
-                print("ERROR: OPENAI_API_KEY environment variable not set.")
-                print("Please set it with: export OPENAI_API_KEY='your_key_here'")
-                return 1
-            if not anthropic_key and judge_model.startswith("claude-"):
-                print("ERROR: ANTHROPIC_API_KEY environment variable not set.")
-                print("Please set it with: export ANTHROPIC_API_KEY='your_key_here'")
-                return 1
+        PreflightChecker(config).run()
 
         tester = Mastif(config_path)
 
@@ -85,6 +70,12 @@ def main():
         should_close = False
         print("\nInterrupted by user (Ctrl+C).", file=sys.stderr)
         return 130
+    except JudgeUnavailableError:
+        should_close = False
+        return 1
+    except PreflightError as error:
+        print(f"❌ Preflight failed: {error}", file=sys.stderr)
+        return 1
     finally:
         if tester is not None and should_close:
             try:
