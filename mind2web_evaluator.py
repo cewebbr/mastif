@@ -10,6 +10,11 @@ import os
 import json
 from config import ConfigExpert
 
+
+class JudgeUnavailableError(RuntimeError):
+    """Raised when the judge cannot provide a usable evaluation response."""
+
+
 class Mind2WebEvaluator:
     """
     Evaluator for Mind2Web benchmark tasks
@@ -80,6 +85,8 @@ class Mind2WebEvaluator:
                 "reasoning_steps_count": len(reasoning_steps),
             }
             
+        except JudgeUnavailableError:
+            raise
         except Exception as e:
             print(f"    Warning: Judge evaluation failed: {e}")
             result = {
@@ -172,17 +179,14 @@ Do not include any extra text, markdown, or explanation outside the JSON object.
             response = self.judge_adapter.generate(prompt, max_tokens=350, temperature=0.0)
             parsed = self._parse_json_object(response)
             return self._normalize_evaluation_results(parsed, response)
+        except JudgeUnavailableError:
+            raise
         except Exception as e:
-            print(f"      Warning: Task evaluation failed: {e}")
-            return self._default_evaluation_results(
-                "Judge evaluation failed."
-            )
+            raise JudgeUnavailableError(f"Judge request failed: {e}") from e
 
     def _normalize_evaluation_results(self, parsed: Optional[dict], raw_response: str) -> Dict:
         if not isinstance(parsed, dict):
-            return self._default_evaluation_results(
-                "Could not parse judge JSON response."
-            )
+            raise JudgeUnavailableError("Could not parse judge JSON response.")
 
         evaluation = {}
         for key in ["task_understanding", "task_adherence", "task_completion"]:

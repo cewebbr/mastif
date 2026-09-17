@@ -27,7 +27,7 @@ from frameworks import (
 )
 
 from mind2web_loader import Mind2WebLoader
-from mind2web_evaluator import Mind2WebEvaluator
+from mind2web_evaluator import JudgeUnavailableError, Mind2WebEvaluator
 from config import ConfigExpert
 from tool_pool import ToolPool
 from experiment_logger import ExperimentLogger
@@ -853,6 +853,8 @@ Please respond according to this protocol structure and complete the task."""
                         try:
                             result = test_fn(*args, **kwargs)
 
+                            self._raise_if_judge_unavailable(result)
+
                             # Payment/quota hard stop — abort before logging so
                             # this combination is retried on the next resume.
                             if self._is_payment_error(result.response or "") or \
@@ -893,6 +895,20 @@ Please respond according to this protocol structure and complete the task."""
             print(f"\n{'='*70}")
             print(f"Model {model_name} Complete")
             print(f"{'='*70}")
+
+    @staticmethod
+    def _raise_if_judge_unavailable(result: TestResult):
+        """Halt a run when a result reports that its judge is unavailable."""
+        judge_messages = (result.response or "", result.error or "")
+        judge_failure_patterns = (
+            "could not parse judge json response",
+            "judge request failed",
+        )
+        for message in judge_messages:
+            if any(pattern in message.lower() for pattern in judge_failure_patterns):
+                print(f"\n🛑 Judge unavailable: {message}")
+                print("   Partial log preserved. Resume with the same YAML when the judge is available.")
+                raise SystemExit(1)
     
     def run_mind2web_evaluation(
         self,
@@ -1065,11 +1081,16 @@ Please respond according to this protocol structure and complete the task."""
                                     print(f"   Partial log preserved. Resume with the same YAML to continue.")
                                     raise SystemExit(1)
 
-                                eval_result = evaluator.evaluate_task(
-                                    task,
-                                    result.response,
-                                    result.reasoning_steps
-                                )
+                                try:
+                                    eval_result = evaluator.evaluate_task(
+                                        task,
+                                        result.response,
+                                        result.reasoning_steps
+                                    )
+                                except JudgeUnavailableError as e:
+                                    print(f"\n🛑 Judge unavailable: {e}")
+                                    print("   Partial log preserved. Resume with the same YAML when the judge is available.")
+                                    raise SystemExit(1) from e
 
                                 result.metadata["tokenizer_id"] = tokenizer_id
                                 result.metadata["mind2web_evaluation"] = eval_result
