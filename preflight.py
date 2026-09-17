@@ -42,7 +42,7 @@ class PreflightChecker:
             raise PreflightError(
                 f"Model '{model_name}' is unavailable: {self._clean(response)}"
             )
-        print(f"  ✅️ Model available: {model_name}")
+        print(f"  ✅️ Model configured: {model_name}")
 
     def _check_judge(self, model_name: str):
         adapter = self._create_adapter(model_name)
