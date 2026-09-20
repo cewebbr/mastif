@@ -24,6 +24,9 @@ def main():
         if len(sys.argv) >= 3 and sys.argv[1] in ("csv", "to-csv"):
             ExperimentLogger.export_results_csv(sys.argv[2])
             return 0
+        if len(sys.argv) >= 3 and sys.argv[1] in ("recommend-csv", "recommend-to-csv"):
+            ExperimentLogger.export_recommended_prompt_csv(sys.argv[2])
+            return 0
 
         if len(sys.argv) > 1:
             config_path = sys.argv[1]

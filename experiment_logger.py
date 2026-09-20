@@ -378,6 +378,44 @@ class ExperimentLogger:
         print(f"✅️ CSV results exported to {output_path}")
         return output_path
 
+    @staticmethod
+    def export_recommended_prompt_csv(filename: str, csv_filename: Optional[str] = None) -> Path:
+        """Classify task, reasoning thoughts, and final answers into CSV values."""
+        from prompt_recommender import recommended_values
+
+        input_path = Path(filename)
+        output_path = Path(csv_filename) if csv_filename else input_path.with_suffix(".csv")
+        with open(input_path, encoding="utf-8") as f:
+            rows = json.load(f).get("results", [])
+
+        fieldnames = [
+            "model", "protocol", "framework", "high_level_task",
+            *(f"reasoning_step_{index}" for index in range(1, 19)),
+            "final_answer",
+        ]
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, "w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=";")
+            writer.writeheader()
+            for row in rows:
+                evaluation = (row.get("metadata") or {}).get("mind2web_evaluation") or {}
+                reasoning_steps = row.get("reasoning_steps", [])
+                step_values = {
+                    f"reasoning_step_{index}": recommended_values(step.get("thought", ""))
+                    if step.get("thought") else ""
+                    for index, step in enumerate(reasoning_steps[:18], start=1)
+                }
+                writer.writerow({
+                    "model": row.get("model_name", ""),
+                    "protocol": row.get("protocol", ""),
+                    "framework": row.get("framework", ""),
+                    "high_level_task": recommended_values(evaluation.get("high_level_task", "")),
+                    **step_values,
+                    "final_answer": recommended_values(row.get("response", "")),
+                })
+        print(f"✅️ Recommended-prompt CSV exported to {output_path}")
+        return output_path
+
     # ------------------------------------------------------------------
     # CLI summary
     # ------------------------------------------------------------------
