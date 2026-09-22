@@ -23,6 +23,7 @@ edge [fontname="Helvetica", fontsize=10];
     AnthropicAPI;
     OllamaAPI;
     Mind2WebDataset;
+    PromptValuesRepository;
 }
 
 HuggingFaceAPI [
@@ -60,6 +61,13 @@ Mind2WebDataset [
     label="Mind2Web\nDataset (HF)"
 ];
 
+PromptValuesRepository [
+    shape=component,
+    style="filled",
+    fillcolor="#e0e0e0",
+    label="Responsible Prompting\nValues (GitHub)"
+];
+
 // ─────────────────────────────────────────────
 // Rank: Orchestrator (top)
 // ─────────────────────────────────────────────
@@ -89,6 +97,9 @@ tester [
     tool_pool;
     workflow;
     experiment_logger;
+    preflight;
+    evaluator;
+    prompt_recommender;
 }
 
 config [
@@ -151,6 +162,36 @@ experiment_logger [
     label="experiment_logger"
 ];
 
+preflight [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#d97941",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="preflight"
+];
+
+evaluator [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#cc5a5a",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="mind2web_evaluator"
+];
+
+prompt_recommender [
+    shape=box,
+    style="filled,rounded",
+    fillcolor="#6d83b5",
+    fontcolor=white,
+    fontname="Helvetica-Bold",
+    fontsize=13,
+    label="prompt_recommender"
+];
+
 // ─────────────────────────────────────────────
 // Rank: Execution layer (third row)
 // ─────────────────────────────────────────────
@@ -204,12 +245,22 @@ tester -> domain_model      [xlabel="produces"];
 tester -> config            [xlabel="reads"];
 tester -> workflow          [xlabel="uses"];
 tester -> experiment_logger [xlabel="delegates logging"];
+tester -> evaluator         [xlabel="evaluates tasks"];
+tester -> preflight         [xlabel="startup checks"];
 
 adapters -> HuggingFaceAPI [xlabel="chat_completion()"];
 adapters -> OpenAIAPI      [xlabel="chat.completions.create()"];
 adapters -> AnthropicAPI   [xlabel="messages.create()"];
 adapters -> OllamaAPI     [xlabel="/api/chat"];
 adapters -> config         [xlabel="reads"];
+
+preflight -> adapters       [xlabel="pings models/judge"];
+preflight -> Mind2WebDataset [xlabel="verifies access"];
+preflight -> config         [xlabel="reads"];
+
+evaluator -> adapters       [xlabel="uses judge"];
+evaluator -> domain_model   [xlabel="scores tasks"];
+evaluator -> tester         [xlabel="JudgeUnavailableError"];
 
 frameworks -> adapters  [xlabel="generate()"];
 frameworks -> tool_pool [xlabel="get_tool()"];
@@ -225,5 +276,9 @@ experiment_logger -> config       [xlabel="reads (yaml_path)"];
 
 benchmark -> Mind2WebDataset [xlabel="load_dataset()"];
 benchmark -> adapters        [xlabel="judge"];
+
+prompt_recommender -> HuggingFaceAPI [xlabel="SentenceTransformer"];
+prompt_recommender -> PromptValuesRepository [xlabel="loads value definitions"];
+experiment_logger -> prompt_recommender [xlabel="recommend-csv"];
 
 }
