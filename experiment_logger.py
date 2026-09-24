@@ -401,8 +401,10 @@ class ExperimentLogger:
                 evaluation = (row.get("metadata") or {}).get("mind2web_evaluation") or {}
                 reasoning_steps = row.get("reasoning_steps", [])
                 step_values = {
-                    f"reasoning_step_{index}": recommended_values(step.get("thought", ""))
-                    if step.get("thought") else ""
+                    f"reasoning_step_{index}": recommended_values(
+                        step.get("observation") or step.get("action_input") or ""
+                    )
+                    if step.get("observation") or step.get("action_input") else ""
                     for index, step in enumerate(reasoning_steps[:18], start=1)
                 }
                 writer.writerow({
