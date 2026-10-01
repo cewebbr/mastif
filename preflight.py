@@ -47,29 +47,46 @@ class PreflightChecker:
     def _check_judge(self, model_name: str):
         adapter = self._create_adapter(model_name)
         prompt = (
-            'Return only valid JSON with this exact shape: '
-            '{"task_understanding":{"score":1},'
-            '"task_adherence":{"score":1},'
+            'Return only this exact compact JSON, with no other text: '
+            '{"task_understanding":{"score":1},"task_adherence":{"score":1},'
             '"task_completion":{"score":1}}'
         )
-        response = self._generate(adapter, prompt)
+        response = self._generate(adapter, prompt, max_tokens=256)
         if self._looks_like_error(response):
             raise PreflightError(
                 f"Judge '{model_name}' is unavailable: {self._clean(response)}"
             )
-        try:
-            parsed = json.loads(response)
-        except json.JSONDecodeError as error:
+        parsed = self._parse_json_object(response)
+        if parsed is None:
             raise PreflightError(
-                f"Judge '{model_name}' returned invalid JSON: {error}"
-            ) from error
+                f"Judge '{model_name}' returned invalid JSON: {self._clean(response)}"
+            )
         required = {"task_understanding", "task_adherence", "task_completion"}
-        if not required.issubset(parsed):
+        if not required.issubset(parsed.keys()):
             missing = ", ".join(sorted(required - set(parsed)))
             raise PreflightError(
                 f"Judge '{model_name}' returned JSON missing: {missing}"
             )
         print(f"  ✅️ Judge available: {model_name}")
+
+    @staticmethod
+    def _parse_json_object(response: str):
+        """Parse a JSON object, accepting fenced or surrounded judge output."""
+        cleaned = response.strip()
+        cleaned = cleaned.removeprefix("```json").removeprefix("```").strip()
+        cleaned = cleaned.removesuffix("```").strip()
+        try:
+            parsed = json.loads(cleaned)
+            return parsed if isinstance(parsed, dict) else None
+        except json.JSONDecodeError:
+            start, end = cleaned.find("{"), cleaned.rfind("}")
+            if start < 0 or end <= start:
+                return None
+            try:
+                parsed = json.loads(cleaned[start:end + 1])
+                return parsed if isinstance(parsed, dict) else None
+            except json.JSONDecodeError:
+                return None
 
     def _check_dataset(self):
         token = os.getenv("HF_TOKEN")
@@ -105,9 +122,9 @@ class PreflightChecker:
         self._require("HF_TOKEN", model_name)
         return HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))
 
-    def _generate(self, adapter, prompt: str) -> str:
+    def _generate(self, adapter, prompt: str, max_tokens: int = 32) -> str:
         try:
-            return adapter.generate(prompt, max_tokens=32, temperature=0.0)
+            return adapter.generate(prompt, max_tokens=max_tokens, temperature=0.0)
         except Exception as error:
             raise PreflightError(
                 f"{adapter.model_name} request failed: {error}"
