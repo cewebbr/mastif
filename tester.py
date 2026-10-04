@@ -835,7 +835,8 @@ Please respond according to this protocol structure and complete the task."""
                     
                     for i, task in enumerate(test_tasks):
                         progress.set_postfix_str(
-                            f"{model_name} | {protocol.value} | {framework_name} | task {i + 1}/{len(test_tasks)}",
+                            # f"{model_name} | {protocol.value} | {framework_name} | task {i + 1}/{len(test_tasks)}",
+                            f"task {i + 1}/{len(test_tasks)}",
                             refresh=False,
                         )
                         print(f"    Task {i+1}/{len(test_tasks)}: {task[:100]}...")
