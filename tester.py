@@ -1067,7 +1067,8 @@ Please respond according to this protocol structure and complete the task."""
 
                     for i, task in enumerate(tasks):
                         progress.set_postfix_str(
-                            f"{model_name} | {protocol.value} | {framework_name} | task {i + 1}/{len(tasks)}",
+                            # f"{model_name} | {protocol.value} | {framework_name} | task {i + 1}/{len(tasks)}",
+                            f"task {i + 1}/{len(tasks)}",
                             refresh=False,
                         )
                         print(f"\n  Task {i+1}/{len(tasks)}: {task['website']} ({task['domain']})")
