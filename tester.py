@@ -13,6 +13,7 @@ import threading
 import traceback
 from pathlib import Path
 from typing import List, Dict, Optional
+from tqdm import tqdm
 
 from domain_model import TestResult, ProtocolType, ReasoningStep
 from adapters import HuggingFaceAdapter, OpenAIAdapter, BaseAdapter, AnthropicAdapter, OllamaAdapter
@@ -803,6 +804,7 @@ Please respond according to this protocol structure and complete the task."""
                 return False        
             print("\n✅️ Starting test execution...\n")
 
+        progress = tqdm(total=total, desc="Evaluation", unit="run", dynamic_ncols=True)
         for model_name, tokenizer_id in models:
             print(f"\n{'='*70}")
             print(f"Testing Model: {model_name}")
@@ -832,11 +834,16 @@ Please respond according to this protocol structure and complete the task."""
                     combination_results = []
                     
                     for i, task in enumerate(test_tasks):
+                        progress.set_postfix_str(
+                            f"{model_name} | {protocol.value} | {framework_name} | task {i + 1}/{len(test_tasks)}",
+                            refresh=False,
+                        )
                         print(f"    Task {i+1}/{len(test_tasks)}: {task[:100]}...")
 
                         # Skip if already completed in a resumed run
                         if self._logger.is_completed(model_name, protocol.value, framework_name, i):
                             print(f"      ⏭️  Skipped (already completed)")
+                            progress.update(1)
                             continue
                         
                         # Build arguments for test function
@@ -867,13 +874,19 @@ Please respond according to this protocol structure and complete the task."""
                             combination_results.append(result)
                             result.metadata["tokenizer_id"] = tokenizer_id
                             self._logger.log_result(result, model_name, protocol.value, framework_name, i)
+                            progress.update(1)
                             
                             status = "✅️" if result.success else "❌"
                             error_msg = f" — {result.error}" if not result.success and result.error else ""
                             print(f"      {status} Latency: {result.latency:.2f}s, Steps: {len(result.reasoning_steps)}{error_msg}")
                         except SystemExit:
+                            progress.close()
                             raise  # propagate halt immediately
                         except JudgeUnavailableError:
+                            progress.close()
+                            raise
+                        except KeyboardInterrupt:
+                            progress.close()
                             raise
                         except Exception as e:
                             print(f"      ❌ Error: {str(e)}")
@@ -882,6 +895,7 @@ Please respond according to this protocol structure and complete the task."""
                             for line in traceback.format_exception(type(e), e, e.__traceback__):
                                 for subline in line.rstrip().splitlines():
                                     print(f"        {subline}")
+                            progress.update(1)
                     
                     # Summary for this protocol-framework combination
                     if combination_results:
@@ -897,6 +911,8 @@ Please respond according to this protocol structure and complete the task."""
             print(f"\n{'='*70}")
             print(f"Model {model_name} Complete")
             print(f"{'='*70}")
+
+        progress.close()
 
     @staticmethod
     def _raise_if_judge_unavailable(result: TestResult):
@@ -1017,6 +1033,7 @@ Please respond according to this protocol structure and complete the task."""
                 return False        
             print("\n✅️ Starting test execution...\n")
 
+        progress = tqdm(total=total, desc="Mind2Web evaluation", unit="run", dynamic_ncols=True)
         # Run tests for each model
         for model_name, tokenizer_id in models:
             print(f"\n{'='*70}")
@@ -1049,12 +1066,17 @@ Please respond according to this protocol structure and complete the task."""
                     combination_results = []
 
                     for i, task in enumerate(tasks):
+                        progress.set_postfix_str(
+                            f"{model_name} | {protocol.value} | {framework_name} | task {i + 1}/{len(tasks)}",
+                            refresh=False,
+                        )
                         print(f"\n  Task {i+1}/{len(tasks)}: {task['website']} ({task['domain']})")
                         print(f"  Goal: {task['confirmed_task']}")
 
                         # Skip if already completed in a resumed run
                         if self._logger.is_completed(model_name, protocol.value, framework_name, i):
                             print(f"    ⏭️  Skipped (already completed)")
+                            progress.update(1)
                             continue
 
                         # Construct task context for Workflow (this string maps to {task} in plan-mind2web.txt)
@@ -1092,11 +1114,13 @@ Please respond according to this protocol structure and complete the task."""
                                 except JudgeUnavailableError as e:
                                     print(f"\n🛑 Judge unavailable: {e}")
                                     print("   Partial log preserved. Resume with the same YAML when the judge is available.")
+                                    progress.close()
                                     raise
 
                                 result.metadata["tokenizer_id"] = tokenizer_id
                                 result.metadata["mind2web_evaluation"] = eval_result
                                 self._logger.log_result(result, model_name, protocol.value, framework_name, i)
+                                progress.update(1)
                                 combination_results.append(result)
 
                                 status = "✅️ Completed" if result.success else f"⚠️  Completed with errors"
@@ -1122,8 +1146,13 @@ Please respond according to this protocol structure and complete the task."""
                                 print(f"      Overall Score: {eval_result['overall_score']:.2%}")
                                 print(f"      Reasoning Steps: {eval_result['reasoning_steps_count']}")
                         except SystemExit:
+                            progress.close()
                             raise  # propagate halt immediately
                         except JudgeUnavailableError:
+                            progress.close()
+                            raise
+                        except KeyboardInterrupt:
+                            progress.close()
                             raise
                         except Exception as e:
                             print(f"      ❌ Error: {str(e)}")
@@ -1132,6 +1161,7 @@ Please respond according to this protocol structure and complete the task."""
                             for line in traceback.format_exception(type(e), e, e.__traceback__):
                                 for subline in line.rstrip().splitlines():
                                     print(f"        {subline}")
+                            progress.update(1)
                             
 
                     if combination_results:
@@ -1143,6 +1173,8 @@ Please respond according to this protocol structure and complete the task."""
                         print(f"    Success: {len(successes)}/{len(combination_results)} ({len(successes)/len(combination_results)*100:.1f}%)")
                         print(f"    Avg Latency: {avg_latency:.2f}s")
                         print(f"    Avg Reasoning Steps: {avg_reasoning_steps:.1f}")
+
+            progress.close()
 
         # Print aggregate metrics
         print("\n" + "="*70)
