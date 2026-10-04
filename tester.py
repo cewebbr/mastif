@@ -1174,7 +1174,7 @@ Please respond according to this protocol structure and complete the task."""
                         print(f"    Avg Latency: {avg_latency:.2f}s")
                         print(f"    Avg Reasoning Steps: {avg_reasoning_steps:.1f}")
 
-            progress.close()
+        progress.close()
 
         # Print aggregate metrics
         print("\n" + "="*70)
