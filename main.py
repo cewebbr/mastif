@@ -9,7 +9,7 @@ import os
 import sys
 import datetime
 
-from tester import Mastif
+from tester import Mastif, PaymentQuotaError
 from mind2web_evaluator import JudgeUnavailableError
 from config import ConfigExpert
 from experiment_logger import ExperimentLogger
@@ -74,6 +74,9 @@ def main():
         print("\nInterrupted by user (Ctrl+C).", file=sys.stderr)
         return 130
     except JudgeUnavailableError:
+        should_close = False
+        return 1
+    except PaymentQuotaError:
         should_close = False
         return 1
     except PreflightError as error:

@@ -33,6 +33,11 @@ from config import ConfigExpert
 from tool_pool import ToolPool
 from experiment_logger import ExperimentLogger
 
+
+class PaymentQuotaError(RuntimeError):
+    """Raised to stop an experiment while preserving its partial log."""
+
+
 class Mastif:
     """
     Main testing framework for comprehensive agentic technology evaluation
@@ -870,7 +875,7 @@ Please respond according to this protocol structure and complete the task."""
                                 print(f"\n💳 Payment/quota error detected ({adapter.model_name}) — halting experiment.")
                                 print(f"   Response/Error: {result.response or result.error}")
                                 print(f"   Partial log preserved. Resume with the same YAML to continue.")
-                                raise SystemExit(1)
+                                raise PaymentQuotaError("Payment/quota error halted the experiment.")
 
                             combination_results.append(result)
                             result.metadata["tokenizer_id"] = tokenizer_id
@@ -883,6 +888,9 @@ Please respond according to this protocol structure and complete the task."""
                         except SystemExit:
                             progress.close()
                             raise  # propagate halt immediately
+                        except PaymentQuotaError:
+                            progress.close()
+                            raise
                         except JudgeUnavailableError:
                             progress.close()
                             raise
@@ -1105,7 +1113,7 @@ Please respond according to this protocol structure and complete the task."""
                                     print(f"\n💳 Payment/quota error detected ({adapter.model_name}) — halting experiment.")
                                     print(f"   Response/Error: {result.response or result.error}")
                                     print(f"   Partial log preserved. Resume with the same YAML to continue.")
-                                    raise SystemExit(1)
+                                    raise PaymentQuotaError("Payment/quota error halted the experiment.")
 
                                 try:
                                     eval_result = evaluator.evaluate_task(
@@ -1150,6 +1158,9 @@ Please respond according to this protocol structure and complete the task."""
                         except SystemExit:
                             progress.close()
                             raise  # propagate halt immediately
+                        except PaymentQuotaError:
+                            progress.close()
+                            raise
                         except JudgeUnavailableError:
                             progress.close()
                             raise
