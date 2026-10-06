@@ -25,6 +25,7 @@ class PreflightChecker:
         for model_entry in models:
             model_name = self._model_name(model_entry)
             self._check_model(model_name)
+            self._check_tokenizer(model_name, self._tokenizer_id(model_entry))
 
         if mode == "mind2web":
             self._check_dataset()
@@ -34,6 +35,74 @@ class PreflightChecker:
             self._check_judge(judge_model)
 
         print("✅️ Preflight checks passed.\n")
+
+    def _check_tokenizer(self, model_name: str, tokenizer_id: str = None):
+        """Validate the configured or inferred tokenizer used for token metrics."""
+        provider = self._tokenizer_provider(model_name)
+        if tokenizer_id:
+            self._load_huggingface_tokenizer(tokenizer_id)
+            print(f"  ✅️ Tokenizer available: {tokenizer_id} (configured)")
+            return
+
+        if provider == "openai":
+            import tiktoken
+
+            try:
+                tiktoken.encoding_for_model(model_name)
+            except KeyError:
+                tiktoken.get_encoding("cl100k_base")
+                print(f"  ⚠️ Tokenizer for '{model_name}' is unknown; using cl100k_base approximation.")
+                return
+            print(f"  ✅️ Tokenizer available for model: {model_name}")
+            return
+
+        if provider in {"anthropic", "ollama"}:
+            import tiktoken
+
+            tiktoken.get_encoding("cl100k_base")
+            print(f"  ✅️ Tokenizer available: cl100k_base approximation ({provider})")
+            return
+
+        try:
+            self._load_huggingface_tokenizer(model_name)
+            print(f"  ✅️ Tokenizer available: {model_name}")
+        except PreflightError:
+            # The result exporter already falls back to cl100k_base if an
+            # inferred Hugging Face tokenizer cannot be loaded.
+            import tiktoken
+
+            tiktoken.get_encoding("cl100k_base")
+            print(f"  ⚠️ Hugging Face tokenizer unavailable for '{model_name}'; token metrics will use cl100k_base approximation.")
+
+    @staticmethod
+    def _load_huggingface_tokenizer(tokenizer_id: str):
+        from transformers import AutoTokenizer
+
+        last_error = None
+        for options in ({}, {"use_fast": False}):
+            try:
+                tokenizer = AutoTokenizer.from_pretrained(tokenizer_id, **options)
+                if tokenizer.encode("preflight tokenizer check"):
+                    return
+                last_error = ValueError("tokenizer returned no token IDs")
+            except Exception as error:
+                last_error = error
+        raise PreflightError(
+            f"Tokenizer '{tokenizer_id}' is unavailable: {last_error}"
+        ) from last_error
+
+    @staticmethod
+    def _tokenizer_provider(model_name: str) -> str:
+        lower = model_name.lower()
+        if any(lower.startswith(prefix) for prefix in ("gpt-", "text-", "openai")):
+            return "openai"
+        if lower.startswith("claude-"):
+            return "anthropic"
+        if ":" in model_name and "/" not in model_name:
+            return "ollama"
+        if "/" in model_name:
+            return "huggingface"
+        return "unknown"
 
     def _check_model(self, model_name: str):
         adapter = self._create_adapter(model_name)
@@ -135,6 +204,10 @@ class PreflightChecker:
         if isinstance(entry, dict):
             return entry["id"]
         return str(entry)
+
+    @staticmethod
+    def _tokenizer_id(entry: Any) -> str:
+        return entry.get("tokenizer") if isinstance(entry, dict) else None
 
     @staticmethod
     def _require(variable: str, model_name: str):
