@@ -12,32 +12,15 @@ test_mode: "mind2web"  # Options: "mind2web", "standard"
 
 # Any model ID listed here must be available on HuggingFace, OpenAI, or Antrhropic.
 # IMPORTANT: If tool use is expected in the tasks, make sure to use models that support it (e.g., DeepSeek, GPT-4o, etc.)
-models: 
-  # - id: "gpt-4o"
-  # - id: "meta-llama/Llama-3.3-70B-Instruct"
-  # - id: "meta-llama/Llama-4-Scout-17B-16E-Instruct"
-  # - id: "deepseek-ai/DeepSeek-V3.2"  
-  # - id: "openai/gpt-oss-120b"
-  # - id: "mistralai/Mistral-Large-2407"
-    
+models:     
   # Baseline behavior
-  # - id: "mistral:7b"
-  #   tokenizer: "mistralai/Mistral-7B-Instruct-v0.1"
   - id: "mistralai/Mistral-7B-Instruct-v0.1" # https://arxiv.org/abs/2310.06825
 
   # Tool-use proficiency
-  # - id: "qcwind/qwen2.5-7B-instruct-Q4_K_M:latest" # Ollama id -- Strong tool-use capabilities for effective fan-out research
-  #   tokenizer: "Qwen/Qwen2.5-7B-Instruct"
   - id: "Qwen/Qwen2.5-7B-Instruct" # https://qwen.ai/blog?id=qwen2.5
   
   # Agent-focused more powerful models
   - id: "meta-llama/Llama-4-Scout-17B-16E-Instruct" # https://ai.meta.com/blog/llama-4-multimodal-intelligence/
-  # Reasoning depth	DeepSeek
-  # - id: "deepseek-ai/DeepSeek-V3.2" # https://arxiv.org/abs/2412.19437 MoE
-  # - id: "deepseek-r1:70b"
-  #   tokenizer: "deepseek-ai/DeepSeek-V3.2"
-  # Agentic execution
-  # - id: "moonshotai/Kimi-K2.5" # agentic execution top-tier
 
 # ====== Used only in MIND2WEB test mode ====== 
 # Any model ID listed here must be available on HuggingFace, OpenAI, or Antrhropic.
@@ -51,15 +34,12 @@ protocols:
   - "STANDARD"
   - "MCP"
   - "A2A"
-  # - "ACP"
 
 frameworks:
   # Role-based
   - "CrewAI"
-  # - "Smolagents"
   # Pipeline-based
   - "LangChain"
-  # - "LlamaIndex"
   # Graph-based
   - "LangGraph"
   - "SemanticKernel"
