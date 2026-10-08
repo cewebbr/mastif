@@ -1,0 +1,217 @@
+experiment:
+  name: "TWEB 2026"
+  description: "Test different framework and protocol combinations."
+
+temperature: 0.7 # Model temperature setting
+max_tokens: 1024 # Max tokens per request
+max_steps: 3 # Max research iterations per agent workflow; agent iterations impact cost and time, so adjust based on task complexity and budget
+max_tool_rounds: 3 # Max tool execution rounds per generate(); tool iterations impact cost and time, so adjust based on task complexity and budget
+timeout: 100 # Timeout in seconds for API calls to prevent silent hangs
+requests_soft_limit: 1000 # Requires user confirmation if exceeded
+test_mode: "mind2web"  # Options: "mind2web", "standard"
+
+# Any model ID listed here must be available on HuggingFace, OpenAI, or Antrhropic.
+# IMPORTANT: If tool use is expected in the tasks, make sure to use models that support it (e.g., DeepSeek, GPT-4o, etc.)
+models: 
+  # - id: "gpt-4o"
+  # - id: "meta-llama/Llama-3.3-70B-Instruct"
+  # - id: "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+  # - id: "deepseek-ai/DeepSeek-V3.2"  
+  # - id: "openai/gpt-oss-120b"
+  # - id: "mistralai/Mistral-Large-2407"
+    
+  # Baseline behavior
+  # - id: "mistral:7b"
+  #   tokenizer: "mistralai/Mistral-7B-Instruct-v0.1"
+  - id: "mistralai/Mistral-7B-Instruct-v0.1" # https://arxiv.org/abs/2310.06825
+
+  # Tool-use proficiency
+  # - id: "qcwind/qwen2.5-7B-instruct-Q4_K_M:latest" # Ollama id -- Strong tool-use capabilities for effective fan-out research
+  #   tokenizer: "Qwen/Qwen2.5-7B-Instruct"
+  - id: "Qwen/Qwen2.5-7B-Instruct" # https://qwen.ai/blog?id=qwen2.5
+  
+  # Agent-focused more powerful models
+  - id: "meta-llama/Llama-4-Scout-17B-16E-Instruct" # https://ai.meta.com/blog/llama-4-multimodal-intelligence/
+  # Reasoning depth	DeepSeek
+  # - id: "deepseek-ai/DeepSeek-V3.2" # https://arxiv.org/abs/2412.19437 MoE
+  # - id: "deepseek-r1:70b"
+  #   tokenizer: "deepseek-ai/DeepSeek-V3.2"
+  # Agentic execution
+  # - id: "moonshotai/Kimi-K2.5" # agentic execution top-tier
+
+# ====== Used only in MIND2WEB test mode ====== 
+# Any model ID listed here must be available on HuggingFace, OpenAI, or Antrhropic.
+# Avoid using the same family for both testing and judging to prevent preference leakage.
+# Reference: https://arxiv.org/abs/2502.01534
+# judge_model: "gpt-4o"
+judge_model: "gpt-4o-mini"
+# ============================================= 
+
+protocols:
+  - "STANDARD"
+  - "MCP"
+  - "A2A"
+  # - "ACP"
+
+frameworks:
+  # Role-based
+  - "CrewAI"
+  # - "Smolagents"
+  # Pipeline-based
+  - "LangChain"
+  # - "LlamaIndex"
+  # Graph-based
+  - "LangGraph"
+  - "SemanticKernel"
+
+# ====== Used only in MIND2WEB test mode ====== 
+mind2web_num_tasks: 300 # Set to 2350 to run all tasks from the benchmark
+sampling_seed: 20260504 # Seed for reproducible task sampling from the Mind2Web dataset
+# ============================================= 
+
+# ====== Used only in STANDARD test mode ====== 
+# prompt_template: |
+#   {task}
+
+# tasks:
+#   - Look for dissertations and thesis published in Brazil about open data and open research in which datasets were published with research results.
+#   - Look for technical reports published in Brazil about open data and open research in which datasets were published with research results.
+#   - Look for blog posts published in Brazil about open data and open research in which datasets were published with research results.
+# ============================================= 
+
+tools:
+  # Core & utility tools
+  - name: "web_search"
+    description: >
+      Use this tool when you need to find information that is not already known or may be outdated.
+      This includes current events, recent facts, or unknown topics.
+      Input should be a clear search query.
+      Do NOT use this for simple reasoning or when the answer is already known.
+
+  - name: "web_browser"
+    description: >
+      Use this tool to open and read the content of a specific webpage when you already have a URL.
+      Useful after performing a search.
+      Do NOT use this for searching—use web_search first.
+
+  - name: "requests_get"
+    description: >
+      Use this to retrieve raw content from a specific URL (API, webpage, or endpoint).
+      Prefer this for structured or programmatic access.
+      Do NOT use for general browsing or search.
+
+  - name: "beautifulsoup_scraper"
+    description: >
+      Use this to extract structured information from HTML content of a webpage.
+      Typically used after fetching a page via web_browser or requests_get.
+      Do NOT use if you only need raw text.
+
+  - name: "datetime"
+    description: >
+      Use this when you need the current date or time.
+      Do NOT guess or fabricate current timestamps.
+
+  # Knowledge tools
+  - name: "wikipedia"
+    description: >
+      Use this for general knowledge lookups on well-known topics, people, or concepts.
+      Faster and more reliable than web_search for encyclopedic content.
+      Do NOT use for recent or niche information.
+
+  - name: "arxiv"
+    description: >
+      Use this to find academic papers in technical or scientific domains.
+      Input should be a research topic or keywords.
+      Do NOT use for general knowledge or non-academic queries.
+
+  - name: "pubmed"
+    description: >
+      Use this for biomedical or clinical research queries.
+      Input should be medical terms or research questions.
+      Do NOT use for general health advice or non-scientific queries.
+
+  # Computation & parsing
+  - name: "python_repl"
+    description: >
+      Use this for calculations, data processing, or executing code.
+      Required for precise arithmetic, transformations, or simulations.
+      Do NOT use for simple math that can be done mentally.
+
+  - name: "sympy"
+    description: >
+      Use this for symbolic mathematics such as algebra, equation solving, or simplification.
+      Prefer this over python_repl for symbolic operations.
+
+  - name: "json_parser"
+    description: >
+      Use this to parse, extract, or query structured JSON data.
+      Input should be a JSON string and query instructions.
+      Do NOT use for plain text.
+
+  # Content extraction
+  - name: "pdf_reader"
+    description: >
+      Use this to extract text from PDF files or PDF URLs.
+      Required when the content is not directly readable as text.
+      Do NOT use for HTML pages.
+
+  - name: "youtube_transcript"
+    description: >
+      Use this to retrieve the transcript of a YouTube video.
+      Input should be a video URL.
+      Do NOT use if you only need metadata or summaries.
+
+  # Mind2Web-style tools
+  - name: "web_interaction"
+    description: >
+      Use this to interact with web pages in multi-step tasks.
+      Includes clicking elements, filling forms, navigating pages, and extracting results.
+      Required for tasks involving user workflows on websites.
+      Do NOT use for simple retrieval—use web_search or web_browser instead.
+
+  - name: "keyboard_interaction"
+    description: >
+      Use this for keyboard-based navigation of web interfaces.
+      Includes tabbing between elements, pressing enter, typing text, and triggering shortcuts.
+      Prefer this when interaction must simulate accessibility or non-mouse workflows.
+      Do NOT use for static content extraction.
+
+# -----------------------------------------------------------------------------
+# Workflow
+# Defines the sequence of nodes each agent executes.
+# Each node references a prompt template file under the prompts/ folder.
+#
+# Node fields:
+#   name            : Unique node identifier
+#   prompt_template : Path to the prompt template file (relative to this config)
+#   output_key      : State dict key where the node's output is stored
+#   loop            : If true, the node repeats until step > max_steps
+#
+# entry_node : First node to execute
+# exit_node  : Last node; its output_key value is returned as the final answer
+# -----------------------------------------------------------------------------
+
+workflow:
+  nodes:
+    - name: "navigate"
+      prompt_template: "prompts/mind2web/navigate.txt"
+      output_key: "navigation_status"
+      loop: false
+
+    - name: "observe_and_identify"
+      prompt_template: "prompts/mind2web/observe.txt"
+      output_key: "observation_analysis"
+      loop: true
+
+    - name: "interact"
+      prompt_template: "prompts/mind2web/interact.txt"
+      output_key: "research_results" # Accumulates history in workflow.py
+      loop: true
+
+    - name: "conclude"
+      prompt_template: "prompts/mind2web/conclude.txt"
+      output_key: "final_report"
+      loop: false
+
+  entry_node: "navigate"
+  exit_node: "conclude"
