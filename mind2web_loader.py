@@ -325,7 +325,7 @@ class Mind2WebLoader:
                 return []
 
         config = ConfigExpert.get_instance()
-        random.seed(config.get_instance().get("sampling_seed", seed))
+        rng = random.Random(config.get("sampling_seed", seed))
 
         # Prepare full task list
         all_tasks = list(self.dataset)
@@ -335,7 +335,7 @@ class Mind2WebLoader:
             sampled_tasks = all_tasks
             print(f"Using all {len(all_tasks)} tasks")
         else:
-            # --- Build strata: (domain, trajectory_length_bucket) ---
+            # --- Build strata: domain -> trajectory-length bucket -> tasks ---
             strata = {}
 
             for task in all_tasks:
@@ -351,35 +351,61 @@ class Mind2WebLoader:
                 else:
                     bucket = "long"
 
-                key = (domain, bucket)
+                strata.setdefault(domain, {}).setdefault(bucket, []).append(task)
 
-                if key not in strata:
-                    strata[key] = []
-                strata[key].append(task)
+            target = min(num_tasks, len(all_tasks))
+            domains = list(strata)
+            domain_capacities = {
+                domain: sum(len(group) for group in buckets.values())
+                for domain, buckets in strata.items()
+            }
 
-            # --- Compute sampling per stratum (proportional allocation) ---
-            total_tasks = len(all_tasks)
+            # Reserve one slot for each domain when the requested sample can
+            # represent all of them. Apportion the remaining slots by capacity.
+            domain_minimums = {
+                domain: int(target >= len(domains)) for domain in domains
+            }
+            remaining_capacities = {
+                domain: domain_capacities[domain] - domain_minimums[domain]
+                for domain in domains
+            }
+            extra_domain_slots = target - sum(domain_minimums.values())
+            extra_domain_quotas = self._allocate_proportionally(
+                remaining_capacities, extra_domain_slots
+            )
+            domain_quotas = {
+                domain: domain_minimums[domain] + extra_domain_quotas[domain]
+                for domain in domains
+            }
+
             sampled_tasks = []
+            for domain, buckets in strata.items():
+                bucket_capacities = {
+                    bucket: len(group) for bucket, group in buckets.items()
+                }
+                bucket_quotas = self._allocate_proportionally(
+                    bucket_capacities, domain_quotas[domain]
+                )
+                for bucket, group in buckets.items():
+                    quota = bucket_quotas[bucket]
+                    sampled_tasks.extend(rng.sample(group, quota))
 
-            for key, group in strata.items():
-                proportion = len(group) / total_tasks
-                n_samples = max(1, int(proportion * num_tasks))
+            if len(sampled_tasks) != target:
+                raise RuntimeError(
+                    f"Stratified allocation produced {len(sampled_tasks)} tasks; expected {target}."
+                )
 
-                # Sample within stratum
-                if len(group) <= n_samples:
-                    sampled_tasks.extend(group)
-                else:
-                    sampled_tasks.extend(random.sample(group, n_samples))
-
-            # --- Adjust to exact num_tasks (if over/under) ---
-            if len(sampled_tasks) > num_tasks:
-                sampled_tasks = random.sample(sampled_tasks, num_tasks)
-            elif len(sampled_tasks) < num_tasks:
-                remaining = [t for t in all_tasks if t not in sampled_tasks]
-                needed = num_tasks - len(sampled_tasks)
-                sampled_tasks.extend(random.sample(remaining, min(needed, len(remaining))))
-
-            print(f"Stratified sampled {len(sampled_tasks)} tasks from {len(all_tasks)} total tasks")
+            sampled_domains = {task.get("domain", "unknown") for task in sampled_tasks}
+            missing_domains = set(domains) - sampled_domains
+            if missing_domains:
+                print(
+                    "⚠️ Requested sample is too small to include every domain; "
+                    f"not sampled: {', '.join(sorted(missing_domains))}"
+                )
+            print(
+                f"Stratified sampled {len(sampled_tasks)} tasks from {len(all_tasks)} total tasks "
+                f"across {len(sampled_domains)}/{len(domains)} domains"
+            )
 
         # --- Convert to simplified format ---
         self.tasks = []
@@ -395,6 +421,34 @@ class Mind2WebLoader:
             })
 
         return self.tasks
+
+    @staticmethod
+    def _allocate_proportionally(capacities: Dict[str, int], target: int) -> Dict[str, int]:
+        """Allocate an exact target by largest remainders without exceeding capacities."""
+        allocation = {key: 0 for key in capacities}
+        capacity_total = sum(capacities.values())
+        if target <= 0 or capacity_total == 0:
+            return allocation
+        if target > capacity_total:
+            raise ValueError("Allocation target exceeds available capacity.")
+
+        exact = {key: target * capacity / capacity_total for key, capacity in capacities.items()}
+        allocation = {key: int(value) for key, value in exact.items()}
+        remaining = target - sum(allocation.values())
+        order = sorted(
+            capacities,
+            key=lambda key: (exact[key] - allocation[key], capacities[key]),
+            reverse=True,
+        )
+        for key in order:
+            if remaining == 0:
+                break
+            if allocation[key] < capacities[key]:
+                allocation[key] += 1
+                remaining -= 1
+        if remaining:
+            raise RuntimeError("Could not allocate requested sample across available strata.")
+        return allocation
 
     def get_task_by_domain(self, domain: str) -> List[Dict]:
         """
