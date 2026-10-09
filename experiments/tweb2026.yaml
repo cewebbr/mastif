@@ -14,13 +14,16 @@ test_mode: "mind2web"  # Options: "mind2web", "standard"
 # IMPORTANT: If tool use is expected in the tasks, make sure to use models that support it (e.g., DeepSeek, GPT-4o, etc.)
 models:     
   # Baseline behavior
-  - id: "mistralai/Mistral-7B-Instruct-v0.1" # https://arxiv.org/abs/2310.06825
+  # - id: "mistralai/Mistral-7B-Instruct-v0.1" # https://arxiv.org/abs/2310.06825
 
   # Tool-use proficiency
-  - id: "Qwen/Qwen2.5-7B-Instruct" # https://qwen.ai/blog?id=qwen2.5
+  # - id: "Qwen/Qwen2.5-7B-Instruct" # https://qwen.ai/blog?id=qwen2.5
   
   # Agent-focused more powerful models
-  - id: "meta-llama/Llama-4-Scout-17B-16E-Instruct" # https://ai.meta.com/blog/llama-4-multimodal-intelligence/
+  # - id: "meta-llama/Llama-4-Scout-17B-16E-Instruct" # https://ai.meta.com/blog/llama-4-multimodal-intelligence/
+  - id: "deepseek-r1:70b"
+    tokenizer: "deepseek-ai/DeepSeek-R1-Distill-Llama-70B"
+
 
 # ====== Used only in MIND2WEB test mode ====== 
 # Any model ID listed here must be available on HuggingFace, OpenAI, or Antrhropic.
