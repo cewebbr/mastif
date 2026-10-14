@@ -11,6 +11,7 @@ import time
 import datetime
 import threading
 import traceback
+from collections import Counter
 from pathlib import Path
 from typing import List, Dict, Optional
 from tqdm import tqdm
@@ -958,6 +959,24 @@ Please respond according to this protocol structure and complete the task."""
         # tasks = loader.get_task_sample(num_tasks=config.get("mind2web_num_tasks", 10))
         # Load and sample stratified tasks
         tasks = loader.get_stratified_task_sample(num_tasks=config.get("mind2web_num_tasks", 10))
+
+        if tasks:
+            domain_counts = Counter(task.get("domain", "unknown") for task in tasks)
+            trajectory_counts = Counter(
+                "short" if len(task.get("action_reprs", [])) <= 4
+                else "medium" if len(task.get("action_reprs", [])) <= 7
+                else "long"
+                for task in tasks
+            )
+            print("\nMind2Web stratified sample:")
+            print(f"  Tasks: {len(tasks)} across {len(domain_counts)} domains")
+            print("  Domains: " + ", ".join(
+                f"{domain}={count}" for domain, count in sorted(domain_counts.items())
+            ))
+            print("  Trajectories: " + ", ".join(
+                f"{bucket}={trajectory_counts.get(bucket, 0)}"
+                for bucket in ("short", "medium", "long")
+            ))
         
         # Extract experiment configuration
         raw_models = config.get("models")
@@ -997,19 +1016,9 @@ Please respond according to this protocol structure and complete the task."""
         }
         self._logger = self._init_logger(metadata)
         
-        # Print statistics
-        stats = loader.get_task_statistics()
         print("\n" + "="*70)
         print("MIND2WEB BENCHMARK EVALUATION")
         print("="*70)
-        print(f"\nDataset Statistics:")
-        print(f"  Total Tasks: {stats['total_tasks']}")
-        print(f"  Unique Domains: {stats['unique_domains']}")
-        print(f"  Unique Websites: {stats['unique_websites']}")
-        print(f"  Avg Actions per Task: {stats['avg_actions_per_task']:.1f}")
-        print(f"\nTop Domains:")
-        for domain, count in sorted(stats['domains'].items(), key=lambda x: x[1], reverse=True)[:5]:
-            print(f"  - {domain}: {count} tasks")
         
         # Initialize evaluator
         if(judge_model.startswith("gpt-")):
