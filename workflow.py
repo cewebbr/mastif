@@ -412,7 +412,11 @@ class WorkflowController:
             reasoning_steps.append(ReasoningStep(
                 step_number=len(reasoning_steps) + 1,
                 thought=f"Node '{node.name}' completed",
-                observation=f"Output stored in '{node.output_key}'"
+                observation=(
+                    f"Final output stored in '{node.output_key}'"
+                    if node.name == self._exit_node
+                    else output
+                )
             ))
 
         except Exception as e:
