@@ -298,6 +298,12 @@ This helps catch configuration problems before a long benchmark run begins.
 - Standard mode example: [out-standard.txt](out-standard.txt)
 - Mind2Web example: [out-mind2web.txt](out-mind2web.txt)
 
+## Publications
+
+- Vagner Figueredo de Santana, Diogo Cortiz, Beatriz Rocha, and Henrique S. Xavier. "A Multi-Agent Query Fan-Out Analysis of Popular Google Searches in Brazil." In Proceedings of the 32nd Brazilian Symposium on Multimedia and the Web (WebMedia 2026). [SBC archive](https://sol.sbc.org.br/index.php/webmedia/issue/archive)
+- Vagner Santana, Reinaldo Ferraz, and Jeniffer Vieira de Deus. "On the Limits for Web Accessibility Evaluation Using AI Agents." In Proceedings of the 23rd International Web for All Conference (W4A 2026). DOI: [10.1145/3800424.3800445](https://doi.org/10.1145/3800424.3800445)
+- Vagner Figueredo de Santana and Diogo Cortiz. "A Baseline Assessment for the Agentic Web Technology Stack." arXiv preprint, 2026. [arXiv:2610.13703](https://arxiv.org/abs/2610.13703)
+
 ## AI attribution
 
 <a href="https://aiattribution.github.io/statements/AIA-HAb-Ce-Hin-R-?model=Copilot,%20ChatGPT%205.2,%20Gemini%203,%20Sonnet%204.5,%20and%20Sonnet%204.6%20v1.0" target="_blank">AIA Human-AI blend, Content edits, Human-initiated, Reviewed, Copilot, ChatGPT 5.2, Gemini 3, Sonnet 4.5, and Sonnet 4.6 v1.0</a>
