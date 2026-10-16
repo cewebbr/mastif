@@ -6,136 +6,157 @@
 
 ## Overview
 
-MASTIF (Multi-Agent System TestIng Framework) is a comprehensive benchmarking suite for evaluating multi-agent systems using AI technologies across multiple frameworks, protocols, and Generative AI  models (LLMs). It supports both standard user-defined tasks and the [Mind2Web benchmark](https://github.com/OSU-NLP-Group/Mind2Web), enabling reproducible assessment of agent reasoning, tool use, and web interaction capabilities.
+MASTIF is a benchmarking framework for comparing agentic AI stacks across model providers, frameworks, protocols, workflows, and tool ecosystems. It is designed for reproducible evaluations of reasoning, planning, tool use, and web automation on both custom tasks and the [Mind2Web benchmark](https://github.com/OSU-NLP-Group/Mind2Web).
 
-**Key Capabilities:**
+The project supports the same workflow being executed under multiple conditions so you can compare:
 
-- **Multi-Framework Support:** Evaluates agents built with CrewAI, Smolagents, LangChain, LangGraph, LlamaIndex, and Semantic Kernel.
-- **Multi-Model Support:** Supports models from both HuggingFace and OpenAI models, including open-source and proprietary LLMs.
-- **Protocol Flexibility:** Assesses agent performance under various prompting and reasoning protocols (e.g., MCP, A2A, ACP, standard).
-- **ReAct Workflow Support:** Automatically parses and executes plain-text tool calls from models that don't support structured tool calls, enabling tool use across a wider range of models.
-- **Mind2Web Benchmark Integration:** Runs large-scale, real-world web interaction tasks from the Mind2Web dataset, with automatic sampling and domain breakdowns.
-- **Token Consumption Metrics:** Tracks and reports reasoning tokens, output tokens, and total tokens spent for each test, framework, protocol, and model.
-- **Tool Usage Analytics:** Aggregates and displays detailed tool invocation statistics across all test combinations, helping identify which tools are most effective.
-- **Intermediate Result Saving:** Automatically saves partial results during long-running benchmarks, allowing progress monitoring and recovery from interruptions.
-- **Detailed Metrics Collection:** Captures reasoning steps, latency, task understanding, task adherence, task completion, and domain-specific performance.
-- **Extensible Tool Use:** Evaluates agent tool-calling and web search capabilities with 15+ built-in tools.
-- **Flexible Configuration:** Supports switching between models, frameworks, and protocols via environment variables or code, with YAML-based workflow definitions.
-- **Comprehensive Output:** Exports results in machine-readable (JSON) formats with detailed summaries and breakdowns. Files `out-standard.txt` and `out-mind2web.txt` show examples of human readable console output.
-- **Judge Model Integration:** You can use LLM-as-a-judge (e.g., GPT-4o-mini) for scoring and evaluation of agent outputs.
+- model families and providers
+- communication protocols
+- framework implementations
+- tool availability and prompting strategies
+- benchmark vs. custom task performance
 
-MASTIF framework is designed for researchers, developers, and practitioners who want to systematically compare agentic AI stacks, understand their strengths and weaknesses, and drive improvements in agent reasoning and web automation.
+## Current key capabilities
 
-## Component Diagram
+MASTIF currently includes the following capabilities, all reflected in the codebase:
+
+- Multi-provider model support for Hugging Face, OpenAI, Anthropic, and local Ollama deployments.
+- Multi-framework evaluation across CrewAI, Smolagents, LangChain, LangGraph, LlamaIndex, and Semantic Kernel.
+- Protocol comparison for STANDARD, MCP, A2A, and ACP message formats.
+- YAML-driven workflow orchestration with node sequencing, looping, output-key propagation, and placeholder validation.
+- ReAct-style plain-text tool execution for models that do not expose native structured tool-calling APIs.
+- Cross-framework tool pooling where one tool definition is adapted to each framework at runtime.
+- Large-scale benchmark support for Mind2Web with judge-based scoring and partial-result resume support.
+- Preflight validation for configured models, tokenizers, judge models, and dataset access before a run begins.
+- Detailed metrics collection for token usage, latency, reasoning steps, and tool-call statistics.
+- JSON result export and CSV conversion utilities for downstream analysis.
+- Partial experiment saving so long runs can be resumed without restarting the full benchmark.
+
+## Component and class structure
 
 ![Component Diagram](images/component_diagram.png)
-
-## Class Diagram
 
 ![Class Diagram](images/class_diagram.png)
 
 ## Installation
 
-### Convert a Result Log to CSV
-
-```bash
-python main.py csv logs/results-[suffix].json
-```
-
-The CSV is written beside the JSON log with the same filename and a `.csv` extension.
-
-### 1. Create and Activate a Virtual Environment
+### 1. Create and activate a virtual environment
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 2. Install Dependencies
+### 2. Install project dependencies
 
-#### 2.1 Requirements.txt
+The project includes a pinned dependency set in [requirements.txt](requirements.txt):
 
 ```bash
-# Install all dependencies considering all the specific versions used in the project
 pip install -r requirements.txt
 ```
 
-#### 2.2 Fresh Install
+For browser-based tooling and web-interaction tasks, install Playwright browsers as well:
 
 ```bash
-# Install dependency for Mind2Web
-pip install datasets
-
-# Install core
-pip install \
-  huggingface-hub \
-  openai \
-  pydantic \
-  pyyaml \
-  python-dotenv \
-  requests \
-  tiktoken \
-  transformers \
-  anthropic
-
-# Install agentic frameworks
-pip install langchain langchain-community langchain-core langgraph
-pip install crewai crewai-tools
-pip install smolagents
-pip install llama-index llama-index-core llama-index-llms-huggingface-api
-pip install semantic-kernel
-
-# Install tool pool dependencies
-pip install duckduckgo-search
-pip install playwright
 playwright install chromium
-pip install wikipedia
-pip install arxiv
-pip install RestrictedPython
-pip install beautifulsoup4
-pip install pypdf requests
-pip install biopython
-pip install youtube-transcript-api
-pip install sympy
 ```
 
-## Usage
+## Environment variables
 
-MASTIF supports 2 types of tests: 
-
-1. Custom tasks 
-2. Benchmark tasks; the currently supported benchmark is [Mind2Web benchmark](https://github.com/OSU-NLP-Group/Mind2Web).
-
-`HF_TOKEN` is required for open models, `OPENAI_API_KEY` is only needed if you configure tests with `gpt-*` models, and `ANTHROPIC_API_KEY` is only needed if you configure tests with `claude-*` models.
-
-For Mind2Web tasks, the following two keys are required, as MASTIF currently considers OpenAI models to judge outputs from benckmark tasks.
+Set the credentials required by your selected provider:
 
 ```bash
-export HF_TOKEN='your_token'
-export OPENAI_API_KEY='your_key'
-export ANTHROPIC_API_KEY='your_key'
+export HF_TOKEN='your_huggingface_token'
+export OPENAI_API_KEY='your_openai_key'
+export ANTHROPIC_API_KEY='your_anthropic_key'
 ```
 
-Make a copy of [experiments.yaml](./experiments/example.yaml), rename it, and customize it according to your needs.
+Notes:
+
+- Hugging Face models require `HF_TOKEN`.
+- OpenAI models such as `gpt-*` require `OPENAI_API_KEY`.
+- Anthropic models such as `claude-*` require `ANTHROPIC_API_KEY`.
+- Ollama deployments can be used without a cloud API key when the model is running locally.
+- Mind2Web dataset access also requires an accepted Hugging Face token and dataset access.
+
+## Quick start
+
+Copy the example experiment and customize it:
 
 ```bash
-python main.py experiments/[your experiment file].yaml
+cp experiments/example.yaml experiments/my-experiment.yaml
+python main.py experiments/my-experiment.yaml
 ```
 
-### Configuration Options
+You can also run the project with the default example config:
 
-MASTIF supports extensive configuration through YAML files:
+```bash
+python main.py
+```
 
-- **Model Settings**: `temperature`, `max_tokens`, `max_steps`, `max_tool_rounds`
-- **Workflow Definition**: Custom node sequences with prompt templates and looping logic
-- **Tool Configuration**: Detailed tool descriptions and usage guidelines
-- **Test Parameters**: Model selection, protocol choices, framework combinations
+### Convert JSON results to CSV
 
-See [experiments/example.yaml](./experiments/example.yaml) for a complete configuration reference.
+```bash
+python main.py csv logs/results-<timestamp>.json
+```
 
-### Workflow Configuration
+This writes a sibling CSV next to the original log file.
 
-MASTIF supports configurable agent workflows through YAML definitions. Each workflow consists of nodes that execute in sequence, with support for looping and tool integration:
+### Export prompt recommendations to CSV
+
+```bash
+python main.py recommend-csv logs/results-<timestamp>.json
+```
+
+## Supported model providers and example IDs
+
+MASTIF is not limited to one vendor. The runtime adapters support:
+
+- Hugging Face model IDs such as `meta-llama/Llama-3.3-70B-Instruct`
+- OpenAI models such as `gpt-4o`, `gpt-4o-mini`, `gpt-oss-*`
+- Anthropic models such as `claude-3-5-sonnet-20241022`
+- Ollama models using the local format `llama3.2:latest` or similar local names
+
+Model entries in YAML may be plain strings or dictionaries with an optional tokenizer override:
+
+```yaml
+models:
+  - id: "gpt-4o"
+  - id: "meta-llama/Llama-3.3-70B-Instruct"
+  - id: "llama3.2:latest"
+  - id: "Qwen/Qwen2.5-7B-Instruct"
+    tokenizer: "Qwen/Qwen2.5-7B-Instruct"
+```
+
+## Supported frameworks
+
+MASTIF evaluates the same workflow across multiple framework implementations:
+
+- CrewAI
+- Smolagents
+- LangChain
+- LangGraph
+- LlamaIndex
+- Semantic Kernel
+
+This is implemented through framework-specific wrappers around a shared tool pool and workflow controller.
+
+## Supported protocols
+
+The framework includes protocol-aware prompt wrapping and overhead measurement for:
+
+- `STANDARD`: direct API call without protocol injection
+- `MCP`: Model Context Protocol payloads
+- `A2A`: Agent-to-Agent message payloads
+- `ACP`: Agent Communication Protocol payloads
+
+These are defined in [protocols.py](protocols.py) and are measured for send/receive overhead and message size.
+
+## Workflow configuration
+
+MASTIF executes workflows from YAML. Each workflow node can reference a prompt template, store output in an output key, and optionally loop until the configured step limit is reached.
+
+Example:
 
 ```yaml
 workflow:
@@ -146,12 +167,12 @@ workflow:
       loop: false
 
     - name: "research"
-      prompt_template: "prompts/react-loop.txt"  # ReAct-enabled prompt
+      prompt_template: "prompts/research.txt"
       output_key: "research_results"
       loop: true
 
     - name: "report"
-      prompt_template: "prompts/react-synthesize.txt"
+      prompt_template: "prompts/report.txt"
       output_key: "final_report"
       loop: false
 
@@ -159,99 +180,125 @@ workflow:
   exit_node: "report"
 ```
 
-**ReAct Support:** Workflows can use ReAct-style prompts that enable plain-text tool calling for models without structured tool call APIs.
+The workflow engine also validates placeholder continuity between nodes and resolves prompt templates relative to the active experiment config file.
 
-### Tool Usage and Intermediate Results
+## ReAct and plain-text tool execution
 
-MASTIF provides detailed tool usage analytics and progress monitoring:
+MASTIF includes a built-in ReAct parser that can detect and execute tool calls embedded in plain text, even when a model does not support native tool calling.
 
-- **Tool Usage Tracking:** Displays which tools were invoked and how many times across all test combinations
-- **Intermediate Snapshots:** Automatically saves partial results after each model and framework-protocol combination
-- **Progress Monitoring:** Monitor long-running benchmarks with real-time progress updates
+Example pattern:
 
-### Mind2Web Sample Sizes
-- **10 tasks**: Quick evaluation (~15 minutes)
-- **50 tasks**: Medium evaluation (~1 hour)
-- **100 tasks**: Comprehensive sample (~2 hours)
-- **All tasks** (2,350): Full benchmark (~24+ hours)
-
-## Output Files
-
-### Standard Mode
-- `logs/results-TIMESTAMP.json`: Complete test results with detailed metrics
-- `logs/intermediate-results-*.json`: Partial results saved during execution for progress monitoring
-
-### Mind2Web Mode
-- `logs/mind2web-results-TIMESTAMP.json`: Mind2Web specific metrics
-- `logs/results-TIMESTAMP.json`: Standard test results
-- `logs/intermediate-mind2web-*.json`: Partial Mind2Web results saved during execution
-
-### Metrics Included
-- Task Understanding: Agent's comprehension of the task
-- Task Adherence: Agent's adherence to the task in reasoning steps
-- Task Completion: Agent's performance on fulfilling the task
-- Reasoning Steps: Number of intermediate reasoning steps
-- Tool Usage: Detailed breakdown of which tools were invoked and how frequently
-- Domain-specific performance breakdowns
-- Token consumption metrics (reasoning, output, total)
-
-## Example Output
-
-- Standard mode with user defined tasks: [out-standard.txt](./out-standard.txt)
-- Mind2Web mode with benchmark tasks: [out-mind2web.txt](./out-mind2web.txt)
-
-## Tool Capabilities
-
-MASTIF includes 15+ built-in tools for comprehensive agent evaluation:
-
-### Core Tools
-- **web_search**: DuckDuckGo web search for current information
-- **web_browser**: Playwright-based headless browser navigation
-- **requests_get**: HTTP GET requests for programmatic access
-- **beautifulsoup_scraper**: HTML structure extraction and parsing
-
-### Knowledge Tools
-- **wikipedia**: Encyclopedic knowledge lookups
-- **arxiv**: Academic paper search
-- **pubmed**: Biomedical literature search
-
-### Computation Tools
-- **python_repl**: Sandboxed Python code execution
-- **sympy**: Symbolic mathematics and equation solving
-- **json_parser**: JSON parsing and querying
-
-### Content Tools
-- **pdf_reader**: PDF text extraction
-- **youtube_transcript**: YouTube video transcript retrieval
-- **datetime**: Current date/time information
-
-### Specialized Tools
-- **web_interaction**: Multi-step web interactions for complex tasks
-- **keyboard_interaction**: Keyboard-driven accessibility-focused interactions
-
-### ReAct Tool Execution
-
-MASTIF automatically detects and executes tools from plain-text ReAct format responses:
-
-```
-Thought: I need to search for information
+```text
+Thought: I need to search for the answer.
 Action: web_search
 Action Input: {"query": "accessibility guidelines"}
-
-Observation: [Search results...]
+Observation: ...
 ```
 
-This enables tool use across models that don't support structured tool calls, expanding compatibility with open-source and fine-tuned models.
+The parser extracts the action and argument payload, invokes the registered tool, and appends the observation back into the model context. This helps broaden compatibility with open-source and fine-tuned models.
 
-## Notes
+## Tool pool and built-in tools
 
-- Mind2Web requires authentication with HuggingFace
-- The test set requires accepting terms on HuggingFace
-- Focus is on task understanding and action planning capabilities
-- ReAct parsing enables tool use across a wider range of models
-- Intermediate snapshots allow monitoring of long-running benchmarks
+The project uses a shared tool registry and adapts the same tool definition to each framework automatically. The built-in tool set includes:
 
-## AI Attribution
+### Core utility and browsing
+- `web_search`
+- `web_browser`
+- `requests_get`
+- `beautifulsoup_scraper`
+- `web_interaction`
+- `keyboard_interaction`
+- `searxng_search`
+
+### Knowledge and information retrieval
+- `wikipedia`
+- `arxiv`
+- `pubmed`
+- `youtube_transcript`
+
+### Computation and parsing
+- `python_repl`
+- `sympy`
+- `json_parser`
+- `pdf_reader`
+- `datetime`
+
+This is implemented in [tool_pool.py](tool_pool.py) and supports per-framework conversions for LangChain, CrewAI, Smolagents, LlamaIndex, and Semantic Kernel.
+
+## Configuration reference
+
+The example config in [experiments/example.yaml](experiments/example.yaml) shows the current supported settings:
+
+- `experiment.name`, `experiment.description`
+- `temperature`, `max_tokens`, `max_steps`, `max_tool_rounds`, `timeout`
+- `workflow.nodes`, `workflow.entry_node`, `workflow.exit_node`
+- `test_mode`: `standard` or `mind2web`
+- `requests_soft_limit`
+- `models`
+- `protocols`
+- `frameworks`
+- `tools`
+
+The same config file powers the runtime, prompt templates, and logger metadata.
+
+## Benchmark modes
+
+### Standard mode
+
+Runs user-defined tasks across all selected models, protocols, and frameworks.
+
+### Mind2Web mode
+
+Runs the [Mind2Web benchmark](https://github.com/OSU-NLP-Group/Mind2Web) and evaluates task completion with a judge model. In this mode, MASTIF validates the dataset and judge availability before execution.
+
+## Output and logs
+
+Results are written to the `logs/` directory.
+
+### Standard mode
+- `logs/results-TIMESTAMP.json`
+- `logs/intermediate-results-*.json`
+
+### Mind2Web mode
+- `logs/mind2web-results-TIMESTAMP.json`
+- `logs/results-TIMESTAMP.json`
+
+The logger also supports partial completion tracking and resume prompts so long-running experiments can continue without losing progress.
+
+### Metrics collected
+
+- reasoning steps and thought traces
+- total, input, and output token counts
+- latency and protocol overhead
+- task completion and understanding scores
+- tool usage summaries and per-tool statistics
+- model/framework/protocol breakdowns
+
+## Preflight validation
+
+Before a run starts, [preflight.py](preflight.py) checks:
+
+- configured model availability
+- tokenizer availability or fallback behavior
+- required API keys for cloud providers
+- Mind2Web dataset access when needed
+- judge model validity in benchmark mode
+
+This helps catch configuration problems before a long benchmark run begins.
+
+## Current notes and caveats
+
+- Mind2Web requires a valid Hugging Face token and access to the dataset.
+- Browser and web-interaction tools require the Playwright browser runtime.
+- Long benchmark runs should be allowed to save partial logs or resumed from previous results.
+- Tool execution performance depends on the selected model’s native tool-calling behavior; the ReAct fallback expands compatibility for less capable models.
+
+## Example output
+
+- Standard mode example: [out-standard.txt](out-standard.txt)
+- Mind2Web example: [out-mind2web.txt](out-mind2web.txt)
+
+## AI attribution
 
 <a href="https://aiattribution.github.io/statements/AIA-HAb-Ce-Hin-R-?model=Copilot,%20ChatGPT%205.2,%20Gemini%203,%20Sonnet%204.5,%20and%20Sonnet%204.6%20v1.0" target="_blank">AIA Human-AI blend, Content edits, Human-initiated, Reviewed, Copilot, ChatGPT 5.2, Gemini 3, Sonnet 4.5, and Sonnet 4.6 v1.0</a>
 
