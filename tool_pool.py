@@ -309,6 +309,7 @@ class _ToolPool:
         """DuckDuckGo web search — works natively with LangChain, CrewAI, smolagents."""
         from duckduckgo_search import DDGS
 
+        # TODO: Add searchxng as a fall back tool in case of blockage of DuckDuckGo.
         def _search(query: str) -> str:
             with DDGS() as ddgs:
                 results = list(ddgs.text(query, max_results=5))
