@@ -300,9 +300,10 @@ This helps catch configuration problems before a long benchmark run begins.
 
 ## Publications
 
-- Vagner Figueredo de Santana, Diogo Cortiz, Beatriz Rocha, and Henrique S. Xavier. "A Multi-Agent Query Fan-Out Analysis of Popular Google Searches in Brazil." In Proceedings of the 32nd Brazilian Symposium on Multimedia and the Web (WebMedia 2026). DOI: [webmedia.2026.30219](https://doi.org/10.5753/webmedia.2026.30219)
+- Vagner Figueredo de Santana, Diogo Cortiz, Beatriz Rocha, and Henrique S. Xavier. "A Multi-Agent Query Fan-Out Analysis of Popular Google Searches in Brazil." In Proceedings of the 32nd Brazilian Symposium on Multimedia and the Web (WebMedia 2026). DOI: [webmedia.2026.30219](https://sol.sbc.org.br/index.php/webmedia/article/view/46071)
 
 - Vagner Santana, Reinaldo Ferraz, and Jeniffer Vieira de Deus. "On the Limits for Web Accessibility Evaluation Using AI Agents." In Proceedings of the 23rd International Web for All Conference (W4A 2026). DOI: [10.1145/3800424.3800445](https://doi.org/10.1145/3800424.3800445)
+
 - Vagner Figueredo de Santana and Diogo Cortiz. "A Baseline Assessment for the Agentic Web Technology Stack." arXiv preprint, 2026. [arXiv:2610.13703](https://arxiv.org/abs/2610.13703)
 
 ## AI attribution
