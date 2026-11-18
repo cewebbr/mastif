@@ -132,12 +132,19 @@ models:
 
 MASTIF evaluates the same workflow across multiple framework implementations:
 
-- CrewAI
-- Smolagents
-- LangChain
-- LangGraph
-- LlamaIndex
-- Semantic Kernel
+- Code-centric 
+  - Smolagents
+
+- Role-based
+  - CrewAI
+
+- Pipeline-based
+  - LangChain
+  - LlamaIndex
+
+- Graph-based
+  - LangGraph
+  - SemanticKernel
 
 This is implemented through framework-specific wrappers around a shared tool pool and workflow controller.
 
