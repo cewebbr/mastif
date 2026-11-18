@@ -40,25 +40,24 @@ MASTIF currently includes the following capabilities, all reflected in the codeb
 
 ## Installation
 
-### 1. Create and activate a virtual environment
+### 1. Check Python and create a virtual environment
+
+A Python 3.12 environment is known to work for the current dependency set. From the repository root:
 
 ```bash
+python3 --version
 python3 -m venv venv
 source venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-### 2. Install project dependencies
+Always run MASTIF from the repository root with the virtual environment activated.
 
-The project includes a pinned dependency set in [requirements.txt](requirements.txt):
-
-```bash
-pip install -r requirements.txt
-```
-
-For browser-based tooling and web-interaction tasks, install Playwright browsers as well:
+For browser-based tooling and web-interaction tasks, install the Chromium runtime:
 
 ```bash
-playwright install chromium
+python -m playwright install chromium
 ```
 
 ## Environment variables
@@ -71,13 +70,19 @@ export OPENAI_API_KEY='your_openai_key'
 export ANTHROPIC_API_KEY='your_anthropic_key'
 ```
 
+For a local Ollama server, the default endpoint is `http://127.0.0.1:11434`. Override it when using a remote or tunneled Ollama service:
+
+```bash
+export OLLAMA_URL='http://127.0.0.1:11434'
+```
+
 Notes:
 
 - Hugging Face models require `HF_TOKEN`.
 - OpenAI models such as `gpt-*` require `OPENAI_API_KEY`.
 - Anthropic models such as `claude-*` require `ANTHROPIC_API_KEY`.
-- Ollama deployments can be used without a cloud API key when the model is running locally.
-- Mind2Web dataset access also requires an accepted Hugging Face token and dataset access.
+- Ollama model IDs contain a colon, such as `llama3.2:latest`, and require a reachable Ollama server; they do not require a cloud API key.
+- Mind2Web dataset access requires `HF_TOKEN` and accepted access to `osunlp/Mind2Web`.
 
 ## Quick start
 
@@ -94,10 +99,12 @@ You can also run the project with the default example config:
 python main.py
 ```
 
+The first positional argument is always the YAML experiment file; there is currently no separate `--help` mode or default argument parser. For CSV or prompt-recommendation utilities, use the following commands instead:
+
 ### Convert JSON results to CSV
 
 ```bash
-python main.py csv logs/results-<timestamp>.json
+python main.py csv logs/results-[experiment]-[timestamp].json
 ```
 
 This writes a sibling CSV next to the original log file.
@@ -105,7 +112,7 @@ This writes a sibling CSV next to the original log file.
 ### Export prompt recommendations to CSV
 
 ```bash
-python main.py recommend-csv logs/results-<timestamp>.json
+python main.py recommend-csv logs/results-[experiment]-[timestamp].json
 ```
 
 ## Supported model providers and example IDs
@@ -263,14 +270,17 @@ Runs the [Mind2Web benchmark](https://github.com/OSU-NLP-Group/Mind2Web) and eva
 Results are written to the `logs/` directory.
 
 ### Standard mode
-- `logs/results-TIMESTAMP.json`
-- `logs/intermediate-results-*.json`
+
+- `logs/results-[experiment]-[timestamp].json`: final results exported on clean completion
+- `logs/partial-[experiment]-[timestamp].json`: result-by-result partial progress used for resume prompts
 
 ### Mind2Web mode
-- `logs/mind2web-results-TIMESTAMP.json`
-- `logs/results-TIMESTAMP.json`
 
-The logger also supports partial completion tracking and resume prompts so long-running experiments can continue without losing progress.
+- `logs/mind2web-results-[timestamp].json`: benchmark-specific aggregate and task-level results
+- `logs/results-[experiment]-[timestamp].json`: general result export, also written on clean completion
+- `logs/partial-[experiment]-[timestamp].json`: partial benchmark progress used for resume prompts
+
+The logger finds the most recent `logs/partial-[experiment]-*.json` file for the active YAML configuration. Starting the same experiment again offers to resume completed, successful combinations and retries entries that failed or returned retryable errors.
 
 ### Metrics collected
 
