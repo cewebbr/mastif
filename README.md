@@ -132,7 +132,7 @@ models:
 
 MASTIF evaluates the same workflow across multiple framework implementations:
 
-- Code-centric 
+- Lightweight 
   - Smolagents
 
 - Role-based
