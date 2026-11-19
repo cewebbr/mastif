@@ -2,7 +2,9 @@
 
 import json
 import os
-from typing import Any, Dict, Iterable
+import re
+from pathlib import Path
+from typing import Any
 
 from adapters import AnthropicAdapter, HuggingFaceAdapter, OllamaAdapter, OpenAIAdapter
 
@@ -22,6 +24,8 @@ class PreflightChecker:
         mode = self.config.get("test_mode", "standard")
 
         print("\n🔎 Running preflight checks...")
+        self._check_workflow()
+
         for model_entry in models:
             model_name = self._model_name(model_entry)
             self._check_model(model_name)
@@ -35,6 +39,101 @@ class PreflightChecker:
             self._check_judge(judge_model)
 
         print("✅️ Preflight checks passed.\n")
+
+    def _check_workflow(self):
+        """Validate workflow structure and prompt-to-output-key result flow."""
+        workflow = self.config.get("workflow", {})
+        raw_nodes = workflow.get("nodes", []) if isinstance(workflow, dict) else []
+
+        if not isinstance(raw_nodes, list) or not raw_nodes:
+            raise PreflightError("Workflow has no nodes under 'workflow.nodes'.")
+
+        names = []
+        nodes = {}
+        for index, node in enumerate(raw_nodes):
+            if not isinstance(node, dict):
+                raise PreflightError(f"Workflow node at index {index} must be a mapping.")
+
+            name = node.get("name")
+            prompt_template = node.get("prompt_template")
+            output_key = node.get("output_key")
+
+            if not isinstance(name, str) or not name.strip():
+                raise PreflightError(f"Workflow node at index {index} is missing 'name'.")
+            if name in nodes:
+                raise PreflightError(f"Duplicate workflow node name: '{name}'.")
+            if not isinstance(prompt_template, str) or not prompt_template.strip():
+                raise PreflightError(f"Workflow node '{name}' is missing 'prompt_template'.")
+            if not isinstance(output_key, str) or not output_key.strip():
+                raise PreflightError(f"Workflow node '{name}' is missing 'output_key'.")
+
+            names.append(name)
+            nodes[name] = node
+
+        entry_node = workflow.get("entry_node", names[0])
+        exit_node = workflow.get("exit_node", names[-1])
+        if entry_node not in nodes:
+            raise PreflightError(f"Workflow entry_node '{entry_node}' does not name a defined node.")
+        if exit_node not in nodes:
+            raise PreflightError(f"Workflow exit_node '{exit_node}' does not name a defined node.")
+
+        # Values injected by the workflow controller before rendering a prompt.
+        available_keys = {
+            "framework", "role", "tools_text", "task", "step",
+            "max_steps", "research_results",
+        }
+        consumed_keys = set()
+        placeholder_re = re.compile(r"\{([a-zA-Z_]\w*)\}")
+
+        config_path = getattr(self.config, "get_config_path", lambda: None)()
+        config_dir = Path(config_path).resolve().parent if config_path else Path.cwd()
+
+        for node in raw_nodes:
+            name = node["name"]
+            template_value = node["prompt_template"]
+            template_candidates = (
+                config_dir / template_value,
+                Path.cwd() / template_value,
+                Path(template_value),
+            )
+            template_path = next((path for path in template_candidates if path.is_file()), None)
+
+            if template_path is None:
+                searched = ", ".join(str(path) for path in template_candidates)
+                raise PreflightError(
+                    f"Prompt template for workflow node '{name}' was not found: "
+                    f"'{template_value}'. Searched: {searched}"
+                )
+
+            try:
+                template_text = template_path.read_text(encoding="utf-8")
+            except OSError as error:
+                raise PreflightError(
+                    f"Could not read prompt template '{template_path}' for workflow node '{name}': {error}"
+                ) from error
+
+            placeholders = set(placeholder_re.findall(template_text))
+            missing = sorted(placeholders - available_keys)
+            if missing:
+                missing_text = ", ".join("{" + key + "}" for key in missing)
+                raise PreflightError(
+                    f"Workflow node '{name}' uses placeholder(s) {missing_text}, "
+                    f"but no preceding node declares them in 'output_key'."
+                )
+
+            consumed_keys.update(placeholders)
+            available_keys.add(node["output_key"])
+
+        for node in raw_nodes:
+            if node["name"] == exit_node:
+                continue
+            if node["output_key"] not in consumed_keys:
+                print(
+                    f"  ⚠️ Workflow node '{node['name']}' output_key "
+                    f"'{node['output_key']}' is not used by a subsequent prompt."
+                )
+
+        print("  ✅️ Workflow result flow valid.")
 
     def _check_tokenizer(self, model_name: str, tokenizer_id: str = None):
         """Validate the configured or inferred tokenizer used for token metrics."""
@@ -224,3 +323,14 @@ class PreflightChecker:
     @staticmethod
     def _clean(response: str) -> str:
         return response.strip()[:300] or "empty response"
+
+    @staticmethod
+    def _validate_yaml_syntax(file_path: str):
+        """Validate the syntax of a YAML file."""
+        import yaml
+
+        with open(file_path, "r") as stream:
+            try:
+                yaml.safe_load(stream)
+            except yaml.YAMLError as exc:
+                raise PreflightError(f"YAML syntax error in {file_path}: {exc}")
