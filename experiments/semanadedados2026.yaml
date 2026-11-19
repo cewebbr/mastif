@@ -1,0 +1,155 @@
+experiment:
+  name: "Tutorial para Semana de Dados 2026"
+  description: "Experimento de exemplo."
+
+temperature: 0.7          # Sampling temperature (0.0 = deterministic, 1.0 = creative; this influences tool use)
+max_tokens: 1024          # Max tokens generated per request
+max_steps: 3              # Max research iterations per agent workflow (default: 3)
+max_tool_rounds: 5        # Max tool execution rounds per generate() call (default: 5)
+timeout: 30               # Timeout in seconds for API calls to prevent silent hangs
+
+test_mode: "standard"     # "standard" | "mind2web"
+requests_soft_limit: 1000 # Prompts for confirmation if total API calls exceed this value
+                          # Total calls = models × protocols × frameworks × tasks × max_steps
+
+models:
+  - id: "Qwen/Qwen2.5-7B-Instruct"
+  # - id: "gpt-4o"
+  # - id: "meta-llama/Llama-3.3-70B-Instruct"
+  # - id: "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+  # - id: "deepseek-ai/DeepSeek-V3.2"
+  # - id: "openai/gpt-oss-120b"
+  
+  # - id: "qcwind/qwen2.5-7B-instruct-Q4_K_M:latest" # Note that Ollama models use HF tokenizer IDs
+  #   tokenizer: "Qwen/Qwen2.5-7B-Instruct"
+
+protocols:
+  - "STANDARD"
+  # - "MCP"
+  # - "A2A"
+  # - "ACP"
+
+frameworks:
+  - "CrewAI"
+  # - "Smolagents"
+  # - "LangChain"
+  # - "LangGraph"
+  # - "LlamaIndex"
+  # - "SemanticKernel"
+
+# =============================================================================
+# STANDARD test mode settings
+# Used when test_mode is "standard".
+# =============================================================================
+
+# prompt_template wraps each task before it is sent to the agent.
+# Use {task} as the placeholder for the actual task text.
+prompt_template: |
+  Você é um especialista em legislação Brasileira e você vai utilizar as leis fornecidas para realizar as tarefas a seguir.
+  Sua tarefa é: {task}
+  Não forneça respostas hipotéticas.
+  Use qualquer ferramenta disponível aplicável à tarefa.
+  Informe todas as fontes que usar para fornecer a resposta.
+
+tasks: 
+  # 5 perguntas do tipo "O que é ...?" no GOogle em 2025 feitas no Brasil
+  # Fonte: https://trends.withgoogle.com/pt-br/year-in-search/2025/br
+  - "O que é metanol?"
+  - "O que é anistia?"
+  - "O que é GLO (Garantia da Lei e da Ordem)?"
+  - "O que é PEC da Blindagem?"
+  - "O que é BRICS?"
+
+# =============================================================================
+# MIND2WEB test mode settings
+# Used when test_mode is "mind2web".
+# Judge model can be any model available on HuggingFace, OpenAI (gpt-*), or Anthropic (claude-*).
+# Avoid using the same family for both testing and judging to prevent preference leakage.
+# Reference: https://arxiv.org/abs/2502.01534
+# =============================================================================
+
+# mind2web_num_tasks: 10      # Number of tasks to sample (max: 2350 for full benchmark)
+# judge_model: "gpt-4o"       # Model used to evaluate task completion quality
+# judge_model: "gpt-4o-mini"  # Model used to evaluate task completion quality
+
+# -----------------------------------------------------------------------------
+# Tools
+# Tools available to all agents. Must match names registered in tool_pool.py.
+# Available builtin and custom tools:
+#   web_search            — DuckDuckGo web search (no API key required)
+#   web_browser           — Playwright headless browser navigation
+#   wikipedia             — Wikipedia topic lookup
+#   arxiv                 — Academic paper search on arXiv
+#   python_repl           — Sandboxed Python code execution
+#   requests_get          — Simple HTTP GET requests
+#   beautifulsoup_scraper — Extract structured HTML content from a URL
+#   pdf_reader            — Extract text from PDF files or URLs
+#   datetime              — Get current UTC date and time
+#   json_parser           — Parse and query JSON strings
+#   pubmed                — Search biomedical literature on PubMed
+#   youtube_transcript    — Retrieve YouTube video transcripts
+#   sympy                 — Evaluate or simplify symbolic math expressions
+#   web_interaction       — Custom tool for complex web interactions (e.g. Mind2Web tasks)
+#   keyboard_interaction  — Custom tool for keyboard-driven web interactions (e.g. Mind2Web tasks)
+#   searxng_search        — Metasearch tool that queries multiple engines simultaneously (via requests to a SearXNG instance)
+# -----------------------------------------------------------------------------
+
+tools:
+  - name: "web_search"
+    description: >
+      Use esta ferramenta quando precisar buscar inforomação que não é conhecida ou pode estar desatualizada.
+      Isto inclui eventos atuais, fatos recentes ou tópicos desconhecidos.
+      A entrada deve ser uma consulta de pesquisa clara.
+      USE esta ferramenta especialmente para buscas de informações recentes ou de nicho.
+
+  - name: "requests_get"
+    description: >
+      Use esta ferramenta para recuperar conteúdo bruto de uma URL específica (API, página da web ou endpoint).
+      Prefira esta ferramenta para acesso estruturado ou programático.
+      NÃO use para navegação geral ou pesquisa.
+
+  - name: "wikipedia"
+    description: >
+      Use esta ferramenta para consultas de conhecimento geral sobre tópicos, pessoas ou conceitos bem conhecidos.
+      Mais rápida e confiável do que web_search para conteúdo enciclopédico.
+      NÃO use para informações recentes ou de nicho.
+
+# -----------------------------------------------------------------------------
+# Workflow
+# Defines the sequence of nodes each agent executes.
+# Each node references a prompt template file under the prompts/ folder.
+#
+# Node fields:
+#   name            : Unique node identifier
+#   prompt_template : Path to the prompt template file (relative to this config)
+#   output_key      : State dict key where the node's output is stored
+#   loop            : If true, the node repeats until step > max_steps
+#
+# entry_node : First node to execute
+# exit_node  : Last node; its output_key value is returned as the final answer
+# -----------------------------------------------------------------------------
+
+workflow:
+  nodes:
+    - name: "planejar"
+      prompt_template: "prompts/semanadedados2026/planejar.txt"
+      output_key: "plan"
+      loop: false
+
+    - name: "pesquisar-lai"
+      prompt_template: "prompts/semanadedados2026/pesquisar-lai.txt"
+      output_key: "research_results_lai"
+      loop: true
+
+    - name: "pesquisar-lgpd"
+      prompt_template: "prompts/semanadedados2026/pesquisar-lgpd.txt"
+      output_key: "research_results_lgpd"
+      loop: true
+
+    - name: "reportar"
+      prompt_template: "prompts/semanadedados2026/reportar.txt"
+      output_key: "final_report"
+      loop: false
+
+  entry_node: "planejar"
+  exit_node: "reportar"
