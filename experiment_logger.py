@@ -624,7 +624,7 @@ class ExperimentLogger:
         """
         lower = model_name.lower()
         
-        if any(lower.startswith(p) for p in ["gpt-", "text-", "openai"]):
+        if any(lower.startswith(p) for p in ["gpt-", "text-"]):
             return "openai"
         if lower.startswith("claude-"):
             return "anthropic"

@@ -816,11 +816,11 @@ Please respond according to this protocol structure and complete the task."""
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
             
-            if(model_name.startswith("gpt-")):
+            if(model_name.startswith(("gpt-", "text-"))):
                 adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
-            elif(model_name.startswith("claude-")):
+            elif(model_name.startswith(("claude-", "anthropic/"))):
                 adapter = AnthropicAdapter(model_name, api_key=os.getenv("ANTHROPIC_API_KEY"))
-            elif(":" in model_name):
+            elif(":" in model_name and "/" not in model_name):
                 adapter = OllamaAdapter(model_name)
             else:                
                 adapter = HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))
@@ -1058,11 +1058,11 @@ Please respond according to this protocol structure and complete the task."""
             print(f"Testing Model: {model_name}")
             print(f"{'='*70}")
             
-            if(model_name.startswith("gpt-")):
+            if(model_name.startswith(("gpt-", "text-"))):
                 adapter = OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
-            elif(model_name.startswith("claude-")):
+            elif(model_name.startswith(("claude-", "anthropic/"))):
                 adapter = AnthropicAdapter(model_name, api_key=os.getenv("ANTHROPIC_API_KEY"))
-            elif(":" in model_name):
+            elif(":" in model_name and "/" not in model_name):
                 adapter = OllamaAdapter(model_name)
             else:                
                 adapter = HuggingFaceAdapter(model_name, api_key=os.getenv("HF_TOKEN"))

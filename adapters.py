@@ -15,6 +15,44 @@ from config import ConfigExpert
 from tool_pool import ToolPool
 import anthropic
 import signal
+import traceback
+
+
+def _format_inference_error(provider: str, model_name: Optional[str], error: BaseException, **context) -> str:
+    """Preserve exception details even when str(error) is empty."""
+    error_type = type(error).__name__
+    error_module = type(error).__module__
+    message = str(error).strip()
+    args = repr(error.args) if getattr(error, "args", None) else "<none>"
+
+    status_code = getattr(error, "status_code", None)
+    if status_code is None:
+        response = getattr(error, "response", None)
+        status_code = getattr(response, "status_code", None)
+
+    details = [
+        f"provider={provider}",
+        f"model={model_name or '<unspecified>'}",
+        f"exception={error_module}.{error_type}",
+        f"message={message or '<empty>'}",
+        f"args={args}",
+    ]
+    if status_code is not None:
+        details.append(f"status={status_code}")
+    details.extend(f"{key}={value}" for key, value in context.items())
+
+    if isinstance(error, StopIteration):
+        details.append(
+            "diagnostic=no Hugging Face inference-provider mapping was available; "
+            "verify HF_TOKEN, model availability, and provider settings"
+        )
+
+    if os.getenv("DEBUG_INFERENCE_ERRORS", "false").lower() in ("1", "true", "yes", "on"):
+        print("⚠️ Inference traceback:")
+        print(traceback.format_exc().strip())
+
+    return "Inference Error: " + "; ".join(details)
+
 
 class BaseAdapter(ABC):
     """
@@ -211,9 +249,15 @@ class HuggingFaceAdapter(BaseAdapter):
             return "Error: Maximum tool execution rounds reached without a final text response."
 
         except TimeoutError as e:
-            return f"Timeout Error: {str(e)}"
+            return _format_inference_error(
+                "huggingface", self.model_name, e,
+                timeout_seconds=getattr(self, "timeout", None),
+            )
         except Exception as e:
-            return f"Inference Error: {str(e)}"
+            return _format_inference_error(
+                "huggingface", self.model_name, e,
+                hf_token_configured=bool(self.api_key),
+            )
     
     def get_langchain_llm(self):
         """Create LangChain-compatible LLM instance"""
@@ -413,7 +457,7 @@ class OpenAIAdapter(BaseAdapter):
             return "Error: Maximum tool execution rounds reached without a final text response."
 
         except Exception as e:
-            return f"Error: {str(e)}"
+            return _format_inference_error("openai", self.model_name, e)
 
 class AnthropicAdapter(BaseAdapter):
     """

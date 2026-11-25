@@ -193,7 +193,7 @@ class PreflightChecker:
     @staticmethod
     def _tokenizer_provider(model_name: str) -> str:
         lower = model_name.lower()
-        if any(lower.startswith(prefix) for prefix in ("gpt-", "text-", "openai")):
+        if any(lower.startswith(prefix) for prefix in ("gpt-", "text-")):
             return "openai"
         if lower.startswith("claude-"):
             return "anthropic"
@@ -204,6 +204,10 @@ class PreflightChecker:
         return "unknown"
 
     def _check_model(self, model_name: str):
+        provider = self._tokenizer_provider(model_name)
+        if provider == "huggingface":
+            self._check_huggingface_provider(model_name)
+
         adapter = self._create_adapter(model_name)
         response = self._generate(adapter, "Reply with exactly: OK")
         if not response.strip() or self._looks_like_error(response):
@@ -278,8 +282,31 @@ class PreflightChecker:
             ) from error
         print("  ✅️ Mind2Web dataset available: osunlp/Mind2Web")
 
+    def _check_huggingface_provider(self, model_name: str):
+        """Report Hugging Face provider discovery without blocking an inference attempt."""
+        try:
+            from huggingface_hub.inference._providers import _fetch_inference_provider_mapping
+
+            mapping = _fetch_inference_provider_mapping(model_name)
+        except Exception as error:
+            print(
+                f"  ⚠️ Hugging Face provider discovery failed for '{model_name}': "
+                f"{type(error).__module__}.{type(error).__name__}: {str(error) or '<no message>'}"
+            )
+            return
+
+        if not mapping:
+            print(
+                f"  ⚠️ No serverless provider mapping found for '{model_name}'. "
+                "Continuing with a real inference check; dedicated/custom endpoints may still work."
+            )
+            return
+
+        providers = ", ".join(sorted({entry.provider for entry in mapping}))
+        print(f"  ✅️ Hugging Face provider discovered: {model_name} ({providers})")
+
     def _create_adapter(self, model_name: str):
-        if model_name.startswith("gpt-") or model_name.startswith("openai/"):
+        if model_name.startswith(("gpt-", "text-")):
             self._require("OPENAI_API_KEY", model_name)
             return OpenAIAdapter(model_name, api_key=os.getenv("OPENAI_API_KEY"))
         if model_name.startswith("claude-") or model_name.startswith("anthropic/"):
