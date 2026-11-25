@@ -315,6 +315,13 @@ This helps catch configuration problems before a long benchmark run begins.
 - Standard mode example: [out-standard.txt](out-standard.txt)
 - Mind2Web example: [out-mind2web.txt](out-mind2web.txt)
 
+
+## Presentations
+
+### 2026
+
+- Vagner Figueredo de Santana. "[Avaliando Sistemas Multi-Agentes com MASTIF](./presentations/2026-semanadadedados-tutorial.pptx)". Semana de Dados BR 2026. Brasília, Brazil. 
+
 ## Publications
 
 ### 2026
