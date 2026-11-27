@@ -355,7 +355,12 @@ class PreflightChecker:
         try:
             from huggingface_hub import InferenceClient
 
-            client = InferenceClient(model=model_name, token=token, timeout=timeout)
+            client = InferenceClient(
+                model=model_name,
+                token=token,
+                timeout=timeout,
+                provider="auto",
+            )
             response = client.chat_completion(
                 messages=[{"role": "user", "content": "Reply with OK."}],
                 max_tokens=4,

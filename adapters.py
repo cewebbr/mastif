@@ -108,7 +108,7 @@ class HuggingFaceAdapter(BaseAdapter):
         """
         self._model_name = model_name
         self.api_key = api_key or os.getenv("HF_TOKEN")
-        self.client = InferenceClient(model=model_name, token=self.api_key)
+        self.client = InferenceClient(model=model_name, token=self.api_key, provider="auto")
         config = ConfigExpert.get_instance()
         self.timeout = config.get("timeout", 30)  # Default 30 seconds
     

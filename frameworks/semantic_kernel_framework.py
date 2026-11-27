@@ -49,7 +49,8 @@ class SemanticKernelAgent:
         if isinstance(adapter, HuggingFaceAdapter):
             self.inference_client = InferenceClient(
                 model=adapter.model_name,
-                token=adapter.api_key if hasattr(adapter, "api_key") else None
+                token=adapter.api_key if hasattr(adapter, "api_key") else None,
+                provider="auto",
             )
             self._use_adapter_generate = False
         else:
