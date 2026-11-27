@@ -178,7 +178,10 @@ class HuggingFaceAdapter(BaseAdapter):
                     if os.getenv("DEBUG_TOOL_CALLS", "false").lower() in ("1", "true", "yes", "on"):
                         print(f"🔧 HuggingFace tool request round={round_num} | model={self.model_name} | tool_choice={request_kwargs.get('tool_choice')}")
 
-                response = self._call_with_timeout(self.client.chat_completion, **request_kwargs)
+                response = self._call_with_timeout(
+                    self.client.chat.completions.create,
+                    **request_kwargs,
+                )
 
                 if isinstance(response, dict) and "error" in response:
                     return f"API Error: {response.get('error')} - {response.get('description', 'No description provided')}"

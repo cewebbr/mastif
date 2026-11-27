@@ -75,7 +75,7 @@ class SemanticKernelAgent:
             return self.adapter.generate(prompt, **kwargs)
 
         # Otherwise use the HuggingFace InferenceClient as before.
-        return self.inference_client.chat_completion(
+        return self.inference_client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             max_tokens=kwargs.get("max_tokens", 1024)
         ).choices[0].message.content

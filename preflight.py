@@ -361,7 +361,7 @@ class PreflightChecker:
                 timeout=timeout,
                 provider="auto",
             )
-            response = client.chat_completion(
+            response = client.chat.completions.create(
                 messages=[{"role": "user", "content": "Reply with OK."}],
                 max_tokens=4,
                 temperature=0.0,
