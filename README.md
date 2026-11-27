@@ -45,8 +45,8 @@ MASTIF currently includes the following capabilities, all reflected in the codeb
 A Python 3.12 environment is known to work for the current dependency set. From the repository root:
 
 ```bash
-python3 --version
-python3 -m venv venv
+python --version
+python -m venv venv
 source venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
